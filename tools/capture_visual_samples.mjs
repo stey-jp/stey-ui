@@ -23,6 +23,10 @@ try{
         await candidate.goto(`http://127.0.0.1:8766/?sample=${component}&variant=${variant}&appearance=${appearance}&mode=${mode}`,{waitUntil:'networkidle'});
         if(component==='badge')await candidate.getByText('Active',{exact:true}).waitFor();
         else await candidate.getByRole(component==='input'?'textbox':'button',{name:component==='input'?'Name':'Save',exact:true}).waitFor({timeout:30000});
+        // Compare the same idle state. The semantics bridge may initially focus
+        // a native Flutter input, so use a real outside pointer click in both.
+        await reference.mouse.click(20,20);await candidate.mouse.click(20,20);
+        for(const page of [reference,candidate])await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
         const ref=await reference.screenshot({path:resolve(output,id+'-reference.png')});
         const actual=await candidate.screenshot({path:resolve(output,id+'-candidate.png')});
         const a=PNG.sync.read(ref),b=PNG.sync.read(actual),diff=new PNG({width:a.width,height:a.height});
@@ -36,5 +40,5 @@ try{
   }
 }finally{await browser.close();}
 const report={upstreamSha:'f46e8bc9922c37dc1d3e7da779e589fe171df306',source:'Exact upstream source rendered in a temporary Vite fixture',
-  note:'Diagnostic samples only; these do not certify every component or interaction.',rows};
+  state:'idle, not focused or hovered',note:'Diagnostic samples only; these do not certify every component or interaction.',rows};
 await writeFile(resolve(output,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(rows));
