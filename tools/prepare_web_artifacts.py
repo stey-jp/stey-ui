@@ -2,6 +2,7 @@
 import json
 import gzip
 import shutil
+import subprocess
 from pathlib import Path
 from urllib.parse import urlparse, unquote
 from urllib.request import url2pathname
@@ -44,6 +45,8 @@ def prepare():
         roots.append(resolve_source(uri, sdk, package_file))
     completed = 0
     for map_path in build.glob('main.dart.*.map'):
+        if map_path.name == 'main.dart.mjs.map':
+            continue  # Produced by the JavaScript glue minifier below.
         mapping = json.loads(map_path.read_text(encoding='utf-8'))
         origin = map_path
         if any(not urlparse(uri).scheme for uri in mapping['sources']):
@@ -68,6 +71,7 @@ def prepare():
             completed += 1
         mapping['sourcesContent'] = content
         map_path.write_text(json.dumps(mapping, separators=(',', ':')), encoding='utf-8')
+    subprocess.run(['node', str(ROOT / 'tools/minify_web_loader.mjs')], cwd=ROOT, check=True)
     for asset in build.rglob('*'):
         if asset.is_file() and asset.suffix in ('.html','.js','.mjs','.wasm','.map','.json','.ttf','.otf'):
             asset.with_name(asset.name+'.gz').write_bytes(gzip.compress(asset.read_bytes(),mtime=0))
