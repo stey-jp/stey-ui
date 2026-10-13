@@ -108,7 +108,7 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
   late List<T> internal = widget.multiple
       ? List.of(widget.defaultValues)
       : [if (widget.defaultValue != null) widget.defaultValue as T];
-  bool open = false, hovered = false;
+  bool open = false, hovered = false, keyboardFocus = false;
   int active = -1;
   String typed = '';
   Timer? typingTimer;
@@ -144,6 +144,15 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
   void initState() {
     super.initState();
     focus.addListener(focusChanged);
+    HardwareKeyboard.instance.addHandler(trackKeyboard);
+  }
+
+  bool trackKeyboard(KeyEvent event) {
+    if (event is! KeyUpEvent && !keyboardFocus) {
+      keyboardFocus = true;
+      if (mounted && (focus.hasFocus || open)) setState(() {});
+    }
+    return false;
   }
 
   void focusChanged() {
@@ -170,6 +179,7 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
 
   @override
   void dispose() {
+    HardwareKeyboard.instance.removeHandler(trackKeyboard);
     typingTimer?.cancel();
     focus.removeListener(focusChanged);
     ownedFocus.dispose();
@@ -350,11 +360,14 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
           if (option.value == value) option.label,
     ];
     final hasValue = selected.isNotEmpty;
-    final keyboard =
-        focus.hasFocus &&
-        FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+    final keyboard = focus.hasFocus && keyboardFocus;
+    final radius = widget.size == SteySize.xs ? 4.0 : widget.size.radius;
     final error = widget.error?.isNotEmpty ?? false;
-    final foreground = hasValue ? c.text : c.placeholder;
+    final foreground = hasValue
+        ? enabled
+              ? c.text
+              : c.text.withValues(alpha: .7)
+        : c.placeholder;
     final rendered = hasValue
         ? widget.multiple
               ? widget.renderValues?.call(context, selected)
@@ -381,10 +394,16 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
             cursor: enabled
                 ? SystemMouseCursors.click
                 : SystemMouseCursors.forbidden,
-            onEnter: (_) => setState(() => hovered = true),
+            onEnter: (_) => setState(() {
+              hovered = true;
+              keyboardFocus = false;
+            }),
             onExit: (_) => setState(() => hovered = false),
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
+              onTapDown: enabled
+                  ? (_) => setState(() => keyboardFocus = false)
+                  : null,
               onTap: enabled
                   ? () {
                       focus.requestFocus();
@@ -409,7 +428,7 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                         : keyboard
                         ? 2
                         : 1,
-                    radius: widget.size.radius,
+                    radius: radius,
                     inset: keyboard && !error,
                   ),
                   child: Container(
@@ -418,8 +437,19 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                       horizontal: widget.size.padding,
                     ),
                     decoration: BoxDecoration(
-                      color: hovered && enabled && !open ? c.tint : c.control,
-                      borderRadius: BorderRadius.circular(widget.size.radius),
+                      color: hovered && enabled
+                          ? c.tint
+                          : enabled
+                          ? c.control
+                          : c.control.withValues(alpha: .5),
+                      borderRadius: BorderRadius.circular(radius),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: .05),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
                     ),
                     child: Row(
                       children: [
@@ -445,7 +475,13 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                                       ),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(
+                          width: widget.size == SteySize.lg
+                              ? 8
+                              : widget.size == SteySize.base
+                              ? 6
+                              : 4,
+                        ),
                         CustomPaint(
                           size: Size.square(switch (widget.size) {
                             SteySize.xs => 12,
@@ -486,7 +522,11 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
           OverlayPortal.overlayChildLayoutBuilder(
             controller: portal,
             overlayChildBuilder: (context, info) => popup(context, info),
-            child: trigger,
+            child: Semantics(
+              container: true,
+              explicitChildNodes: true,
+              child: trigger,
+            ),
           ),
           if (error || widget.description != null) ...[
             const SizedBox(height: 8),
@@ -602,7 +642,14 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: .1),
-                        blurRadius: 10,
+                        blurRadius: 15,
+                        spreadRadius: -3,
+                        offset: const Offset(0, 10),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: .1),
+                        blurRadius: 6,
+                        spreadRadius: -4,
                         offset: const Offset(0, 4),
                       ),
                     ],
@@ -630,8 +677,7 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
     final itemKey = optionKeys.putIfAbsent(item.value, GlobalKey.new);
     final highlighted = active == index;
     final checked = selected.contains(item.value);
-    final keyboard =
-        FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+    final keyboard = keyboardFocus;
     return Focus(
       focusNode: node,
       canRequestFocus: !item.disabled,
@@ -653,7 +699,10 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
             onEnter: item.disabled
                 ? null
                 : (_) {
-                    setState(() => active = index);
+                    setState(() {
+                      active = index;
+                      keyboardFocus = false;
+                    });
                     node.requestFocus();
                   },
             child: GestureDetector(

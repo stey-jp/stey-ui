@@ -24,6 +24,25 @@ Widget host(
 );
 
 void main() {
+  testWidgets('System back closes the select popup before leaving the route', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      host(
+        const SteySelect<String>(
+          controlled: false,
+          options: {'a': 'Alpha', 'b': 'Beta'},
+        ),
+      ),
+    );
+    await tester.tap(find.text('Select an option'));
+    await tester.pumpAndSettle();
+    expect(find.text('Beta'), findsOneWidget);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('Beta'), findsNothing);
+    expect(find.text('Select an option'), findsOneWidget);
+  });
   testWidgets(
     'Select keyboard opens, skips disabled, commits and restores focus',
     (tester) async {
