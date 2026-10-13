@@ -27,7 +27,9 @@ FlutterのOverlayPortal・Focus・Semanticsを使い、MaterialのDropdownButton
 
 上下矢印・Home／End・Enter／Space・Escape・Tab、閉じた単一Selectの文字検索、
 開いた一覧の文字検索、無効項目、読み取り専用、外側クリック、フォーカス復帰を検査します。
-Androidの戻る操作はPopScopeで開いた一覧を閉じます。実機操作は別途検証が必要です。
+Androidの戻る操作はPopScopeで開いた一覧を閉じます。API 36エミュレーターでも確認しました。
+元のview metricsから画面内の安全領域を計算し、SafeArea配下でもシステム操作領域・キーボードとの重なりを避けます。
+実機操作、Androidでの全選択操作は別途検証が必要です。
 
 使用中のFlutter SDKはSemanticsRole.comboBoxのdebug検証処理が未実装で、
 Webのlistbox／option役割も公開APIにありません。このためnativeのbutton／listと

@@ -12,6 +12,9 @@ Materialの選択・日付・通知などを使った部分は、公式挙動と
 Checkbox／Switch／Radioのネイティブ描画と複合グループを実装しています。
 APIの対応範囲と差異は [Checkbox／Switch](docs/checkable-api-mapping.md)、
 [Radio](docs/radio-api-mapping.md) を参照してください。
+Selectもネイティブのポップアップ、単一／複数選択、グループ、文字検索を実装しています。
+既存の値管理APIを維持し、[SelectのAPI対応](docs/select-api-mapping.md)に差異を記録しています。
+固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 
 ```text
 packages/

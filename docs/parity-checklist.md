@@ -56,7 +56,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | surface | variant、境界、nested構成、padding、theme | 全比較待ち |
 | switch | 単体/Item/Group/Legend、default/neutral、3size、busy、150ms遷移 | ネイティブ描画・グループ・操作テスト追加。全API・位相比較待ち |
 | table | 全parts、選択、sort、sticky、スクロール、空/忙しい状態 | 全比較待ち |
-| table-of-contents | active位置、scroll spy、anchor、sticky、階層/狭幅 | 全比較待ち |
+| table-of-contents | active位置、scroll spy、anchor、sticky、階層/狭幅 | URLハッシュ／scroll追跡hook・全複合APIが未実装。新しい公式修正の不正ハッシュ・raw fragment・Unicode処理も対応待ち。全比較待ち |
 | tabs | parts、orientation、activation、disabled、focus、mount、overflow | 基本操作済み。全比較待ち |
 | tag-input | add/remove、区切り、重複、IME、keyboard、disabled、overflow | 基本追加削除済み。全比較待ち |
 | text | 全variant、element、weight、mono、truncate、折返し | 全比較待ち |

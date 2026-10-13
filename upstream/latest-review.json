@@ -1,0 +1,29 @@
+{
+  "reviewed_at": "2026-10-13T13:48:50Z",
+  "baseline_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
+  "observed_sha": "dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1",
+  "upstream_commit_time": "2026-10-13T08:41:07-04:00",
+  "upstream_commit_url": "https://github.com/cloudflare/kumo/commit/dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1",
+  "summary": "Ignore malformed Table of Contents URL hashes, match raw fragments on percent-decoding failure, and continue syncing subsequent valid hashes.",
+  "classification": "bug_fix",
+  "affected_components": ["table-of-contents"],
+  "changed_files": [
+    ".changeset/calm-hashes-ignore.md",
+    "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.test.tsx",
+    "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.ts"
+  ],
+  "current_implementation": "SteyTableOfContents is presentational and receives activeId/onSelected from its consumer. The upstream URL-hash/scroll tracking hook has no equivalent yet; there is no corresponding URI-decoding call to patch.",
+  "remaining_work": [
+    "Implement the native active-section tracking counterpart, including URL fragment integration on Web and scroll tracking on supported Flutter platforms.",
+    "Compare malformed %, %ZZ and literal 50%-off fragments, percent-encoded Unicode, unknown fragments, and later valid hash changes against the new upstream tests.",
+    "Verify complete Table of Contents compound APIs, functionality and visual states."
+  ],
+  "implementation_synchronized": false,
+  "synchronized_sha_advanced": false,
+  "reference_fixture_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
+  "reference_fixture_note": "The fixed reference and the Select/checkable/radio sources remain at the recorded baseline; this upstream update only changes the Table of Contents hook and its tests.",
+  "batch_api_calls": 0,
+  "openai_api_cost_usd": 0,
+  "cloud_workflow_executed": false,
+  "review_kind": "manual CLI source diff review; does not update the cloud synchronization ledger"
+}
