@@ -20,6 +20,7 @@ class SteyColors {
   Color get focus => Color(dark ? 0xffe9e9e9 : 0xff0b0b0b);
   Color get text => Color(dark ? 0xfff5f5f5 : 0xff171717);
   Color get inverse => Color(dark ? 0xff171717 : 0xfff5f5f5);
+  Color get strong => Color(dark ? 0xfffafafa : 0xff0a0a0a);
   Color get subtle => Color(dark ? 0xffa1a1a1 : 0xff737373);
   Color get link => Color(dark ? 0xff51a2ff : 0xff193cb8);
   Color get placeholder => Color(dark ? 0xff737373 : 0xffa1a1a1);

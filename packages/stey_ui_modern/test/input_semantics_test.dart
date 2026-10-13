@@ -51,4 +51,69 @@ void main() {
     expect(find.semantics.byLabel('Hide API key'), findsOneWidget);
     semantics.dispose();
   });
+  testWidgets(
+    'Required field announces error and hides its helper description',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: SteyTheme.material(Brightness.light),
+          home: const SteyTheme(
+            brightness: Brightness.light,
+            child: Scaffold(
+              body: SteyInput(
+                label: 'Project',
+                required: true,
+                description: 'Choose a unique name',
+                error: 'Name is already taken',
+              ),
+            ),
+          ),
+        ),
+      );
+      final field = find.semantics
+          .byFlag(SemanticsFlag.isTextField)
+          .evaluate()
+          .single;
+      expect(field.label, 'Project');
+      expect(field.hint, 'Name is already taken');
+      expect(find.semantics.byFlag(SemanticsFlag.isRequired), findsOneWidget);
+      expect(find.text('Choose a unique name'), findsNothing);
+      expect(find.text('Name is already taken'), findsOneWidget);
+      expect(find.text('Project *'), findsNothing);
+      semantics.dispose();
+    },
+  );
+  testWidgets(
+    'Optional indicator is explicit and tooltip has one action name',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: SteyTheme.material(Brightness.light),
+          home: const SteyTheme(
+            brightness: Brightness.light,
+            child: Scaffold(
+              body: Column(
+                children: [
+                  SteyField(label: 'Default field', child: SizedBox()),
+                  SteyField(
+                    label: 'Optional field',
+                    required: false,
+                    labelTooltip: 'You may leave this blank',
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Default field'), findsOneWidget);
+      expect(find.text('Default field (optional)'), findsNothing);
+      expect(find.text('Optional field (optional)'), findsOneWidget);
+      expect(find.semantics.byLabel('More information'), findsOneWidget);
+      semantics.dispose();
+    },
+  );
 }

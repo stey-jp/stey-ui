@@ -76,6 +76,7 @@ FIELDS = {
     'brand':'color-kumo-brand', 'line':'color-kumo-line',
     'hairline':'color-kumo-hairline', 'focus':'color-kumo-focus',
     'text':'text-color-kumo-default', 'inverse':'text-color-kumo-inverse',
+    'strong':'text-color-kumo-strong',
     'subtle':'text-color-kumo-subtle', 'link':'text-color-kumo-link',
     'placeholder':'text-color-kumo-placeholder',
     'danger':'color-kumo-danger', 'dangerText':'text-color-kumo-danger',

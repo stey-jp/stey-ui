@@ -81,6 +81,15 @@ class _SteyGalleryState extends State<SteyGallery> {
           if (sample != null) {
             final variant =
                 router.uri.queryParameters['variant'] ?? 'secondary';
+            final sampleState = router.uri.queryParameters['state'] ?? 'idle';
+            final sampleSize = SteySize.values.firstWhere(
+              (value) => value.name == router.uri.queryParameters['size'],
+              orElse: () => SteySize.base,
+            );
+            final sampleShape = SteyButtonShape.values.firstWhere(
+              (value) => value.name == router.uri.queryParameters['shape'],
+              orElse: () => SteyButtonShape.base,
+            );
             final child = switch (sample) {
               'badge' => SteyBadge(
                 appearance: router.uri.queryParameters['appearance'] == 'dot'
@@ -100,12 +109,16 @@ class _SteyGalleryState extends State<SteyGallery> {
                 ),
               ),
               _ => SteyButton(
-                onPressed: () {},
+                onPressed: sampleState == 'disabled' ? null : () {},
+                loading: sampleState == 'loading',
+                semanticLabel: 'Save',
+                size: sampleSize,
+                shape: sampleShape,
                 variant: SteyButtonVariant.values.firstWhere(
                   (v) => v.name == variant,
                   orElse: () => SteyButtonVariant.secondary,
                 ),
-                child: const Text('Save'),
+                child: Text(sampleShape == SteyButtonShape.base ? 'Save' : '+'),
               ),
             };
             return Scaffold(

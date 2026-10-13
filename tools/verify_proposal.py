@@ -29,7 +29,7 @@ def main():
             raise ValueError('VERIFICATION_SOURCE_CHANGED')
     write_json(folder/'verification.json',{'success':True,'target':context['target'],
         'base_sha':context['base_sha'],'proposal_sha256':digest(json.dumps(proposal,sort_keys=True)),
-        'checks':['central-full','upstream-visual-comparison']})
+        'checks':['flutter-full','upstream-visual-comparison']})
 
 
 if __name__=='__main__': main()

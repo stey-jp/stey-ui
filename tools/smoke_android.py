@@ -41,7 +41,7 @@ def main():
         return list(ET.parse(output / 'window.xml').iter('node'))
 
     def label(node):
-        return node.get('content-desc') or node.get('text') or ''
+        return ' '.join((node.get('content-desc') or node.get('text') or '').split())
 
     def find(text):
         for _ in range(5):
@@ -64,7 +64,7 @@ def main():
     tap('primary')
     find('Activated 1 times')
     tap('Disabled')
-    tap('Saving')
+    tap('Loading Saving')
     find('Activated 1 times')
     screenshot('light.png')
     tap('Switch to dark mode')

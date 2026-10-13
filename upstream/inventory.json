@@ -328,7 +328,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Explicit optional label, hidden label, tooltip, helper/error visibility, required semantics and announcements are implemented. Full structured ValidityState matching remains pending."
     },
     {
       "id": "flow",
@@ -496,12 +496,12 @@
         "packages/kumo/src/components/loader/skeleton-line.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/loader.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native circle geometry and the 2s rotation / 1.5s dash timelines are implemented. Time-aligned upstream visual certification remains pending."
     },
     {
       "id": "menubar",

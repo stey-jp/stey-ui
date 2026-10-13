@@ -51,26 +51,58 @@ class _SteyRingInputBorder extends OutlineInputBorder {
 }
 
 class SteyLabel extends StatelessWidget {
-  const SteyLabel(this.text, {super.key, this.required = false});
-  final String text;
-  final bool required;
+  const SteyLabel(
+    this.text, {
+    super.key,
+    this.required,
+    this.showOptional = false,
+    this.optionalLabel = '(optional)',
+    this.tooltip,
+    this.tooltipAriaLabel = 'More information',
+  });
+  final String text, optionalLabel, tooltipAriaLabel;
+  final String? tooltip;
+  final bool? required;
+  final bool showOptional;
   @override
-  Widget build(BuildContext context) => Text.rich(
-    TextSpan(
-      children: [
-        TextSpan(text: text),
-        if (required)
-          TextSpan(
-            text: ' *',
-            style: TextStyle(color: SteyTheme.colorsOf(context).dangerText),
+  Widget build(BuildContext context) => Wrap(
+    spacing: 4,
+    crossAxisAlignment: WrapCrossAlignment.center,
+    children: [
+      Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: text),
+            if (showOptional || required == false)
+              TextSpan(
+                text: ' $optionalLabel',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: SteyTheme.colorsOf(context).subtle,
+                ),
+              ),
+          ],
+        ),
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: SteyTheme.colorsOf(context).text,
+        ),
+      ),
+      if (tooltip != null)
+        Tooltip(
+          message: tooltip!,
+          excludeFromSemantics: true,
+          child: SteyButton(
+            onPressed: () {},
+            variant: SteyButtonVariant.ghost,
+            size: SteySize.xs,
+            shape: SteyButtonShape.square,
+            semanticLabel: tooltipAriaLabel,
+            child: const Icon(Icons.info_outline, size: 14),
           ),
-      ],
-    ),
-    style: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: SteyTheme.colorsOf(context).text,
-    ),
+        ),
+    ],
   );
 }
 
@@ -81,42 +113,47 @@ class SteyField extends StatelessWidget {
     this.label,
     this.description,
     this.error,
-    this.required = false,
+    this.required,
+    this.hideLabel = false,
+    this.labelTooltip,
   });
   final Widget child;
-  final String? label, description, error;
-  final bool required;
+  final String? label, description, error, labelTooltip;
+  final bool? required;
+  final bool hideLabel;
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      if (label != null)
+      if (label != null && !hideLabel)
         Padding(
-          padding: const EdgeInsets.only(bottom: 6),
-          child: SteyLabel(label!, required: required),
+          padding: const EdgeInsets.only(bottom: 8),
+          child: SteyLabel(label!, required: required, tooltip: labelTooltip),
         ),
       child,
-      if (description != null)
+      if (description != null && (error == null || error!.isEmpty))
         Padding(
-          padding: const EdgeInsets.only(top: 6),
+          padding: const EdgeInsets.only(top: 8),
           child: Text(
             description!,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 13,
+              height: 1.375,
               color: SteyTheme.colorsOf(context).subtle,
             ),
           ),
         ),
-      if (error != null)
+      if (error != null && error!.isNotEmpty)
         Semantics(
           liveRegion: true,
           child: Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: 8),
             child: Text(
               error!,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
+                height: 1.375,
                 color: SteyTheme.colorsOf(context).dangerText,
               ),
             ),
@@ -138,7 +175,7 @@ class SteyInput extends StatelessWidget {
     this.onSubmitted,
     this.enabled = true,
     this.readOnly = false,
-    this.required = false,
+    this.required,
     this.obscureText = false,
     this.size = SteySize.base,
     this.maxLines = 1,
@@ -153,7 +190,8 @@ class SteyInput extends StatelessWidget {
   final TextEditingController? controller;
   final String? label, placeholder, description, error, semanticLabel;
   final ValueChanged<String>? onChanged, onSubmitted;
-  final bool enabled, readOnly, required, obscureText, autofocus;
+  final bool enabled, readOnly, obscureText, autofocus;
+  final bool? required;
   final SteySize size;
   final int maxLines;
   final TextInputType? keyboardType;
@@ -163,6 +201,7 @@ class SteyInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = SteyTheme.colorsOf(context);
+    final hasError = error?.isNotEmpty ?? false;
     OutlineInputBorder border(Color color, [double width = 1]) =>
         _SteyRingInputBorder(
           borderRadius: BorderRadius.circular(size.radius),
@@ -175,6 +214,8 @@ class SteyInput extends StatelessWidget {
       required: required,
       child: Semantics(
         label: semanticLabel ?? label ?? placeholder,
+        hint: hasError ? error : description,
+        isRequired: required,
         child: SizedBox(
           height: maxLines == 1 ? size.height : null,
           child: TextField(
@@ -230,9 +271,9 @@ class SteyInput extends StatelessWidget {
                 vertical: maxLines == 1 ? 0 : 12,
               ),
               border: border(c.line),
-              enabledBorder: border(error == null ? c.line : c.dangerText),
+              enabledBorder: border(hasError ? c.dangerText : c.line),
               focusedBorder: border(
-                error == null ? c.focus.withValues(alpha: .5) : c.dangerText,
+                hasError ? c.dangerText : c.focus.withValues(alpha: .5),
                 1.5,
               ),
               disabledBorder: border(c.line.withValues(alpha: .5)),

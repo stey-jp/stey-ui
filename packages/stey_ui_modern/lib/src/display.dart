@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'button.dart';
 import 'theme.dart';
+export 'loader.dart';
 
 class SteyText extends StatelessWidget {
   const SteyText(
@@ -424,24 +425,6 @@ class SteyMeter extends StatelessWidget {
       ),
     );
   }
-}
-
-class SteyLoader extends StatelessWidget {
-  const SteyLoader({super.key, this.size = 16, this.label = 'Loading'});
-  final double size;
-  final String label;
-  @override
-  Widget build(BuildContext context) => Semantics(
-    label: label,
-    liveRegion: true,
-    child: SizedBox.square(
-      dimension: size,
-      child: CircularProgressIndicator(
-        strokeWidth: 1.5,
-        color: SteyTheme.colorsOf(context).subtle,
-      ),
-    ),
-  );
 }
 
 class SteySkeletonLine extends StatefulWidget {

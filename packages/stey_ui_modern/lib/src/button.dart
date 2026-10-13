@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
+import 'loader.dart';
 
 class _ButtonRingBorder extends RoundedRectangleBorder {
   const _ButtonRingBorder({required super.borderRadius, super.side});
@@ -14,6 +15,28 @@ class _ButtonRingBorder extends RoundedRectangleBorder {
     side: side ?? this.side,
     borderRadius: borderRadius ?? this.borderRadius,
   );
+  @override
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) => a is RoundedRectangleBorder
+      ? _ButtonRingBorder(
+          side: BorderSide.lerp(a.side, side, t),
+          borderRadius: BorderRadiusGeometry.lerp(
+            a.borderRadius,
+            borderRadius,
+            t,
+          )!,
+        )
+      : super.lerpFrom(a, t);
+  @override
+  ShapeBorder? lerpTo(ShapeBorder? b, double t) => b is RoundedRectangleBorder
+      ? _ButtonRingBorder(
+          side: BorderSide.lerp(side, b.side, t),
+          borderRadius: BorderRadiusGeometry.lerp(
+            borderRadius,
+            b.borderRadius,
+            t,
+          )!,
+        )
+      : super.lerpTo(b, t);
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
     if (side.style == BorderStyle.none) return;
@@ -101,126 +124,151 @@ class _SteyButtonState extends State<SteyButton> {
               ? c.dangerEmphasisRing
               : c.brandEmphasisRing
         : c.line;
-    return MergeSemantics(
-      child: Semantics(
-        label: widget.semanticLabel,
-        child: TextButton(
-          focusNode: widget.focusNode,
-          autofocus: widget.autofocus,
-          onPressed: disabled ? null : widget.onPressed,
-          style: ButtonStyle(
-            backgroundBuilder: emphasis
-                ? (context, states, child) => DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: radius,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          (danger
-                                  ? (states.contains(WidgetState.hovered)
-                                        ? c.dangerEmphasisHover
-                                        : c.dangerEmphasisStart)
-                                  : (states.contains(WidgetState.hovered)
-                                        ? c.brandEmphasisHover
-                                        : c.brandEmphasisStart))
-                              .withValues(alpha: disabled ? 0.5 : 1),
-                          accent.withValues(alpha: disabled ? 0.5 : 1),
-                        ],
+    return Opacity(
+      opacity: widget.onPressed == null || (widget.loading && emphasis)
+          ? .5
+          : 1,
+      child: MergeSemantics(
+        child: Semantics(
+          label: widget.semanticLabel,
+          hint: widget.semanticLabel != null && widget.loading
+              ? 'Loading'
+              : null,
+          child: TextButton(
+            focusNode: widget.focusNode,
+            autofocus: widget.autofocus,
+            onPressed: disabled ? null : widget.onPressed,
+            style: ButtonStyle(
+              backgroundBuilder: emphasis
+                  ? (context, states, child) => DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: radius,
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            (danger
+                                ? (states.contains(WidgetState.hovered)
+                                      ? c.dangerEmphasisHover
+                                      : c.dangerEmphasisStart)
+                                : (states.contains(WidgetState.hovered)
+                                      ? c.brandEmphasisHover
+                                      : c.brandEmphasisStart)),
+                            accent,
+                          ],
+                        ),
                       ),
-                    ),
-                    child: child,
-                  )
-                : null,
-            alignment: widget.alignment,
-            animationDuration: Duration.zero,
-            minimumSize: WidgetStatePropertyAll(
-              Size(
-                0,
-                widget.shape == SteyButtonShape.base
-                    ? widget.size.height
-                    : compactHeight,
-              ),
-            ),
-            fixedSize: widget.shape == SteyButtonShape.base
-                ? null
-                : WidgetStatePropertyAll(Size.square(compactHeight)),
-            maximumSize: widget.shape == SteyButtonShape.base
-                ? null
-                : WidgetStatePropertyAll(Size.square(compactHeight)),
-            padding: WidgetStatePropertyAll(
-              EdgeInsets.symmetric(
-                horizontal: widget.shape == SteyButtonShape.base
-                    ? widget.size.padding
-                    : 0,
-              ),
-            ),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.standard,
-            textStyle: WidgetStatePropertyAll(
-              TextStyle(
-                fontFamily: 'Inter',
-                package: 'stey_ui_modern',
-                fontSize: widget.size.fontSize,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            foregroundColor: WidgetStatePropertyAll(
-              disabled ? foreground.withValues(alpha: .5) : foreground,
-            ),
-            backgroundColor: WidgetStateProperty.resolveWith((states) {
-              if (widget.backgroundColor != null) return widget.backgroundColor;
-              if (emphasis) {
-                return Colors.transparent;
-              }
-              if (states.contains(WidgetState.hovered) ||
-                  states.contains(WidgetState.pressed)) {
-                return c.tint;
-              }
-              return ghost || widget.variant == SteyButtonVariant.outline
-                  ? Colors.transparent
-                  : c.base;
-            }),
-            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-            side: WidgetStateProperty.resolveWith(
-              (states) => BorderSide(
-                color: states.contains(WidgetState.focused)
-                    ? c.brand
-                    : disabled && emphasis
-                    ? border.withValues(alpha: .5)
-                    : border,
-                width: states.contains(WidgetState.focused) ? 2 : 1,
-              ),
-            ),
-            shape: WidgetStatePropertyAll(
-              _ButtonRingBorder(borderRadius: radius),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.loading)
-                SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.5,
-                    color: foreground,
-                  ),
-                )
-              else if (widget.icon != null)
-                IconTheme(
-                  data: IconThemeData(size: 16, color: foreground),
-                  child: widget.icon!,
+                      child: child,
+                    )
+                  : null,
+              alignment: widget.alignment,
+              animationDuration: Duration.zero,
+              minimumSize: WidgetStatePropertyAll(
+                Size(
+                  0,
+                  widget.shape == SteyButtonShape.base
+                      ? widget.size.height
+                      : compactHeight,
                 ),
-              if (widget.icon != null || widget.loading)
-                const SizedBox(width: 6),
-              Flexible(child: widget.child),
-              if (widget.trailing != null) ...[
-                const SizedBox(width: 6),
-                widget.trailing!,
-              ],
-            ],
+              ),
+              fixedSize: widget.shape == SteyButtonShape.base
+                  ? null
+                  : WidgetStatePropertyAll(Size.square(compactHeight)),
+              maximumSize: widget.shape == SteyButtonShape.base
+                  ? null
+                  : WidgetStatePropertyAll(Size.square(compactHeight)),
+              padding: WidgetStatePropertyAll(
+                EdgeInsets.symmetric(
+                  horizontal: widget.shape == SteyButtonShape.base
+                      ? widget.size.padding
+                      : 0,
+                ),
+              ),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.standard,
+              textStyle: WidgetStatePropertyAll(
+                TextStyle(
+                  fontFamily: 'Inter',
+                  package: 'stey_ui_modern',
+                  fontSize: widget.size.fontSize,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              foregroundColor: WidgetStateProperty.resolveWith((states) {
+                if (disabled && !emphasis) {
+                  return ghost || widget.variant == SteyButtonVariant.outline
+                      ? c.subtle
+                      : foreground.withValues(alpha: .7);
+                }
+                if (widget.variant == SteyButtonVariant.outline &&
+                    states.contains(WidgetState.hovered)) {
+                  return c.strong;
+                }
+                return foreground;
+              }),
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (widget.backgroundColor != null) {
+                  return widget.backgroundColor;
+                }
+                if (emphasis) {
+                  return Colors.transparent;
+                }
+                if (states.contains(WidgetState.hovered) ||
+                    states.contains(WidgetState.pressed)) {
+                  if (ghost || widget.variant == SteyButtonVariant.secondary) {
+                    return c.tint;
+                  }
+                }
+                return ghost || widget.variant == SteyButtonVariant.outline
+                    ? Colors.transparent
+                    : disabled
+                    ? c.base.withValues(alpha: .5)
+                    : c.base;
+              }),
+              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+              side: WidgetStateProperty.resolveWith(
+                (states) => BorderSide(
+                  color: states.contains(WidgetState.focused)
+                      ? c.brand
+                      : states.contains(WidgetState.hovered) &&
+                            !disabled &&
+                            widget.variant ==
+                                SteyButtonVariant.secondaryDestructive
+                      ? c.danger.withValues(alpha: .3)
+                      : states.contains(WidgetState.hovered) &&
+                            !disabled &&
+                            widget.variant == SteyButtonVariant.outline
+                      ? c.focus.withValues(alpha: .25)
+                      : border,
+                  width: states.contains(WidgetState.focused) ? 2 : 1,
+                ),
+              ),
+              shape: WidgetStatePropertyAll(
+                _ButtonRingBorder(borderRadius: radius),
+              ),
+            ),
+            child: ExcludeSemantics(
+              excluding: widget.semanticLabel != null,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.loading)
+                    SteyLoader(size: widget.size == SteySize.lg ? 16 : 14)
+                  else if (widget.icon != null)
+                    IconTheme(
+                      data: IconThemeData(size: 16, color: foreground),
+                      child: widget.icon!,
+                    ),
+                  if (widget.icon != null || widget.loading)
+                    const SizedBox(width: 6),
+                  Flexible(child: widget.child),
+                  if (widget.trailing != null) ...[
+                    const SizedBox(width: 6),
+                    widget.trailing!,
+                  ],
+                ],
+              ),
+            ),
           ),
         ),
       ),
