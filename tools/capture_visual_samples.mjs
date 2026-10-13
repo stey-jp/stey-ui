@@ -33,10 +33,11 @@ samples.push({component:'input',variant:'default'});
 for(const variant of ['default','error'])for(const checked of ['false','true','mixed'])for(const state of ['idle','hover','focus','disabled'])samples.push({component:'checkbox',variant,checked,state});
 for(const variant of ['default','neutral'])for(const size of ['sm','base','lg'])for(const checked of ['false','true'])for(const state of ['idle','hover','focus','disabled'])samples.push({component:'switch',variant,size,checked,state});
 for(const variant of ['default','error'])for(const checked of ['false','true'])for(const state of ['idle','hover','focus','disabled'])samples.push({component:'radio',variant,checked,state});
+for(const size of ['xs','sm','base','lg'])for(const state of ['idle','hover','focus','disabled','readonly','error','loading','open'])samples.push({component:'select',variant:'default',size,state});
 const requestedComponents=process.argv.find(argument=>argument.startsWith('--components='))?.slice(13).split(',');
-if(requestedComponents?.some(component=>!['button','badge','input','checkbox','switch','radio'].includes(component)))throw Error('SAMPLE_COMPONENT_INVALID');
+if(requestedComponents?.some(component=>!['button','badge','input','checkbox','switch','radio','select'].includes(component)))throw Error('SAMPLE_COMPONENT_INVALID');
 const requestedState=process.argv.find(argument=>argument.startsWith('--state='))?.slice(8);
-if(requestedState&&!['idle','hover','focus','disabled','loading'].includes(requestedState))throw Error('SAMPLE_STATE_INVALID');
+if(requestedState&&!['idle','hover','focus','disabled','loading','readonly','error','open'].includes(requestedState))throw Error('SAMPLE_STATE_INVALID');
 const selectedSamples=samples.filter(sample=>(!requestedState||(sample.state??'idle')===requestedState)&&(!requestedComponents||requestedComponents.includes(sample.component)));
 const previous=requestedState||requestedComponents?JSON.parse(await readFile(resolve(output,'report.json'),'utf8')):null;
 if(previous&&previous.upstreamSha!=='f46e8bc9922c37dc1d3e7da779e589fe171df306')throw Error('SAMPLE_UPSTREAM_CHANGED');
@@ -44,7 +45,7 @@ const browser=await chromium.launch({channel:'chrome',headless:true});const rows
 try{
  for(const mode of ['light','dark']){
   for(const sample of selectedSamples){
-   const context=await browser.newContext({viewport:{width:600,height:160},colorScheme:mode});
+   const context=await browser.newContext({viewport:{width:600,height:sample.component==='select'?360:160},colorScheme:mode});
    const reference=await context.newPage(),candidate=await context.newPage();
    const {component,variant,size='base',shape='base',state='idle',appearance='filled',checked}=sample;
    const id=[component,variant,appearance==='dot'?'dot':null,size!=='base'?size:null,shape!=='base'?shape:null,checked,state!=='idle'?state:null,mode].filter(Boolean).join('-');
@@ -53,20 +54,22 @@ try{
    if(checked!==undefined)parameters.checked=checked;
    const role=component==='checkbox'?'checkbox':component==='switch'?'switch':component==='radio'?'radio':component==='input'?'textbox':'button';
    const name=['checkbox','switch','radio'].includes(component)?'Toggle':component==='input'?'Name':'Save';
+   const target=page=>component==='select'?page.getByRole(page===reference?'combobox':'button',{name:/^Choice(?:\s|$)/}):page.getByRole(role,{name,exact:true});
    await reference.goto('http://127.0.0.1:8767/?'+new URLSearchParams({component,...parameters}),{waitUntil:'networkidle'});
    if(component==='input')await reference.locator('input').waitFor();
    else if(component==='badge')await reference.getByText('Active',{exact:true}).waitFor();
-   else await reference.getByRole(role,{name,exact:true}).waitFor();
+   else await target(reference).waitFor();
    await reference.evaluate(()=>document.fonts.ready);
    await candidate.goto('http://127.0.0.1:8766/?'+new URLSearchParams({sample:component,...parameters,variant}),{waitUntil:'networkidle'});
    if(component==='badge')await candidate.getByText('Active',{exact:true}).waitFor();
-   else await candidate.getByRole(role,{name,exact:true}).waitFor();
+   else await target(candidate).waitFor();
    for(const page of [reference,candidate]){
     await page.mouse.click(20,20);
-    if(state==='hover')await page.getByRole(role,{name,exact:true}).hover();
+    if(state==='hover')await target(page).hover();
+    if(state==='open')await target(page).click();
     if(state==='focus'){
-     const button=page.getByRole(role,{name,exact:true});
-     if(['checkbox','switch','radio'].includes(component)){
+     const button=target(page);
+     if(['checkbox','switch','radio','select'].includes(component)){
       await page.mouse.move(20,20);
       for(let step=0;step<8;step++){
        await page.keyboard.press('Tab');

@@ -6,72 +6,7 @@ import 'theme.dart';
 export 'checkable.dart';
 
 export 'radio.dart';
-
-class SteySelect<T> extends StatelessWidget {
-  const SteySelect({
-    super.key,
-    required this.value,
-    required this.options,
-    required this.onChanged,
-    this.label,
-    this.placeholder = 'Select an option',
-    this.size = SteySize.base,
-    this.error,
-  });
-  final T? value;
-  final Map<T, String> options;
-  final ValueChanged<T?>? onChanged;
-  final String? label, error;
-  final String placeholder;
-  final SteySize size;
-  @override
-  Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    return SteyField(
-      label: label,
-      error: error,
-      child: Semantics(
-        label: label ?? placeholder,
-        child: Container(
-          height: size.height,
-          padding: EdgeInsets.symmetric(horizontal: size.padding),
-          decoration: BoxDecoration(
-            color: c.control,
-            borderRadius: BorderRadius.circular(size.radius),
-            border: Border.all(color: error == null ? c.line : c.dangerText),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<T>(
-              value: value,
-              onChanged: onChanged,
-              isExpanded: true,
-              isDense: true,
-              hint: Text(
-                placeholder,
-                style: TextStyle(fontSize: size.fontSize, color: c.subtle),
-              ),
-              dropdownColor: c.base,
-              borderRadius: BorderRadius.circular(8),
-              style: TextStyle(
-                fontFamily: 'Inter',
-                package: 'stey_ui_modern',
-                fontSize: size.fontSize,
-                color: c.text,
-              ),
-              icon: const Icon(Icons.unfold_more, size: 16),
-              items: options.entries
-                  .map(
-                    (e) =>
-                        DropdownMenuItem<T>(value: e.key, child: Text(e.value)),
-                  )
-                  .toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+export 'select.dart';
 
 class SteyAutocomplete extends StatelessWidget {
   const SteyAutocomplete({

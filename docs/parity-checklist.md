@@ -49,7 +49,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | pagination | page/count、境界、ellipsis、size、keyboard、狭幅 | 全比較待ち |
 | popover | 全parts、anchor、衝突、開閉、dismiss、focus、portal | 全比較待ち |
 | radio | Group/Item/Legend、inline/card/segmented、description、矢印/Tab、generic値、rich label | RawRadioの操作・native描画・縦/二列グループを追加。イベント詳細・フォーム・拡張hit area・全視覚比較待ち |
-| select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | Material依存を含む追加実装・全比較待ち |
+| select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | native overlay、複数選択、group/disabled、readOnly、typeahead、画面端の反転を追加。Form・任意anchor/trigger・SDKのWeb役割制約・全比較待ち |
 | sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | reveal/valueの基本テストあり。全比較待ち |
 | sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | resize/状態保持テストあり。peeking/mobile sheet等待ち |
 | slider | 値域、step、複数thumb、orientation、keyboard、label/tooltip | 全比較待ち |

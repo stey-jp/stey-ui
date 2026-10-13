@@ -440,6 +440,7 @@ class _SteySkeletonLineState extends State<SteySkeletonLine>
   late final AnimationController animation = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1500),
+    animationBehavior: AnimationBehavior.preserve,
   )..repeat();
   @override
   void dispose() {

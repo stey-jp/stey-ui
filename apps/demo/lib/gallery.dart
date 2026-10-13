@@ -91,6 +91,20 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'select' => SizedBox(
+                width: 280,
+                child: SteySelect<String>(
+                  value: 'a',
+                  options: const {'a': 'Alpha', 'b': 'Beta', 'c': 'Gamma'},
+                  onChanged: (_) {},
+                  semanticLabel: 'Choice',
+                  size: sampleSize,
+                  disabled: sampleState == 'disabled',
+                  loading: sampleState == 'loading',
+                  readOnly: sampleState == 'readonly',
+                  error: sampleState == 'error' ? 'Please select' : null,
+                ),
+              ),
               'radio' => SteyRadioGroup<String>(
                 value: router.uri.queryParameters['checked'] == 'true'
                     ? 'toggle'
@@ -717,12 +731,43 @@ class _ComponentExampleState extends State<ComponentExample> {
           ],
         ),
       ]),
-      'select' => SteySelect(
-        value: option,
-        options: options,
-        onChanged: (v) => setState(() => option = v ?? option),
-        label: 'Deployment mode',
-      ),
+      'select' => form([
+        SteySelect(
+          value: option,
+          options: options,
+          onChanged: (v) => setState(() => option = v ?? option),
+          label: 'Deployment mode',
+          description: 'Choose the deployment environment.',
+        ),
+        const SteySelect<String>(
+          controlled: false,
+          multiple: true,
+          defaultValues: ['eu'],
+          label: 'Regions',
+          entries: [
+            SteySelectGroup(
+              label: 'Available',
+              entries: [
+                SteySelectOption(value: 'eu', label: 'Europe'),
+                SteySelectOption(value: 'us', label: 'United States'),
+              ],
+            ),
+            SteySelectSeparator(),
+            SteySelectOption(
+              value: 'ap',
+              label: 'Asia Pacific',
+              disabled: true,
+            ),
+          ],
+        ),
+        const SteySelect<String>(
+          value: 'preview',
+          options: {'preview': 'Preview', 'production': 'Production'},
+          readOnly: true,
+          label: 'Read-only mode',
+        ),
+        const SteySelect<String>(label: 'Loading environments', loading: true),
+      ]),
       'autocomplete' || 'combobox' => form([
         SteyCombobox(
           options: const [

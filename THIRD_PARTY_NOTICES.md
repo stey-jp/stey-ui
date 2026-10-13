@@ -67,9 +67,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Phosphor check and minus indicators
+## Phosphor check, minus and caret indicators
 
-The native Checkbox indicators reproduce the upstream Phosphor bold paths. No React icon runtime is used.
+The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. No React icon runtime is used.
 
 MIT License
 

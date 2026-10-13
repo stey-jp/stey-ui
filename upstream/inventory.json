@@ -593,12 +593,12 @@
         "packages/kumo/src/components/select/select.visual.browser.test.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/selection.dart"
+        "packages/stey_ui_modern/lib/src/select.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native overlay, controlled/uncontrolled and multiple selection, groups, disabled items, readOnly browsing, typeahead, keyboard navigation, dismissal/focus restoration and viewport flipping are implemented. Form integration, event details, custom triggers/anchors, all positioning and visual certification remain pending. Flutter SDK lacks public listbox/option roles and comboBox debug validation; native button/list semantics are used."
     },
     {
       "id": "sensitive-input",
