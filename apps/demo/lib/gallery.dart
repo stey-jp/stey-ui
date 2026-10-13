@@ -382,7 +382,6 @@ class _SteyGalleryState extends State<SteyGallery> {
                                                   bold: true,
                                                 ),
                                               ),
-                                              Spacer(),
                                               SteyBadge(child: Text('プレビュー')),
                                             ],
                                           ),
