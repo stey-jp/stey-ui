@@ -142,6 +142,9 @@ class SteyInput extends StatelessWidget {
             autofocus: autofocus,
             focusNode: focusNode,
             maxLines: maxLines,
+            textAlignVertical: maxLines == 1
+                ? TextAlignVertical.center
+                : TextAlignVertical.top,
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
             style: TextStyle(
@@ -151,7 +154,7 @@ class SteyInput extends StatelessWidget {
             ),
             cursorColor: c.focus,
             decoration: InputDecoration(
-              isDense: true,
+              isDense: maxLines != 1,
               visualDensity: VisualDensity.standard,
               constraints: maxLines == 1
                   ? BoxConstraints.tightFor(height: size.height)

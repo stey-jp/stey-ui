@@ -7,7 +7,7 @@
 - Flutter 3.47.0 / Dart 3.13.0で `flutter analyze`：指摘0。
 - ライブラリのWidget test：19件成功。キーボード、無効／loading、入力、秘密表示、タグ、タブ、検索候補、ダイアログ、折り畳み、カレンダー3モードと年境界、Sidebarの読み上げ名、CommandPaletteのグループ・無効項目・Ctrl+Enter・検索・強調・loading・Escapeを検証。
 - デモtest：5件成功。52群をLight/Dark・390px/1280pxで描画し、例外とoverflowを検査。
-- Python同期テスト：17件成功。予約前保存、予算上限、受付不明時停止、失敗要求だけの再処理と成功結果の保存、競合とパス制限、ドキュメント更新時のAI不使用、再処理防止、ライセンス変更時停止、提案適用からPR作成までの模擬フロー。
+- Python同期テスト：18件成功。予約前保存、再試行を合算した予算上限、受付不明時停止、失敗要求だけの再処理と成功結果の保存、競合とパス制限、ドキュメント更新時のAI不使用、再処理防止、ライセンス変更時停止、提案適用からPR作成までの模擬フロー。
 - Webリリースビルド成功。Wasm＋JavaScriptフォールバック、ローカル配信、ソースマップ、`-O4`。生成mapへビルド入力ソースを埋め込み、Flutter loader mapも配信。
 - Windowsリリースビルド成功。製品の実機起動／操作は未検証。
 - shared-ci中央テスト85件、設定検査、coverage contract、actionlint、GitHub Verify shared CI成功。中央mainとローカルmainのSHA一致を確認。中央登録の全検査をローカル共通CLIでも実行。
@@ -47,7 +47,6 @@ macOS・Linux・Android・iOSのrunnerは生成済みで、ライブラリにdar
 macOS/Linux/iOSのbuildおよび全OSの実機操作は未検証。AndroidはSDK license未承認です。
 SDKライセンス承認や新しいクラウド接続は実行していません。
 
-OpenAIキーはStey jpプロジェクトの制限付きキーとしてGitHub Secretsに保存済み。
-誤作成したStey UIプロジェクトはArchive、値が表示された旧キーは失効、新しいキーへ置換済み。
+OpenAIの制限付きキーをGitHub SecretsのOPENAI_API_KEYへ保存済み。
 実Batch送信→回収→PR作成は、ユーザー指定で共通CIクラウド接続が保留のため未検証・無効です。
 Webデモはローカルで検証済み、公開ホスティングは未設定です。pub.devへは公開していません。

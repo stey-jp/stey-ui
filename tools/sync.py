@@ -6,7 +6,7 @@ import os
 import subprocess
 from pathlib import Path
 
-from sync_engine import (Api, ROOT, SHA, build_requests, collect, digest, new_state,
+from sync_engine import (Api, ROOT, SHA, budget_reservation, build_requests, collect, digest, new_state,
                          read_json, run, safe_path, stage_proposal, submit, write_json)
 
 
@@ -181,8 +181,12 @@ def main():
                 context['previous_failures']=state['pending']['errors']
                 request['body']['input']=json.dumps(context,ensure_ascii=False)
                 batches.setdefault(request['body']['model'],[]).append(request)
+            if state['attempts'].get(target,0) >= config['max_attempts']:
+                raise ValueError('RETRY_LIMIT')
+            budget_reservation(config,{**state,'pending':None},failed,target=target)
+            api=Api()
             state['history'].append({'target':target,'result':'failed-request-retry','errors':state['pending']['errors']}); state['pending']=None; persist(state)
-            submit(config,state,batches,target,persist,Api(),ROOT/'.sync-work/requests',completed)
+            submit(config,state,batches,target,persist,api,ROOT/'.sync-work/requests',completed)
             return
         if args.operation == 'validation-failed':
             if state['pending'] and state['pending']['phase']=='results-ready':

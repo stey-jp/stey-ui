@@ -93,7 +93,7 @@ def new_state(config):
             'pending': None, 'history': [], 'costs': [], 'attempts': {}}
 
 
-def budget_reservation(config, state, requests, today=None):
+def budget_reservation(config, state, requests, today=None, target=None):
     today = today or datetime.now(timezone.utc).date()
     if (today - date.fromisoformat(config['pricing_verified_at'])).days > config['pricing_max_age_days']:
         raise ValueError('PRICING_REVIEW_REQUIRED')
@@ -107,8 +107,9 @@ def budget_reservation(config, state, requests, today=None):
                      request['body']['max_output_tokens'] * model['output_per_million']) / 1_000_000
     month = today.strftime('%Y-%m')
     spent = sum(c['usd'] for c in state['costs'] if c['month'] == month)
+    target_spent = sum(c['usd'] for c in state['costs'] if target and c.get('target') == target)
     reserved = state['pending']['reserved_usd'] if state['pending'] else 0
-    if estimate > config['per_sync_budget_usd'] or spent + reserved + estimate > config['monthly_budget_usd']:
+    if target_spent + estimate > config['per_sync_budget_usd'] or spent + reserved + estimate > config['monthly_budget_usd']:
         raise ValueError('BUDGET_EXCEEDED')
     return round(estimate, 8)
 
@@ -257,7 +258,7 @@ def submit(config, state, batches, target, persist, api, requests_dir, completed
     if attempt > config['max_attempts']:
         raise ValueError('RETRY_LIMIT')
     requests = [r for group in batches.values() for r in group]
-    reservation = budget_reservation(config,state,requests)
+    reservation = budget_reservation(config,state,requests,target=target)
     state['attempts'][target] = attempt
     state['pending'] = {'target':target, 'base':state.get('observed_sha') or state['synchronized_sha'] or state['baseline_sha'],
                         'phase':'reserved', 'reserved_usd':reservation,

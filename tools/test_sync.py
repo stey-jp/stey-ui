@@ -109,6 +109,14 @@ class SyncTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'BUDGET'):
             sync.budget_reservation(self.config,self.state,[],sync.date(2026,10,13))
 
+    def test_per_sync_budget_includes_prior_attempts_across_months(self):
+        target='a'*40
+        self.state['costs']=[{'month':'2026-09','target':target,'usd':.49}]
+        requests=[{'body':{'model':self.config['models']['complex']['id'],'max_output_tokens':16000}}]
+        with self.assertRaisesRegex(ValueError,'BUDGET'):
+            sync.budget_reservation(self.config,self.state,requests,sync.date(2026,10,13),target)
+        self.assertGreater(sync.budget_reservation(self.config,self.state,requests,sync.date(2026,10,13),'b'*40),0)
+
     def test_unknown_acceptance_never_resubmits(self):
         self.state['pending']={'phase':'reserved'}
         with self.assertRaisesRegex(ValueError,'ACCEPTANCE_UNKNOWN'):

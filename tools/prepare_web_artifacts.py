@@ -1,5 +1,6 @@
 """Complete generated debugging artifacts without changing application execution."""
 import json
+import gzip
 import shutil
 from pathlib import Path
 from urllib.parse import urlparse, unquote
@@ -67,6 +68,9 @@ def prepare():
             completed += 1
         mapping['sourcesContent'] = content
         map_path.write_text(json.dumps(mapping, separators=(',', ':')), encoding='utf-8')
+    for asset in build.rglob('*'):
+        if asset.is_file() and asset.suffix in ('.html','.js','.mjs','.wasm','.map','.json','.ttf','.otf'):
+            asset.with_name(asset.name+'.gz').write_bytes(gzip.compress(asset.read_bytes(),mtime=0))
     print(json.dumps({'loader_source_map': True, 'embedded_sources': completed}))
 
 

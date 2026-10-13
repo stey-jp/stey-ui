@@ -22,8 +22,10 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_response(304);self.send_header('ETag',tag);self.end_headers();return
         mime=self.guess_type(str(path))
         compress=('gzip' in self.headers.get('Accept-Encoding','') and
-                  (mime.startswith('text/') or path.suffix in ('.js','.json','.wasm','.map')))
-        if compress:data=gzip.compress(data)
+                  (mime.startswith('text/') or path.suffix in ('.js','.mjs','.json','.wasm','.map','.ttf','.otf')))
+        if compress:
+            cached=path.with_name(path.name+'.gz')
+            data=cached.read_bytes() if cached.is_file() and cached.stat().st_mtime>=path.stat().st_mtime else gzip.compress(data)
         self.send_response(200)
         self.send_header('Content-Type',mime)
         self.send_header('Content-Length',str(len(data)))
