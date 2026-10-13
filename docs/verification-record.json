@@ -1,0 +1,5619 @@
+{
+  "recorded_at": "2026-10-13T09:58:07.646840+00:00",
+  "verified_source_sha": "e6658a0bc85c1168276d0ceb8d279da700a9a502",
+  "kumo_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
+  "status": "development-preview; full completion criteria unmet",
+  "toolchain": {
+    "flutter": "3.47.0",
+    "flutter_sha": "4cf24164269a5ebf0c16a028a00727d0e77bbb05",
+    "dart": "3.13.0",
+    "chrome": "155.0.8059.40"
+  },
+  "tests": {
+    "flutter_analyze_issues": 0,
+    "library_widget_tests": 27,
+    "demo_tests": 5,
+    "python_sync_tests": 18,
+    "api_calls_mocked": true
+  },
+  "release_builds": {
+    "source_sha": "ad040f4ada2f75cb212775d22df11df8da194fe4",
+    "artifacts": [
+      {
+        "path": "apps/demo/build/windows/x64/runner/Release/stey_ui_demo.exe",
+        "bytes": 91136,
+        "sha256": "d117b275cd7ce49d1782b9782de0ad9551e63ae39c1de7cb3faa4d489f5e6cf2"
+      },
+      {
+        "path": "apps/demo/build/windows/x64/runner/Release/data/app.so",
+        "bytes": 6128520,
+        "sha256": "5f9862a7e61117e12a5c7305a4b629a081623ec08e1483866a620085032a915a"
+      },
+      {
+        "path": "apps/demo/build/app/outputs/flutter-apk/app-release.apk",
+        "bytes": 52011604,
+        "sha256": "2b4224393a369bce79993951b78ac88aee482c0b0d2aa242bf5b46adf0bc1939"
+      },
+      {
+        "path": "apps/demo/build/web/main.dart.wasm",
+        "bytes": 2278282,
+        "sha256": "1e126c51679da6e9088c78713c553b7e7be3a61be0856e002ae36df964b87bf8"
+      }
+    ]
+  },
+  "platforms": {
+    "web": "release build and real Chrome gallery/input/history tests passed",
+    "windows": {
+      "build": "passed",
+      "interaction_source_sha": "934cc541dd2a4b5b862b8aa074ee1e647579a4b5",
+      "checks": [
+        "release launch",
+        "button activation",
+        "disabled inert",
+        "loading inert",
+        "light/dark",
+        "state retained"
+      ]
+    },
+    "android": {
+      "success": true,
+      "device": "emulator-5568",
+      "api": "36",
+      "apk_sha256": "2b4224393a369bce79993951b78ac88aee482c0b0d2aa242bf5b46adf0bc1939",
+      "tested_source_sha": "934cc541dd2a4b5b862b8aa074ee1e647579a4b5",
+      "checks": [
+        "release launch",
+        "button activation",
+        "disabled inert",
+        "loading inert",
+        "light/dark",
+        "state retained",
+        "no app runtime error"
+      ]
+    },
+    "linux": {
+      "build": "passed",
+      "source_sha": "934cc541dd2a4b5b862b8aa074ee1e647579a4b5",
+      "distribution": "Ubuntu 24.04.5 LTS x64",
+      "environment": "Docker container on WSL2; Xvfb virtual screen; software Impeller rendering",
+      "physical_device": false,
+      "all_components_or_screen_reader_verified": false,
+      "checks": [
+        "release launch",
+        "button activation",
+        "disabled inert",
+        "loading inert",
+        "light/dark",
+        "state retained",
+        "no application runtime error after desktop runtime setup"
+      ],
+      "artifacts": [
+        {
+          "path": "output/linux/bundle/stey_ui_demo",
+          "bytes": 24016,
+          "sha256": "5971c80d4e5532764c402db689871814045c12e73f6ec0249164d35d5c445b79"
+        },
+        {
+          "path": "output/linux/bundle/lib/libapp.so",
+          "bytes": 6128520,
+          "sha256": "c4074ab32ffede4a29f0f869fdbcae62d5d7e5c3da68114941ad0c7773b6945b"
+        }
+      ]
+    },
+    "macos": "unverified; no macOS host",
+    "ios": "unverified; no macOS/Xcode host",
+    "physical_mobile_devices": "unverified"
+  },
+  "visual_diagnostics": {
+    "samples": 152,
+    "approved_full_parity": false,
+    "pixelmatch_threshold": 0.1,
+    "include_anti_aliasing": true,
+    "loading_phase_aligned": false,
+    "component_bounds_method": "Union of non-background painted pixels in both images, expanded by 4px; same threshold and anti-alias inclusion.",
+    "rows": [
+      {
+        "id": "button-primary-light",
+        "state": "idle",
+        "changedPixels": 318,
+        "totalPixels": 96000,
+        "changedRatio": 0.0033125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.09949937421777222
+      },
+      {
+        "id": "button-primary-hover-light",
+        "state": "hover",
+        "changedPixels": 269,
+        "totalPixels": 96000,
+        "changedRatio": 0.0028020833333333335,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.08416770963704631
+      },
+      {
+        "id": "button-primary-disabled-light",
+        "state": "disabled",
+        "changedPixels": 137,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014270833333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.042866082603254065
+      },
+      {
+        "id": "button-primary-loading-light",
+        "state": "loading",
+        "changedPixels": 171,
+        "totalPixels": 96000,
+        "changedRatio": 0.00178125,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 47
+        },
+        "componentChangedRatio": 0.04134429400386847
+      },
+      {
+        "id": "button-secondary-light",
+        "state": "idle",
+        "changedPixels": 164,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017083333333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.05131414267834793
+      },
+      {
+        "id": "button-secondary-hover-light",
+        "state": "hover",
+        "changedPixels": 162,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.05068836045056321
+      },
+      {
+        "id": "button-secondary-disabled-light",
+        "state": "disabled",
+        "changedPixels": 38,
+        "totalPixels": 96000,
+        "changedRatio": 0.0003958333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.011889862327909888
+      },
+      {
+        "id": "button-secondary-loading-light",
+        "state": "loading",
+        "changedPixels": 188,
+        "totalPixels": 96000,
+        "changedRatio": 0.001958333333333333,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 47
+        },
+        "componentChangedRatio": 0.045454545454545456
+      },
+      {
+        "id": "button-ghost-light",
+        "state": "idle",
+        "changedPixels": 164,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017083333333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 279,
+          "top": 71,
+          "width": 42,
+          "height": 20
+        },
+        "componentChangedRatio": 0.19523809523809524
+      },
+      {
+        "id": "button-ghost-hover-light",
+        "state": "hover",
+        "changedPixels": 162,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 267,
+          "top": 58,
+          "width": 66,
+          "height": 44
+        },
+        "componentChangedRatio": 0.05578512396694215
+      },
+      {
+        "id": "button-ghost-disabled-light",
+        "state": "disabled",
+        "changedPixels": 22,
+        "totalPixels": 96000,
+        "changedRatio": 0.00022916666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 280,
+          "top": 71,
+          "width": 41,
+          "height": 20
+        },
+        "componentChangedRatio": 0.026829268292682926
+      },
+      {
+        "id": "button-ghost-loading-light",
+        "state": "loading",
+        "changedPixels": 166,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017291666666666666,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 69,
+          "width": 61,
+          "height": 22
+        },
+        "componentChangedRatio": 0.12369597615499255
+      },
+      {
+        "id": "button-destructive-light",
+        "state": "idle",
+        "changedPixels": 273,
+        "totalPixels": 96000,
+        "changedRatio": 0.00284375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.08541927409261577
+      },
+      {
+        "id": "button-destructive-hover-light",
+        "state": "hover",
+        "changedPixels": 226,
+        "totalPixels": 96000,
+        "changedRatio": 0.0023541666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.0707133917396746
+      },
+      {
+        "id": "button-destructive-disabled-light",
+        "state": "disabled",
+        "changedPixels": 132,
+        "totalPixels": 96000,
+        "changedRatio": 0.001375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.04130162703379224
+      },
+      {
+        "id": "button-destructive-loading-light",
+        "state": "loading",
+        "changedPixels": 163,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016979166666666666,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 47
+        },
+        "componentChangedRatio": 0.0394100580270793
+      },
+      {
+        "id": "button-secondaryDestructive-light",
+        "state": "idle",
+        "changedPixels": 138,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.043178973717146435
+      },
+      {
+        "id": "button-secondaryDestructive-hover-light",
+        "state": "hover",
+        "changedPixels": 138,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.043178973717146435
+      },
+      {
+        "id": "button-secondaryDestructive-disabled-light",
+        "state": "disabled",
+        "changedPixels": 33,
+        "totalPixels": 96000,
+        "changedRatio": 0.00034375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.01032540675844806
+      },
+      {
+        "id": "button-secondaryDestructive-loading-light",
+        "state": "loading",
+        "changedPixels": 146,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015208333333333332,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 47
+        },
+        "componentChangedRatio": 0.03529980657640232
+      },
+      {
+        "id": "button-outline-light",
+        "state": "idle",
+        "changedPixels": 164,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017083333333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.05131414267834793
+      },
+      {
+        "id": "button-outline-hover-light",
+        "state": "hover",
+        "changedPixels": 209,
+        "totalPixels": 96000,
+        "changedRatio": 0.0021770833333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.06539424280350438
+      },
+      {
+        "id": "button-outline-disabled-light",
+        "state": "disabled",
+        "changedPixels": 22,
+        "totalPixels": 96000,
+        "changedRatio": 0.00022916666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 47
+        },
+        "componentChangedRatio": 0.00688360450563204
+      },
+      {
+        "id": "button-outline-loading-light",
+        "state": "loading",
+        "changedPixels": 167,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017395833333333334,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 47
+        },
+        "componentChangedRatio": 0.04037717601547389
+      },
+      {
+        "id": "button-secondary-xs-light",
+        "state": "idle",
+        "changedPixels": 171,
+        "totalPixels": 96000,
+        "changedRatio": 0.00178125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 275,
+          "top": 65,
+          "width": 50,
+          "height": 31
+        },
+        "componentChangedRatio": 0.11032258064516129
+      },
+      {
+        "id": "button-secondary-xs-square-light",
+        "state": "idle",
+        "changedPixels": 15,
+        "totalPixels": 96000,
+        "changedRatio": 0.00015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 288,
+          "top": 68,
+          "width": 24,
+          "height": 25
+        },
+        "componentChangedRatio": 0.025
+      },
+      {
+        "id": "button-secondary-xs-circle-light",
+        "state": "idle",
+        "changedPixels": 15,
+        "totalPixels": 96000,
+        "changedRatio": 0.00015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 288,
+          "top": 68,
+          "width": 24,
+          "height": 25
+        },
+        "componentChangedRatio": 0.025
+      },
+      {
+        "id": "button-secondary-sm-light",
+        "state": "idle",
+        "changedPixels": 171,
+        "totalPixels": 96000,
+        "changedRatio": 0.00178125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 273,
+          "top": 62,
+          "width": 54,
+          "height": 37
+        },
+        "componentChangedRatio": 0.08558558558558559
+      },
+      {
+        "id": "button-secondary-sm-square-light",
+        "state": "idle",
+        "changedPixels": 15,
+        "totalPixels": 96000,
+        "changedRatio": 0.00015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 282,
+          "top": 62,
+          "width": 36,
+          "height": 37
+        },
+        "componentChangedRatio": 0.01126126126126126
+      },
+      {
+        "id": "button-secondary-sm-circle-light",
+        "state": "idle",
+        "changedPixels": 15,
+        "totalPixels": 96000,
+        "changedRatio": 0.00015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 282,
+          "top": 62,
+          "width": 36,
+          "height": 37
+        },
+        "componentChangedRatio": 0.01126126126126126
+      },
+      {
+        "id": "button-secondary-square-light",
+        "state": "idle",
+        "changedPixels": 28,
+        "totalPixels": 96000,
+        "changedRatio": 0.0002916666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 277,
+          "top": 57,
+          "width": 46,
+          "height": 47
+        },
+        "componentChangedRatio": 0.012950971322849213
+      },
+      {
+        "id": "button-secondary-circle-light",
+        "state": "idle",
+        "changedPixels": 28,
+        "totalPixels": 96000,
+        "changedRatio": 0.0002916666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 277,
+          "top": 57,
+          "width": 46,
+          "height": 47
+        },
+        "componentChangedRatio": 0.012950971322849213
+      },
+      {
+        "id": "button-secondary-lg-light",
+        "state": "idle",
+        "changedPixels": 164,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017083333333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 55,
+          "width": 76,
+          "height": 51
+        },
+        "componentChangedRatio": 0.04231166150670795
+      },
+      {
+        "id": "button-secondary-lg-square-light",
+        "state": "idle",
+        "changedPixels": 28,
+        "totalPixels": 96000,
+        "changedRatio": 0.0002916666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 275,
+          "top": 55,
+          "width": 50,
+          "height": 51
+        },
+        "componentChangedRatio": 0.010980392156862745
+      },
+      {
+        "id": "button-secondary-lg-circle-light",
+        "state": "idle",
+        "changedPixels": 28,
+        "totalPixels": 96000,
+        "changedRatio": 0.0002916666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 275,
+          "top": 55,
+          "width": 50,
+          "height": 51
+        },
+        "componentChangedRatio": 0.010980392156862745
+      },
+      {
+        "id": "badge-primary-light",
+        "state": "idle",
+        "changedPixels": 169,
+        "totalPixels": 96000,
+        "changedRatio": 0.0017604166666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.09735023041474654
+      },
+      {
+        "id": "badge-primary-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-secondary-light",
+        "state": "idle",
+        "changedPixels": 152,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015833333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08755760368663594
+      },
+      {
+        "id": "badge-secondary-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-error-light",
+        "state": "idle",
+        "changedPixels": 128,
+        "totalPixels": 96000,
+        "changedRatio": 0.0013333333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 66,
+          "width": 60,
+          "height": 28
+        },
+        "componentChangedRatio": 0.0761904761904762
+      },
+      {
+        "id": "badge-error-dot-light",
+        "state": "idle",
+        "changedPixels": 196,
+        "totalPixels": 96000,
+        "changedRatio": 0.0020416666666666665,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.08596491228070176
+      },
+      {
+        "id": "badge-warning-light",
+        "state": "idle",
+        "changedPixels": 102,
+        "totalPixels": 96000,
+        "changedRatio": 0.0010625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 66,
+          "width": 60,
+          "height": 28
+        },
+        "componentChangedRatio": 0.060714285714285714
+      },
+      {
+        "id": "badge-warning-dot-light",
+        "state": "idle",
+        "changedPixels": 188,
+        "totalPixels": 96000,
+        "changedRatio": 0.001958333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0824561403508772
+      },
+      {
+        "id": "badge-success-light",
+        "state": "idle",
+        "changedPixels": 154,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016041666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 66,
+          "width": 60,
+          "height": 28
+        },
+        "componentChangedRatio": 0.09166666666666666
+      },
+      {
+        "id": "badge-success-dot-light",
+        "state": "idle",
+        "changedPixels": 193,
+        "totalPixels": 96000,
+        "changedRatio": 0.002010416666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.08464912280701754
+      },
+      {
+        "id": "badge-destructive-light",
+        "state": "idle",
+        "changedPixels": 99,
+        "totalPixels": 96000,
+        "changedRatio": 0.00103125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.057027649769585256
+      },
+      {
+        "id": "badge-destructive-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-info-light",
+        "state": "idle",
+        "changedPixels": 139,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014479166666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 66,
+          "width": 60,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08273809523809524
+      },
+      {
+        "id": "badge-info-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-beta-light",
+        "state": "idle",
+        "changedPixels": 246,
+        "totalPixels": 96000,
+        "changedRatio": 0.0025625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 63,
+          "height": 31
+        },
+        "componentChangedRatio": 0.1259600614439324
+      },
+      {
+        "id": "badge-beta-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-outline-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-outline-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-red-light",
+        "state": "idle",
+        "changedPixels": 99,
+        "totalPixels": 96000,
+        "changedRatio": 0.00103125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.057027649769585256
+      },
+      {
+        "id": "badge-red-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-green-light",
+        "state": "idle",
+        "changedPixels": 151,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015729166666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.0869815668202765
+      },
+      {
+        "id": "badge-green-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-neutral-light",
+        "state": "idle",
+        "changedPixels": 107,
+        "totalPixels": 96000,
+        "changedRatio": 0.0011145833333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.061635944700460826
+      },
+      {
+        "id": "badge-neutral-dot-light",
+        "state": "idle",
+        "changedPixels": 189,
+        "totalPixels": 96000,
+        "changedRatio": 0.00196875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.08289473684210526
+      },
+      {
+        "id": "badge-orange-light",
+        "state": "idle",
+        "changedPixels": 150,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08640552995391705
+      },
+      {
+        "id": "badge-orange-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-purple-light",
+        "state": "idle",
+        "changedPixels": 79,
+        "totalPixels": 96000,
+        "changedRatio": 0.0008229166666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.04550691244239631
+      },
+      {
+        "id": "badge-purple-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-teal-light",
+        "state": "idle",
+        "changedPixels": 150,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08640552995391705
+      },
+      {
+        "id": "badge-teal-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-tealSubtle-light",
+        "state": "idle",
+        "changedPixels": 156,
+        "totalPixels": 96000,
+        "changedRatio": 0.001625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 278,
+          "top": 70,
+          "width": 44,
+          "height": 19
+        },
+        "componentChangedRatio": 0.18660287081339713
+      },
+      {
+        "id": "badge-tealSubtle-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "badge-blue-light",
+        "state": "idle",
+        "changedPixels": 136,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014166666666666668,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.07834101382488479
+      },
+      {
+        "id": "badge-blue-dot-light",
+        "state": "idle",
+        "changedPixels": 174,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.090625
+      },
+      {
+        "id": "input-default-light",
+        "state": "idle",
+        "changedPixels": 100,
+        "totalPixels": 96000,
+        "changedRatio": 0.0010416666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 155,
+          "top": 57,
+          "width": 290,
+          "height": 46
+        },
+        "componentChangedRatio": 0.0074962518740629685
+      },
+      {
+        "id": "button-primary-dark",
+        "state": "idle",
+        "changedPixels": 251,
+        "totalPixels": 96000,
+        "changedRatio": 0.0026145833333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.08024296675191815
+      },
+      {
+        "id": "button-primary-hover-dark",
+        "state": "hover",
+        "changedPixels": 197,
+        "totalPixels": 96000,
+        "changedRatio": 0.0020520833333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.06297953964194374
+      },
+      {
+        "id": "button-primary-disabled-dark",
+        "state": "disabled",
+        "changedPixels": 37,
+        "totalPixels": 96000,
+        "changedRatio": 0.00038541666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.011828644501278773
+      },
+      {
+        "id": "button-primary-loading-dark",
+        "state": "loading",
+        "changedPixels": 70,
+        "totalPixels": 96000,
+        "changedRatio": 0.0007291666666666667,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 46
+        },
+        "componentChangedRatio": 0.017292490118577076
+      },
+      {
+        "id": "button-secondary-dark",
+        "state": "idle",
+        "changedPixels": 177,
+        "totalPixels": 96000,
+        "changedRatio": 0.00184375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.056585677749360616
+      },
+      {
+        "id": "button-secondary-hover-dark",
+        "state": "hover",
+        "changedPixels": 158,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016458333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.05051150895140665
+      },
+      {
+        "id": "button-secondary-disabled-dark",
+        "state": "disabled",
+        "changedPixels": 32,
+        "totalPixels": 96000,
+        "changedRatio": 0.0003333333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.010230179028132993
+      },
+      {
+        "id": "button-secondary-loading-dark",
+        "state": "loading",
+        "changedPixels": 182,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018958333333333334,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 46
+        },
+        "componentChangedRatio": 0.04496047430830039
+      },
+      {
+        "id": "button-ghost-dark",
+        "state": "idle",
+        "changedPixels": 177,
+        "totalPixels": 96000,
+        "changedRatio": 0.00184375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 279,
+          "top": 71,
+          "width": 42,
+          "height": 20
+        },
+        "componentChangedRatio": 0.21071428571428572
+      },
+      {
+        "id": "button-ghost-hover-dark",
+        "state": "hover",
+        "changedPixels": 158,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016458333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 267,
+          "top": 58,
+          "width": 66,
+          "height": 44
+        },
+        "componentChangedRatio": 0.05440771349862259
+      },
+      {
+        "id": "button-ghost-disabled-dark",
+        "state": "disabled",
+        "changedPixels": 25,
+        "totalPixels": 96000,
+        "changedRatio": 0.00026041666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 279,
+          "top": 71,
+          "width": 42,
+          "height": 20
+        },
+        "componentChangedRatio": 0.02976190476190476
+      },
+      {
+        "id": "button-ghost-loading-dark",
+        "state": "loading",
+        "changedPixels": 160,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016666666666666668,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 69,
+          "width": 61,
+          "height": 22
+        },
+        "componentChangedRatio": 0.11922503725782414
+      },
+      {
+        "id": "button-destructive-dark",
+        "state": "idle",
+        "changedPixels": 293,
+        "totalPixels": 96000,
+        "changedRatio": 0.0030520833333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.09367007672634271
+      },
+      {
+        "id": "button-destructive-hover-dark",
+        "state": "hover",
+        "changedPixels": 228,
+        "totalPixels": 96000,
+        "changedRatio": 0.002375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.07289002557544758
+      },
+      {
+        "id": "button-destructive-disabled-dark",
+        "state": "disabled",
+        "changedPixels": 52,
+        "totalPixels": 96000,
+        "changedRatio": 0.0005416666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.016624040920716114
+      },
+      {
+        "id": "button-destructive-loading-dark",
+        "state": "loading",
+        "changedPixels": 86,
+        "totalPixels": 96000,
+        "changedRatio": 0.0008958333333333333,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 46
+        },
+        "componentChangedRatio": 0.021245059288537548
+      },
+      {
+        "id": "button-secondaryDestructive-dark",
+        "state": "idle",
+        "changedPixels": 135,
+        "totalPixels": 96000,
+        "changedRatio": 0.00140625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.04315856777493606
+      },
+      {
+        "id": "button-secondaryDestructive-hover-dark",
+        "state": "hover",
+        "changedPixels": 135,
+        "totalPixels": 96000,
+        "changedRatio": 0.00140625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.04315856777493606
+      },
+      {
+        "id": "button-secondaryDestructive-disabled-dark",
+        "state": "disabled",
+        "changedPixels": 14,
+        "totalPixels": 96000,
+        "changedRatio": 0.00014583333333333335,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.004475703324808184
+      },
+      {
+        "id": "button-secondaryDestructive-loading-dark",
+        "state": "loading",
+        "changedPixels": 150,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015625,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 46
+        },
+        "componentChangedRatio": 0.03705533596837945
+      },
+      {
+        "id": "button-outline-dark",
+        "state": "idle",
+        "changedPixels": 177,
+        "totalPixels": 96000,
+        "changedRatio": 0.00184375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.056585677749360616
+      },
+      {
+        "id": "button-outline-hover-dark",
+        "state": "hover",
+        "changedPixels": 178,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018541666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.05690537084398977
+      },
+      {
+        "id": "button-outline-disabled-dark",
+        "state": "disabled",
+        "changedPixels": 25,
+        "totalPixels": 96000,
+        "changedRatio": 0.00026041666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 266,
+          "top": 57,
+          "width": 68,
+          "height": 46
+        },
+        "componentChangedRatio": 0.0079923273657289
+      },
+      {
+        "id": "button-outline-loading-dark",
+        "state": "loading",
+        "changedPixels": 159,
+        "totalPixels": 96000,
+        "changedRatio": 0.00165625,
+        "animationPhaseAligned": false,
+        "componentPixelBounds": {
+          "left": 256,
+          "top": 57,
+          "width": 88,
+          "height": 46
+        },
+        "componentChangedRatio": 0.039278656126482216
+      },
+      {
+        "id": "button-secondary-xs-dark",
+        "state": "idle",
+        "changedPixels": 191,
+        "totalPixels": 96000,
+        "changedRatio": 0.0019895833333333332,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 274,
+          "top": 65,
+          "width": 52,
+          "height": 30
+        },
+        "componentChangedRatio": 0.12243589743589743
+      },
+      {
+        "id": "button-secondary-xs-square-dark",
+        "state": "idle",
+        "changedPixels": 17,
+        "totalPixels": 96000,
+        "changedRatio": 0.00017708333333333335,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 288,
+          "top": 68,
+          "width": 24,
+          "height": 24
+        },
+        "componentChangedRatio": 0.029513888888888888
+      },
+      {
+        "id": "button-secondary-xs-circle-dark",
+        "state": "idle",
+        "changedPixels": 17,
+        "totalPixels": 96000,
+        "changedRatio": 0.00017708333333333335,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 288,
+          "top": 68,
+          "width": 24,
+          "height": 24
+        },
+        "componentChangedRatio": 0.029513888888888888
+      },
+      {
+        "id": "button-secondary-sm-dark",
+        "state": "idle",
+        "changedPixels": 183,
+        "totalPixels": 96000,
+        "changedRatio": 0.00190625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 272,
+          "top": 62,
+          "width": 56,
+          "height": 36
+        },
+        "componentChangedRatio": 0.09077380952380952
+      },
+      {
+        "id": "button-secondary-sm-square-dark",
+        "state": "idle",
+        "changedPixels": 17,
+        "totalPixels": 96000,
+        "changedRatio": 0.00017708333333333335,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 282,
+          "top": 62,
+          "width": 36,
+          "height": 36
+        },
+        "componentChangedRatio": 0.013117283950617283
+      },
+      {
+        "id": "button-secondary-sm-circle-dark",
+        "state": "idle",
+        "changedPixels": 17,
+        "totalPixels": 96000,
+        "changedRatio": 0.00017708333333333335,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 282,
+          "top": 62,
+          "width": 36,
+          "height": 36
+        },
+        "componentChangedRatio": 0.013117283950617283
+      },
+      {
+        "id": "button-secondary-square-dark",
+        "state": "idle",
+        "changedPixels": 30,
+        "totalPixels": 96000,
+        "changedRatio": 0.0003125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 277,
+          "top": 57,
+          "width": 46,
+          "height": 46
+        },
+        "componentChangedRatio": 0.014177693761814745
+      },
+      {
+        "id": "button-secondary-circle-dark",
+        "state": "idle",
+        "changedPixels": 30,
+        "totalPixels": 96000,
+        "changedRatio": 0.0003125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 277,
+          "top": 57,
+          "width": 46,
+          "height": 46
+        },
+        "componentChangedRatio": 0.014177693761814745
+      },
+      {
+        "id": "button-secondary-lg-dark",
+        "state": "idle",
+        "changedPixels": 177,
+        "totalPixels": 96000,
+        "changedRatio": 0.00184375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 55,
+          "width": 76,
+          "height": 50
+        },
+        "componentChangedRatio": 0.04657894736842105
+      },
+      {
+        "id": "button-secondary-lg-square-dark",
+        "state": "idle",
+        "changedPixels": 30,
+        "totalPixels": 96000,
+        "changedRatio": 0.0003125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 275,
+          "top": 55,
+          "width": 50,
+          "height": 50
+        },
+        "componentChangedRatio": 0.012
+      },
+      {
+        "id": "button-secondary-lg-circle-dark",
+        "state": "idle",
+        "changedPixels": 30,
+        "totalPixels": 96000,
+        "changedRatio": 0.0003125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 275,
+          "top": 55,
+          "width": 50,
+          "height": 50
+        },
+        "componentChangedRatio": 0.012
+      },
+      {
+        "id": "badge-primary-dark",
+        "state": "idle",
+        "changedPixels": 180,
+        "totalPixels": 96000,
+        "changedRatio": 0.001875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.10368663594470046
+      },
+      {
+        "id": "badge-primary-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-secondary-dark",
+        "state": "idle",
+        "changedPixels": 147,
+        "totalPixels": 96000,
+        "changedRatio": 0.00153125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.0846774193548387
+      },
+      {
+        "id": "badge-secondary-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-error-dark",
+        "state": "idle",
+        "changedPixels": 122,
+        "totalPixels": 96000,
+        "changedRatio": 0.0012708333333333332,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.07027649769585254
+      },
+      {
+        "id": "badge-error-dot-dark",
+        "state": "idle",
+        "changedPixels": 179,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018645833333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.07850877192982456
+      },
+      {
+        "id": "badge-warning-dark",
+        "state": "idle",
+        "changedPixels": 112,
+        "totalPixels": 96000,
+        "changedRatio": 0.0011666666666666668,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.06451612903225806
+      },
+      {
+        "id": "badge-warning-dot-dark",
+        "state": "idle",
+        "changedPixels": 182,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018958333333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.07982456140350877
+      },
+      {
+        "id": "badge-success-dark",
+        "state": "idle",
+        "changedPixels": 142,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014791666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 270,
+          "top": 66,
+          "width": 60,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08452380952380953
+      },
+      {
+        "id": "badge-success-dot-dark",
+        "state": "idle",
+        "changedPixels": 181,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018854166666666668,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0793859649122807
+      },
+      {
+        "id": "badge-destructive-dark",
+        "state": "idle",
+        "changedPixels": 113,
+        "totalPixels": 96000,
+        "changedRatio": 0.0011770833333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.06509216589861751
+      },
+      {
+        "id": "badge-destructive-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-info-dark",
+        "state": "idle",
+        "changedPixels": 91,
+        "totalPixels": 96000,
+        "changedRatio": 0.0009479166666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.05241935483870968
+      },
+      {
+        "id": "badge-info-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-beta-dark",
+        "state": "idle",
+        "changedPixels": 182,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018958333333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 63,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0962962962962963
+      },
+      {
+        "id": "badge-beta-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-outline-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-outline-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-red-dark",
+        "state": "idle",
+        "changedPixels": 113,
+        "totalPixels": 96000,
+        "changedRatio": 0.0011770833333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.06509216589861751
+      },
+      {
+        "id": "badge-red-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-green-dark",
+        "state": "idle",
+        "changedPixels": 157,
+        "totalPixels": 96000,
+        "changedRatio": 0.0016354166666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.09043778801843318
+      },
+      {
+        "id": "badge-green-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-neutral-dark",
+        "state": "idle",
+        "changedPixels": 124,
+        "totalPixels": 96000,
+        "changedRatio": 0.0012916666666666667,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.07142857142857142
+      },
+      {
+        "id": "badge-neutral-dot-dark",
+        "state": "idle",
+        "changedPixels": 173,
+        "totalPixels": 96000,
+        "changedRatio": 0.0018020833333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 262,
+          "top": 65,
+          "width": 76,
+          "height": 30
+        },
+        "componentChangedRatio": 0.07587719298245614
+      },
+      {
+        "id": "badge-orange-dark",
+        "state": "idle",
+        "changedPixels": 150,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08640552995391705
+      },
+      {
+        "id": "badge-orange-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-purple-dark",
+        "state": "idle",
+        "changedPixels": 92,
+        "totalPixels": 96000,
+        "changedRatio": 0.0009583333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.052995391705069124
+      },
+      {
+        "id": "badge-purple-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-teal-dark",
+        "state": "idle",
+        "changedPixels": 152,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015833333333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08755760368663594
+      },
+      {
+        "id": "badge-teal-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-tealSubtle-dark",
+        "state": "idle",
+        "changedPixels": 150,
+        "totalPixels": 96000,
+        "changedRatio": 0.0015625,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 278,
+          "top": 70,
+          "width": 44,
+          "height": 19
+        },
+        "componentChangedRatio": 0.17942583732057416
+      },
+      {
+        "id": "badge-tealSubtle-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "badge-blue-dark",
+        "state": "idle",
+        "changedPixels": 142,
+        "totalPixels": 96000,
+        "changedRatio": 0.0014791666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 269,
+          "top": 66,
+          "width": 62,
+          "height": 28
+        },
+        "componentChangedRatio": 0.08179723502304148
+      },
+      {
+        "id": "badge-blue-dot-dark",
+        "state": "idle",
+        "changedPixels": 168,
+        "totalPixels": 96000,
+        "changedRatio": 0.00175,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 268,
+          "top": 65,
+          "width": 64,
+          "height": 30
+        },
+        "componentChangedRatio": 0.0875
+      },
+      {
+        "id": "input-default-dark",
+        "state": "idle",
+        "changedPixels": 99,
+        "totalPixels": 96000,
+        "changedRatio": 0.00103125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 155,
+          "top": 57,
+          "width": 290,
+          "height": 46
+        },
+        "componentChangedRatio": 0.007421289355322339
+      },
+      {
+        "id": "button-primary-focus-light",
+        "state": "focus",
+        "changedPixels": 324,
+        "totalPixels": 96000,
+        "changedRatio": 0.003375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09642857142857143
+      },
+      {
+        "id": "button-secondary-focus-light",
+        "state": "focus",
+        "changedPixels": 330,
+        "totalPixels": 96000,
+        "changedRatio": 0.0034375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09821428571428571
+      },
+      {
+        "id": "button-ghost-focus-light",
+        "state": "focus",
+        "changedPixels": 332,
+        "totalPixels": 96000,
+        "changedRatio": 0.0034583333333333332,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.0988095238095238
+      },
+      {
+        "id": "button-destructive-focus-light",
+        "state": "focus",
+        "changedPixels": 281,
+        "totalPixels": 96000,
+        "changedRatio": 0.002927083333333333,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.08363095238095238
+      },
+      {
+        "id": "button-secondaryDestructive-focus-light",
+        "state": "focus",
+        "changedPixels": 304,
+        "totalPixels": 96000,
+        "changedRatio": 0.0031666666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09047619047619047
+      },
+      {
+        "id": "button-outline-focus-light",
+        "state": "focus",
+        "changedPixels": 330,
+        "totalPixels": 96000,
+        "changedRatio": 0.0034375,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09821428571428571
+      },
+      {
+        "id": "button-primary-focus-dark",
+        "state": "focus",
+        "changedPixels": 256,
+        "totalPixels": 96000,
+        "changedRatio": 0.0026666666666666666,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.0761904761904762
+      },
+      {
+        "id": "button-secondary-focus-dark",
+        "state": "focus",
+        "changedPixels": 309,
+        "totalPixels": 96000,
+        "changedRatio": 0.00321875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09196428571428572
+      },
+      {
+        "id": "button-ghost-focus-dark",
+        "state": "focus",
+        "changedPixels": 309,
+        "totalPixels": 96000,
+        "changedRatio": 0.00321875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09196428571428572
+      },
+      {
+        "id": "button-destructive-focus-dark",
+        "state": "focus",
+        "changedPixels": 305,
+        "totalPixels": 96000,
+        "changedRatio": 0.0031770833333333334,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09077380952380952
+      },
+      {
+        "id": "button-secondaryDestructive-focus-dark",
+        "state": "focus",
+        "changedPixels": 267,
+        "totalPixels": 96000,
+        "changedRatio": 0.00278125,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.07946428571428571
+      },
+      {
+        "id": "button-outline-focus-dark",
+        "state": "focus",
+        "changedPixels": 309,
+        "totalPixels": 96000,
+        "changedRatio": 0.00321875,
+        "animationPhaseAligned": null,
+        "componentPixelBounds": {
+          "left": 265,
+          "top": 56,
+          "width": 70,
+          "height": 48
+        },
+        "componentChangedRatio": 0.09196428571428572
+      }
+    ],
+    "focus_state": "Keyboard focus verified on both native semantic DOM and reference button; pointer moved outside.",
+    "max_canvas_changed_ratio": 0.0034583333333333332
+  },
+  "colors": {
+    "count": 80,
+    "success": true,
+    "method": "Both colors composited on the official base; per-channel tolerance 1.",
+    "rows": [
+      {
+        "mode": "light",
+        "name": "canvas",
+        "reference": [
+          251,
+          251,
+          251,
+          255
+        ],
+        "candidate": [
+          251,
+          251,
+          251,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "base",
+        "reference": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "candidate": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "elevated",
+        "reference": [
+          248,
+          248,
+          248,
+          255
+        ],
+        "candidate": [
+          248,
+          248,
+          248,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "recessed",
+        "reference": [
+          243,
+          243,
+          243,
+          255
+        ],
+        "candidate": [
+          243,
+          243,
+          243,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "tint",
+        "reference": [
+          245,
+          245,
+          245,
+          255
+        ],
+        "candidate": [
+          245,
+          245,
+          245,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "fill",
+        "reference": [
+          229,
+          229,
+          229,
+          255
+        ],
+        "candidate": [
+          229,
+          229,
+          229,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "overlay",
+        "reference": [
+          251,
+          251,
+          251,
+          255
+        ],
+        "candidate": [
+          251,
+          251,
+          251,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "control",
+        "reference": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "candidate": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "contrast",
+        "reference": [
+          6,
+          6,
+          6,
+          255
+        ],
+        "candidate": [
+          6,
+          6,
+          6,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "brand",
+        "reference": [
+          5,
+          109,
+          255,
+          255
+        ],
+        "candidate": [
+          5,
+          109,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "line",
+        "reference": [
+          230,
+          230,
+          230,
+          255
+        ],
+        "candidate": [
+          230,
+          230,
+          230,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "hairline",
+        "reference": [
+          233,
+          233,
+          233,
+          255
+        ],
+        "candidate": [
+          233,
+          233,
+          233,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "focus",
+        "reference": [
+          11,
+          11,
+          11,
+          255
+        ],
+        "candidate": [
+          11,
+          11,
+          11,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "text",
+        "reference": [
+          23,
+          23,
+          23,
+          255
+        ],
+        "candidate": [
+          23,
+          23,
+          23,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "inverse",
+        "reference": [
+          245,
+          245,
+          245,
+          255
+        ],
+        "candidate": [
+          245,
+          245,
+          245,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "strong",
+        "reference": [
+          10,
+          10,
+          10,
+          255
+        ],
+        "candidate": [
+          10,
+          10,
+          10,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "subtle",
+        "reference": [
+          115,
+          115,
+          115,
+          255
+        ],
+        "candidate": [
+          115,
+          115,
+          115,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "link",
+        "reference": [
+          25,
+          60,
+          184,
+          255
+        ],
+        "candidate": [
+          25,
+          60,
+          184,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "placeholder",
+        "reference": [
+          161,
+          161,
+          161,
+          255
+        ],
+        "candidate": [
+          161,
+          161,
+          161,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "danger",
+        "reference": [
+          251,
+          44,
+          54,
+          255
+        ],
+        "candidate": [
+          251,
+          44,
+          54,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "dangerText",
+        "reference": [
+          193,
+          0,
+          7,
+          255
+        ],
+        "candidate": [
+          193,
+          0,
+          7,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "success",
+        "reference": [
+          0,
+          153,
+          102,
+          255
+        ],
+        "candidate": [
+          0,
+          153,
+          102,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "successText",
+        "reference": [
+          0,
+          96,
+          69,
+          255
+        ],
+        "candidate": [
+          0,
+          96,
+          69,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "warningText",
+        "reference": [
+          189,
+          101,
+          0,
+          255
+        ],
+        "candidate": [
+          189,
+          101,
+          0,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "infoTint",
+        "reference": [
+          239,
+          246,
+          255,
+          255
+        ],
+        "candidate": [
+          239,
+          246,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "successTint",
+        "reference": [
+          235,
+          253,
+          241,
+          255
+        ],
+        "candidate": [
+          235,
+          253,
+          241,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "warningTint",
+        "reference": [
+          255,
+          250,
+          234,
+          255
+        ],
+        "candidate": [
+          255,
+          250,
+          234,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "dangerTint",
+        "reference": [
+          255,
+          243,
+          243,
+          255
+        ],
+        "candidate": [
+          255,
+          243,
+          243,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeRed",
+        "reference": [
+          231,
+          0,
+          11,
+          255
+        ],
+        "candidate": [
+          231,
+          0,
+          11,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeGreen",
+        "reference": [
+          0,
+          153,
+          102,
+          255
+        ],
+        "candidate": [
+          0,
+          153,
+          102,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeOrange",
+        "reference": [
+          255,
+          172,
+          0,
+          255
+        ],
+        "candidate": [
+          255,
+          172,
+          0,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgePurple",
+        "reference": [
+          152,
+          16,
+          250,
+          255
+        ],
+        "candidate": [
+          152,
+          16,
+          250,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeTeal",
+        "reference": [
+          5,
+          131,
+          120,
+          255
+        ],
+        "candidate": [
+          5,
+          131,
+          120,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeBlue",
+        "reference": [
+          21,
+          93,
+          252,
+          255
+        ],
+        "candidate": [
+          21,
+          93,
+          252,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeNeutral",
+        "reference": [
+          115,
+          115,
+          115,
+          255
+        ],
+        "candidate": [
+          115,
+          115,
+          115,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeInverted",
+        "reference": [
+          10,
+          10,
+          10,
+          255
+        ],
+        "candidate": [
+          10,
+          10,
+          10,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeInverseText",
+        "reference": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "candidate": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeOrangeText",
+        "reference": [
+          159,
+          45,
+          0,
+          255
+        ],
+        "candidate": [
+          159,
+          45,
+          0,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeTealText",
+        "reference": [
+          0,
+          95,
+          90,
+          255
+        ],
+        "candidate": [
+          0,
+          95,
+          90,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "light",
+        "name": "badgeNeutralText",
+        "reference": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "candidate": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "canvas",
+        "reference": [
+          3,
+          3,
+          3,
+          255
+        ],
+        "candidate": [
+          3,
+          3,
+          3,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "base",
+        "reference": [
+          15,
+          15,
+          15,
+          255
+        ],
+        "candidate": [
+          15,
+          15,
+          15,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "elevated",
+        "reference": [
+          6,
+          6,
+          6,
+          255
+        ],
+        "candidate": [
+          6,
+          6,
+          6,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "recessed",
+        "reference": [
+          11,
+          11,
+          11,
+          255
+        ],
+        "candidate": [
+          11,
+          11,
+          11,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "tint",
+        "reference": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "candidate": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "fill",
+        "reference": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "candidate": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "overlay",
+        "reference": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "candidate": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "control",
+        "reference": [
+          23,
+          23,
+          23,
+          255
+        ],
+        "candidate": [
+          23,
+          23,
+          23,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "contrast",
+        "reference": [
+          250,
+          250,
+          250,
+          255
+        ],
+        "candidate": [
+          250,
+          250,
+          250,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "brand",
+        "reference": [
+          4,
+          94,
+          222,
+          255
+        ],
+        "candidate": [
+          4,
+          94,
+          222,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "line",
+        "reference": [
+          51,
+          51,
+          51,
+          255
+        ],
+        "candidate": [
+          51,
+          51,
+          51,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "hairline",
+        "reference": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "candidate": [
+          38,
+          38,
+          38,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "focus",
+        "reference": [
+          233,
+          233,
+          233,
+          255
+        ],
+        "candidate": [
+          233,
+          233,
+          233,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "text",
+        "reference": [
+          245,
+          245,
+          245,
+          255
+        ],
+        "candidate": [
+          245,
+          245,
+          245,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "inverse",
+        "reference": [
+          23,
+          23,
+          23,
+          255
+        ],
+        "candidate": [
+          23,
+          23,
+          23,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "strong",
+        "reference": [
+          250,
+          250,
+          250,
+          255
+        ],
+        "candidate": [
+          250,
+          250,
+          250,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "subtle",
+        "reference": [
+          161,
+          161,
+          161,
+          255
+        ],
+        "candidate": [
+          161,
+          161,
+          161,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "link",
+        "reference": [
+          80,
+          162,
+          255,
+          255
+        ],
+        "candidate": [
+          81,
+          162,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "placeholder",
+        "reference": [
+          115,
+          115,
+          115,
+          255
+        ],
+        "candidate": [
+          115,
+          115,
+          115,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "danger",
+        "reference": [
+          231,
+          0,
+          11,
+          255
+        ],
+        "candidate": [
+          231,
+          0,
+          11,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "dangerText",
+        "reference": [
+          255,
+          100,
+          103,
+          255
+        ],
+        "candidate": [
+          255,
+          100,
+          103,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "success",
+        "reference": [
+          0,
+          212,
+          146,
+          255
+        ],
+        "candidate": [
+          0,
+          212,
+          146,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "successText",
+        "reference": [
+          164,
+          244,
+          207,
+          255
+        ],
+        "candidate": [
+          164,
+          244,
+          207,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "warningText",
+        "reference": [
+          255,
+          137,
+          4,
+          255
+        ],
+        "candidate": [
+          255,
+          137,
+          4,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "infoTint",
+        "reference": [
+          17,
+          24,
+          42,
+          255
+        ],
+        "candidate": [
+          17,
+          24,
+          42,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "successTint",
+        "reference": [
+          14,
+          29,
+          21,
+          255
+        ],
+        "candidate": [
+          14,
+          29,
+          21,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "warningTint",
+        "reference": [
+          41,
+          27,
+          9,
+          255
+        ],
+        "candidate": [
+          41,
+          27,
+          9,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "dangerTint",
+        "reference": [
+          38,
+          12,
+          12,
+          255
+        ],
+        "candidate": [
+          38,
+          12,
+          13,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeRed",
+        "reference": [
+          193,
+          0,
+          7,
+          255
+        ],
+        "candidate": [
+          193,
+          0,
+          7,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeGreen",
+        "reference": [
+          0,
+          122,
+          85,
+          255
+        ],
+        "candidate": [
+          0,
+          122,
+          85,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeOrange",
+        "reference": [
+          255,
+          172,
+          0,
+          255
+        ],
+        "candidate": [
+          255,
+          172,
+          0,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgePurple",
+        "reference": [
+          130,
+          0,
+          219,
+          255
+        ],
+        "candidate": [
+          130,
+          0,
+          219,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeTeal",
+        "reference": [
+          0,
+          120,
+          111,
+          255
+        ],
+        "candidate": [
+          0,
+          120,
+          111,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeBlue",
+        "reference": [
+          20,
+          71,
+          230,
+          255
+        ],
+        "candidate": [
+          20,
+          71,
+          230,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeNeutral",
+        "reference": [
+          82,
+          82,
+          82,
+          255
+        ],
+        "candidate": [
+          82,
+          82,
+          82,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeInverted",
+        "reference": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "candidate": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeInverseText",
+        "reference": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "candidate": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeOrangeText",
+        "reference": [
+          255,
+          214,
+          168,
+          255
+        ],
+        "candidate": [
+          255,
+          214,
+          167,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeTealText",
+        "reference": [
+          150,
+          247,
+          228,
+          255
+        ],
+        "candidate": [
+          150,
+          247,
+          228,
+          255
+        ],
+        "success": true
+      },
+      {
+        "mode": "dark",
+        "name": "badgeNeutralText",
+        "reference": [
+          229,
+          229,
+          229,
+          255
+        ],
+        "candidate": [
+          229,
+          229,
+          229,
+          255
+        ],
+        "success": true
+      }
+    ]
+  },
+  "chrome_audit": {
+    "audited_at": "2026-10-13T09:21:50.303Z",
+    "url_count": 104,
+    "issue_count": 104,
+    "runtime_errors": 0,
+    "issue_types": {
+      "IntlV8BreakIterator": 104
+    },
+    "product_code_issues": 0,
+    "remaining_cause": "Flutter engine browser detection references deprecated Intl.v8BreakIterator"
+  },
+  "lighthouse": {
+    "mobile": {
+      "version": "13.5.0",
+      "measured_at": "2026-10-13T09:15:48.357Z",
+      "scores": {
+        "performance": 79,
+        "accessibility": 100,
+        "best-practices": 81,
+        "seo": 100
+      },
+      "run_warnings": [],
+      "audits": [
+        {
+          "id": "is-on-https",
+          "title": "Uses HTTPS",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "first-contentful-paint",
+          "title": "First Contentful Paint",
+          "score": 1,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "0.7 s"
+        },
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 1,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "1.4 s"
+        },
+        {
+          "id": "speed-index",
+          "title": "Speed Index",
+          "score": 0.87,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "3.6 s",
+          "details": null
+        },
+        {
+          "id": "screenshot-thumbnails",
+          "title": "Screenshot Thumbnails",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "final-screenshot",
+          "title": "Final Screenshot",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "total-blocking-time",
+          "title": "Total Blocking Time",
+          "score": 0.33,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "860 ms",
+          "details": null
+        },
+        {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "score": 0.08,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "510 ms",
+          "details": null
+        },
+        {
+          "id": "cumulative-layout-shift",
+          "title": "Cumulative Layout Shift",
+          "score": 1,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "0"
+        },
+        {
+          "id": "errors-in-console",
+          "title": "No browser errors logged to the console",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "server-response-time",
+          "title": "Initial server response time was short",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "Root document took 0 ms"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 0.25,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "10.2 s",
+          "details": null
+        },
+        {
+          "id": "redirects",
+          "title": "Avoid multiple page redirects",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "image-aspect-ratio",
+          "title": "Displays images with correct aspect ratio",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "image-size-responsive",
+          "title": "Serves images with appropriate resolution",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "deprecations",
+          "title": "Uses deprecated APIs",
+          "score": 0,
+          "scoreDisplayMode": "binary",
+          "displayValue": "1 warning found",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "value",
+                "valueType": "text",
+                "label": "Deprecation / Warning"
+              },
+              {
+                "key": "source",
+                "valueType": "source-location",
+                "label": "Source"
+              }
+            ],
+            "items": [
+              {
+                "value": "Intl.v8BreakIterator is deprecated. Please use Intl.Segmenter instead.",
+                "source": {
+                  "type": "source-location",
+                  "url": "http://127.0.0.1:8766/main.dart.mjs",
+                  "urlProvider": "network",
+                  "line": 0,
+                  "column": 5898,
+                  "original": {
+                    "file": "main.dart.generated.mjs",
+                    "line": 306,
+                    "column": 21
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "third-party-cookies",
+          "title": "Avoids third-party cookies",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "mainthread-work-breakdown",
+          "title": "Minimize main-thread work",
+          "score": 0,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "3.1 s",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "groupLabel",
+                "valueType": "text",
+                "label": "Category"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "granularity": 1,
+                "label": "Time Spent"
+              }
+            ],
+            "items": [
+              {
+                "group": "scriptEvaluation",
+                "groupLabel": "Script Evaluation",
+                "duration": 2276.3239999999882
+              },
+              {
+                "group": "other",
+                "groupLabel": "Other",
+                "duration": 576.211999999997
+              },
+              {
+                "group": "styleLayout",
+                "groupLabel": "Style & Layout",
+                "duration": 175.94400000000002
+              },
+              {
+                "group": "paintCompositeRender",
+                "groupLabel": "Rendering",
+                "duration": 46.62799999999986
+              },
+              {
+                "group": "garbageCollection",
+                "groupLabel": "Garbage Collection",
+                "duration": 45.02799999999995
+              },
+              {
+                "group": "parseHTML",
+                "groupLabel": "Parse HTML & CSS",
+                "duration": 3.564
+              },
+              {
+                "group": "scriptParseCompile",
+                "groupLabel": "Script Parsing & Compilation",
+                "duration": 3.3080000000000003
+              }
+            ],
+            "sortedBy": [
+              "duration"
+            ]
+          }
+        },
+        {
+          "id": "bootup-time",
+          "title": "Reduce JavaScript execution time",
+          "score": 0,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "2.3 s",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "url",
+                "valueType": "url",
+                "label": "URL"
+              },
+              {
+                "key": "total",
+                "granularity": 1,
+                "valueType": "ms",
+                "label": "Total CPU Time"
+              },
+              {
+                "key": "scripting",
+                "granularity": 1,
+                "valueType": "ms",
+                "label": "Script Evaluation"
+              },
+              {
+                "key": "scriptParseCompile",
+                "granularity": 1,
+                "valueType": "ms",
+                "label": "Script Parse"
+              }
+            ],
+            "items": [
+              {
+                "url": "http://127.0.0.1:8766/main.dart.mjs",
+                "total": 1998.351999999997,
+                "scripting": 1708.3599999999967,
+                "scriptParseCompile": 0.144
+              },
+              {
+                "url": "http://127.0.0.1:8766/flutter_bootstrap.js",
+                "total": 513.536,
+                "scripting": 508.23199999999997,
+                "scriptParseCompile": 2.428
+              },
+              {
+                "url": "Unattributable",
+                "total": 363.8519999999993,
+                "scripting": 15.527999999999997,
+                "scriptParseCompile": 0
+              },
+              {
+                "url": "http://127.0.0.1:8766/",
+                "total": 180.056,
+                "scripting": 3.2960000000000007,
+                "scriptParseCompile": 0.556
+              },
+              {
+                "url": "http://127.0.0.1:8766/canvaskit/skwasm.js",
+                "total": 66.68799999999987,
+                "scripting": 38.511999999999944,
+                "scriptParseCompile": 0.18
+              }
+            ],
+            "summary": {
+              "wastedMs": 2277.2359999999967
+            },
+            "sortedBy": [
+              "total"
+            ]
+          }
+        },
+        {
+          "id": "diagnostics",
+          "title": "Diagnostics",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "network-requests",
+          "title": "Network Requests",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "network-rtt",
+          "title": "Network Round Trip Times",
+          "score": 1,
+          "scoreDisplayMode": "informative",
+          "displayValue": "0 ms"
+        },
+        {
+          "id": "network-server-latency",
+          "title": "Server Backend Latencies",
+          "score": 1,
+          "scoreDisplayMode": "informative",
+          "displayValue": "10 ms"
+        },
+        {
+          "id": "main-thread-tasks",
+          "title": "Tasks",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "metrics",
+          "title": "Metrics",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "resource-summary",
+          "title": "Resources Summary",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "long-tasks",
+          "title": "Avoid long main-thread tasks",
+          "score": 1,
+          "scoreDisplayMode": "informative",
+          "displayValue": "8 long tasks found"
+        },
+        {
+          "id": "unsized-images",
+          "title": "Image elements have explicit `width` and `height`",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "valid-source-maps",
+          "title": "Missing source maps for large first-party JavaScript",
+          "score": 0,
+          "scoreDisplayMode": "binary",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "scriptUrl",
+                "valueType": "url",
+                "subItemsHeading": {
+                  "key": "error"
+                },
+                "label": "URL"
+              },
+              {
+                "key": "sourceMapUrl",
+                "valueType": "url",
+                "label": "Map URL"
+              }
+            ],
+            "items": [
+              {
+                "scriptUrl": "http://127.0.0.1:8766/canvaskit/skwasm.wasm",
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "error": "Large JavaScript file is missing a source map"
+                    }
+                  ]
+                }
+              },
+              {
+                "scriptUrl": "http://127.0.0.1:8766/main.dart.wasm",
+                "sourceMapUrl": "http://127.0.0.1:8766/main.dart.wasm.map",
+                "subItems": {
+                  "type": "subitems",
+                  "items": []
+                }
+              },
+              {
+                "scriptUrl": "http://127.0.0.1:8766/main.dart.mjs",
+                "sourceMapUrl": "http://127.0.0.1:8766/main.dart.mjs.map",
+                "subItems": {
+                  "type": "subitems",
+                  "items": []
+                }
+              },
+              {
+                "scriptUrl": "http://127.0.0.1:8766/flutter_bootstrap.js",
+                "sourceMapUrl": "http://127.0.0.1:8766/flutter_bootstrap.js.map",
+                "subItems": {
+                  "type": "subitems",
+                  "items": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "csp-xss",
+          "title": "Ensure CSP is effective against XSS attacks",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "has-hsts",
+          "title": "Use a strong HSTS policy",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "clickjacking-mitigation",
+          "title": "Mitigate clickjacking with XFO or CSP",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "trusted-types-xss",
+          "title": "Mitigate DOM-based XSS with Trusted Types",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "script-treemap-data",
+          "title": "Script Treemap Data",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "aria-allowed-attr",
+          "title": "`[aria-*]` attributes match their roles",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-command-name",
+          "title": "`button`, `link`, and `menuitem` elements have accessible names",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-conditional-attr",
+          "title": "ARIA attributes are used as specified for the element's role",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-deprecated-role",
+          "title": "Deprecated ARIA roles were not used",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-hidden-body",
+          "title": "`[aria-hidden=\"true\"]` is not present on the document `<body>`",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-hidden-focus",
+          "title": "`[aria-hidden=\"true\"]` elements do not contain focusable descendents",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "title": "Elements use only permitted ARIA attributes",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-required-attr",
+          "title": "`[role]`s have all required `[aria-*]` attributes",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-roles",
+          "title": "`[role]` values are valid",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-valid-attr-value",
+          "title": "`[aria-*]` attributes have valid values",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-valid-attr",
+          "title": "`[aria-*]` attributes are valid and not misspelled",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors have a sufficient contrast ratio",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "document-title",
+          "title": "Document has a `<title>` element",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "heading-order",
+          "title": "Heading elements appear in a sequentially-descending order",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "html-has-lang",
+          "title": "`<html>` element has a `[lang]` attribute",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "html-lang-valid",
+          "title": "`<html>` element has a valid value for its `[lang]` attribute",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "landmark-one-main",
+          "title": "Document has a main landmark.",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "meta-viewport",
+          "title": "`[user-scalable=\"no\"]` is not used in the `<meta name=\"viewport\">` element and the `[maximum-scale]` attribute is not less than 5.",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "tabindex",
+          "title": "No element has a `[tabindex]` value greater than 0",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "target-size",
+          "title": "Touch targets have sufficient size and spacing.",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "custom-controls-labels",
+          "title": "Custom controls have associated labels",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "custom-controls-roles",
+          "title": "Custom controls have ARIA roles",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "focus-traps",
+          "title": "User focus is not accidentally trapped in a region",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "focusable-controls",
+          "title": "Interactive controls are keyboard focusable",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "interactive-element-affordance",
+          "title": "Interactive elements indicate their purpose and state",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "logical-tab-order",
+          "title": "The page has a logical tab order",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "managed-focus",
+          "title": "The user's focus is directed to new content added to the page",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "offscreen-content-hidden",
+          "title": "Offscreen content is hidden from assistive technology",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "use-landmarks",
+          "title": "HTML5 landmark elements are used to improve navigation",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "visual-order-follows-dom",
+          "title": "Visual order on the page follows DOM order",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "total-byte-weight",
+          "title": "Avoid enormous network payloads",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "Total size was 2,943 KiB",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "url",
+                "valueType": "url",
+                "label": "URL"
+              },
+              {
+                "key": "totalBytes",
+                "valueType": "bytes",
+                "label": "Transfer Size"
+              }
+            ],
+            "items": [
+              {
+                "url": "http://127.0.0.1:8766/canvaskit/skwasm.wasm",
+                "totalBytes": 1537361
+              },
+              {
+                "url": "http://127.0.0.1:8766/main.dart.wasm",
+                "totalBytes": 846551
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/packages/stey_ui_modern/assets/fonts/Inter-SemiBold.ttf",
+                "totalBytes": 165883
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/packages/stey_ui_modern/assets/fonts/Inter-Medium.ttf",
+                "totalBytes": 165259
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/packages/stey_ui_modern/assets/fonts/Inter-Regular.ttf",
+                "totalBytes": 162265
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/fonts/fallback/Roboto-Regular.ttf",
+                "totalBytes": 90499
+              },
+              {
+                "url": "http://127.0.0.1:8766/canvaskit/skwasm.js",
+                "totalBytes": 17495
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/fonts/MaterialIcons-Regular.otf",
+                "totalBytes": 5892
+              },
+              {
+                "url": "http://127.0.0.1:8766/icons/Icon-192.png",
+                "totalBytes": 5702
+              },
+              {
+                "url": "http://127.0.0.1:8766/flutter_bootstrap.js",
+                "totalBytes": 5693
+              }
+            ],
+            "sortedBy": [
+              "totalBytes"
+            ]
+          }
+        },
+        {
+          "id": "unminified-css",
+          "title": "Minify CSS",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "unminified-javascript",
+          "title": "Minify JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "",
+          "warnings": []
+        },
+        {
+          "id": "unused-css-rules",
+          "title": "Reduce unused CSS",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "doctype",
+          "title": "Page has the HTML doctype",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "charset",
+          "title": "Properly defines charset",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "geolocation-on-start",
+          "title": "Avoids requesting the geolocation permission on page load",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "inspector-issues",
+          "title": "No issues in the `Issues` panel in Chrome Devtools",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "notification-on-start",
+          "title": "Avoids requesting the notification permission on page load",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "paste-preventing-inputs",
+          "title": "Allows users to paste into input fields",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "baseline",
+          "title": "Baseline Features",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "meta-description",
+          "title": "Document has a meta description",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "http-status-code",
+          "title": "Page has successful HTTP status code",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "link-text",
+          "title": "Links have descriptive text",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "crawlable-anchors",
+          "title": "Links are crawlable",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "is-crawlable",
+          "title": "Page isn’t blocked from indexing",
+          "score": 1,
+          "scoreDisplayMode": "binary",
+          "warnings": []
+        },
+        {
+          "id": "hreflang",
+          "title": "Document has a valid `hreflang`",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "structured-data",
+          "title": "Structured data is valid",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "bf-cache",
+          "title": "Page didn't prevent back/forward cache restoration",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "cache-insight",
+          "title": "Use efficient cache lifetimes",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "cls-culprits-insight",
+          "title": "Layout shift culprits",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "document-latency-insight",
+          "title": "Document request latency",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "dom-size-insight",
+          "title": "Optimize DOM size",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "duplicated-javascript-insight",
+          "title": "Duplicated JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "font-display-insight",
+          "title": "Font display",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "forced-reflow-insight",
+          "title": "Forced reflow",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "image-delivery-insight",
+          "title": "Improve image delivery",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "lcp-breakdown-insight",
+          "title": "LCP breakdown",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "modern-http-insight",
+          "title": "Modern HTTP",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 0,
+          "scoreDisplayMode": "numeric",
+          "details": {
+            "type": "list",
+            "items": [
+              {
+                "type": "list-section",
+                "value": {
+                  "type": "network-tree",
+                  "chains": {
+                    "3F10F23548D8E35C57F6A124F6E496CF": {
+                      "url": "http://127.0.0.1:8766/",
+                      "navStartToEndTime": 30,
+                      "transferSize": 1064,
+                      "isLongest": true,
+                      "children": {
+                        "61392.4": {
+                          "url": "http://127.0.0.1:8766/manifest.json",
+                          "navStartToEndTime": 186,
+                          "transferSize": 632,
+                          "isLongest": true,
+                          "children": {}
+                        }
+                      }
+                    }
+                  },
+                  "longestChain": {
+                    "duration": 186
+                  }
+                }
+              },
+              {
+                "type": "list-section",
+                "title": "Preconnected origins",
+                "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+                "value": {
+                  "type": "text",
+                  "value": "no origins were preconnected"
+                }
+              },
+              {
+                "type": "list-section",
+                "title": "Preconnect candidates",
+                "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+                "value": {
+                  "type": "text",
+                  "value": "No additional origins are good candidates for preconnecting"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render-blocking requests",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "third-parties-insight",
+          "title": "3rd parties",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "viewport-insight",
+          "title": "Optimize viewport for mobile",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        }
+      ]
+    },
+    "desktop": {
+      "version": "13.5.0",
+      "measured_at": "2026-10-13T09:18:09.381Z",
+      "scores": {
+        "performance": 88,
+        "accessibility": 96,
+        "best-practices": 81,
+        "seo": 100
+      },
+      "run_warnings": [],
+      "audits": [
+        {
+          "id": "is-on-https",
+          "title": "Uses HTTPS",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "first-contentful-paint",
+          "title": "First Contentful Paint",
+          "score": 1,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "0.2 s"
+        },
+        {
+          "id": "largest-contentful-paint",
+          "title": "Largest Contentful Paint",
+          "score": 0.54,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "2.3 s",
+          "details": null
+        },
+        {
+          "id": "speed-index",
+          "title": "Speed Index",
+          "score": 0.96,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "1.1 s",
+          "details": null
+        },
+        {
+          "id": "screenshot-thumbnails",
+          "title": "Screenshot Thumbnails",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "final-screenshot",
+          "title": "Final Screenshot",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "total-blocking-time",
+          "title": "Total Blocking Time",
+          "score": 1,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "20 ms"
+        },
+        {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "score": 0.99,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "70 ms",
+          "details": null
+        },
+        {
+          "id": "cumulative-layout-shift",
+          "title": "Cumulative Layout Shift",
+          "score": 1,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "0"
+        },
+        {
+          "id": "errors-in-console",
+          "title": "No browser errors logged to the console",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "server-response-time",
+          "title": "Initial server response time was short",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "Root document took 0 ms"
+        },
+        {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "score": 0.93,
+          "scoreDisplayMode": "numeric",
+          "displayValue": "2.3 s",
+          "details": null
+        },
+        {
+          "id": "redirects",
+          "title": "Avoid multiple page redirects",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "image-aspect-ratio",
+          "title": "Displays images with correct aspect ratio",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "image-size-responsive",
+          "title": "Serves images with appropriate resolution",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "deprecations",
+          "title": "Uses deprecated APIs",
+          "score": 0,
+          "scoreDisplayMode": "binary",
+          "displayValue": "1 warning found",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "value",
+                "valueType": "text",
+                "label": "Deprecation / Warning"
+              },
+              {
+                "key": "source",
+                "valueType": "source-location",
+                "label": "Source"
+              }
+            ],
+            "items": [
+              {
+                "value": "Intl.v8BreakIterator is deprecated. Please use Intl.Segmenter instead.",
+                "source": {
+                  "type": "source-location",
+                  "url": "http://127.0.0.1:8766/main.dart.mjs",
+                  "urlProvider": "network",
+                  "line": 0,
+                  "column": 5898,
+                  "original": {
+                    "file": "main.dart.generated.mjs",
+                    "line": 306,
+                    "column": 21
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "third-party-cookies",
+          "title": "Avoids third-party cookies",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "mainthread-work-breakdown",
+          "title": "Minimizes main-thread work",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "0.7 s"
+        },
+        {
+          "id": "bootup-time",
+          "title": "JavaScript execution time",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "0.5 s"
+        },
+        {
+          "id": "diagnostics",
+          "title": "Diagnostics",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "network-requests",
+          "title": "Network Requests",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "network-rtt",
+          "title": "Network Round Trip Times",
+          "score": 1,
+          "scoreDisplayMode": "informative",
+          "displayValue": "0 ms"
+        },
+        {
+          "id": "network-server-latency",
+          "title": "Server Backend Latencies",
+          "score": 1,
+          "scoreDisplayMode": "informative",
+          "displayValue": "0 ms"
+        },
+        {
+          "id": "main-thread-tasks",
+          "title": "Tasks",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "metrics",
+          "title": "Metrics",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "resource-summary",
+          "title": "Resources Summary",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "long-tasks",
+          "title": "Avoid long main-thread tasks",
+          "score": 1,
+          "scoreDisplayMode": "informative",
+          "displayValue": "1 long task found"
+        },
+        {
+          "id": "unsized-images",
+          "title": "Image elements have explicit `width` and `height`",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "valid-source-maps",
+          "title": "Missing source maps for large first-party JavaScript",
+          "score": 0,
+          "scoreDisplayMode": "binary",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "scriptUrl",
+                "valueType": "url",
+                "subItemsHeading": {
+                  "key": "error"
+                },
+                "label": "URL"
+              },
+              {
+                "key": "sourceMapUrl",
+                "valueType": "url",
+                "label": "Map URL"
+              }
+            ],
+            "items": [
+              {
+                "scriptUrl": "http://127.0.0.1:8766/canvaskit/skwasm.wasm",
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "error": "Large JavaScript file is missing a source map"
+                    }
+                  ]
+                }
+              },
+              {
+                "scriptUrl": "http://127.0.0.1:8766/main.dart.wasm",
+                "sourceMapUrl": "http://127.0.0.1:8766/main.dart.wasm.map",
+                "subItems": {
+                  "type": "subitems",
+                  "items": []
+                }
+              },
+              {
+                "scriptUrl": "http://127.0.0.1:8766/main.dart.mjs",
+                "sourceMapUrl": "http://127.0.0.1:8766/main.dart.mjs.map",
+                "subItems": {
+                  "type": "subitems",
+                  "items": []
+                }
+              },
+              {
+                "scriptUrl": "http://127.0.0.1:8766/flutter_bootstrap.js",
+                "sourceMapUrl": "http://127.0.0.1:8766/flutter_bootstrap.js.map",
+                "subItems": {
+                  "type": "subitems",
+                  "items": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "csp-xss",
+          "title": "Ensure CSP is effective against XSS attacks",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "has-hsts",
+          "title": "Use a strong HSTS policy",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "clickjacking-mitigation",
+          "title": "Mitigate clickjacking with XFO or CSP",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "trusted-types-xss",
+          "title": "Mitigate DOM-based XSS with Trusted Types",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "script-treemap-data",
+          "title": "Script Treemap Data",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "aria-allowed-attr",
+          "title": "`[aria-*]` attributes match their roles",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-command-name",
+          "title": "`button`, `link`, and `menuitem` elements have accessible names",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-conditional-attr",
+          "title": "ARIA attributes are used as specified for the element's role",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-deprecated-role",
+          "title": "Deprecated ARIA roles were not used",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-hidden-body",
+          "title": "`[aria-hidden=\"true\"]` is not present on the document `<body>`",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-hidden-focus",
+          "title": "`[aria-hidden=\"true\"]` elements do not contain focusable descendents",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "title": "Elements use only permitted ARIA attributes",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-required-attr",
+          "title": "`[role]`s have all required `[aria-*]` attributes",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-roles",
+          "title": "`[role]` values are valid",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-valid-attr-value",
+          "title": "`[aria-*]` attributes have valid values",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "aria-valid-attr",
+          "title": "`[aria-*]` attributes are valid and not misspelled",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors have a sufficient contrast ratio",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "document-title",
+          "title": "Document has a `<title>` element",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "heading-order",
+          "title": "Heading elements appear in a sequentially-descending order",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "html-has-lang",
+          "title": "`<html>` element has a `[lang]` attribute",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "html-lang-valid",
+          "title": "`<html>` element has a valid value for its `[lang]` attribute",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "label",
+          "title": "Form elements have associated labels",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "landmark-one-main",
+          "title": "Document has a main landmark.",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "meta-viewport",
+          "title": "`[user-scalable=\"no\"]` is not used in the `<meta name=\"viewport\">` element and the `[maximum-scale]` attribute is not less than 5.",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "tabindex",
+          "title": "No element has a `[tabindex]` value greater than 0",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "score": 0,
+          "scoreDisplayMode": "binary",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-FLT-SEMANTICS",
+                  "path": "1,HTML,1,BODY,3,FLUTTER-VIEW,2,FLT-SEMANTICS-HOST,0,FLT-SEMANTICS,0,FLT-SEMANTICS,0,FLT-SEMANTICS,6,FLT-SEMANTICS,0,FLT-SEMANTICS,22,FLT-SEMANTICS,0,FLT-SEMANTICS",
+                  "selector": "flt-semantics#flt-semantic-node-11 > flt-semantics#flt-semantic-node-96 > flt-semantics#flt-semantic-node-75 > flt-semantics#flt-semantic-node-76",
+                  "boundingRect": {
+                    "top": 938,
+                    "bottom": 940,
+                    "left": 8,
+                    "right": 232,
+                    "width": 224,
+                    "height": 2
+                  },
+                  "snippet": "<flt-semantics id=\"flt-semantic-node-76\" role=\"button\" tabindex=\"0\" flt-tappable=\"\" style=\"position: absolute; overflow: visible; pointer-events: all; width: 224px;\">",
+                  "nodeLabel": "Grid",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (224px by 2px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 6px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-FLT-SEMANTICS",
+                        "path": "1,HTML,1,BODY,3,FLUTTER-VIEW,2,FLT-SEMANTICS-HOST,0,FLT-SEMANTICS,0,FLT-SEMANTICS,0,FLT-SEMANTICS,6,FLT-SEMANTICS,0,FLT-SEMANTICS,21,FLT-SEMANTICS,0,FLT-SEMANTICS",
+                        "selector": "flt-semantics#flt-semantic-node-11 > flt-semantics#flt-semantic-node-96 > flt-semantics#flt-semantic-node-72 > flt-semantics#flt-semantic-node-73",
+                        "boundingRect": {
+                          "top": 900,
+                          "bottom": 936,
+                          "left": 8,
+                          "right": 232,
+                          "width": 224,
+                          "height": 36
+                        },
+                        "snippet": "<flt-semantics id=\"flt-semantic-node-73\" role=\"button\" tabindex=\"0\" flt-tappable=\"\" style=\"position: absolute; overflow: visible; pointer-events: all; width: 224px;\">",
+                        "nodeLabel": "Flow"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258",
+                "EN-301-549v4",
+                "EN-9.2.5.8"
+              ]
+            }
+          }
+        },
+        {
+          "id": "custom-controls-labels",
+          "title": "Custom controls have associated labels",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "custom-controls-roles",
+          "title": "Custom controls have ARIA roles",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "focus-traps",
+          "title": "User focus is not accidentally trapped in a region",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "focusable-controls",
+          "title": "Interactive controls are keyboard focusable",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "interactive-element-affordance",
+          "title": "Interactive elements indicate their purpose and state",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "logical-tab-order",
+          "title": "The page has a logical tab order",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "managed-focus",
+          "title": "The user's focus is directed to new content added to the page",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "offscreen-content-hidden",
+          "title": "Offscreen content is hidden from assistive technology",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "use-landmarks",
+          "title": "HTML5 landmark elements are used to improve navigation",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "visual-order-follows-dom",
+          "title": "Visual order on the page follows DOM order",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "autocomplete-valid",
+          "title": "`autocomplete` attributes are used correctly",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "total-byte-weight",
+          "title": "Avoid enormous network payloads",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "Total size was 2,943 KiB",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "url",
+                "valueType": "url",
+                "label": "URL"
+              },
+              {
+                "key": "totalBytes",
+                "valueType": "bytes",
+                "label": "Transfer Size"
+              }
+            ],
+            "items": [
+              {
+                "url": "http://127.0.0.1:8766/canvaskit/skwasm.wasm",
+                "totalBytes": 1537361
+              },
+              {
+                "url": "http://127.0.0.1:8766/main.dart.wasm",
+                "totalBytes": 846551
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/packages/stey_ui_modern/assets/fonts/Inter-SemiBold.ttf",
+                "totalBytes": 165883
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/packages/stey_ui_modern/assets/fonts/Inter-Medium.ttf",
+                "totalBytes": 165259
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/packages/stey_ui_modern/assets/fonts/Inter-Regular.ttf",
+                "totalBytes": 162265
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/fonts/fallback/Roboto-Regular.ttf",
+                "totalBytes": 90499
+              },
+              {
+                "url": "http://127.0.0.1:8766/canvaskit/skwasm.js",
+                "totalBytes": 17495
+              },
+              {
+                "url": "http://127.0.0.1:8766/assets/fonts/MaterialIcons-Regular.otf",
+                "totalBytes": 5892
+              },
+              {
+                "url": "http://127.0.0.1:8766/icons/Icon-192.png",
+                "totalBytes": 5702
+              },
+              {
+                "url": "http://127.0.0.1:8766/flutter_bootstrap.js",
+                "totalBytes": 5693
+              }
+            ],
+            "sortedBy": [
+              "totalBytes"
+            ]
+          }
+        },
+        {
+          "id": "unminified-css",
+          "title": "Minify CSS",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "unminified-javascript",
+          "title": "Minify JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": "",
+          "warnings": []
+        },
+        {
+          "id": "unused-css-rules",
+          "title": "Reduce unused CSS",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings",
+          "displayValue": ""
+        },
+        {
+          "id": "doctype",
+          "title": "Page has the HTML doctype",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "charset",
+          "title": "Properly defines charset",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "geolocation-on-start",
+          "title": "Avoids requesting the geolocation permission on page load",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "inspector-issues",
+          "title": "No issues in the `Issues` panel in Chrome Devtools",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "notification-on-start",
+          "title": "Avoids requesting the notification permission on page load",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "paste-preventing-inputs",
+          "title": "Allows users to paste into input fields",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "baseline",
+          "title": "Baseline Features",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "meta-description",
+          "title": "Document has a meta description",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "http-status-code",
+          "title": "Page has successful HTTP status code",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "link-text",
+          "title": "Links have descriptive text",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "crawlable-anchors",
+          "title": "Links are crawlable",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "is-crawlable",
+          "title": "Page isn’t blocked from indexing",
+          "score": 1,
+          "scoreDisplayMode": "binary",
+          "warnings": []
+        },
+        {
+          "id": "hreflang",
+          "title": "Document has a valid `hreflang`",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "structured-data",
+          "title": "Structured data is valid",
+          "score": null,
+          "scoreDisplayMode": "manual"
+        },
+        {
+          "id": "bf-cache",
+          "title": "Page didn't prevent back/forward cache restoration",
+          "score": 1,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "cache-insight",
+          "title": "Use efficient cache lifetimes",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "cls-culprits-insight",
+          "title": "Layout shift culprits",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "document-latency-insight",
+          "title": "Document request latency",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "dom-size-insight",
+          "title": "Optimize DOM size",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "duplicated-javascript-insight",
+          "title": "Duplicated JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "font-display-insight",
+          "title": "Font display",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "forced-reflow-insight",
+          "title": "Forced reflow",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "image-delivery-insight",
+          "title": "Improve image delivery",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "lcp-breakdown-insight",
+          "title": "LCP breakdown",
+          "score": 1,
+          "scoreDisplayMode": "informative"
+        },
+        {
+          "id": "legacy-javascript-insight",
+          "title": "Legacy JavaScript",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "modern-http-insight",
+          "title": "Modern HTTP",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "title": "Network dependency tree",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "title": "Render-blocking requests",
+          "score": 1,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "third-parties-insight",
+          "title": "3rd parties",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "viewport-insight",
+          "title": "Optimize viewport for mobile",
+          "score": 1,
+          "scoreDisplayMode": "numeric"
+        }
+      ]
+    }
+  },
+  "quality_limitations": {
+    "all_100": false,
+    "public_psi": "not measured; no hosted demo URL",
+    "deprecation": "Flutter engine; changing SDK browser detection is outside the independent UI implementation",
+    "source_map": "Flutter SDK does not ship the matching SkWasm source map. Dart Wasm, glue and bootstrap maps are available.",
+    "target_size": "A partially visible 36px sidebar button is exposed as a 2px-high target by Flutter semantic clipping at the desktop viewport edge. Hiding it from accessibility or changing official control dimensions was not used.",
+    "performance": "Flutter initialization/compilation and complete local engine/font assets remain; no audit-only loading suppression or removal of functionality used."
+  },
+  "synchronization": {
+    "daily_workflow_active": false,
+    "live_batch_submission_verified": false,
+    "real_sync_pr_verified": false,
+    "mock_end_to_end_verified": true,
+    "secret_name": "OPENAI_API_KEY",
+    "secret_content_recorded": false,
+    "monthly_budget_usd": 5,
+    "per_sync_budget_usd": 0.5,
+    "attempt_limit": 2,
+    "approved_visual_fixtures": 0,
+    "coverage_gate_requires": 104,
+    "coverage_gate_missing": 104,
+    "upstream_head_unchanged": true
+  },
+  "ci": {
+    "active_github_workflows": 0,
+    "cloud_connection": "deferred by user",
+    "product_ci_success_asserted": false
+  }
+}

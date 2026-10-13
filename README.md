@@ -60,8 +60,11 @@ COOP `same-origin` とCOEP `credentialless` を配信環境へ設定します。
 ルートで `flutter pub get --enforce-lockfile`、`flutter analyze --no-pub` を実行します。
 ライブラリ・デモの各ディレクトリで `flutter test --no-pub`、
 ルートで `python -m unittest discover -s tools -p 'test_*.py'` を実行します。
+Webのリリースビルドは `apps/demo` で
+`flutter build web --wasm --release --no-pub --source-maps --no-web-resources-cdn -O4`。
 Android／Windowsのリリースビルドは `apps/demo` で、それぞれ
 `flutter build apk --release --no-pub`／`flutter build windows --release --no-pub`。
+Linuxの開発環境では `flutter build linux --release --no-pub`。
 Androidのエミュレーター操作検証は `python tools/smoke_android.py --device <device-id>`。
 APKは開発用署名を使用し、ストア公開向けの署名設定は含めません。
 有効なGitHub Workflowは配置していません。
