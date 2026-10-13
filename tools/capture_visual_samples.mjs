@@ -4,8 +4,15 @@ import {resolve} from 'node:path';
 import {PNG} from 'pngjs';
 import pixelmatch from 'pixelmatch';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 const output=resolve('output/visual-samples');await mkdir(output,{recursive:true});
 const candidateSourceSha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+if(execFileSync('git',['diff','HEAD','--','packages/stey_ui_modern/lib','apps/demo/lib'],{encoding:'utf8'}).trim())throw Error('SAMPLE_PRODUCT_SOURCE_UNCOMMITTED');
+const candidateWasmSha256=createHash('sha256').update(await readFile(resolve('apps/demo/build/web/main.dart.wasm'))).digest('hex');
+const referenceRuntime=process.env.KUMO_REFERENCE_DIRECTORY?Object.fromEntries(await Promise.all(['react','react-dom','@base-ui/react','@phosphor-icons/react','tailwindcss'].map(async name=>[name,JSON.parse(await readFile(resolve(process.env.KUMO_REFERENCE_DIRECTORY,'node_modules',name,'package.json'),'utf8')).version]))):null;
+if(!referenceRuntime)throw Error('SAMPLE_REFERENCE_RUNTIME_UNSPECIFIED');
+const expectedRuntime={'react':'19.2.0','react-dom':'19.2.0','@base-ui/react':'1.9.0','@phosphor-icons/react':'2.1.10','tailwindcss':'4.3.3'};
+if(Object.entries(expectedRuntime).some(([name,version])=>referenceRuntime[name]!==version))throw Error('SAMPLE_REFERENCE_RUNTIME_DIFFERS_FROM_UPSTREAM_LOCK');
 function paintedBounds(a,b){
  let left=a.width,top=a.height,right=-1,bottom=-1;
  for(let y=0;y<a.height;y++)for(let x=0;x<a.width;x++){
@@ -87,7 +94,7 @@ try{
     boundsComparison={componentPixelBounds:bounds,componentChangedPixels:count,componentChangedRatio:count/(bounds.width*bounds.height)};
    }
    await writeFile(resolve(output,id+'-diff.png'),PNG.sync.write(diff));
-   rows.push({id,component,state,checked,candidateSourceSha,...boundsComparison,changedPixels:changed,totalPixels:a.width*a.height,changedRatio:changed/(a.width*a.height),animationPhaseAligned:state==='loading'?false:null});
+   rows.push({id,component,state,checked,candidateSourceSha,candidateWasmSha256,referenceRuntime,...boundsComparison,changedPixels:changed,totalPixels:a.width*a.height,changedRatio:changed/(a.width*a.height),animationPhaseAligned:state==='loading'?false:null});
    await context.close();
    if(rows.length%20===0)console.log(JSON.stringify({completed:rows.length,total:selectedSamples.length*2}));
   }

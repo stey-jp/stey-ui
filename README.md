@@ -9,6 +9,9 @@ React・WebViewへの実行時依存はありません。
 Cloudflareロゴ群は書面による商標許可待ちです。詳細と未検証項目は
 [対応表](upstream/inventory.json)、[再現チェックリスト](docs/parity-checklist.md)、[検証結果](docs/verification.md) を参照してください。
 Materialの選択・日付・通知などを使った部分は、公式挙動との追加検証が必要です。
+Checkbox／Switch／Radioのネイティブ描画と複合グループを実装しています。
+APIの対応範囲と差異は [Checkbox／Switch](docs/checkable-api-mapping.md)、
+[Radio](docs/radio-api-mapping.md) を参照してください。
 
 ```text
 packages/

@@ -382,6 +382,7 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
               child: DefaultTextStyle.merge(
                 style: TextStyle(
                   fontSize: segmented ? 13 : 14,
+                  height: segmented ? 18 / 13 : 20 / 14,
                   fontWeight: card || segmented
                       ? FontWeight.w500
                       : FontWeight.w400,
@@ -393,6 +394,7 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
                       widget.label,
                       style: TextStyle(
                         fontSize: segmented ? 13 : 14,
+                        height: segmented ? 18 / 13 : 20 / 14,
                         fontWeight: card || segmented
                             ? FontWeight.w500
                             : FontWeight.w400,
@@ -450,7 +452,11 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
                         child: ExcludeSemantics(
                           child: Text(
                             widget.description!,
-                            style: TextStyle(fontSize: 13, color: c.subtle),
+                            style: TextStyle(
+                              fontSize: 13,
+                              height: 18 / 13,
+                              color: c.subtle,
+                            ),
                           ),
                         ),
                       ),
@@ -492,7 +498,13 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
                 );
               }
             }
-            return Opacity(opacity: enabled ? 1 : .5, child: content);
+            // Inline Kumo labels dim only for an explicitly disabled item.
+            // Card and segmented labels also react to inherited disabled state.
+            final dimmed =
+                widget.disabled ||
+                (group?.disabledValues.contains(widget.value) ?? false) ||
+                (!enabled && (card || segmented));
+            return Opacity(opacity: dimmed ? .5 : 1, child: content);
           },
         ),
       ),
