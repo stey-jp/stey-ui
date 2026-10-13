@@ -32,7 +32,12 @@ try{
    for(const page of [reference,candidate]){
     await page.mouse.click(20,20);
     if(state==='hover')await page.getByRole('button',{name:'Save',exact:true}).hover();
-    if(state==='focus'){await page.getByRole('button',{name:'Save',exact:true}).click();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');}
+    if(state==='focus'){
+     const button=page.getByRole('button',{name:'Save',exact:true});
+     await button.click();await page.keyboard.press('Tab');
+     if(page===reference)await page.keyboard.press('Shift+Tab');
+     if(!await button.evaluate(element=>element===document.activeElement))throw Error('SAMPLE_KEYBOARD_FOCUS_MISSING');
+    }
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
    }
    const ref=await reference.screenshot({path:resolve(output,id+'-reference.png')});
