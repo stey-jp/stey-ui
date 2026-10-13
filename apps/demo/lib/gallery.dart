@@ -83,6 +83,9 @@ class _SteyGalleryState extends State<SteyGallery> {
                 router.uri.queryParameters['variant'] ?? 'secondary';
             final child = switch (sample) {
               'badge' => SteyBadge(
+                appearance: router.uri.queryParameters['appearance'] == 'dot'
+                    ? SteyBadgeAppearance.dot
+                    : SteyBadgeAppearance.filled,
                 variant: SteyBadgeVariant.values.firstWhere(
                   (v) => v.name == variant,
                   orElse: () => SteyBadgeVariant.secondary,
@@ -406,6 +409,8 @@ class ComponentExample extends StatefulWidget {
 
 class _ComponentExampleState extends State<ComponentExample> {
   bool checked = false, open = false;
+  bool sidebarCollapsed = false;
+  String sidebarSurface = 'account';
   String tab = 'overview', option = 'automatic';
   int page = 1, clicks = 0;
   double value = 36;
@@ -499,6 +504,17 @@ class _ComponentExampleState extends State<ComponentExample> {
           SteyBadge(tone: tone, child: Text(tone.name)),
         for (final tone in SteyTone.values)
           SteyBadge(tone: tone, dot: true, child: Text(tone.name)),
+        for (final variant in [
+          SteyBadgeVariant.success,
+          SteyBadgeVariant.warning,
+          SteyBadgeVariant.error,
+          SteyBadgeVariant.neutral,
+        ])
+          SteyBadge(
+            variant: variant,
+            appearance: SteyBadgeAppearance.dot,
+            child: Text(variant.name),
+          ),
       ]),
       'banner' => form([
         for (final tone in SteyTone.values)
@@ -763,23 +779,87 @@ class _ComponentExampleState extends State<ComponentExample> {
           SteyFlowEdge('origin', 'response'),
         ],
       ),
-      'sidebar' => SizedBox(
-        height: 300,
-        child: SteySidebar(
-          items: const [
-            SteySidebarItem('overview', 'Overview', icon: Icons.home_outlined),
-            SteySidebarItem('analytics', 'Analytics', icon: Icons.bar_chart),
-            SteySidebarItem(
-              'settings',
-              'Settings',
-              icon: Icons.settings_outlined,
-              children: [SteySidebarItem('profile', 'Profile')],
+      'sidebar' => form([
+        group([
+          SteyButton(
+            onPressed: () =>
+                setState(() => sidebarCollapsed = !sidebarCollapsed),
+            child: Text(
+              sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar',
             ),
-          ],
-          selected: tab,
-          onSelected: (v) => setState(() => tab = v),
+          ),
+          SteyButton(
+            onPressed: () => setState(
+              () => sidebarSurface = sidebarSurface == 'account'
+                  ? 'zone'
+                  : 'account',
+            ),
+            child: const Text('Switch navigation view'),
+          ),
+        ]),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final maxWidth = constraints.maxWidth.clamp(58.0, 480.0);
+            return Align(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                height: 300,
+                child: SteySidebar(
+                  width: 256,
+                  resizable: true,
+                  minWidth: maxWidth < 200 ? maxWidth : 200,
+                  maxWidth: maxWidth,
+                  collapsed: sidebarCollapsed,
+                  onCollapsedChanged: (value) =>
+                      setState(() => sidebarCollapsed = value),
+                  items: const [
+                    SteySidebarItem(
+                      'overview',
+                      'Overview',
+                      icon: Icons.home_outlined,
+                    ),
+                    SteySidebarItem(
+                      'analytics',
+                      'Analytics',
+                      icon: Icons.bar_chart,
+                    ),
+                    SteySidebarItem(
+                      'settings',
+                      'Settings',
+                      icon: Icons.settings_outlined,
+                      children: [SteySidebarItem('profile', 'Profile')],
+                    ),
+                  ],
+                  selected: tab,
+                  onSelected: (v) => setState(() => tab = v),
+                ),
+              ),
+            );
+          },
         ),
-      ),
+        SizedBox(
+          height: 140,
+          child: SteySidebarSlidingViews(
+            activeKey: sidebarSurface,
+            views: const [
+              SteySidebarSlidingView(
+                value: 'account',
+                child: SteyInput(
+                  label: 'Account name',
+                  placeholder: 'Text is retained when switching views',
+                ),
+              ),
+              SteySidebarSlidingView(
+                value: 'zone',
+                child: SteyInput(
+                  label: 'Zone name',
+                  placeholder: 'example.com',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ]),
       'table-of-contents' => SteyTableOfContents(
         items: const {
           'overview': 'Overview',

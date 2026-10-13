@@ -1,7 +1,8 @@
 """Write a receipt only after all project checks and visual comparisons pass.
 
-The central workflow invokes the registered full commands first. This command
-checks their completed receipt and the hash of the exact reviewed proposal.
+The verification environment invokes the project's full commands first and runs this
+command only after they succeed. This command checks the visual gate and the
+hash of the exact reviewed proposal; it does not independently run full checks.
 """
 import argparse
 import json

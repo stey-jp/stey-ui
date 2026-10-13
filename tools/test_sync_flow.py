@@ -4,6 +4,8 @@ All network/billing endpoints are fakes; the test explicitly does not claim a
 successful live OpenAI call or a real upstream synchronization.
 """
 import json
+import io
+from contextlib import redirect_stdout
 import tempfile
 import unittest
 from pathlib import Path
@@ -54,7 +56,8 @@ class EndToEndTests(unittest.TestCase):
             def github(path,method='GET',body=None):
                 return {'number':9,'html_url':'https://github.com/stey-jp/stey-ui/pull/9'} if method=='POST' else []
             with patch.object(cli,'ROOT',root),patch.object(cli,'run',run),patch.object(cli,'gh',github),patch.object(cli,'safe_path',lambda path:engine.safe_path(path,root)):
-                cli.create_pr(config,state,Store(),out)
+                with redirect_stdout(io.StringIO()):
+                    cli.create_pr(config,state,Store(),out)
             self.assertEqual((root/path).read_text(),'const value = 2;')
             self.assertEqual(state['pending']['phase'],'pr-open')
             self.assertIsNone(state['synchronized_sha'])

@@ -11,6 +11,17 @@ import {createHash} from 'node:crypto';
 const required=process.argv.includes('--require-upstream');
 const output=resolve('output/visual');await mkdir(output,{recursive:true});
 const manifest=JSON.parse(await readFile('upstream/visual-fixtures.json','utf8'));
+const inventory=JSON.parse(await readFile('upstream/inventory.json','utf8'));
+if(!/^[0-9a-f]{40}$/.test(manifest.upstream_sha))throw Error('VISUAL_UPSTREAM_SHA_INVALID');
+const ids=new Set(),coverage=new Set();
+for(const fixture of manifest.fixtures){
+  if(ids.has(fixture.id))throw Error('VISUAL_FIXTURE_ID_DUPLICATE');
+  if(!inventory.components.some(item=>item.id===fixture.component))throw Error('VISUAL_COMPONENT_UNKNOWN');
+  if(!['light','dark'].includes(fixture.mode))throw Error('VISUAL_MODE_INVALID');
+  if(!Number.isInteger(fixture.width)||fixture.width<1||!Number.isInteger(fixture.height)||fixture.height<1)throw Error('VISUAL_VIEWPORT_INVALID');
+  ids.add(fixture.id);coverage.add(`${fixture.component}-${fixture.mode}`);
+}
+const missingCoverage=inventory.components.flatMap(item=>['light','dark'].map(mode=>`${item.id}-${mode}`)).filter(id=>!coverage.has(id));
 const rows=[];
 let server,browser,port;
 try {
@@ -56,8 +67,9 @@ for(const fixture of manifest.fixtures){
   if(browser)await browser.close();
   if(server)server.kill();
 }
-const success=manifest.fixtures.length>0&&rows.every(row=>row.success);
+const success=missingCoverage.length===0&&rows.length>0&&rows.every(row=>row.success);
 const report={upstream_sha:manifest.upstream_sha,success,fixtures:rows,
+  missing_coverage:missingCoverage,
   missing:manifest.fixtures.length===0?'Pinned official reference fixtures have not been approved.':null};
 await writeFile(resolve(output,'report.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report));

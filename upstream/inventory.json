@@ -31,7 +31,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Filled and dot variants, beta dashes, and default primary variant are implemented. Pixel parity and badges inside hovered links remain pending. The pinned upstream teal-subtle background token is undefined."
     },
     {
       "id": "banner",
@@ -630,7 +630,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Resizing and sliding views are implemented and tested. Peeking, mobile sheet, collapse transitions, compound API and upstream visual parity remain pending."
     },
     {
       "id": "slider",

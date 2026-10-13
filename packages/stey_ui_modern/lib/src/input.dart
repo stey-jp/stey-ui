@@ -4,6 +4,52 @@ import 'package:flutter/services.dart';
 import 'button.dart';
 import 'theme.dart';
 
+// Kumo uses an outer CSS ring. Its stroke does not consume input padding.
+class _SteyRingInputBorder extends OutlineInputBorder {
+  const _SteyRingInputBorder({
+    required super.borderSide,
+    required super.borderRadius,
+  }) : super(gapPadding: 0);
+  @override
+  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
+  @override
+  _SteyRingInputBorder copyWith({
+    BorderSide? borderSide,
+    BorderRadius? borderRadius,
+    double? gapPadding,
+  }) => _SteyRingInputBorder(
+    borderSide: borderSide ?? this.borderSide,
+    borderRadius: borderRadius ?? this.borderRadius,
+  );
+  @override
+  _SteyRingInputBorder scale(double t) =>
+      copyWith(borderSide: borderSide.scale(t));
+  @override
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) =>
+      a is _SteyRingInputBorder ? this : super.lerpFrom(a, t);
+  @override
+  ShapeBorder? lerpTo(ShapeBorder? b, double t) =>
+      b is _SteyRingInputBorder ? b : super.lerpTo(b, t);
+  @override
+  void paint(
+    Canvas canvas,
+    Rect rect, {
+    double? gapStart,
+    double gapExtent = 0,
+    double gapPercentage = 0,
+    TextDirection? textDirection,
+  }) {
+    final radius = borderRadius.topLeft.x + borderSide.width / 2;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        rect.inflate(borderSide.width / 2),
+        Radius.circular(radius),
+      ),
+      borderSide.toPaint(),
+    );
+  }
+}
+
 class SteyLabel extends StatelessWidget {
   const SteyLabel(this.text, {super.key, this.required = false});
   final String text;
@@ -118,9 +164,8 @@ class SteyInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = SteyTheme.colorsOf(context);
     OutlineInputBorder border(Color color, [double width = 1]) =>
-        OutlineInputBorder(
+        _SteyRingInputBorder(
           borderRadius: BorderRadius.circular(size.radius),
-          gapPadding: 0,
           borderSide: BorderSide(color: color, width: width),
         );
     return SteyField(
@@ -150,6 +195,8 @@ class SteyInput extends StatelessWidget {
             inputFormatters: inputFormatters,
             style: TextStyle(
               fontSize: size.fontSize,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0,
               color: enabled ? c.text : c.subtle,
               height: 1.5,
             ),
@@ -168,6 +215,9 @@ class SteyInput extends StatelessWidget {
                 fontFamily: 'Inter',
                 package: 'stey_ui_modern',
                 fontSize: size.fontSize,
+                fontWeight: FontWeight.w400,
+                // Reset Material's 0.5px tracking to CSS's normal spacing.
+                letterSpacing: 0,
                 height: 1.5,
               ),
               contentPadding: EdgeInsets.symmetric(

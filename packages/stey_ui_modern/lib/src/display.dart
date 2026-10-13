@@ -62,25 +62,32 @@ enum SteyBadgeVariant {
   blue,
 }
 
+enum SteyBadgeAppearance { filled, dot }
+
 class SteyBadge extends StatelessWidget {
   const SteyBadge({
     super.key,
     required this.child,
-    this.tone = SteyTone.neutral,
+    this.tone,
     this.dot = false,
     this.outline = false,
     this.variant,
     this.icon,
+    this.appearance = SteyBadgeAppearance.filled,
   });
   final Widget child;
-  final SteyTone tone;
+  final SteyTone? tone;
   final bool dot, outline;
   final SteyBadgeVariant? variant;
   final Widget? icon;
+  final SteyBadgeAppearance appearance;
   @override
   Widget build(BuildContext context) {
     final c = SteyTheme.colorsOf(context);
-    final (background, foreground) = switch (variant) {
+    final selectedVariant =
+        variant ?? (tone == null ? SteyBadgeVariant.primary : null);
+    final isDot = dot || appearance == SteyBadgeAppearance.dot;
+    final (background, foreground) = switch (selectedVariant) {
       SteyBadgeVariant.primary => (c.badgeInverted, c.badgeInverseText),
       SteyBadgeVariant.secondary => (c.fill, c.badgeNeutralText),
       SteyBadgeVariant.error => (c.dangerTint, c.dangerText),
@@ -98,63 +105,125 @@ class SteyBadge extends StatelessWidget {
       SteyBadgeVariant.teal => (c.badgeTeal, Colors.white),
       SteyBadgeVariant.blue => (c.badgeBlue, Colors.white),
       SteyBadgeVariant.tealSubtle => (
-        c.badgeTeal.withValues(alpha: .15),
+        // Upstream references an undefined background token at the pinned SHA.
+        Colors.transparent,
         c.badgeTealText,
       ),
-      null => (tone.background(c), tone.foreground(c)),
+      null => (tone!.background(c), tone!.foreground(c)),
+    };
+    final dotColor = switch (selectedVariant) {
+      SteyBadgeVariant.success => c.success,
+      SteyBadgeVariant.warning => c.badgeOrange,
+      SteyBadgeVariant.error => c.badgeRed,
+      SteyBadgeVariant.neutral => c.badgeNeutral,
+      null => tone!.foreground(c),
+      _ => null,
     };
     final bordered =
-        dot ||
-        outline ||
-        variant == SteyBadgeVariant.outline ||
-        variant == SteyBadgeVariant.beta;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: dot || outline ? c.base : background,
-        borderRadius: BorderRadius.circular(99),
-        border: bordered
-            ? Border.all(
-                color: variant == SteyBadgeVariant.beta ? c.brand : c.hairline,
-              )
-            : null,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        child: DefaultTextStyle.merge(
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            height: 1.33,
-            color: dot ? c.text : foreground,
+        !isDot &&
+        (outline ||
+            selectedVariant == SteyBadgeVariant.outline ||
+            selectedVariant == SteyBadgeVariant.beta);
+    final beta = !isDot && selectedVariant == SteyBadgeVariant.beta;
+    return CustomPaint(
+      foregroundPainter: isDot || beta
+          ? _BadgeBorder(
+              color: isDot ? c.hairline : c.brand,
+              dashed: beta,
+              outside: isDot,
+            )
+          : null,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: isDot
+              ? Colors.transparent
+              : outline
+              ? c.base
+              : background,
+          borderRadius: BorderRadius.circular(99),
+          border: bordered && !beta ? Border.all(color: c.fill) : null,
+        ),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            (icon != null && !isDot ? 6 : 8) + (bordered ? 1 : 0),
+            bordered ? 3 : 2,
+            bordered ? 9 : 8,
+            bordered ? 3 : 2,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (dot) ...[
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: variant == null ? tone.foreground(c) : background,
-                    shape: BoxShape.circle,
+          child: DefaultTextStyle.merge(
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              height: 4 / 3,
+              color: isDot ? c.text : foreground,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isDot && dotColor != null) ...[
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: dotColor,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 6),
+                  const SizedBox(width: 6),
+                ],
+                if (icon != null && !isDot) ...[
+                  IconTheme(
+                    data: IconThemeData(size: 12, color: foreground),
+                    child: icon!,
+                  ),
+                  const SizedBox(width: 4),
+                ],
+                child,
               ],
-              if (icon != null) ...[
-                IconTheme(
-                  data: IconThemeData(size: 12, color: foreground),
-                  child: icon!,
-                ),
-                const SizedBox(width: 4),
-              ],
-              child,
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+class _BadgeBorder extends CustomPainter {
+  const _BadgeBorder({
+    required this.color,
+    required this.dashed,
+    required this.outside,
+  });
+  final Color color;
+  final bool dashed, outside;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = (Offset.zero & size).inflate(outside ? .5 : -.5);
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(rect, Radius.circular(rect.height / 2)),
+      );
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+    if (!dashed) {
+      canvas.drawPath(path, paint);
+      return;
+    }
+    for (final metric in path.computeMetrics()) {
+      for (double offset = 0; offset < metric.length; offset += 6) {
+        canvas.drawPath(metric.extractPath(offset, offset + 3), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_BadgeBorder oldDelegate) =>
+      color != oldDelegate.color ||
+      dashed != oldDelegate.dashed ||
+      outside != oldDelegate.outside;
 }
 
 class SteyBanner extends StatelessWidget {

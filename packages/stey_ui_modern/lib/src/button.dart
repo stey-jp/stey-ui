@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 
 import 'theme.dart';
 
+class _ButtonRingBorder extends RoundedRectangleBorder {
+  const _ButtonRingBorder({required super.borderRadius, super.side});
+  @override
+  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
+  @override
+  _ButtonRingBorder copyWith({
+    BorderSide? side,
+    BorderRadiusGeometry? borderRadius,
+  }) => _ButtonRingBorder(
+    side: side ?? this.side,
+    borderRadius: borderRadius ?? this.borderRadius,
+  );
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    if (side.style == BorderStyle.none) return;
+    canvas.drawRRect(
+      borderRadius.resolve(textDirection).toRRect(rect).inflate(side.width / 2),
+      side.toPaint(),
+    );
+  }
+}
+
 enum SteyButtonVariant {
   primary,
   secondary,
@@ -58,6 +80,9 @@ class _SteyButtonState extends State<SteyButton> {
         widget.variant == SteyButtonVariant.secondaryDestructive;
     final ghost = widget.variant == SteyButtonVariant.ghost;
     final disabled = widget.onPressed == null || widget.loading;
+    final compactHeight = widget.size == SteySize.xs
+        ? 14.0
+        : widget.size.height;
     final accent = danger ? c.danger : c.brand;
     final foreground =
         widget.foregroundColor ??
@@ -109,13 +134,20 @@ class _SteyButtonState extends State<SteyButton> {
                 : null,
             alignment: widget.alignment,
             animationDuration: Duration.zero,
-            minimumSize: WidgetStatePropertyAll(Size(0, widget.size.height)),
+            minimumSize: WidgetStatePropertyAll(
+              Size(
+                0,
+                widget.shape == SteyButtonShape.base
+                    ? widget.size.height
+                    : compactHeight,
+              ),
+            ),
             fixedSize: widget.shape == SteyButtonShape.base
                 ? null
-                : WidgetStatePropertyAll(Size.square(widget.size.height)),
+                : WidgetStatePropertyAll(Size.square(compactHeight)),
             maximumSize: widget.shape == SteyButtonShape.base
                 ? null
-                : WidgetStatePropertyAll(Size.square(widget.size.height)),
+                : WidgetStatePropertyAll(Size.square(compactHeight)),
             padding: WidgetStatePropertyAll(
               EdgeInsets.symmetric(
                 horizontal: widget.shape == SteyButtonShape.base
@@ -152,12 +184,16 @@ class _SteyButtonState extends State<SteyButton> {
             overlayColor: const WidgetStatePropertyAll(Colors.transparent),
             side: WidgetStateProperty.resolveWith(
               (states) => BorderSide(
-                color: states.contains(WidgetState.focused) ? c.brand : border,
+                color: states.contains(WidgetState.focused)
+                    ? c.brand
+                    : disabled && emphasis
+                    ? border.withValues(alpha: .5)
+                    : border,
                 width: states.contains(WidgetState.focused) ? 2 : 1,
               ),
             ),
             shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: radius),
+              _ButtonRingBorder(borderRadius: radius),
             ),
           ),
           child: Row(

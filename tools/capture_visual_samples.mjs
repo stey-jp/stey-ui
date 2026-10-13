@@ -7,18 +7,20 @@ import pixelmatch from 'pixelmatch';
 const output=resolve('output/visual-samples');await mkdir(output,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const rows=[];
+const badgeVariants=['primary','secondary','error','warning','success','destructive','info','beta','outline','red','green','neutral','orange','purple','teal','tealSubtle','blue'];
 try{
   for(const mode of ['light','dark']){
     const context=await browser.newContext({viewport:{width:600,height:160}});
-    for(const [component,variants] of [['button',['primary','secondary','ghost','destructive','outline']],['badge',['secondary','success','red','blue']],['input',['default']]]){
+    for(const [component,variants,appearance] of [['button',['primary','secondary','ghost','destructive','secondaryDestructive','outline'],'filled'],['badge',badgeVariants,'filled'],['badge',badgeVariants,'dot'],['input',['default'],'filled']]){
       for(const variant of variants){
-        const id=`${component}-${variant}-${mode}`;
+        const id=`${component}-${variant}${appearance==='dot'?'-dot':''}-${mode}`;
         const reference=await context.newPage(),candidate=await context.newPage();
-        await reference.goto(`http://127.0.0.1:8767/?component=${component}&variant=${variant}&mode=${mode}`,{waitUntil:'networkidle'});
+        const upstreamVariant=variant==='secondaryDestructive'?'secondary-destructive':variant==='tealSubtle'?'teal-subtle':variant;
+        await reference.goto(`http://127.0.0.1:8767/?component=${component}&variant=${upstreamVariant}&appearance=${appearance}&mode=${mode}`,{waitUntil:'networkidle'});
         if(component==='input')await reference.locator('input').waitFor();
         else await reference.getByText(component==='badge'?'Active':'Save',{exact:true}).waitFor({timeout:30000});
         await reference.evaluate(()=>document.fonts.ready);
-        await candidate.goto(`http://127.0.0.1:8766/?sample=${component}&variant=${variant}&mode=${mode}`,{waitUntil:'networkidle'});
+        await candidate.goto(`http://127.0.0.1:8766/?sample=${component}&variant=${variant}&appearance=${appearance}&mode=${mode}`,{waitUntil:'networkidle'});
         if(component==='badge')await candidate.getByText('Active',{exact:true}).waitFor();
         else await candidate.getByRole(component==='input'?'textbox':'button',{name:component==='input'?'Name':'Save',exact:true}).waitFor({timeout:30000});
         const ref=await reference.screenshot({path:resolve(output,id+'-reference.png')});

@@ -33,7 +33,33 @@ class SteyTheme extends InheritedWidget {
       textTheme: base.textTheme
           .apply(bodyColor: c.text, displayColor: c.text)
           .copyWith(
+            displayLarge: base.textTheme.displayLarge?.copyWith(
+              letterSpacing: 0,
+            ),
+            displayMedium: base.textTheme.displayMedium?.copyWith(
+              letterSpacing: 0,
+            ),
+            displaySmall: base.textTheme.displaySmall?.copyWith(
+              letterSpacing: 0,
+            ),
+            headlineLarge: base.textTheme.headlineLarge?.copyWith(
+              letterSpacing: 0,
+            ),
+            headlineMedium: base.textTheme.headlineMedium?.copyWith(
+              letterSpacing: 0,
+            ),
+            headlineSmall: base.textTheme.headlineSmall?.copyWith(
+              letterSpacing: 0,
+            ),
+            titleLarge: base.textTheme.titleLarge?.copyWith(letterSpacing: 0),
+            titleMedium: base.textTheme.titleMedium?.copyWith(letterSpacing: 0),
+            titleSmall: base.textTheme.titleSmall?.copyWith(letterSpacing: 0),
+            labelLarge: base.textTheme.labelLarge?.copyWith(letterSpacing: 0),
+            labelMedium: base.textTheme.labelMedium?.copyWith(letterSpacing: 0),
+            labelSmall: base.textTheme.labelSmall?.copyWith(letterSpacing: 0),
+            bodySmall: base.textTheme.bodySmall?.copyWith(letterSpacing: 0),
             bodyMedium: TextStyle(
+              letterSpacing: 0,
               fontFamily: 'Inter',
               package: 'stey_ui_modern',
               fontSize: 14,
@@ -41,6 +67,7 @@ class SteyTheme extends InheritedWidget {
               color: c.text,
             ),
             bodyLarge: TextStyle(
+              letterSpacing: 0,
               fontFamily: 'Inter',
               package: 'stey_ui_modern',
               fontSize: 14,
