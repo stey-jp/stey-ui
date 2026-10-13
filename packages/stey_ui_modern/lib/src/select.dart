@@ -889,9 +889,13 @@ class _SelectRing extends CustomPainter {
     if (offset != null) {
       // CSS box shadows snap their edges to physical pixels. Preserve the
       // layout, text and hit target while keeping the native ring equally crisp.
+      // Keep half-pixel ties on the leading edge; text line boxes may round to
+      // a whole logical pixel where the browser retains fractional height.
       canvas.translate(
-        (offset.dx * pixelRatio).roundToDouble() / pixelRatio - offset.dx,
-        (offset.dy * pixelRatio).roundToDouble() / pixelRatio - offset.dy,
+        (offset.dx * pixelRatio + .499999).floorToDouble() / pixelRatio -
+            offset.dx,
+        (offset.dy * pixelRatio + .499999).floorToDouble() / pixelRatio -
+            offset.dy,
       );
     }
     final spread = inset ? -width / 2 : width / 2;
