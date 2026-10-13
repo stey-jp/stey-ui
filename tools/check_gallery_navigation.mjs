@@ -23,8 +23,17 @@ try {
   await page.getByRole('heading',{name:'Badge',exact:true}).waitFor();
   const missingIds=await page.locator('input[data-semantics-role="text-field"],textarea[data-semantics-role="text-field"]').evaluateAll(fields=>fields.filter(field=>!field.id).length);
   assert.equal(missingIds,0);
+  await page.goto(base+'?sample=input&mode=light',{waitUntil:'networkidle'});
+  const field=page.getByRole('textbox',{name:'Name',exact:true});
+  await field.waitFor();
+  assert.equal(await page.getByRole('textbox').count(),1);
+  assert.equal(await field.isEnabled(),true);
+  await field.fill('Native input');
+  assert.equal(await field.inputValue(),'Native input');
+  const rootSize=await page.evaluate(()=>getComputedStyle(document.documentElement).fontSize);
+  assert.equal(rootSize,'16px','The root must retain the browser default for Flutter text scaling.');
   await mkdir('output/web-audit',{recursive:true});
-  const report={success:true,browser:'Real Google Chrome',url:base,checks:['component URL','theme URL','back','forward','semantic input identities']};
+  const report={success:true,browser:'Real Google Chrome',url:base,checks:['component URL','theme URL','back','forward','semantic input identities','one editable input with explicit name','native input editing','browser default root font size']};
   await writeFile('output/web-audit/navigation.json',JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report));
 } finally { await browser.close(); }
