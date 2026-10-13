@@ -476,6 +476,9 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                           child: DefaultTextStyle.merge(
                             style: TextStyle(
                               fontSize: widget.size.fontSize,
+                              height: widget.size.fontSize == 12
+                                  ? 1 / .75
+                                  : 1.5,
                               fontWeight: FontWeight.w400,
                               color: foreground,
                             ),
