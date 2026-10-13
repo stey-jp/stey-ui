@@ -175,7 +175,6 @@ class SteyInput extends StatelessWidget {
       required: required,
       child: Semantics(
         label: semanticLabel ?? label ?? placeholder,
-        textField: true,
         child: SizedBox(
           height: maxLines == 1 ? size.height : null,
           child: TextField(
@@ -209,17 +208,23 @@ class SteyInput extends StatelessWidget {
                   : null,
               filled: true,
               fillColor: c.control,
-              hintText: placeholder,
-              hintStyle: TextStyle(
-                color: c.placeholder,
-                fontFamily: 'Inter',
-                package: 'stey_ui_modern',
-                fontSize: size.fontSize,
-                fontWeight: FontWeight.w400,
-                // Reset Material's 0.5px tracking to CSS's normal spacing.
-                letterSpacing: 0,
-                height: 1.5,
-              ),
+              hint: placeholder == null
+                  ? null
+                  : ExcludeSemantics(
+                      child: Text(
+                        placeholder!,
+                        style: TextStyle(
+                          color: c.placeholder,
+                          fontFamily: 'Inter',
+                          package: 'stey_ui_modern',
+                          fontSize: size.fontSize,
+                          fontWeight: FontWeight.w400,
+                          // Reset Material's 0.5px tracking to CSS's normal spacing.
+                          letterSpacing: 0,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: size.padding,
                 vertical: maxLines == 1 ? 0 : 12,
