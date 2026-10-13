@@ -294,7 +294,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                                             .map(
                                               (id) => SteySidebarItem(
                                                 id,
-                                                title(id),
+                                                componentLabels[id] ?? id,
                                               ),
                                             )
                                             .toList(),
@@ -322,7 +322,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                                             value: selected,
                                             options: {
                                               for (final id in componentIds)
-                                                id: title(id),
+                                                id: componentLabels[id] ?? id,
                                             },
                                             onChanged: (v) {
                                               if (v != null) select(v);

@@ -8,7 +8,7 @@ try {
   const page=await browser.newPage({viewport:{width:1280,height:900}});
   await page.goto(base+'?component=button&mode=light',{waitUntil:'networkidle'});
   await page.getByRole('heading',{name:'ボタン（Button）',exact:true}).waitFor();
-  await page.getByRole('button',{name:'バッジ（Badge）',exact:true}).click();
+  await page.getByRole('button',{name:'バッジ',exact:true}).click();
   await page.waitForURL(url=>url.searchParams.get('component')==='badge');
   await page.getByRole('heading',{name:'バッジ（Badge）',exact:true}).waitFor();
   await page.getByRole('button',{name:'ダークモードに切り替え',exact:true}).click();

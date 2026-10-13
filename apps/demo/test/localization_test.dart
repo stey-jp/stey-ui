@@ -27,7 +27,7 @@ void main() {
     expect(find.text('操作プレビュー'), findsOneWidget);
     await tester.enterText(find.byType(EditableText).first, 'チェック');
     await tester.pump();
-    await tester.tap(find.text('チェックボックス（Checkbox）'));
+    await tester.tap(find.text('チェックボックス'));
     await tester.pump();
     expect(find.text('アクセス分析を有効にする'), findsOneWidget);
     final checkbox = find.byType(SteyCheckbox).first;
