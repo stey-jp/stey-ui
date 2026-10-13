@@ -92,6 +92,20 @@ FIELDS = {
     'badgeOrangeText':'text-color-kumo-badge-orange-subtle',
     'badgeTealText':'text-color-kumo-badge-teal-subtle',
     'badgeNeutralText':'text-color-kumo-badge-neutral-subtle',
+    'shadowEdge':'color-kumo-shadow-edge', 'shadowDrop':'color-kumo-shadow-drop',
+    'interact':'color-kumo-interact',
+}
+
+# Switch uses upstream primitive utilities in addition to semantic tokens.
+SWITCH_COLORS = {
+    'switchTrackOff': ('color-neutral-200', 'color-neutral-700'),
+    'switchTrackOn': ('color-blue-500', 'color-blue-600'),
+    'switchRingOff': ('color-neutral-300', 'color-neutral-600'),
+    'switchRingOn': ('color-blue-600', 'color-blue-500'),
+    'switchThumbOn': ('color-white', 'color-blue-300'),
+    'switchNeutralTrackOn': ('color-neutral-500', '@base'),
+    'switchNeutralRingOn': ('color-neutral-600', 'color-neutral-700'),
+    'switchNeutralThumbOn': ('color-white', 'color-neutral-400'),
 }
 
 
@@ -109,6 +123,7 @@ def generate(source, tokens_only=False, tailwind_theme=None):
             raise ValueError('Tailwind palette does not match the upstream lockfile')
         palette = dict(re.findall(r'--(color-[\w-]+):\s*([^;]+);', tailwind_theme.read_text()))
         referenced = set(re.findall(r'var\(--(color-[\w-]+)', css))
+        referenced.update(value for values in SWITCH_COLORS.values() for value in values if value != '@base')
         palette = {name: value for name, value in palette.items() if name in referenced}
         palette_path.write_text(json.dumps({'tailwind_version': version,
             'source': 'tailwindcss/theme.css (MIT, Tailwind Labs, Inc.)',
@@ -126,6 +141,11 @@ def generate(source, tokens_only=False, tailwind_theme=None):
              '  bool get dark => brightness == Brightness.dark;']
     for name, token in FIELDS.items():
         light, dark = [resolve_color(value, palette) for value in split_args(tokens[token])]
+        lines.append(f'  Color get {name} => Color(dark ? 0x{color(dark)} : 0x{color(light)});')
+    for name, values in SWITCH_COLORS.items():
+        resolved = [resolve_color(split_args(tokens['color-kumo-base'])[index], palette)
+                    if value == '@base' else palette[value] for index, value in enumerate(values)]
+        light, dark = resolved
         lines.append(f'  Color get {name} => Color(dark ? 0x{color(dark)} : 0x{color(light)});')
     for tone in ('brand','danger'):
         for state,fraction,target in [('EmphasisStart',.15,1),('EmphasisHover',.3,1),('EmphasisRing',.1,0)]:

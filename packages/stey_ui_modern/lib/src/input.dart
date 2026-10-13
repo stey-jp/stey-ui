@@ -59,50 +59,78 @@ class SteyLabel extends StatelessWidget {
     this.optionalLabel = '(optional)',
     this.tooltip,
     this.tooltipAriaLabel = 'More information',
+    this.excludeTextSemantics = false,
+    this.weight = FontWeight.w500,
   });
   final String text, optionalLabel, tooltipAriaLabel;
   final String? tooltip;
   final bool? required;
   final bool showOptional;
+  final bool excludeTextSemantics;
+  final FontWeight weight;
   @override
   Widget build(BuildContext context) => Wrap(
     spacing: 4,
     crossAxisAlignment: WrapCrossAlignment.center,
     children: [
-      Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: text),
-            if (showOptional || required == false)
-              TextSpan(
-                text: ' $optionalLabel',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: SteyTheme.colorsOf(context).subtle,
+      ExcludeSemantics(
+        excluding: excludeTextSemantics,
+        child: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: text),
+              if (showOptional || required == false)
+                TextSpan(
+                  text: ' $optionalLabel',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: SteyTheme.colorsOf(context).subtle,
+                  ),
                 ),
-              ),
-          ],
-        ),
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: SteyTheme.colorsOf(context).text,
+            ],
+          ),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: weight,
+            color: SteyTheme.colorsOf(context).text,
+          ),
         ),
       ),
       if (tooltip != null)
-        Tooltip(
-          message: tooltip!,
-          excludeFromSemantics: true,
-          child: SteyButton(
-            onPressed: () {},
-            variant: SteyButtonVariant.ghost,
-            size: SteySize.xs,
-            shape: SteyButtonShape.square,
-            semanticLabel: tooltipAriaLabel,
-            child: const Icon(Icons.info_outline, size: 14),
-          ),
-        ),
+        _SteyLabelInfo(message: tooltip!, semanticLabel: tooltipAriaLabel),
     ],
+  );
+}
+
+class _SteyLabelInfo extends StatefulWidget {
+  const _SteyLabelInfo({required this.message, required this.semanticLabel});
+  final String message, semanticLabel;
+  @override
+  State<_SteyLabelInfo> createState() => _SteyLabelInfoState();
+}
+
+class _SteyLabelInfoState extends State<_SteyLabelInfo> {
+  final tooltip = GlobalKey<TooltipState>();
+  @override
+  Widget build(BuildContext context) => Focus(
+    canRequestFocus: false,
+    skipTraversal: true,
+    onFocusChange: (focused) {
+      if (focused) tooltip.currentState?.ensureTooltipVisible();
+    },
+    child: Tooltip(
+      key: tooltip,
+      message: widget.message,
+      excludeFromSemantics: true,
+      child: SteyButton(
+        onPressed: () => tooltip.currentState?.ensureTooltipVisible(),
+        variant: SteyButtonVariant.ghost,
+        size: SteySize.xs,
+        shape: SteyButtonShape.square,
+        semanticLabel: widget.semanticLabel,
+        child: const Icon(Icons.info_outline, size: 14),
+      ),
+    ),
   );
 }
 

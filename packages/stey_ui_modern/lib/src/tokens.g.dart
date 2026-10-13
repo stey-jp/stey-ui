@@ -45,6 +45,17 @@ class SteyColors {
   Color get badgeOrangeText => Color(dark ? 0xffffd6a7 : 0xff9f2d00);
   Color get badgeTealText => Color(dark ? 0xff96f7e4 : 0xff005f5a);
   Color get badgeNeutralText => Color(dark ? 0xffe5e5e5 : 0xff262626);
+  Color get shadowEdge => Color(dark ? 0x1affffff : 0x1f000000);
+  Color get shadowDrop => Color(dark ? 0x4c000000 : 0x14000000);
+  Color get interact => Color(dark ? 0xff404040 : 0xffd4d4d4);
+  Color get switchTrackOff => Color(dark ? 0xff404040 : 0xffe5e5e5);
+  Color get switchTrackOn => Color(dark ? 0xff155dfc : 0xff2b7fff);
+  Color get switchRingOff => Color(dark ? 0xff525252 : 0xffd4d4d4);
+  Color get switchRingOn => Color(dark ? 0xff2b7fff : 0xff155dfc);
+  Color get switchThumbOn => Color(dark ? 0xff8ec5ff : 0xffffffff);
+  Color get switchNeutralTrackOn => Color(dark ? 0xff0f0f0f : 0xff737373);
+  Color get switchNeutralRingOn => Color(dark ? 0xff404040 : 0xff525252);
+  Color get switchNeutralThumbOn => Color(dark ? 0xffa1a1a1 : 0xffffffff);
   Color get brandEmphasisStart => Color(dark ? 0xff3879e5 : 0xff3c86ff);
   Color get brandEmphasisHover => Color(dark ? 0xff5c92ec : 0xff619eff);
   Color get brandEmphasisRing => Color(dark ? 0xff0351c1 : 0xff045ede);

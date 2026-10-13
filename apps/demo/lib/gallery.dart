@@ -91,6 +91,29 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'checkbox' => SteyCheckbox(
+                value: router.uri.queryParameters['checked'] == 'true',
+                indeterminate: router.uri.queryParameters['checked'] == 'mixed',
+                enabled: sampleState != 'disabled',
+                onChanged: (_) {},
+                semanticLabel: 'Toggle',
+                variant: variant == 'error'
+                    ? SteyCheckboxVariant.error
+                    : SteyCheckboxVariant.standard,
+              ),
+              'switch' => SteySwitch(
+                value: router.uri.queryParameters['checked'] == 'true',
+                enabled: sampleState != 'disabled',
+                onChanged: (_) {},
+                semanticLabel: 'Toggle',
+                variant: variant == 'neutral'
+                    ? SteySwitchVariant.neutral
+                    : SteySwitchVariant.standard,
+                size: SteySwitchSize.values.firstWhere(
+                  (value) => value.name == router.uri.queryParameters['size'],
+                  orElse: () => SteySwitchSize.base,
+                ),
+              ),
               'badge' => SteyBadge(
                 appearance: router.uri.queryParameters['appearance'] == 'dot'
                     ? SteyBadgeAppearance.dot
@@ -591,12 +614,59 @@ class _ComponentExampleState extends State<ComponentExample> {
           label: 'Indeterminate',
         ),
         const SteyCheckbox(value: false, onChanged: null, label: 'Disabled'),
+        const SteyCheckbox(
+          variant: SteyCheckboxVariant.error,
+          label: 'Required selection',
+          required: true,
+        ),
+        const SteyCheckboxGroup(
+          legend: 'Select multiple channels',
+          allValues: ['email', 'sms'],
+          children: [
+            SteyCheckbox(parent: true, label: 'Select all'),
+            SteyCheckboxItem(value: 'email', label: 'Email'),
+            SteyCheckboxItem(value: 'sms', label: 'SMS'),
+          ],
+        ),
+        const SteyCheckboxGroup(
+          legend: 'Notification channels',
+          description: 'Select the channels you use.',
+          defaultValue: ['email'],
+          appearance: SteyCheckboxAppearance.card,
+          children: [
+            SteyCheckboxItem(
+              value: 'email',
+              label: 'Email',
+              description: 'Receive notifications in your inbox.',
+            ),
+            SteyCheckboxItem(
+              value: 'sms',
+              label: 'SMS',
+              description: 'Receive text messages.',
+            ),
+          ],
+        ),
       ]),
-      'switch' => SteySwitch(
-        value: checked,
-        onChanged: (v) => setState(() => checked = v),
-        label: 'Enable notifications',
-      ),
+      'switch' => form([
+        SteySwitch(
+          value: checked,
+          onChanged: (v) => setState(() => checked = v),
+          label: 'Enable notifications',
+        ),
+        const SteySwitch(
+          label: 'Neutral switch',
+          variant: SteySwitchVariant.neutral,
+        ),
+        const SteySwitch(label: 'Small switch', size: SteySwitchSize.sm),
+        const SteySwitch(label: 'Large switch', size: SteySwitchSize.lg),
+        const SteySwitchGroup(
+          legend: 'Channels',
+          children: [
+            SteySwitchItem(label: 'Email', defaultValue: true),
+            SteySwitchItem(label: 'SMS', disabled: true),
+          ],
+        ),
+      ]),
       'radio' => SteyRadioGroup(
         value: option,
         options: options,

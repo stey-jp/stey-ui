@@ -7,7 +7,7 @@ React・WebViewへの実行時依存はありません。
 **開発プレビューです。Kumoの全仕様・挙動・視覚の完全再現は未完了です。**
 49コンポーネント群と3ブロックをソースから列挙し、51群にネイティブ実装とデモを用意しています。
 Cloudflareロゴ群は書面による商標許可待ちです。詳細と未検証項目は
-[対応表](upstream/inventory.json)、[検証結果](docs/verification.md) を参照してください。
+[対応表](upstream/inventory.json)、[再現チェックリスト](docs/parity-checklist.md)、[検証結果](docs/verification.md) を参照してください。
 Materialの選択・日付・通知などを使った部分は、公式挙動との追加検証が必要です。
 
 ```text

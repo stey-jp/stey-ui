@@ -136,12 +136,12 @@
         "packages/kumo/src/components/checkbox/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/selection.dart"
+        "packages/stey_ui_modern/lib/src/checkable.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native 16px contrast control, mixed state, inline/card items, vertical/two-column joined groups, legend, parent partial/all/none restoration with disabled selections, pointer/keyboard and semantics tests are implemented. Event details, expanded hit area, native group/child accessibility relationships and full visual certification remain pending."
     },
     {
       "id": "clipboard-text",
@@ -671,12 +671,12 @@
         "packages/kumo/src/components/switch/switch.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/selection.dart"
+        "packages/stey_ui_modern/lib/src/checkable.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native 32x16/36x18/40x20 squircle controls, default/neutral colors, thumb shadows, 150ms movement/color transition, item/group/legend, busy hint, disabled and keyboard semantics are implemented. Busy accessibility mapping and phase-aligned visual/full API certification remain pending."
     },
     {
       "id": "table",
