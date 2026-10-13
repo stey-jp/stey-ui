@@ -10,7 +10,8 @@
 - Python同期テスト：18件成功。予約前保存、再試行を合算した予算上限、受付不明時停止、失敗要求だけの再処理と成功結果の保存、競合とパス制限、ドキュメント更新時のAI不使用、再処理防止、ライセンス変更時停止、提案適用からPR作成までの模擬フロー。
 - Webリリースビルド成功。Wasm＋JavaScriptフォールバック、ローカル配信、ソースマップ、`-O4`。生成mapへビルド入力ソースを埋め込み、Flutter loader mapも配信。
 - Windowsリリースビルド成功。製品の実機起動／操作は未検証。
-- shared-ci中央テスト85件、設定検査、coverage contract、actionlint、GitHub Verify shared CI成功。中央mainとローカルmainのSHA一致を確認。中央登録の全検査をローカル共通CLIでも実行。
+- AndroidリリースAPK成功（開発用署名、49.6MB）。API 36エミュレーターで起動、ボタンの反応、disabled／loadingの無反応、Light/Dark、状態保持、実行時エラー0件を確認。
+- shared-ci中央テスト86件、設定検査、coverage contract、actionlint、GitHub Verify shared CI成功。中央mainとローカルmainのSHA一致を確認。中央登録の全検査とAndroid／Windowsビルドをローカル共通CLIでも実行。
 - `shared-ci audit`：所有15件、検査12件、公開3件のクラウド接続保留、空repoなし、指摘0件。保留を導入完了とは扱わない。
 
 模擬フローではネットワーク／課金／GitHub書き込みをfakeにしているため、実OpenAI APIや実同期PRの成功は示しません。
@@ -44,8 +45,9 @@ Flutter SDK改造や計測時だけの起動抑止、アクセシビリティ無
 ## プラットフォームと運用の未検証
 
 macOS・Linux・Android・iOSのrunnerは生成済みで、ライブラリにdart:io/WebView/React依存はありません。
-macOS/Linux/iOSのbuildおよび全OSの実機操作は未検証。AndroidはSDK license未承認です。
-SDKライセンス承認や新しいクラウド接続は実行していません。
+macOS/Linux/iOSのbuild、Windowsの画面操作、全OSの物理実機操作は未検証。
+Android SDKライセンスはユーザー承認後に受諾済み。新しいクラウド接続は実行していません。
+Androidビルドには既存SDK command-line toolsとAndroid Studioの世代差によるXML処理警告が残りますが、ビルドとFlutter doctorのAndroid toolchain確認は成功しています。
 
 OpenAIの制限付きキーをGitHub SecretsのOPENAI_API_KEYへ保存済み。
 実Batch送信→回収→PR作成は、ユーザー指定で共通CIクラウド接続が保留のため未検証・無効です。

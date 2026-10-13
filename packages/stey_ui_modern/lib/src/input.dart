@@ -120,6 +120,7 @@ class SteyInput extends StatelessWidget {
     OutlineInputBorder border(Color color, [double width = 1]) =>
         OutlineInputBorder(
           borderRadius: BorderRadius.circular(size.radius),
+          gapPadding: 0,
           borderSide: BorderSide(color: color, width: width),
         );
     return SteyField(
@@ -162,7 +163,13 @@ class SteyInput extends StatelessWidget {
               filled: true,
               fillColor: c.control,
               hintText: placeholder,
-              hintStyle: TextStyle(color: c.placeholder),
+              hintStyle: TextStyle(
+                color: c.placeholder,
+                fontFamily: 'Inter',
+                package: 'stey_ui_modern',
+                fontSize: size.fontSize,
+                height: 1.5,
+              ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: size.padding,
                 vertical: maxLines == 1 ? 0 : 12,

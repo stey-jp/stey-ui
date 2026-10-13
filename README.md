@@ -58,6 +58,11 @@ COOP `same-origin` とCOEP `credentialless` を配信環境へ設定します。
 
 検査コマンドは `stey-jp/shared-ci` の中央policyに登録します。
 導入後のローカル全検査は `shared-ci check --level full`、フック設定は `shared-ci init`。
+Android／Windowsのリリースビルドは、それぞれ
+`shared-ci check --profile stey-ui-android --level full`／
+`shared-ci check --profile stey-ui-windows --level full`。
+Androidのエミュレーター操作検証は `python tools/smoke_android.py --device <device-id>`。
+APKは開発用署名を使用し、ストア公開向けの署名設定は含めません。
 手動で実行する場合はライブラリ・デモの各ディレクトリで `flutter test`、ルートで `flutter analyze`。
 
 公開Stey UIから非公開shared-ciを呼ぶクラウド接続はユーザー指定で保留中です。
