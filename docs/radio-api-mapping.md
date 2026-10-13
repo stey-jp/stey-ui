@@ -29,4 +29,3 @@ Webリリースも実Chromeで、カード／segmentedの選択と左右矢印�
 
 公式の拡張hit area、全複合API、全幅・状態の視覚認証、screen reader実操作、
 フォーム連携、動的な項目変更と全プラットフォームの入力差は未検証です。
-Flutter Webにはlistbox／option等の役割に制約があるため、全体のアクセシビリティ一致は別途照合します。

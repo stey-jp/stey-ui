@@ -200,14 +200,22 @@ class _SteyRadioGroupState<T> extends State<SteyRadioGroup<T>> {
                 SizedBox(height: gap),
                 Text(
                   widget.error!,
-                  style: TextStyle(fontSize: 13, color: c.dangerText),
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1 / .85,
+                    color: c.dangerText,
+                  ),
                 ),
               ],
               if (widget.description != null) ...[
                 SizedBox(height: gap),
                 Text(
                   widget.description!,
-                  style: TextStyle(fontSize: 13, color: c.subtle),
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1 / .85,
+                    color: c.subtle,
+                  ),
                 ),
               ],
             ],
@@ -382,7 +390,7 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
               child: DefaultTextStyle.merge(
                 style: TextStyle(
                   fontSize: segmented ? 13 : 14,
-                  height: segmented ? 18 / 13 : 20 / 14,
+                  height: segmented ? 1 / .85 : 1.5,
                   fontWeight: card || segmented
                       ? FontWeight.w500
                       : FontWeight.w400,
@@ -394,7 +402,7 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
                       widget.label,
                       style: TextStyle(
                         fontSize: segmented ? 13 : 14,
-                        height: segmented ? 18 / 13 : 20 / 14,
+                        height: segmented ? 1 / .85 : 1.5,
                         fontWeight: card || segmented
                             ? FontWeight.w500
                             : FontWeight.w400,
@@ -454,7 +462,7 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
                             widget.description!,
                             style: TextStyle(
                               fontSize: 13,
-                              height: 18 / 13,
+                              height: 1 / .85,
                               color: c.subtle,
                             ),
                           ),
