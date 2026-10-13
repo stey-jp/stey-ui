@@ -20,8 +20,12 @@ def main():
     if visuals.get('success') is not True or visuals.get('upstream_sha')!=context['target']:
         raise ValueError('UPSTREAM_VISUAL_COMPARISON_NOT_PASSED')
     changed=run('git','diff','--name-only').splitlines()
-    if set(changed)!=set(edit['path'] for edit in proposal['files'] if edit['base_sha256'] is not None):
+    changed+=run('git','ls-files','--others','--exclude-standard').splitlines()
+    if set(changed)!=set(edit['path'] for edit in proposal['files']):
         raise ValueError('UNEXPECTED_VERIFICATION_DIFF')
+    for edit in proposal['files']:
+        if digest((ROOT/edit['path']).read_text(encoding='utf-8')) != digest(edit['content']):
+            raise ValueError('VERIFICATION_SOURCE_CHANGED')
     write_json(folder/'verification.json',{'success':True,'target':context['target'],
         'base_sha':context['base_sha'],'proposal_sha256':digest(json.dumps(proposal,sort_keys=True)),
         'checks':['central-full','upstream-visual-comparison']})

@@ -22,6 +22,7 @@ class SteyColors {
   Color get inverse => Color(dark ? 0xff171717 : 0xfff5f5f5);
   Color get subtle => Color(dark ? 0xffa1a1a1 : 0xff737373);
   Color get link => Color(dark ? 0xff51a2ff : 0xff193cb8);
+  Color get placeholder => Color(dark ? 0xff737373 : 0xffa1a1a1);
   Color get danger => Color(dark ? 0xffe7000b : 0xfffb2c36);
   Color get dangerText => Color(dark ? 0xffff6467 : 0xffc10007);
   Color get successText => Color(dark ? 0xffa4f4cf : 0xff006045);

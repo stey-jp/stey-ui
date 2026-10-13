@@ -89,6 +89,7 @@ class Api:
 
 def new_state(config):
     return {'version': 1, 'synchronized_sha': None, 'baseline_sha': config['baseline_sha'],
+            'observed_sha': config['baseline_sha'],
             'pending': None, 'history': [], 'costs': [], 'attempts': {}}
 
 
@@ -116,7 +117,9 @@ def build_requests(config, inventory, source, base, target, root=ROOT):
     if not SHA.fullmatch(base) or not SHA.fullmatch(target):
         raise ValueError('INVALID_UPSTREAM_SHA')
     changed = run('git', 'diff', '--name-only', base, target, cwd=source).splitlines()
-    relevant = [p for p in changed if p.startswith('packages/kumo/') or p in ('package.json','pnpm-lock.yaml')]
+    if any(p.lower() in ('license', 'license.md', 'packages/kumo/license', 'packages/kumo/license.md') for p in changed):
+        raise ValueError('UPSTREAM_LICENSE_REVIEW_REQUIRED')
+    relevant = [p for p in changed if p.startswith('packages/kumo/src/') or p in ('packages/kumo/package.json','package.json','pnpm-lock.yaml')]
     global_files = [p for p in relevant if p.startswith(('packages/kumo/src/styles/','packages/kumo/src/utils/')) or
                     p in ('packages/kumo/src/index.ts','packages/kumo/package.json','package.json','pnpm-lock.yaml')]
     items = list(inventory['components'])
@@ -247,7 +250,7 @@ def actual_cost(config, usage):
                 row['usage']['output_tokens'] * models[row['model']]['output_per_million']) / 1_000_000 for row in usage)
 
 
-def submit(config, state, batches, target, persist, api, requests_dir):
+def submit(config, state, batches, target, persist, api, requests_dir, completed_proposals=None):
     if state['pending']:
         raise ValueError('SYNC_ALREADY_PENDING')
     attempt = state['attempts'].get(target, 0) + 1
@@ -256,9 +259,10 @@ def submit(config, state, batches, target, persist, api, requests_dir):
     requests = [r for group in batches.values() for r in group]
     reservation = budget_reservation(config,state,requests)
     state['attempts'][target] = attempt
-    state['pending'] = {'target':target, 'base':state['synchronized_sha'] or state['baseline_sha'],
+    state['pending'] = {'target':target, 'base':state.get('observed_sha') or state['synchronized_sha'] or state['baseline_sha'],
                         'phase':'reserved', 'reserved_usd':reservation,
-                        'month':datetime.now(timezone.utc).strftime('%Y-%m'), 'jobs':[]}
+                        'month':datetime.now(timezone.utc).strftime('%Y-%m'), 'jobs':[],
+                        'completed_proposals':completed_proposals or {}}
     persist(state)  # Must be durable before any billable side effect.
     for model, group in batches.items():
         payload = ('\n'.join(json.dumps(r,ensure_ascii=False) for r in group)+'\n').encode()

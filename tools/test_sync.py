@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import sync_engine as sync
+import sync as cli
 
 
 class SyncTests(unittest.TestCase):
@@ -29,6 +30,30 @@ class SyncTests(unittest.TestCase):
         for path in ['.github/workflows/sync.yml','packages/stey_ui_modern/lib/../../secret.dart',
                      '/tmp/file.dart','apps/demo/lib/x.py','apps/demo/lib/x.dart/../a.dart','C:/secret.dart']:
             with self.assertRaises(ValueError): sync.safe_path(path)
+
+    def test_documentation_only_change_does_not_generate_ai_requests(self):
+        with patch.object(sync, 'run', return_value='packages/kumo/README.md\nCHANGELOG.md'):
+            batches, changed = sync.build_requests(self.config, {'components': []}, Path('.'), 'a'*40, 'b'*40)
+        self.assertEqual(batches, {})
+        self.assertEqual(len(changed), 2)
+
+    def test_license_change_stops_without_ai(self):
+        with patch.object(sync, 'run', return_value='packages/kumo/LICENSE'):
+            with self.assertRaisesRegex(ValueError, 'LICENSE_REVIEW_REQUIRED'):
+                sync.build_requests(self.config, {'components': []}, Path('.'), 'a'*40, 'b'*40)
+
+    def test_observed_sha_prevents_reprocessing_documentation_after_a_merge(self):
+        self.state.update(synchronized_sha='a'*40, observed_sha='b'*40)
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); (root/'.sync-work/upstream').mkdir(parents=True)
+            commands=[]
+            def run(*args, **kwargs):
+                commands.append(args)
+                return 'b'*40 if args[:2] == ('git','rev-parse') else ''
+            with patch.object(cli, 'ROOT', root), patch.object(cli, 'run', run):
+                _, base, target = cli.source_at(self.config, self.state)
+        self.assertEqual(base, target)
+        self.assertIn(('git','fetch','origin','b'*40),commands)
 
     def test_budget_upper_bound(self):
         config={**self.config,'per_sync_budget_usd':.00001}
@@ -88,6 +113,20 @@ class SyncTests(unittest.TestCase):
         self.state['pending']={'phase':'reserved'}
         with self.assertRaisesRegex(ValueError,'ACCEPTANCE_UNKNOWN'):
             sync.collect(self.config,self.state,lambda state:None,None,Path('.'))
+
+    def test_retry_saves_successful_results_before_a_new_upload(self):
+        completed={'button': {'files': [], 'summaries': ['already verified']}}
+        requests=[{'custom_id':'badge','body':{'model':self.config['models']['simple']['id'],'max_output_tokens':100}}]
+        saved=[]
+        class Api:
+            def upload(_, payload):
+                self.assertEqual(saved[0]['pending']['completed_proposals'],completed)
+                raise RuntimeError('upload interrupted')
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(RuntimeError,'interrupted'):
+                sync.submit(self.config,self.state,{requests[0]['body']['model']:requests},'a'*40,
+                    lambda state:saved.append(json.loads(json.dumps(state))),Api(),Path(folder),completed)
+        self.assertEqual(self.state['pending']['completed_proposals'],completed)
 
     def test_wait_does_not_sleep(self):
         self.state['pending']={'phase':'submitted','jobs':[{'batch_id':'batch-1'}]}

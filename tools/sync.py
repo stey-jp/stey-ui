@@ -64,7 +64,7 @@ def source_at(config, state):
         run('git','clone','--filter=blob:none','--no-checkout','https://github.com/'+config['repository']+'.git',str(source))
     run('git','fetch','origin',config['branch'],cwd=source)
     target = run('git','rev-parse','FETCH_HEAD',cwd=source)
-    base = state['synchronized_sha'] or state['baseline_sha']
+    base = state.get('observed_sha') or state['synchronized_sha'] or state['baseline_sha']
     if not SHA.fullmatch(target) or not SHA.fullmatch(base):
         raise ValueError('INVALID_UPSTREAM_SHA')
     run('git','fetch','origin',base,cwd=source)
@@ -82,6 +82,7 @@ def reconcile(state, store):
         if synced != pending['target']:
             raise ValueError('MERGED_LOCK_SHA_MISMATCH')
         state['synchronized_sha'] = synced
+        state['observed_sha'] = synced
         state['history'].append({'target':synced,'result':'merged','pr':pr['html_url']})
         state['pending'] = None; store.persist(state)
     elif pr['state'] == 'closed':
@@ -181,8 +182,7 @@ def main():
                 request['body']['input']=json.dumps(context,ensure_ascii=False)
                 batches.setdefault(request['body']['model'],[]).append(request)
             state['history'].append({'target':target,'result':'failed-request-retry','errors':state['pending']['errors']}); state['pending']=None; persist(state)
-            submit(config,state,batches,target,persist,Api(),ROOT/'.sync-work/requests')
-            state['pending']['completed_proposals']=completed; persist(state)
+            submit(config,state,batches,target,persist,Api(),ROOT/'.sync-work/requests',completed)
             return
         if args.operation == 'validation-failed':
             if state['pending'] and state['pending']['phase']=='results-ready':
@@ -202,7 +202,7 @@ def main():
                 print('changed:'+target); return
             if not batches:
                 state['history'].append({'target':target,'result':'non-implementation-change'})
-                state['baseline_sha']=target; persist(state); return
+                state['observed_sha']=target; persist(state); return
             submit(config,state,batches,target,persist,Api(),ROOT/'.sync-work/requests')
             print('submitted:'+target)
         elif args.operation == 'collect':

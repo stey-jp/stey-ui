@@ -152,13 +152,17 @@ class SteyInput extends StatelessWidget {
             cursorColor: c.focus,
             decoration: InputDecoration(
               isDense: true,
+              visualDensity: VisualDensity.standard,
+              constraints: maxLines == 1
+                  ? BoxConstraints.tightFor(height: size.height)
+                  : null,
               filled: true,
               fillColor: c.control,
               hintText: placeholder,
-              hintStyle: TextStyle(color: c.subtle),
+              hintStyle: TextStyle(color: c.placeholder),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: size.padding,
-                vertical: maxLines == 1 ? 8 : 12,
+                vertical: maxLines == 1 ? 0 : 12,
               ),
               border: border(c.line),
               enabledBorder: border(error == null ? c.line : c.dangerText),
