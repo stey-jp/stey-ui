@@ -290,6 +290,7 @@ class SteyRadioItem<T> extends StatefulWidget {
 
 class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
   final ownedFocus = FocusNode();
+  final controlKey = GlobalKey();
   FocusNode get focus => widget.focusNode ?? ownedFocus;
   @override
   void initState() {
@@ -370,9 +371,27 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
             final control = Padding(
               padding: const EdgeInsets.only(top: 2),
               child: SizedBox.square(
+                key: controlKey,
                 dimension: 16,
                 child: CustomPaint(
                   painter: _RadioPainter(
+                    origin: () {
+                      final box =
+                          controlKey.currentContext?.findRenderObject()
+                              as RenderBox?;
+                      if (box == null) return null;
+                      final matrix = box.getTransformTo(null).storage;
+                      if (matrix[0] != 1 ||
+                          matrix[5] != 1 ||
+                          matrix[1] != 0 ||
+                          matrix[4] != 0 ||
+                          matrix[3] != 0 ||
+                          matrix[7] != 0) {
+                        return null;
+                      }
+                      return Offset(matrix[12], matrix[13]);
+                    },
+                    pixelRatio: MediaQuery.devicePixelRatioOf(context),
                     fill: selected ? c.contrast : c.base,
                     ring: ring,
                     dot: c.base,
@@ -522,6 +541,8 @@ class _SteyRadioItemState<T> extends State<SteyRadioItem<T>> {
 
 class _RadioPainter extends CustomPainter {
   const _RadioPainter({
+    required this.origin,
+    required this.pixelRatio,
     required this.fill,
     required this.ring,
     required this.dot,
@@ -529,10 +550,23 @@ class _RadioPainter extends CustomPainter {
     required this.ringWidth,
   });
   final Color fill, ring, dot;
+  final Offset? Function() origin;
+  final double pixelRatio;
   final bool selected;
   final double ringWidth;
   @override
   void paint(Canvas canvas, Size size) {
+    // Browser CSS backgrounds snap their box edges to physical pixels.
+    // Keep the native ring and dot together on the same pixel grid.
+    final offset = origin();
+    canvas.save();
+    if (offset != null) {
+      final snapped = Offset(
+        (offset.dx * pixelRatio).roundToDouble() / pixelRatio,
+        (offset.dy * pixelRatio).roundToDouble() / pixelRatio,
+      );
+      canvas.translate(snapped.dx - offset.dx, snapped.dy - offset.dy);
+    }
     final center = size.center(Offset.zero);
     canvas.drawCircle(center, 8, Paint()..color = fill);
     canvas.drawCircle(
@@ -544,10 +578,12 @@ class _RadioPainter extends CustomPainter {
         ..strokeWidth = ringWidth,
     );
     if (selected) canvas.drawCircle(center, 4, Paint()..color = dot);
+    canvas.restore();
   }
 
   @override
   bool shouldRepaint(_RadioPainter old) =>
+      pixelRatio != old.pixelRatio ||
       fill != old.fill ||
       ring != old.ring ||
       dot != old.dot ||
