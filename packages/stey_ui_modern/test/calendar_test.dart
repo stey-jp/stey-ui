@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 
@@ -11,6 +12,31 @@ Widget host(Widget child) => MaterialApp(
   ),
 );
 void main() {
+  testWidgets('Two-digit days stay on one line and remain selectable', (
+    tester,
+  ) async {
+    DateTime? value;
+    await tester.pumpWidget(
+      host(
+        SteyDatePicker(
+          firstDate: DateTime(2026, 10, 1),
+          lastDate: DateTime(2026, 10, 31),
+          initialMonth: DateTime(2026, 10),
+          onChanged: (date) => value = date,
+        ),
+      ),
+    );
+    final day = find.text('22');
+    final paragraph = tester.renderObject<RenderParagraph>(day);
+    final boxes = paragraph.getBoxesForSelection(
+      const TextSelection(baseOffset: 0, extentOffset: 2),
+    );
+    expect(boxes.map((box) => box.top).toSet(), hasLength(1));
+    await tester.tap(day);
+    await tester.pump();
+    expect(value, DateTime(2026, 10, 22));
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('PageUp crosses a year boundary without invalid month values', (
     tester,
   ) async {

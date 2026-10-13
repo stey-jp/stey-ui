@@ -306,6 +306,7 @@ class _SteyDatePickerState extends State<SteyDatePicker> {
                                       : () => choose(date),
                                   semanticLabel: locale.formatFullDate(date),
                                   size: SteySize.base,
+                                  shape: SteyButtonShape.square,
                                   variant: SteyButtonVariant.ghost,
                                   backgroundColor: active ? c.contrast : null,
                                   child: Text(
