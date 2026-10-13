@@ -54,21 +54,16 @@ MaterialApp(
 COOP `same-origin` とCOEP `credentialless` を配信環境へ設定します。
 [Flutter公式Wasm仕様](https://docs.flutter.dev/platform-integration/web/wasm)
 
-## 検証と共通CI
+## 検証
 
-検査コマンドは `stey-jp/shared-ci` の中央policyに登録します。
-導入後のローカル全検査は `shared-ci check --level full`、フック設定は `shared-ci init`。
-Android／Windowsのリリースビルドは、それぞれ
-`shared-ci check --profile stey-ui-android --level full`／
-`shared-ci check --profile stey-ui-windows --level full`。
+ルートで `flutter pub get --enforce-lockfile`、`flutter analyze --no-pub` を実行します。
+ライブラリ・デモの各ディレクトリで `flutter test --no-pub`、
+ルートで `python -m unittest discover -s tools -p 'test_*.py'` を実行します。
+Android／Windowsのリリースビルドは `apps/demo` で、それぞれ
+`flutter build apk --release --no-pub`／`flutter build windows --release --no-pub`。
 Androidのエミュレーター操作検証は `python tools/smoke_android.py --device <device-id>`。
 APKは開発用署名を使用し、ストア公開向けの署名設定は含めません。
-手動で実行する場合はライブラリ・デモの各ディレクトリで `flutter test`、ルートで `flutter analyze`。
-
-公開Stey UIから非公開shared-ciを呼ぶクラウド接続はユーザー指定で保留中です。
-有効なGitHub Workflowはまだ配置していません。共通呼び出し案は [docs/workflows](docs/workflows)、
-共通実装は shared-ci の `project-stey-ui-kumo-sync.yml` に保存します。
-Runner/stepsをこのリポジトリへ複製しません。
+有効なGitHub Workflowは配置していません。
 
 ## Kumo同期
 

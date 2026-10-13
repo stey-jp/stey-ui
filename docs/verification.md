@@ -11,8 +11,6 @@
 - Webリリースビルド成功。Wasm＋JavaScriptフォールバック、ローカル配信、ソースマップ、`-O4`。生成mapへビルド入力ソースを埋め込み、Flutter loader mapも配信。
 - Windowsリリースビルド成功。製品の実機起動／操作は未検証。
 - AndroidリリースAPK成功（開発用署名、49.6MB）。API 36エミュレーターで起動、ボタンの反応、disabled／loadingの無反応、Light/Dark、状態保持、実行時エラー0件を確認。
-- shared-ci中央テスト86件、設定検査、coverage contract、actionlint、GitHub Verify shared CI成功。中央mainとローカルmainのSHA一致を確認。中央登録の全検査とAndroid／Windowsビルドをローカル共通CLIでも実行。
-- `shared-ci audit`：所有15件、検査12件、公開3件のクラウド接続保留、空repoなし、指摘0件。保留を導入完了とは扱わない。
 
 模擬フローではネットワーク／課金／GitHub書き込みをfakeにしているため、実OpenAI APIや実同期PRの成功は示しません。
 
@@ -50,5 +48,5 @@ Android SDKライセンスはユーザー承認後に受諾済み。新しいク
 Androidビルドには既存SDK command-line toolsとAndroid Studioの世代差によるXML処理警告が残りますが、ビルドとFlutter doctorのAndroid toolchain確認は成功しています。
 
 OpenAIの制限付きキーをGitHub SecretsのOPENAI_API_KEYへ保存済み。
-実Batch送信→回収→PR作成は、ユーザー指定で共通CIクラウド接続が保留のため未検証・無効です。
+実Batch送信→回収→PR作成は、クラウド実行が未接続のため未検証・無効です。
 Webデモはローカルで検証済み、公開ホスティングは未設定です。pub.devへは公開していません。

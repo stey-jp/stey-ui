@@ -1,4 +1,4 @@
-"""CLI entrypoints called by the central shared-ci workflow."""
+"""CLI entrypoints for upstream synchronization."""
 import argparse
 import base64
 import json
