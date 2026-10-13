@@ -91,6 +91,22 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'radio' => SteyRadioGroup<String>(
+                value: router.uri.queryParameters['checked'] == 'true'
+                    ? 'toggle'
+                    : '',
+                onChanged: (_) {},
+                disabled: sampleState == 'disabled',
+                children: [
+                  SteyRadioItem(
+                    value: 'toggle',
+                    label: 'Toggle',
+                    variant: variant == 'error'
+                        ? SteyRadioVariant.error
+                        : SteyRadioVariant.standard,
+                  ),
+                ],
+              ),
               'checkbox' => SteyCheckbox(
                 value: router.uri.queryParameters['checked'] == 'true',
                 indeterminate: router.uri.queryParameters['checked'] == 'mixed',
@@ -667,13 +683,40 @@ class _ComponentExampleState extends State<ComponentExample> {
           ],
         ),
       ]),
-      'radio' => SteyRadioGroup(
-        value: option,
-        options: options,
-        onChanged: (v) => setState(() => option = v ?? option),
-        label: 'Deployment mode',
-        card: true,
-      ),
+      'radio' => form([
+        SteyRadioGroup(
+          value: option,
+          options: options,
+          onChanged: (v) => setState(() => option = v ?? option),
+          label: 'Deployment mode',
+          card: true,
+        ),
+        const SteyRadioGroup<String>(
+          legend: 'Billing period',
+          appearance: SteyRadioAppearance.segmented,
+          defaultValue: 'monthly',
+          options: {'monthly': 'Monthly', 'yearly': 'Yearly'},
+        ),
+        const SteyRadioGroup<int>(
+          legend: 'Plan',
+          orientation: Axis.horizontal,
+          appearance: SteyRadioAppearance.card,
+          children: [
+            SteyRadioLegend('Choose a plan', visuallyHidden: true),
+            SteyRadioItem(
+              value: 1,
+              label: 'Free',
+              description: 'For personal projects.',
+            ),
+            SteyRadioItem(
+              value: 2,
+              label: 'Pro',
+              description: 'For professional use.',
+            ),
+            SteyRadioItem(value: 3, label: 'Enterprise', disabled: true),
+          ],
+        ),
+      ]),
       'select' => SteySelect(
         value: option,
         options: options,

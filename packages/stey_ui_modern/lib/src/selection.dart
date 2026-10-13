@@ -5,69 +5,7 @@ import 'theme.dart';
 
 export 'checkable.dart';
 
-class SteyRadioGroup<T> extends StatelessWidget {
-  const SteyRadioGroup({
-    super.key,
-    required this.value,
-    required this.options,
-    required this.onChanged,
-    this.label,
-    this.card = false,
-  });
-  final T? value;
-  final Map<T, String> options;
-  final ValueChanged<T?>? onChanged;
-  final String? label;
-  final bool card;
-  @override
-  Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    return SteyField(
-      label: label,
-      child: RadioGroup<T>(
-        groupValue: value,
-        onChanged: (v) => onChanged?.call(v),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: options.entries
-              .map(
-                (e) => Container(
-                  margin: EdgeInsets.only(bottom: card ? 8 : 4),
-                  padding: EdgeInsets.all(card ? 12 : 0),
-                  decoration: card
-                      ? BoxDecoration(
-                          color: c.base,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: value == e.key ? c.brand : c.line,
-                          ),
-                        )
-                      : null,
-                  child: Row(
-                    children: [
-                      Radio<T>(
-                        value: e.key,
-                        activeColor: c.brand,
-                        enabled: onChanged != null,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          e.value,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
+export 'radio.dart';
 
 class SteySelect<T> extends StatelessWidget {
   const SteySelect({

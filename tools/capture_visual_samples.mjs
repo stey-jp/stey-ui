@@ -25,8 +25,9 @@ for(const variant of badgeVariants)for(const appearance of ['filled','dot'])samp
 samples.push({component:'input',variant:'default'});
 for(const variant of ['default','error'])for(const checked of ['false','true','mixed'])for(const state of ['idle','hover','focus','disabled'])samples.push({component:'checkbox',variant,checked,state});
 for(const variant of ['default','neutral'])for(const size of ['sm','base','lg'])for(const checked of ['false','true'])for(const state of ['idle','hover','focus','disabled'])samples.push({component:'switch',variant,size,checked,state});
+for(const variant of ['default','error'])for(const checked of ['false','true'])for(const state of ['idle','hover','focus','disabled'])samples.push({component:'radio',variant,checked,state});
 const requestedComponents=process.argv.find(argument=>argument.startsWith('--components='))?.slice(13).split(',');
-if(requestedComponents?.some(component=>!['button','badge','input','checkbox','switch'].includes(component)))throw Error('SAMPLE_COMPONENT_INVALID');
+if(requestedComponents?.some(component=>!['button','badge','input','checkbox','switch','radio'].includes(component)))throw Error('SAMPLE_COMPONENT_INVALID');
 const requestedState=process.argv.find(argument=>argument.startsWith('--state='))?.slice(8);
 if(requestedState&&!['idle','hover','focus','disabled','loading'].includes(requestedState))throw Error('SAMPLE_STATE_INVALID');
 const selectedSamples=samples.filter(sample=>(!requestedState||(sample.state??'idle')===requestedState)&&(!requestedComponents||requestedComponents.includes(sample.component)));
@@ -43,8 +44,8 @@ try{
    const upstreamVariant=variant==='secondaryDestructive'?'secondary-destructive':variant==='tealSubtle'?'teal-subtle':variant;
    const parameters={variant:upstreamVariant,appearance,mode,size,shape,state};
    if(checked!==undefined)parameters.checked=checked;
-   const role=component==='checkbox'?'checkbox':component==='switch'?'switch':component==='input'?'textbox':'button';
-   const name=['checkbox','switch'].includes(component)?'Toggle':component==='input'?'Name':'Save';
+   const role=component==='checkbox'?'checkbox':component==='switch'?'switch':component==='radio'?'radio':component==='input'?'textbox':'button';
+   const name=['checkbox','switch','radio'].includes(component)?'Toggle':component==='input'?'Name':'Save';
    await reference.goto('http://127.0.0.1:8767/?'+new URLSearchParams({component,...parameters}),{waitUntil:'networkidle'});
    if(component==='input')await reference.locator('input').waitFor();
    else if(component==='badge')await reference.getByText('Active',{exact:true}).waitFor();
@@ -58,7 +59,7 @@ try{
     if(state==='hover')await page.getByRole(role,{name,exact:true}).hover();
     if(state==='focus'){
      const button=page.getByRole(role,{name,exact:true});
-     if(['checkbox','switch'].includes(component)){
+     if(['checkbox','switch','radio'].includes(component)){
       await page.mouse.move(20,20);
       for(let step=0;step<8;step++){
        await page.keyboard.press('Tab');

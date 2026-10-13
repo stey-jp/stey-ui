@@ -576,12 +576,12 @@
         "packages/kumo/src/components/radio/radio.type-spec.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/selection.dart"
+        "packages/stey_ui_modern/lib/src/radio.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native 16px circle, contrast selection, 8px dot, inline/card/segmented items, vertical/two-column groups, rich label widget, disabled values, legend/error/helper and RawRadio keyboard/semantics are implemented. Full event details, form integration, expanded hit area, arbitrary content overflow and all-state visual certification remain pending."
     },
     {
       "id": "select",
