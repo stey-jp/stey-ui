@@ -1,0 +1,14 @@
+name: Verify Stey UI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  full:
+    uses: stey-jp/shared-ci/.github/workflows/project-checks.yml@main
+    with:
+      level: full

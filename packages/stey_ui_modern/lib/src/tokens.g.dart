@@ -1,0 +1,50 @@
+// Generated from Cloudflare Kumo (MIT). See THIRD_PARTY_NOTICES.md.
+import 'package:flutter/material.dart';
+
+class SteyColors {
+  const SteyColors(this.brightness);
+  final Brightness brightness;
+  bool get dark => brightness == Brightness.dark;
+  Color get canvas => Color(dark ? 0xff030303 : 0xfffbfbfb);
+  Color get base => Color(dark ? 0xff0f0f0f : 0xffffffff);
+  Color get elevated => Color(dark ? 0xff060606 : 0xfff8f8f8);
+  Color get recessed => Color(dark ? 0xff0b0b0b : 0xfff2f2f2);
+  Color get tint => Color(dark ? 0xff262626 : 0xfff5f5f5);
+  Color get fill => Color(dark ? 0xff262626 : 0xffe5e5e5);
+  Color get control => Color(dark ? 0xff18181b : 0xffffffff);
+  Color get contrast => Color(dark ? 0xfffafafa : 0xff020202);
+  Color get brand => Color(dark ? 0xff045ede : 0xff056dff);
+  Color get line => Color(dark ? 0xff333333 : 0x1a0a0a0a);
+  Color get hairline => Color(dark ? 0xff262626 : 0xffe9e9e9);
+  Color get focus => Color(dark ? 0xffe9e9e9 : 0xff0b0b0b);
+  Color get text => Color(dark ? 0xfff5f5f5 : 0xff18181b);
+  Color get inverse => Color(dark ? 0xff171717 : 0xfff5f5f5);
+  Color get subtle => Color(dark ? 0xffa1a1a1 : 0xff737373);
+  Color get link => Color(dark ? 0xff51a2ff : 0xff193cb8);
+  Color get danger => Color(dark ? 0xffe7000b : 0xfffb2c36);
+  Color get dangerText => Color(dark ? 0xffff6467 : 0xffc10007);
+  Color get successText => Color(dark ? 0xffa4f4cf : 0xff006045);
+  Color get warningText => Color(dark ? 0xffff8904 : 0xffbd6500);
+  Color get infoTint => Color(dark ? 0x381c398e : 0x73dbeafe);
+  Color get successTint => Color(dark ? 0x330c542b : 0x91dcfce7);
+  Color get warningTint => Color(dark ? 0x5e573100 : 0x33ffe894);
+  Color get dangerTint => Color(dark ? 0x2b990003 : 0x6bffe2e2);
+  Color get badgeRed => Color(dark ? 0xffc10007 : 0xffe7000b);
+  Color get badgeGreen => Color(dark ? 0xff007a55 : 0xff009966);
+  Color get badgeOrange => Color(dark ? 0xffffac00 : 0xffffac00);
+  Color get badgePurple => Color(dark ? 0xff8200db : 0xff9810fa);
+  Color get badgeTeal => Color(dark ? 0xff00786f : 0xff058378);
+  Color get badgeBlue => Color(dark ? 0xff1447e6 : 0xff155dfc);
+  Color get badgeNeutral => Color(dark ? 0xff525252 : 0xff737373);
+  Color get badgeInverted => Color(dark ? 0xffffffff : 0xff0a0a0a);
+  Color get badgeInverseText => Color(dark ? 0xff000000 : 0xffffffff);
+  Color get badgeOrangeText => Color(dark ? 0xffffd6a7 : 0xff9f2d00);
+  Color get badgeTealText => Color(dark ? 0xff96f7e4 : 0xff005f5a);
+  Color get badgeNeutralText => Color(dark ? 0xffe5e5e5 : 0xff262626);
+  Color get brandEmphasisStart => Color(dark ? 0xff3879e5 : 0xff3c86ff);
+  Color get brandEmphasisHover => Color(dark ? 0xff5c92ec : 0xff619eff);
+  Color get brandEmphasisRing => Color(dark ? 0xff0351c1 : 0xff045ede);
+  Color get dangerEmphasisStart => Color(dark ? 0xfff0463e : 0xffff5b57);
+  Color get dangerEmphasisHover => Color(dark ? 0xfff86e62 : 0xffff7d75);
+  Color get dangerEmphasisRing => Color(dark ? 0xffc90008 : 0xffda252e);
+}

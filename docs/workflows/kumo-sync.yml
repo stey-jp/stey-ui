@@ -1,0 +1,28 @@
+# Pending: public stey-ui cannot call the private shared-ci repository.
+# Move this file to .github/workflows only after the connection is approved.
+name: Synchronize Kumo
+on:
+  schedule:
+    - cron: '19 0 * * *'
+    - cron: '19 6,12,18 * * *'
+  workflow_dispatch:
+    inputs:
+      retry_failed:
+        description: Retry only failed requests within the configured limit
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: kumo-upstream-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    uses: stey-jp/shared-ci/.github/workflows/project-stey-ui-kumo-sync.yml@main
+    with:
+      detect_updates: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '19 0 * * *' }}
+      retry_failed: ${{ github.event_name == 'workflow_dispatch' && inputs.retry_failed }}
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

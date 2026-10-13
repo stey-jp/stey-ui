@@ -1,0 +1,863 @@
+{
+  "inspected_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
+  "components": [
+    {
+      "id": "autocomplete",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/autocomplete/autocomplete.test.tsx",
+        "packages/kumo/src/components/autocomplete/autocomplete.tsx",
+        "packages/kumo/src/components/autocomplete/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "badge",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/badge/badge.test.tsx",
+        "packages/kumo/src/components/badge/badge.tsx",
+        "packages/kumo/src/components/badge/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "banner",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/banner/banner-action.tsx",
+        "packages/kumo/src/components/banner/banner.test.tsx",
+        "packages/kumo/src/components/banner/banner.tsx",
+        "packages/kumo/src/components/banner/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "breadcrumbs",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/breadcrumbs/breadcrumbs.tsx",
+        "packages/kumo/src/components/breadcrumbs/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "button",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/button/button.test.tsx",
+        "packages/kumo/src/components/button/button.tsx",
+        "packages/kumo/src/components/button/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/button.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "button-group",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/button-group/button-group.test.tsx",
+        "packages/kumo/src/components/button-group/button-group.tsx",
+        "packages/kumo/src/components/button-group/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/button.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "chart",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/chart/Color.ts",
+        "packages/kumo/src/components/chart/EChart.tsx",
+        "packages/kumo/src/components/chart/GlobeMap.tsx",
+        "packages/kumo/src/components/chart/Legend.tsx",
+        "packages/kumo/src/components/chart/Maps.test.tsx",
+        "packages/kumo/src/components/chart/Maps.tsx",
+        "packages/kumo/src/components/chart/SankeyChart.test.tsx",
+        "packages/kumo/src/components/chart/SankeyChart.tsx",
+        "packages/kumo/src/components/chart/TimeseriesChart.test.tsx",
+        "packages/kumo/src/components/chart/TimeseriesChart.tsx",
+        "packages/kumo/src/components/chart/globe-land-mask.ts",
+        "packages/kumo/src/components/chart/index.ts",
+        "packages/kumo/src/components/chart/timeseries-markers.ts",
+        "packages/kumo/src/components/chart/timeseries-thresholds.ts",
+        "packages/kumo/src/components/chart/timeseries-tooltip.tsx",
+        "packages/kumo/src/components/chart/tooltip-utils.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/chart.dart",
+        "packages/stey_ui_modern/lib/src/maps.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "checkbox",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/checkbox/checkbox.test.tsx",
+        "packages/kumo/src/components/checkbox/checkbox.tsx",
+        "packages/kumo/src/components/checkbox/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "clipboard-text",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/clipboard-text/clipboard-text.test.tsx",
+        "packages/kumo/src/components/clipboard-text/clipboard-text.tsx",
+        "packages/kumo/src/components/clipboard-text/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "cloudflare-logo",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/cloudflare-logo/cloudflare-logo.tsx",
+        "packages/kumo/src/components/cloudflare-logo/index.ts"
+      ],
+      "implementation_files": [],
+      "status": "blocked-trademark",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Written permission required for the Cloudflare logo."
+    },
+    {
+      "id": "code",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/code/code.tsx",
+        "packages/kumo/src/components/code/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "collapsible",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/collapsible/collapsible.tsx",
+        "packages/kumo/src/components/collapsible/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "combobox",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/combobox/combobox.browser.test.tsx",
+        "packages/kumo/src/components/combobox/combobox.test.tsx",
+        "packages/kumo/src/components/combobox/combobox.tsx",
+        "packages/kumo/src/components/combobox/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "command-palette",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/command-palette/command-palette.test.tsx",
+        "packages/kumo/src/components/command-palette/command-palette.tsx",
+        "packages/kumo/src/components/command-palette/index.ts",
+        "packages/kumo/src/components/command-palette/types.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "date-picker",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/date-picker/date-picker.tsx",
+        "packages/kumo/src/components/date-picker/date-picker.visual.browser.test.tsx",
+        "packages/kumo/src/components/date-picker/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/calendar.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": true,
+      "limitations": "Core selection modes tested; complete react-day-picker props, all locales and visual parity remain unverified."
+    },
+    {
+      "id": "date-range-picker",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/date-range-picker/date-range-picker.tsx",
+        "packages/kumo/src/components/date-range-picker/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/calendar.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": true,
+      "limitations": "Core selection modes tested; complete react-day-picker props, all locales and visual parity remain unverified."
+    },
+    {
+      "id": "dialog",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/dialog/dialog.test.tsx",
+        "packages/kumo/src/components/dialog/dialog.tsx",
+        "packages/kumo/src/components/dialog/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "dropdown",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/dropdown/dropdown.tsx",
+        "packages/kumo/src/components/dropdown/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "empty",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/empty/empty.test.tsx",
+        "packages/kumo/src/components/empty/empty.tsx",
+        "packages/kumo/src/components/empty/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "field",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/field/field.test.tsx",
+        "packages/kumo/src/components/field/field.tsx",
+        "packages/kumo/src/components/field/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/input.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "flow",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/flow/connectors.tsx",
+        "packages/kumo/src/components/flow/diagram.tsx",
+        "packages/kumo/src/components/flow/flow-layout.ts",
+        "packages/kumo/src/components/flow/flow.browser.test.tsx",
+        "packages/kumo/src/components/flow/flow.test.tsx",
+        "packages/kumo/src/components/flow/index.ts",
+        "packages/kumo/src/components/flow/node.tsx",
+        "packages/kumo/src/components/flow/parallel.tsx",
+        "packages/kumo/src/components/flow/specs/2026-04-17-flow-layout.md",
+        "packages/kumo/src/components/flow/use-children.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/flow.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "grid",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/grid/grid.tsx",
+        "packages/kumo/src/components/grid/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "inline-copy-text",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/inline-copy-text/index.ts",
+        "packages/kumo/src/components/inline-copy-text/inline-copy-text.test.tsx",
+        "packages/kumo/src/components/inline-copy-text/inline-copy-text.tsx",
+        "packages/kumo/src/components/inline-copy-text/inline-copy-text.type-spec.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "input",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/input/index.ts",
+        "packages/kumo/src/components/input/input-area.tsx",
+        "packages/kumo/src/components/input/input.test.tsx",
+        "packages/kumo/src/components/input/input.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/input.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "input-group",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/input-group/context.ts",
+        "packages/kumo/src/components/input-group/index.ts",
+        "packages/kumo/src/components/input-group/input-group-addon.tsx",
+        "packages/kumo/src/components/input-group/input-group-button.tsx",
+        "packages/kumo/src/components/input-group/input-group-input.tsx",
+        "packages/kumo/src/components/input-group/input-group-suffix.tsx",
+        "packages/kumo/src/components/input-group/input-group.test.tsx",
+        "packages/kumo/src/components/input-group/input-group.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/input.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "label",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/label/index.ts",
+        "packages/kumo/src/components/label/label.test.tsx",
+        "packages/kumo/src/components/label/label.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/input.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "layer-card",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/layer-card/index.ts",
+        "packages/kumo/src/components/layer-card/layer-card.test.tsx",
+        "packages/kumo/src/components/layer-card/layer-card.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "layer-dialog",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/layer-dialog/index.ts",
+        "packages/kumo/src/components/layer-dialog/layer-dialog.test.tsx",
+        "packages/kumo/src/components/layer-dialog/layer-dialog.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "link",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/link/index.ts",
+        "packages/kumo/src/components/link/link.test.tsx",
+        "packages/kumo/src/components/link/link.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/button.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "loader",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/loader/index.ts",
+        "packages/kumo/src/components/loader/loader.tsx",
+        "packages/kumo/src/components/loader/skeleton-line.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "menubar",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/menubar/index.ts",
+        "packages/kumo/src/components/menubar/menubar.tsx",
+        "packages/kumo/src/components/menubar/use-menu-navigation.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "meter",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/meter/index.ts",
+        "packages/kumo/src/components/meter/meter.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "pagination",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/pagination/index.ts",
+        "packages/kumo/src/components/pagination/pagination.test.tsx",
+        "packages/kumo/src/components/pagination/pagination.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "popover",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/popover/index.ts",
+        "packages/kumo/src/components/popover/popover.tsx",
+        "packages/kumo/src/components/popover/popover.visual.browser.test.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "radio",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/radio/index.ts",
+        "packages/kumo/src/components/radio/radio.test.tsx",
+        "packages/kumo/src/components/radio/radio.tsx",
+        "packages/kumo/src/components/radio/radio.type-spec.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "select",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/select/index.ts",
+        "packages/kumo/src/components/select/select.test.tsx",
+        "packages/kumo/src/components/select/select.tsx",
+        "packages/kumo/src/components/select/select.visual.browser.test.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "sensitive-input",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/sensitive-input/index.ts",
+        "packages/kumo/src/components/sensitive-input/sensitive-input.test.tsx",
+        "packages/kumo/src/components/sensitive-input/sensitive-input.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/input.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "sidebar",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/sidebar/index.ts",
+        "packages/kumo/src/components/sidebar/sidebar.test.tsx",
+        "packages/kumo/src/components/sidebar/sidebar.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "slider",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/slider/index.ts",
+        "packages/kumo/src/components/slider/slider.test.tsx",
+        "packages/kumo/src/components/slider/slider.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "surface",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/surface/index.ts",
+        "packages/kumo/src/components/surface/surface.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "switch",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/switch/index.ts",
+        "packages/kumo/src/components/switch/switch.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/selection.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "table",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/table/index.ts",
+        "packages/kumo/src/components/table/table.test.tsx",
+        "packages/kumo/src/components/table/table.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "table-of-contents",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/table-of-contents/index.ts",
+        "packages/kumo/src/components/table-of-contents/table-of-contents.test.tsx",
+        "packages/kumo/src/components/table-of-contents/table-of-contents.tsx",
+        "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.test.tsx",
+        "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "tabs",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/tabs/index.ts",
+        "packages/kumo/src/components/tabs/tabs.test.tsx",
+        "packages/kumo/src/components/tabs/tabs.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "tag-input",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/tag-input/index.ts",
+        "packages/kumo/src/components/tag-input/tag-input.test.tsx",
+        "packages/kumo/src/components/tag-input/tag-input.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/input.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "text",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/text/index.ts",
+        "packages/kumo/src/components/text/text.test.tsx",
+        "packages/kumo/src/components/text/text.tsx",
+        "packages/kumo/src/components/text/text.type-spec.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/display.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "toast",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/toast/index.ts",
+        "packages/kumo/src/components/toast/toast.test.tsx",
+        "packages/kumo/src/components/toast/toast.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "toolbar",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/toolbar/index.ts",
+        "packages/kumo/src/components/toolbar/toolbar.browser.test.tsx",
+        "packages/kumo/src/components/toolbar/toolbar.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/navigation.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "tooltip",
+      "kind": "components",
+      "source_files": [
+        "packages/kumo/src/components/tooltip/__screenshots__/tooltip.visual.browser.test.tsx/truncating-text-trigger-chromium-darwin.png",
+        "packages/kumo/src/components/tooltip/__screenshots__/tooltip.visual.browser.test.tsx/truncating-text-trigger-chromium-linux.png",
+        "packages/kumo/src/components/tooltip/index.ts",
+        "packages/kumo/src/components/tooltip/tooltip.test.tsx",
+        "packages/kumo/src/components/tooltip/tooltip.tsx",
+        "packages/kumo/src/components/tooltip/tooltip.visual.browser.test.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "delete-resource",
+      "kind": "blocks",
+      "source_files": [
+        "packages/kumo/src/blocks/delete-resource/delete-resource.test.tsx",
+        "packages/kumo/src/blocks/delete-resource/delete-resource.tsx",
+        "packages/kumo/src/blocks/delete-resource/index.ts"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/overlay.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "page-header",
+      "kind": "blocks",
+      "source_files": [
+        "packages/kumo/src/blocks/page-header/index.ts",
+        "packages/kumo/src/blocks/page-header/page-header.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/blocks.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    },
+    {
+      "id": "resource-list",
+      "kind": "blocks",
+      "source_files": [
+        "packages/kumo/src/blocks/resource-list/index.ts",
+        "packages/kumo/src/blocks/resource-list/resource-list.test.tsx",
+        "packages/kumo/src/blocks/resource-list/resource-list.tsx"
+      ],
+      "implementation_files": [
+        "packages/stey_ui_modern/lib/src/blocks.dart"
+      ],
+      "status": "partial",
+      "visual_verified": false,
+      "behavior_verified": false,
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+    }
+  ]
+}

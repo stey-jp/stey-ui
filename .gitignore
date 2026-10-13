@@ -1,0 +1,13 @@
+.dart_tool/
+build/
+.flutter-plugins*
+.idea/
+*.iml
+output/
+.sync-work/
+__pycache__/
+*.pyc
+node_modules/
+.env
+*.key
+*.pem
