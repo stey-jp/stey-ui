@@ -11,14 +11,14 @@ const results=[];
 try {
   for (const mode of ['light','dark']) {
     const context=await browser.newContext({viewport:{width:1280,height:900},colorScheme:mode});
-    for (const item of inventory.components) {
+    for (const item of [{id:null},...inventory.components]) {
       const page=await context.newPage();
       const cdp=await context.newCDPSession(page);
       const issues=[],errors=[];
       cdp.on('Audits.issueAdded',event=>issues.push(event.issue));
       page.on('pageerror',error=>errors.push(error.message));
       await cdp.send('Audits.enable');
-      const url=new URL(base);url.searchParams.set('component',item.id);url.searchParams.set('mode',mode);
+      const url=new URL(base);if(item.id)url.searchParams.set('component',item.id);url.searchParams.set('mode',mode);
       await page.goto(url.href,{waitUntil:'networkidle'});
       await page.getByText('Interactive preview',{exact:true}).waitFor({timeout:30000});
       const nodes=[];
@@ -30,17 +30,25 @@ try {
           nodes.push({backendNodeId:id,nodeName:node.nodeName,attributes:node.attributes});
         } catch { nodes.push({backendNodeId:id,unavailable:true}); }
       }
-      results.push({url:url.href,component:item.id,mode,issues:[...issues],issueNodes:nodes,errors:[...errors]});
+      results.push({url:url.href,component:item.id,mode,viewport:{width:1280,height:900},issues:[...issues],issueNodes:nodes,errors:[...errors]});
       if(['button','input','chart'].includes(item.id))await page.screenshot({path:resolve(output,`${item.id}-${mode}.png`)});
       await page.close();
     }
     await context.close();
   }
-  const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,deviceScaleFactor:1});
-  const page=await mobile.newPage();await page.goto(base,{waitUntil:'networkidle'});
-  await page.getByText('Interactive preview',{exact:true}).waitFor({timeout:30000});
-  await page.screenshot({path:resolve(output,'mobile.png')});
-  await mobile.close();
+  for(const mode of ['light','dark']) {
+    const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,deviceScaleFactor:1,colorScheme:mode});
+    const page=await mobile.newPage(),cdp=await mobile.newCDPSession(page),issues=[],errors=[];
+    cdp.on('Audits.issueAdded',event=>issues.push(event.issue));await cdp.send('Audits.enable');
+    page.on('pageerror',error=>errors.push(error.message));
+    const url=new URL(base);url.searchParams.set('mode',mode);
+    await page.goto(url.href,{waitUntil:'networkidle'});
+    await page.getByText('Interactive preview',{exact:true}).waitFor({timeout:30000});
+    results.push({url:url.href,component:null,mode,viewport:{width:390,height:844},issues:[...issues],issueNodes:[],errors:[...errors]});
+    await page.screenshot({path:resolve(output,`mobile-${mode}.png`)});
+    if(mode==='light')await page.screenshot({path:resolve(output,'mobile.png')});
+    await mobile.close();
+  }
 } finally { await browser.close(); }
 const report={auditedAt:new Date().toISOString(),browser:'Real Google Chrome',results,
   issueCount:results.reduce((sum,r)=>sum+r.issues.length,0),errorCount:results.reduce((sum,r)=>sum+r.errors.length,0)};

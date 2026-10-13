@@ -101,6 +101,7 @@ class SteySelect<T> extends StatefulWidget {
 
 class _SteySelectState<T> extends State<SteySelect<T>> {
   final portal = OverlayPortalController();
+  final triggerPaintKey = GlobalKey();
   final ownedFocus = FocusNode();
   final optionFocus = <T, FocusNode>{};
   final optionKeys = <T, GlobalKey>{};
@@ -415,6 +416,7 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                     ? .5
                     : 1,
                 child: CustomPaint(
+                  key: triggerPaintKey,
                   foregroundPainter: _SelectRing(
                     error
                         ? c.danger.withValues(alpha: focus.hasFocus ? .5 : 1)
@@ -430,6 +432,23 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                         : 1,
                     radius: radius,
                     inset: keyboard && !error,
+                    pixelRatio: MediaQuery.devicePixelRatioOf(context),
+                    origin: () {
+                      final box =
+                          triggerPaintKey.currentContext?.findRenderObject()
+                              as RenderBox?;
+                      if (box == null) return null;
+                      final matrix = box.getTransformTo(null).storage;
+                      if (matrix[0] != 1 ||
+                          matrix[5] != 1 ||
+                          matrix[1] != 0 ||
+                          matrix[4] != 0 ||
+                          matrix[3] != 0 ||
+                          matrix[7] != 0) {
+                        return null;
+                      }
+                      return Offset(matrix[12], matrix[13]);
+                    },
                   ),
                   child: Container(
                     height: widget.size.height,
@@ -855,27 +874,47 @@ class _SelectRing extends CustomPainter {
     this.width = 1,
     required this.radius,
     this.inset = false,
+    this.pixelRatio = 1,
+    this.origin,
   });
   final Color color;
   final double width, radius;
   final bool inset;
+  final double pixelRatio;
+  final Offset? Function()? origin;
   @override
-  void paint(Canvas canvas, Size size) => canvas.drawRRect(
-    RRect.fromRectAndRadius(
-      (Offset.zero & size).inflate(inset ? -width / 2 : width / 2),
-      Radius.circular(radius),
-    ),
-    Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = width,
-  );
+  void paint(Canvas canvas, Size size) {
+    final offset = origin?.call();
+    canvas.save();
+    if (offset != null) {
+      // CSS box shadows snap their edges to physical pixels. Preserve the
+      // layout, text and hit target while keeping the native ring equally crisp.
+      canvas.translate(
+        (offset.dx * pixelRatio).roundToDouble() / pixelRatio - offset.dx,
+        (offset.dy * pixelRatio).roundToDouble() / pixelRatio - offset.dy,
+      );
+    }
+    final spread = inset ? -width / 2 : width / 2;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        (Offset.zero & size).inflate(spread),
+        Radius.circular(math.max(0, radius + spread)),
+      ),
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width,
+    );
+    canvas.restore();
+  }
+
   @override
   bool shouldRepaint(_SelectRing old) =>
       color != old.color ||
       width != old.width ||
       radius != old.radius ||
-      inset != old.inset;
+      inset != old.inset ||
+      pixelRatio != old.pixelRatio;
 }
 
 class _SelectIcon extends CustomPainter {
