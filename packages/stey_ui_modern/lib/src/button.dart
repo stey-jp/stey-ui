@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
+import 'messages.dart';
 import 'loader.dart';
 
 class _ButtonRingBorder extends RoundedRectangleBorder {
@@ -132,7 +133,7 @@ class _SteyButtonState extends State<SteyButton> {
         child: Semantics(
           label: widget.semanticLabel,
           hint: widget.semanticLabel != null && widget.loading
-              ? 'Loading'
+              ? SteyMessages.of(context).loading
               : null,
           child: TextButton(
             clipBehavior: Clip.none,

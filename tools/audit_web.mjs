@@ -20,7 +20,7 @@ try {
       await cdp.send('Audits.enable');
       const url=new URL(base);if(item.id)url.searchParams.set('component',item.id);url.searchParams.set('mode',mode);
       await page.goto(url.href,{waitUntil:'networkidle'});
-      await page.getByText('Interactive preview',{exact:true}).waitFor({timeout:30000});
+      await page.getByText('操作プレビュー',{exact:true}).waitFor({timeout:30000});
       const nodes=[];
       for(const issue of issues) {
         const id=issue.details.genericIssueDetails?.violatingNodeId;
@@ -43,7 +43,7 @@ try {
     page.on('pageerror',error=>errors.push(error.message));
     const url=new URL(base);url.searchParams.set('mode',mode);
     await page.goto(url.href,{waitUntil:'networkidle'});
-    await page.getByText('Interactive preview',{exact:true}).waitFor({timeout:30000});
+    await page.getByText('操作プレビュー',{exact:true}).waitFor({timeout:30000});
     results.push({url:url.href,component:null,mode,viewport:{width:390,height:844},issues:[...issues],issueNodes:[],errors:[...errors]});
     await page.screenshot({path:resolve(output,`mobile-${mode}.png`)});
     if(mode==='light')await page.screenshot({path:resolve(output,'mobile.png')});

@@ -227,7 +227,7 @@ class _SteyDatePickerState extends State<SteyDatePicker> {
                     shape: SteyButtonShape.square,
                     size: SteySize.sm,
                     variant: SteyButtonVariant.outline,
-                    semanticLabel: 'Previous month',
+                    semanticLabel: locale.previousMonthTooltip,
                     child: const Icon(Icons.chevron_left, size: 16),
                   ),
                   Expanded(
@@ -243,7 +243,7 @@ class _SteyDatePickerState extends State<SteyDatePicker> {
                     shape: SteyButtonShape.square,
                     size: SteySize.sm,
                     variant: SteyButtonVariant.outline,
-                    semanticLabel: 'Next month',
+                    semanticLabel: locale.nextMonthTooltip,
                     child: const Icon(Icons.chevron_right, size: 16),
                   ),
                 ],

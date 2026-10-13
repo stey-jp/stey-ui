@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'button.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 enum SteyMapProjection { equirectangular, mercator }
 
@@ -388,12 +389,12 @@ class _SteyGlobeMapState extends State<SteyGlobeMap> {
           children: [
             SteyButton(
               onPressed: () => setState(() => rotation -= math.pi / 8),
-              semanticLabel: 'Rotate globe left',
+              semanticLabel: SteyMessages.of(context).rotateGlobeLeft,
               child: const Icon(Icons.chevron_left, size: 16),
             ),
             SteyButton(
               onPressed: () => setState(() => rotation += math.pi / 8),
-              semanticLabel: 'Rotate globe right',
+              semanticLabel: SteyMessages.of(context).rotateGlobeRight,
               child: const Icon(Icons.chevron_right, size: 16),
             ),
           ],

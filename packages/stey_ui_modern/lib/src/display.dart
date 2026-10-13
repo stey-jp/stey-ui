@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'button.dart';
 import 'theme.dart';
+import 'messages.dart';
 export 'loader.dart';
 
 class SteyText extends StatelessWidget {
@@ -502,7 +503,9 @@ class _SteyClipboardTextState extends State<SteyClipboardText> {
     variant: widget.inline
         ? SteyButtonVariant.ghost
         : SteyButtonVariant.secondary,
-    semanticLabel: copied ? 'Copied' : 'Copy ${widget.text}',
+    semanticLabel: copied
+        ? SteyMessages.of(context).copied
+        : SteyMessages.of(context).copy(widget.text),
     trailing: Icon(copied ? Icons.check : Icons.copy, size: 14),
     child: Text(
       widget.text,

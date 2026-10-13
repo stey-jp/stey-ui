@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'messages.dart';
+
 import 'button.dart';
 import 'display.dart';
 import 'input.dart';
@@ -90,7 +92,7 @@ class _SteyResourceListState<T> extends State<SteyResourceList<T>> {
           children: [
             Expanded(
               child: SteyInput(
-                placeholder: 'Search resources',
+                placeholder: SteyMessages.of(context).searchResources,
                 onChanged: (v) => setState(() {
                   query = v;
                   page = 1;
@@ -101,7 +103,7 @@ class _SteyResourceListState<T> extends State<SteyResourceList<T>> {
               const SizedBox(width: 8),
               SteyButton(
                 onPressed: widget.onCreate,
-                child: const Text('Create'),
+                child: Text(SteyMessages.of(context).create),
               ),
             ],
           ],

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
+import 'messages.dart';
 
 /// Native equivalent of Kumo's two SVG circles and independent SMIL timelines.
 class SteyLoader extends StatefulWidget {
@@ -35,7 +36,9 @@ class _SteyLoaderState extends State<SteyLoader>
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: widget.label,
+    label: widget.label == 'Loading'
+        ? SteyMessages.of(context).loading
+        : widget.label,
     liveRegion: true,
     child: SizedBox.square(
       dimension: widget.size,

@@ -5,6 +5,7 @@ import 'button.dart';
 import 'display.dart';
 import 'input.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 /// Inclusive UTF-16 match indices, as used by the upstream search results.
 typedef SteyHighlightRange = (int start, int end);
@@ -307,8 +308,12 @@ class _SteyCommandPaletteState extends State<SteyCommandPalette> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: SteyInput(
               controller: controller,
-              placeholder: widget.placeholder,
-              semanticLabel: widget.placeholder,
+              placeholder: widget.placeholder == 'Search commands'
+                  ? SteyMessages.of(context).searchCommands
+                  : widget.placeholder,
+              semanticLabel: widget.placeholder == 'Search commands'
+                  ? SteyMessages.of(context).searchCommands
+                  : widget.placeholder,
               autofocus: true,
               prefix: const Icon(Icons.search, size: 16),
             ),
@@ -323,7 +328,9 @@ class _SteyCommandPaletteState extends State<SteyCommandPalette> {
                       child: Padding(
                         padding: const EdgeInsets.all(32),
                         child: Text(
-                          widget.emptyText,
+                          widget.emptyText == 'No results found'
+                              ? SteyMessages.of(context).noResults
+                              : widget.emptyText,
                           style: TextStyle(color: c.subtle),
                         ),
                       ),

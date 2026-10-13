@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'display.dart';
 import 'input.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 sealed class SteySelectEntry<T> {
   const SteySelectEntry();
@@ -382,7 +383,9 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
       child: Semantics(
         button: true,
         label: widget.semanticLabel ?? widget.label ?? widget.placeholder,
-        value: widget.loading ? 'Loading' : labels.join(', '),
+        value: widget.loading
+            ? SteyMessages.of(context).loading
+            : labels.join(', '),
         hint: error ? widget.error : widget.description,
         enabled: enabled,
         expanded: open,

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'button.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 // Kumo uses an outer CSS ring. Its stroke does not consume input padding.
 class _SteyRingInputBorder extends OutlineInputBorder {
@@ -370,7 +371,9 @@ class _SteySensitiveInputState extends State<SteySensitiveInput> {
           : null,
       variant: SteyButtonVariant.ghost,
       shape: SteyButtonShape.square,
-      semanticLabel: visible ? 'Hide ${widget.label}' : 'Show ${widget.label}',
+      semanticLabel: visible
+          ? SteyMessages.of(context).hide(widget.label)
+          : SteyMessages.of(context).show(widget.label),
       child: Icon(
         visible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
         size: 16,
@@ -434,7 +437,7 @@ class _SteyTagInputState extends State<SteyTagInput> {
       return;
     }
     if (widget.maxTags != null && widget.value.length >= widget.maxTags!) {
-      setState(() => error = 'Maximum ${widget.maxTags} tags');
+      setState(() => error = SteyMessages.of(context).maxTags(widget.maxTags!));
       return;
     }
     if (!widget.value.contains(tag)) widget.onChanged([...widget.value, tag]);
@@ -468,7 +471,7 @@ class _SteyTagInputState extends State<SteyTagInput> {
                           widget.value.where((v) => v != tag).toList(),
                         )
                       : null,
-                  semanticLabel: 'Remove $tag',
+                  semanticLabel: SteyMessages.of(context).remove(tag),
                   trailing: const Icon(Icons.close, size: 12),
                   child: Text(tag),
                 ),

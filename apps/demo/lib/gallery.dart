@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'catalog.g.dart';
+import 'demo_labels.dart';
 
 const pendingComponents = {'cloudflare-logo'};
 
@@ -63,7 +65,10 @@ class _SteyGalleryState extends State<SteyGallery> {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-    title: 'Stey UI — Flutter component gallery',
+    title: 'Stey UI — Flutterコンポーネント一覧',
+    locale: const Locale('ja'),
+    supportedLocales: const [Locale('ja')],
+    localizationsDelegates: GlobalMaterialLocalizations.delegates,
     debugShowCheckedModeBanner: false,
     theme: SteyTheme.material(dark ? Brightness.dark : Brightness.light),
     routerDelegate: router,
@@ -196,7 +201,13 @@ class _SteyGalleryState extends State<SteyGallery> {
                 builder: (context, constraints) {
                   final wide = constraints.maxWidth >= 900;
                   final ids = componentIds
-                      .where((id) => id.contains(filter.toLowerCase()))
+                      .where(
+                        (id) =>
+                            id.contains(filter.trim().toLowerCase()) ||
+                            componentTitle(id)
+                                .toLowerCase()
+                                .contains(filter.trim().toLowerCase()),
+                      )
                       .toList();
                   return Column(
                     children: [
@@ -236,8 +247,8 @@ class _SteyGalleryState extends State<SteyGallery> {
                             SteyButton(
                               onPressed: toggleMode,
                               semanticLabel: dark
-                                  ? 'Switch to light mode'
-                                  : 'Switch to dark mode',
+                                  ? 'ライトモードに切り替え'
+                                  : 'ダークモードに切り替え',
                               shape: SteyButtonShape.square,
                               variant: SteyButtonVariant.ghost,
                               child: Icon(
@@ -268,7 +279,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                                     Padding(
                                       padding: const EdgeInsets.all(16),
                                       child: SteyInput(
-                                        placeholder: 'Search components',
+                                        placeholder: 'コンポーネントを検索',
                                         prefix: const Icon(
                                           Icons.search,
                                           size: 16,
@@ -316,14 +327,14 @@ class _SteyGalleryState extends State<SteyGallery> {
                                             onChanged: (v) {
                                               if (v != null) select(v);
                                             },
-                                            label: 'Component',
+                                            label: 'コンポーネント',
                                           ),
                                           const SizedBox(height: 24),
                                         ],
                                         SteyBreadcrumbs(
                                           items: [
                                             SteyBreadcrumb(
-                                              'Components',
+                                              'コンポーネント一覧',
                                               onPressed: () => select('button'),
                                             ),
                                             SteyBreadcrumb(title(selected)),
@@ -333,7 +344,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                                         SteyText(title(selected), heading: 1),
                                         const SizedBox(height: 6),
                                         const SteyText(
-                                          'Native Flutter components inspired by Cloudflare Kumo.',
+                                          'Cloudflare Kumoを参考にしたFlutterネイティブのUIコンポーネントです。',
                                           subtle: true,
                                         ),
                                         const SizedBox(height: 20),
@@ -348,9 +359,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                                                   'https://kumo-ui.com/components/${selected == 'dropdown' ? 'dropdown-menu' : selected}/',
                                                 ),
                                               ),
-                                              child: const Text(
-                                                'Compare with Kumo',
-                                              ),
+                                              child: const Text('Kumo公式と比較'),
                                             ),
                                             SteyLink(
                                               external: true,
@@ -359,9 +368,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                                                   'https://github.com/cloudflare/kumo/tree/f46e8bc9922c37dc1d3e7da779e589fe171df306/packages/kumo/src/${{'page-header', 'resource-list', 'delete-resource'}.contains(selected) ? 'blocks' : 'components'}/$selected',
                                                 ),
                                               ),
-                                              child: const Text(
-                                                'Reference source',
-                                              ),
+                                              child: const Text('参照ソース'),
                                             ),
                                           ],
                                         ),
@@ -371,12 +378,12 @@ class _SteyGalleryState extends State<SteyGallery> {
                                             children: [
                                               Expanded(
                                                 child: SteyText(
-                                                  'Interactive preview',
+                                                  '操作プレビュー',
                                                   bold: true,
                                                 ),
                                               ),
                                               Spacer(),
-                                              SteyBadge(child: Text('Preview')),
+                                              SteyBadge(child: Text('プレビュー')),
                                             ],
                                           ),
                                           child: ComponentExample(
@@ -388,12 +395,12 @@ class _SteyGalleryState extends State<SteyGallery> {
                                         const SteyBanner(
                                           tone: SteyTone.warning,
                                           child: Text(
-                                            'Development preview. Complete visual and behavior parity with Kumo has not been certified.',
+                                            '開発プレビューです。Kumoとのデザイン・機能・挙動の完全な一致はまだ検証できていません。',
                                           ),
                                         ),
                                         const SizedBox(height: 24),
                                         const SteyText(
-                                          'Independent MIT project. Cloudflare and Kumo are trademarks of their respective owners. No affiliation or endorsement.',
+                                          'MITライセンスの独立したプロジェクトです。CloudflareとKumoは各権利者の商標です。提携・推奨関係はありません。',
                                           subtle: true,
                                         ),
                                       ],
@@ -462,8 +469,7 @@ class _GalleryRouter extends RouterDelegate<Uri>
 }
 
 String title(String id) {
-  final value = id.replaceAll('-', ' ');
-  return value[0].toUpperCase() + value.substring(1);
+  return componentTitle(id);
 }
 
 class ComponentExample extends StatefulWidget {
@@ -482,7 +488,7 @@ class _ComponentExampleState extends State<ComponentExample> {
   double value = 36;
   DateTime? date;
   DateTimeRange? range;
-  List<String> tags = ['production', 'staging'];
+  List<String> tags = ['本番', 'ステージング'];
   Set<int> rows = {};
   final controller = TextEditingController(text: 'demo-not-a-real-secret');
   @override
@@ -507,16 +513,16 @@ class _ComponentExampleState extends State<ComponentExample> {
     ],
   );
   Widget table() => SteyTable(
-    columns: const ['Name', 'Status', 'Requests'],
+    columns: const ['名前', '状態', 'リクエスト'],
     rows: const [
       [
         Text('api.example.com'),
-        SteyBadge(tone: SteyTone.success, dot: true, child: Text('Active')),
+        SteyBadge(tone: SteyTone.success, dot: true, child: Text('稼働中')),
         Text('24,812'),
       ],
       [
         Text('cdn.example.com'),
-        SteyBadge(tone: SteyTone.warning, dot: true, child: Text('Pending')),
+        SteyBadge(tone: SteyTone.warning, dot: true, child: Text('保留中')),
         Text('12,036'),
       ],
     ],
@@ -525,17 +531,13 @@ class _ComponentExampleState extends State<ComponentExample> {
   );
   @override
   Widget build(BuildContext context) {
-    const options = {
-      'automatic': 'Automatic',
-      'manual': 'Manual',
-      'disabled': 'Disabled',
-    };
+    const options = {'automatic': '自動', 'manual': '手動', 'disabled': '無効'};
     final buttons = [
       for (final variant in SteyButtonVariant.values)
         SteyButton(
           onPressed: action,
           variant: variant,
-          child: Text(variant.name),
+          child: Text(variantLabel(variant.name)),
         ),
     ];
     return switch (widget.id) {
@@ -543,33 +545,41 @@ class _ComponentExampleState extends State<ComponentExample> {
         group(buttons),
         group([
           for (final size in SteySize.values)
-            SteyButton(onPressed: action, size: size, child: Text(size.name)),
-          const SteyButton(child: Text('Disabled')),
+            SteyButton(
+              onPressed: action,
+              size: size,
+              child: Text(sizeLabel(size.name)),
+            ),
+          const SteyButton(child: Text('無効')),
           SteyButton(
             onPressed: action,
             loading: true,
-            child: const Text('Saving'),
+            child: const Text('保存中'),
           ),
         ]),
         group([
-          SteyRefreshButton(onPressed: action),
+          SteyRefreshButton(onPressed: action, label: '更新'),
           SteyButton(
             onPressed: action,
             shape: SteyButtonShape.circle,
-            semanticLabel: 'Add item',
+            semanticLabel: '項目を追加',
             child: const Icon(Icons.add, size: 16),
           ),
         ]),
-        SteyText('Activated $clicks times'),
+        SteyText('操作回数：$clicks回'),
       ]),
       'button-group' => SteyButtonGroup(children: buttons.take(3).toList()),
       'badge' => group([
         for (final variant in SteyBadgeVariant.values)
-          SteyBadge(variant: variant, child: Text(variant.name)),
+          SteyBadge(variant: variant, child: Text(variantLabel(variant.name))),
         for (final tone in SteyTone.values)
-          SteyBadge(tone: tone, child: Text(tone.name)),
+          SteyBadge(tone: tone, child: Text(variantLabel(tone.name))),
         for (final tone in SteyTone.values)
-          SteyBadge(tone: tone, dot: true, child: Text(tone.name)),
+          SteyBadge(
+            tone: tone,
+            dot: true,
+            child: Text(variantLabel(tone.name)),
+          ),
         for (final variant in [
           SteyBadgeVariant.success,
           SteyBadgeVariant.warning,
@@ -579,100 +589,90 @@ class _ComponentExampleState extends State<ComponentExample> {
           SteyBadge(
             variant: variant,
             appearance: SteyBadgeAppearance.dot,
-            child: Text(variant.name),
+            child: Text(variantLabel(variant.name)),
           ),
       ]),
       'banner' => form([
         for (final tone in SteyTone.values)
-          SteyBanner(
-            tone: tone,
-            child: Text('${title(tone.name)} notification'),
-          ),
+          SteyBanner(tone: tone, child: Text('${variantLabels[tone.name]}の通知')),
       ]),
       'input' => form([
         const SteyInput(
-          label: 'Project name',
+          label: 'プロジェクト名',
           placeholder: 'my-project',
           required: true,
-          description: 'Choose a unique name.',
+          description: '重複しない名前を指定してください。',
         ),
         const SteyInput(
-          label: 'Email',
-          error: 'Enter a valid email address',
+          label: 'メール',
+          error: '有効なメールアドレスを入力してください',
           placeholder: 'name@example.com',
         ),
-        const SteyTextarea(
-          label: 'Description',
-          placeholder: 'Describe your project',
-        ),
-        const SteyInput(
-          label: 'Disabled field',
-          enabled: false,
-          placeholder: 'Unavailable',
-        ),
+        const SteyTextarea(label: '説明', placeholder: 'プロジェクトの説明を入力'),
+        const SteyInput(label: '無効な入力欄', enabled: false, placeholder: '利用不可'),
       ]),
       'input-group' => const SteyInputGroup(
         addon: Text('https://'),
         suffix: Text('.com'),
-        child: SteyInput(label: 'Domain', placeholder: 'example.com'),
+        child: SteyInput(label: 'ドメイン', placeholder: 'example.com'),
       ),
       'sensitive-input' => SteySensitiveInput(
         controller: controller,
-        label: 'API token',
+        label: 'APIトークン',
       ),
       'field' => const SteyField(
-        label: 'Account name',
-        description: 'This name is public.',
+        label: 'アカウント名',
+        description: 'この名前は公開されます。',
         required: true,
-        child: SteyInput(semanticLabel: 'Account name', placeholder: 'Account'),
+        child: SteyInput(semanticLabel: 'アカウント名', placeholder: 'アカウント'),
       ),
       'label' => group([
-        const SteyLabel('Project name'),
-        const SteyLabel('Required field', required: true),
+        const SteyLabel('プロジェクト名'),
+        const SteyLabel('必須の入力欄', required: true),
       ]),
       'checkbox' => form([
         SteyCheckbox(
           value: checked,
           onChanged: (v) => setState(() => checked = v ?? false),
-          label: 'Enable analytics',
-          description: 'Collect usage statistics.',
+          label: 'アクセス分析を有効にする',
+          description: '利用状況を集計します。',
         ),
         const SteyCheckbox(
           value: null,
           tristate: true,
           onChanged: null,
-          label: 'Indeterminate',
+          label: '部分選択',
         ),
-        const SteyCheckbox(value: false, onChanged: null, label: 'Disabled'),
+        const SteyCheckbox(value: false, onChanged: null, label: '無効'),
         const SteyCheckbox(
           variant: SteyCheckboxVariant.error,
-          label: 'Required selection',
+          label: '必須の選択項目',
           required: true,
         ),
         const SteyCheckboxGroup(
-          legend: 'Select multiple channels',
+          legend: '通知方法を複数選択',
           allValues: ['email', 'sms'],
           children: [
-            SteyCheckbox(parent: true, label: 'Select all'),
-            SteyCheckboxItem(value: 'email', label: 'Email'),
+            SteyCheckbox(parent: true, label: 'すべて選択'),
+            SteyCheckboxItem(value: 'email', label: 'メール'),
             SteyCheckboxItem(value: 'sms', label: 'SMS'),
           ],
         ),
         const SteyCheckboxGroup(
-          legend: 'Notification channels',
-          description: 'Select the channels you use.',
+          legend: '通知方法',
+          description: '使用する通知方法を選択してください。',
           defaultValue: ['email'],
           appearance: SteyCheckboxAppearance.card,
           children: [
             SteyCheckboxItem(
               value: 'email',
-              label: 'Email',
-              description: 'Receive notifications in your inbox.',
+              label: 'メール',
+              description: '受信トレイに通知を送ります。',
             ),
             SteyCheckboxItem(
               value: 'sms',
               label: 'SMS',
-              description: 'Receive text messages.',
+              description: 'SMSで通知を送ります。',
             ),
           ],
         ),
@@ -681,18 +681,15 @@ class _ComponentExampleState extends State<ComponentExample> {
         SteySwitch(
           value: checked,
           onChanged: (v) => setState(() => checked = v),
-          label: 'Enable notifications',
+          label: '通知を有効にする',
         ),
-        const SteySwitch(
-          label: 'Neutral switch',
-          variant: SteySwitchVariant.neutral,
-        ),
-        const SteySwitch(label: 'Small switch', size: SteySwitchSize.sm),
-        const SteySwitch(label: 'Large switch', size: SteySwitchSize.lg),
+        const SteySwitch(label: '中立色のスイッチ', variant: SteySwitchVariant.neutral),
+        const SteySwitch(label: '小さいスイッチ', size: SteySwitchSize.sm),
+        const SteySwitch(label: '大きいスイッチ', size: SteySwitchSize.lg),
         const SteySwitchGroup(
-          legend: 'Channels',
+          legend: '通知方法',
           children: [
-            SteySwitchItem(label: 'Email', defaultValue: true),
+            SteySwitchItem(label: 'メール', defaultValue: true),
             SteySwitchItem(label: 'SMS', disabled: true),
           ],
         ),
@@ -702,32 +699,24 @@ class _ComponentExampleState extends State<ComponentExample> {
           value: option,
           options: options,
           onChanged: (v) => setState(() => option = v ?? option),
-          label: 'Deployment mode',
+          label: 'デプロイ方法',
           card: true,
         ),
         const SteyRadioGroup<String>(
-          legend: 'Billing period',
+          legend: '請求期間',
           appearance: SteyRadioAppearance.segmented,
           defaultValue: 'monthly',
-          options: {'monthly': 'Monthly', 'yearly': 'Yearly'},
+          options: {'monthly': '月払い', 'yearly': '年払い'},
         ),
         const SteyRadioGroup<int>(
-          legend: 'Plan',
+          legend: 'プラン',
           orientation: Axis.horizontal,
           appearance: SteyRadioAppearance.card,
           children: [
-            SteyRadioLegend('Choose a plan', visuallyHidden: true),
-            SteyRadioItem(
-              value: 1,
-              label: 'Free',
-              description: 'For personal projects.',
-            ),
-            SteyRadioItem(
-              value: 2,
-              label: 'Pro',
-              description: 'For professional use.',
-            ),
-            SteyRadioItem(value: 3, label: 'Enterprise', disabled: true),
+            SteyRadioLegend('プランを選択', visuallyHidden: true),
+            SteyRadioItem(value: 1, label: '無料', description: '個人のプロジェクト向け。'),
+            SteyRadioItem(value: 2, label: 'プロ', description: '業務での利用向け。'),
+            SteyRadioItem(value: 3, label: '企業向け', disabled: true),
           ],
         ),
       ]),
@@ -736,94 +725,93 @@ class _ComponentExampleState extends State<ComponentExample> {
           value: option,
           options: options,
           onChanged: (v) => setState(() => option = v ?? option),
-          label: 'Deployment mode',
-          description: 'Choose the deployment environment.',
+          label: 'デプロイ方法',
+          description: 'デプロイ先の環境を選択してください。',
         ),
         const SteySelect<String>(
+          placeholder: '選択してください',
           controlled: false,
           multiple: true,
           defaultValues: ['eu'],
-          label: 'Regions',
+          label: '地域',
           entries: [
             SteySelectGroup(
-              label: 'Available',
+              label: '選択可能',
               entries: [
-                SteySelectOption(value: 'eu', label: 'Europe'),
-                SteySelectOption(value: 'us', label: 'United States'),
+                SteySelectOption(value: 'eu', label: 'ヨーロッパ'),
+                SteySelectOption(value: 'us', label: '米国'),
               ],
             ),
             SteySelectSeparator(),
-            SteySelectOption(
-              value: 'ap',
-              label: 'Asia Pacific',
-              disabled: true,
-            ),
+            SteySelectOption(value: 'ap', label: 'アジア太平洋', disabled: true),
           ],
         ),
         const SteySelect<String>(
           value: 'preview',
-          options: {'preview': 'Preview', 'production': 'Production'},
+          options: {'preview': 'プレビュー', 'production': '本番'},
           readOnly: true,
-          label: 'Read-only mode',
+          label: '読み取り専用',
         ),
-        const SteySelect<String>(label: 'Loading environments', loading: true),
+        const SteySelect<String>(
+          label: '環境を読み込み中',
+          placeholder: '選択してください',
+          loading: true,
+        ),
       ]),
       'autocomplete' || 'combobox' => form([
         SteyCombobox(
-          options: const [
-            'Workers',
-            'R2 storage',
-            'Pages',
-            'D1 database',
-            'Queues',
-          ],
-          label: 'Product',
+          options: const ['Workers', 'R2ストレージ', 'Pages', 'D1データベース', 'Queues'],
+          label: '製品',
+          placeholder: '製品を検索',
           onSelected: (v) => setState(() => option = v),
         ),
-        SteyText('Selected: $option'),
+        SteyText('選択中：${exampleValues[option] ?? option}'),
       ]),
       'slider' => form([
         SteySlider(
           value: value,
           onChanged: (v) => setState(() => value = v),
           divisions: 100,
-          label: 'Cache duration',
+          label: 'キャッシュ時間',
         ),
-        SteyText('${value.round()} minutes'),
+        SteyText('${value.round()}分'),
       ]),
       'tabs' || 'menubar' => form([
         SteyTabs(
+          label: 'タブ',
           tabs: const [
-            SteyTab('overview', 'Overview'),
-            SteyTab('analytics', 'Analytics'),
-            SteyTab('settings', 'Settings'),
+            SteyTab('overview', '概要'),
+            SteyTab('analytics', '分析'),
+            SteyTab('settings', '設定'),
           ],
           value: tab,
           onChanged: (v) => setState(() => tab = v),
         ),
         SteyTabs(
+          label: 'タブ',
           tabs: const [
-            SteyTab('overview', 'Overview'),
-            SteyTab('analytics', 'Analytics'),
-            SteyTab('settings', 'Settings'),
+            SteyTab('overview', '概要'),
+            SteyTab('analytics', '分析'),
+            SteyTab('settings', '設定'),
           ],
           value: tab,
           onChanged: (v) => setState(() => tab = v),
           variant: SteyTabsVariant.underline,
         ),
-        SteyText('Current tab: $tab'),
+        SteyText('選択中のタブ：${exampleValues[tab] ?? tab}'),
       ]),
       'pagination' => form([
         SteyPagination(
+          label: 'ページ',
           page: page,
           totalPages: 20,
           onChanged: (v) => setState(() => page = v),
         ),
-        SteyText('Page $page of 20'),
+        SteyText('20ページ中$pageページ目'),
       ]),
       'breadcrumbs' => SteyBreadcrumbs(
         items: [
-          SteyBreadcrumb('Account', onPressed: action),
+          SteyBreadcrumb('アカウント', onPressed: action),
           SteyBreadcrumb('Workers', onPressed: action),
           const SteyBreadcrumb('my-worker'),
         ],
@@ -831,21 +819,22 @@ class _ComponentExampleState extends State<ComponentExample> {
       'collapsible' => SteyCollapsible(
         open: open,
         onChanged: (v) => setState(() => open = v),
-        title: const Text('Advanced settings'),
+        title: const Text('詳細設定'),
         child: const Padding(
           padding: EdgeInsets.all(16),
-          child: SteyInput(label: 'Cache key', placeholder: 'default'),
+          child: SteyInput(label: 'キャッシュキー', placeholder: 'default'),
         ),
       ),
       'toolbar' => SteyToolbar(
         children: [
-          SteyButton(onPressed: action, child: const Text('Create')),
-          SteyButton(onPressed: action, child: const Text('Filter')),
-          SteyRefreshButton(onPressed: action),
+          SteyButton(onPressed: action, child: const Text('作成')),
+          SteyButton(onPressed: action, child: const Text('絞り込み')),
+          SteyRefreshButton(onPressed: action, label: '更新'),
         ],
       ),
       'table' => table(),
       'resource-list' => SteyResourceList<String>(
+        emptyTitle: 'リソースがありません',
         items: const [
           'api.example.com',
           'cdn.example.com',
@@ -860,9 +849,10 @@ class _ComponentExampleState extends State<ComponentExample> {
       ),
       'chart' => form([
         SteyTimeseriesChart(
+          label: '時系列チャート',
           series: const [
             SteyChartSeries(
-              name: 'Requests',
+              name: 'リクエスト',
               color: Color(0xff2563eb),
               points: [
                 SteyChartPoint(0, 12),
@@ -873,7 +863,7 @@ class _ComponentExampleState extends State<ComponentExample> {
               ],
             ),
             SteyChartSeries(
-              name: 'Cached',
+              name: 'キャッシュ',
               color: Color(0xff059669),
               points: [
                 SteyChartPoint(0, 6),
@@ -884,16 +874,14 @@ class _ComponentExampleState extends State<ComponentExample> {
               ],
             ),
           ],
-          thresholds: const [
-            SteyChartThreshold(40, 'Threshold', Color(0xffd97706)),
-          ],
+          thresholds: const [SteyChartThreshold(40, 'しきい値', Color(0xffd97706))],
           onPointSelected: (_, point) => setState(() => value = point.y),
         ),
         SteySankeyChart(
           nodes: const [
-            SteySankeyNode('edge', 'Edge'),
-            SteySankeyNode('cache', 'Cache'),
-            SteySankeyNode('origin', 'Origin'),
+            SteySankeyNode('edge', 'エッジ'),
+            SteySankeyNode('cache', 'キャッシュ'),
+            SteySankeyNode('origin', 'オリジン'),
           ],
           links: const [
             SteySankeyLink('edge', 'cache', 80),
@@ -902,17 +890,18 @@ class _ComponentExampleState extends State<ComponentExample> {
           onNodeClick: (_) => action(),
         ),
         const SteyBubbleMap(
+          label: '地図上の拠点',
           markers: [
             SteyMapMarker(
               id: 'tokyo',
-              name: 'Tokyo',
+              name: '東京',
               latitude: 35.68,
               longitude: 139.69,
               value: 64,
             ),
             SteyMapMarker(
               id: 'london',
-              name: 'London',
+              name: 'ロンドン',
               latitude: 51.5,
               longitude: -.12,
               value: 36,
@@ -923,13 +912,13 @@ class _ComponentExampleState extends State<ComponentExample> {
           markers: [
             SteyMapMarker(
               id: 'london',
-              name: 'London',
+              name: 'ロンドン',
               latitude: 51.5,
               longitude: -.12,
             ),
             SteyMapMarker(
               id: 'tokyo',
-              name: 'Tokyo',
+              name: '東京',
               latitude: 35.68,
               longitude: 139.69,
             ),
@@ -938,16 +927,16 @@ class _ComponentExampleState extends State<ComponentExample> {
       ]),
       'flow' => SteyFlow(
         nodes: [
-          SteyFlowNode('start', const Text('Request'), onPressed: action),
-          SteyFlowNode('cache', const Text('Cache'), onPressed: action),
-          SteyFlowNode('origin', const Text('Origin'), onPressed: action),
-          SteyFlowNode('response', const Text('Response'), onPressed: action),
+          SteyFlowNode('開始', const Text('リクエスト'), onPressed: action),
+          SteyFlowNode('キャッシュ', const Text('キャッシュ'), onPressed: action),
+          SteyFlowNode('オリジン', const Text('オリジン'), onPressed: action),
+          SteyFlowNode('応答', const Text('レスポンス'), onPressed: action),
         ],
         edges: const [
-          SteyFlowEdge('start', 'cache'),
-          SteyFlowEdge('start', 'origin'),
-          SteyFlowEdge('cache', 'response'),
-          SteyFlowEdge('origin', 'response'),
+          SteyFlowEdge('開始', 'キャッシュ'),
+          SteyFlowEdge('開始', 'オリジン'),
+          SteyFlowEdge('キャッシュ', '応答'),
+          SteyFlowEdge('オリジン', '応答'),
         ],
       ),
       'sidebar' => form([
@@ -955,9 +944,7 @@ class _ComponentExampleState extends State<ComponentExample> {
           SteyButton(
             onPressed: () =>
                 setState(() => sidebarCollapsed = !sidebarCollapsed),
-            child: Text(
-              sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar',
-            ),
+            child: Text(sidebarCollapsed ? 'サイドバーを展開' : 'サイドバーを折りたたむ'),
           ),
           SteyButton(
             onPressed: () => setState(
@@ -965,7 +952,7 @@ class _ComponentExampleState extends State<ComponentExample> {
                   ? 'zone'
                   : 'account',
             ),
-            child: const Text('Switch navigation view'),
+            child: const Text('ナビゲーション画面を切り替え'),
           ),
         ]),
         LayoutBuilder(
@@ -986,19 +973,15 @@ class _ComponentExampleState extends State<ComponentExample> {
                   items: const [
                     SteySidebarItem(
                       'overview',
-                      'Overview',
+                      '概要',
                       icon: Icons.home_outlined,
                     ),
-                    SteySidebarItem(
-                      'analytics',
-                      'Analytics',
-                      icon: Icons.bar_chart,
-                    ),
+                    SteySidebarItem('analytics', '分析', icon: Icons.bar_chart),
                     SteySidebarItem(
                       'settings',
-                      'Settings',
+                      '設定',
                       icon: Icons.settings_outlined,
-                      children: [SteySidebarItem('profile', 'Profile')],
+                      children: [SteySidebarItem('profile', 'プロフィール')],
                     ),
                   ],
                   selected: tab,
@@ -1016,51 +999,47 @@ class _ComponentExampleState extends State<ComponentExample> {
               SteySidebarSlidingView(
                 value: 'account',
                 child: SteyInput(
-                  label: 'Account name',
-                  placeholder: 'Text is retained when switching views',
+                  label: 'アカウント名',
+                  placeholder: '画面を切り替えても入力内容を保持します',
                 ),
               ),
               SteySidebarSlidingView(
                 value: 'zone',
-                child: SteyInput(
-                  label: 'Zone name',
-                  placeholder: 'example.com',
-                ),
+                child: SteyInput(label: 'ゾーン名', placeholder: 'example.com'),
               ),
             ],
           ),
         ),
       ]),
       'table-of-contents' => SteyTableOfContents(
-        items: const {
-          'overview': 'Overview',
-          'analytics': 'Analytics',
-          'settings': 'Settings',
-        },
+        title: 'このページの内容',
+        items: const {'overview': '概要', 'analytics': '分析', 'settings': '設定'},
         activeId: tab,
         onSelected: (v) => setState(() => tab = v),
       ),
       'tag-input' => SteyTagInput(
         value: tags,
         onChanged: (v) => setState(() => tags = v),
-        label: 'Environment tags',
+        label: '環境タグ',
+        placeholder: 'タグを追加',
       ),
       'layer-card' || 'surface' => const SteyLayerCard(
-        header: SteyText('Deployment', bold: true),
-        footer: SteyText('Last updated just now', subtle: true),
-        child: SteyText('Your worker is ready to deploy.'),
+        header: SteyText('デプロイ', bold: true),
+        footer: SteyText('最終更新：たった今', subtle: true),
+        child: SteyText('Workerをデプロイできます。'),
       ),
       'empty' => SteyEmpty(
-        title: 'No workers yet',
-        description: 'Create your first worker to get started.',
-        action: SteyButton(
-          onPressed: action,
-          child: const Text('Create worker'),
-        ),
+        title: 'Workerがまだありません',
+        description: '最初のWorkerを作成してください。',
+        action: SteyButton(onPressed: action, child: const Text('Workerを作成')),
       ),
       'meter' => form([
-        SteyMeter(value: value, label: 'Requests used'),
-        SteySlider(value: value, onChanged: (v) => setState(() => value = v)),
+        SteyMeter(value: value, label: 'リクエスト使用量'),
+        SteySlider(
+          value: value,
+          label: '使用量',
+          onChanged: (v) => setState(() => value = v),
+        ),
       ]),
       'loader' => group([
         const SteyLoader(),
@@ -1073,7 +1052,7 @@ class _ComponentExampleState extends State<ComponentExample> {
       ),
       'inline-copy-text' => const SteyInlineCopyText('account_12345'),
       'code' => const SteyCodeBlock(
-        'SteyButton(onPressed: save, child: Text(\'Save\'))',
+        'SteyButton(onPressed: save, child: Text(\'保存\'))',
         copyable: true,
       ),
       'grid' => SteyGrid(
@@ -1083,114 +1062,96 @@ class _ComponentExampleState extends State<ComponentExample> {
             Container(
               padding: const EdgeInsets.all(20),
               color: SteyTheme.colorsOf(context).tint,
-              child: Text('Item $i'),
+              child: Text('項目$i'),
             ),
         ],
       ),
       'text' => form([
-        const SteyText('Heading one', heading: 1),
-        const SteyText('Heading two', heading: 2),
-        const SteyText('Heading three', heading: 3),
-        const SteyText('Body content is 14px.'),
-        const SteyText('Subtle supporting text.', subtle: true),
+        const SteyText('見出し1', heading: 1),
+        const SteyText('見出し2', heading: 2),
+        const SteyText('見出し3', heading: 3),
+        const SteyText('本文の文字サイズは14pxです。'),
+        const SteyText('補足説明のテキストです。', subtle: true),
       ]),
       'link' => SteyLink(
         onPressed: () => launchUrl(Uri.parse('https://kumo-ui.com')),
         external: true,
-        child: const Text('Kumo documentation'),
+        child: const Text('Kumoドキュメント'),
       ),
       'dialog' || 'layer-dialog' => SteyButton(
         onPressed: () => SteyDialog.show(
           context,
-          title: 'Edit worker',
-          description: 'Update your worker configuration.',
-          child: const SteyInput(
-            label: 'Worker name',
-            placeholder: 'my-worker',
-          ),
+          title: 'Workerを編集',
+          description: 'Workerの設定を変更します。',
+          child: const SteyInput(label: 'Worker名', placeholder: 'my-worker'),
         ),
-        child: const Text('Open dialog'),
+        child: const Text('ダイアログを開く'),
       ),
       'dropdown' => SteyDropdownMenu(
         items: [
-          SteyMenuItem('Edit', onPressed: action, icon: Icons.edit_outlined),
-          SteyMenuItem('Duplicate', onPressed: action),
-          const SteyMenuItem('Unavailable', disabled: true),
-          SteyMenuItem('Delete', onPressed: action, destructive: true),
+          SteyMenuItem('編集', onPressed: action, icon: Icons.edit_outlined),
+          SteyMenuItem('複製', onPressed: action),
+          const SteyMenuItem('利用不可', disabled: true),
+          SteyMenuItem('削除', onPressed: action, destructive: true),
         ],
-        child: const Text('Actions'),
+        child: const Text('操作'),
       ),
       'popover' => const SteyPopover(
-        trigger: Text('Open popover'),
-        title: 'Deployment details',
-        child: Text('Deployed to 330 cities worldwide.'),
+        trigger: Text('ポップオーバーを開く'),
+        title: 'デプロイの詳細',
+        child: Text('世界330都市へデプロイ済みです。'),
       ),
       'tooltip' => SteyTooltip(
-        message: 'Deploy your worker globally',
-        child: SteyButton(
-          onPressed: action,
-          child: const Text('Hover or focus'),
-        ),
+        message: 'Workerを世界中へデプロイします',
+        child: SteyButton(onPressed: action, child: const Text('ホバーまたはフォーカス')),
       ),
       'toast' => SteyButton(
         onPressed: () => SteyToast.show(
           context,
-          message: 'Worker deployed successfully',
+          message: 'Workerをデプロイしました',
           tone: SteyTone.success,
         ),
-        child: const Text('Show toast'),
+        child: const Text('トーストを表示'),
       ),
       'command-palette' => SteyButton(
         onPressed: () => SteyCommandPalette.show(
           context,
           commands: [
             SteyCommand(
-              'Create worker',
+              'Workerを作成',
               action,
-              group: 'Compute',
+              group: 'コンピューティング',
               icon: const Icon(Icons.cloud_outlined, size: 16),
               breadcrumbs: const ['Workers'],
-              description: 'Deploy a serverless application',
+              description: 'サーバーレスアプリをデプロイ',
               highlights: const [(0, 5)],
             ),
             SteyCommand(
-              'Open settings',
+              '設定を開く',
               action,
-              group: 'Account',
+              group: 'アカウント',
               icon: const Icon(Icons.settings_outlined, size: 16),
               onSelect: (newTab) => SteyToast.show(
                 context,
-                message: newTab
-                    ? 'Open settings in a new tab'
-                    : 'Open settings',
+                message: newTab ? '新しいタブで設定を開く' : '設定を開く',
               ),
             ),
-            SteyCommand(
-              'View analytics',
-              action,
-              group: 'Account',
-              external: true,
-            ),
-            SteyCommand(
-              'Unavailable action',
-              action,
-              group: 'Account',
-              disabled: true,
-            ),
+            SteyCommand('アクセス分析を表示', action, group: 'アカウント', external: true),
+            SteyCommand('利用できない操作', action, group: 'アカウント', disabled: true),
           ],
-          footer: const Text(
-            '↑↓ Navigate · Enter Select · Ctrl/Cmd+Enter New tab',
-          ),
+          footer: const Text('↑↓ 移動 · Enter 選択 · Ctrl/Cmd+Enter 新しいタブ'),
         ),
-        child: const Text('Open commands'),
+        child: const Text('コマンドを開く'),
       ),
       'date-picker' => SteyDatePicker(
+        label: '日付を選択',
         value: date,
         onChanged: (v) => setState(() => date = v),
         firstDate: DateTime(2020),
         lastDate: DateTime(2035),
       ),
       'date-range-picker' => SteyDateRangePicker(
+        label: '日付の範囲を選択',
         value: range,
         onChanged: (v) => setState(() => range = v),
         firstDate: DateTime(2020),
@@ -1198,33 +1159,32 @@ class _ComponentExampleState extends State<ComponentExample> {
       ),
       'delete-resource' => SteyDeleteResource(
         resourceName: 'my-worker',
-        onDelete: () =>
-            SteyToast.show(context, message: 'Demo resource deleted'),
+        onDelete: () => SteyToast.show(context, message: 'デモのリソースを削除しました'),
       ),
       'page-header' => SteyPageHeader(
         breadcrumbs: [
-          SteyBreadcrumb('Account', onPressed: action),
+          SteyBreadcrumb('アカウント', onPressed: action),
           const SteyBreadcrumb('Workers'),
         ],
-        title: 'Workers and Pages',
-        description: 'Deploy serverless applications globally.',
+        title: 'WorkersとPages',
+        description: 'サーバーレスアプリを世界中へデプロイします。',
         actions: [
           SteyButton(
             onPressed: action,
             variant: SteyButtonVariant.primary,
-            child: const Text('Create application'),
+            child: const Text('アプリを作成'),
           ),
         ],
       ),
       'cloudflare-logo' => const SteyBanner(
         tone: SteyTone.warning,
         child: Text(
-          'Cloudflare logo distribution is withheld pending written trademark permission. View the official reference to inspect this component.',
+          'Cloudflareロゴは、商標利用に関する書面での許可を得るまで配布していません。このコンポーネントは公式の参照先で確認してください。',
         ),
       ),
       _ => const SteyEmpty(
-        title: 'Implementation pending',
-        description: 'This component is tracked in the upstream inventory. Open the reference to inspect its official behavior.',
+        title: '実装準備中',
+        description: '対応表で管理しているコンポーネントです。公式の挙動は参照先で確認してください。',
       ),
     };
   }

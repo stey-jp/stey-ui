@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'button.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 class SteyFlowNode {
   const SteyFlowNode(
@@ -113,8 +114,7 @@ class SteyFlow extends StatelessWidget {
       ),
     );
     return Semantics(
-      label:
-          'Flow diagram with ${nodes.length} nodes and ${edges.length} connections',
+      label: SteyMessages.of(context).flow(nodes.length, edges.length),
       child: SizedBox(
         height: height,
         child: interactive

@@ -4,6 +4,7 @@ import 'button.dart';
 import 'display.dart';
 import 'input.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 export 'command.dart';
 
@@ -52,7 +53,7 @@ class SteyDialog {
                       if (dismissible)
                         SteyButton(
                           onPressed: () => Navigator.pop(context),
-                          semanticLabel: 'Close dialog',
+                          semanticLabel: SteyMessages.of(context).closeDialog,
                           variant: SteyButtonVariant.ghost,
                           child: const Icon(Icons.close, size: 16),
                         ),
@@ -265,17 +266,17 @@ class _SteyDeleteResourceState extends State<SteyDeleteResource> {
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      SteyText('Type ${widget.resourceName} to confirm deletion.'),
+      SteyText(SteyMessages.of(context).confirmDeletion(widget.resourceName)),
       const SizedBox(height: 8),
       SteyInput(
-        label: 'Resource name',
+        label: SteyMessages.of(context).resourceName,
         onChanged: (v) => setState(() => confirmation = v),
       ),
       const SizedBox(height: 16),
       SteyButton(
         variant: SteyButtonVariant.destructive,
         onPressed: confirmation == widget.resourceName ? widget.onDelete : null,
-        child: const Text('Delete resource'),
+        child: Text(SteyMessages.of(context).deleteResource),
       ),
     ],
   );

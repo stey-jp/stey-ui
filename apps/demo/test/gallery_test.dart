@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stey_ui_demo/catalog.g.dart';
 import 'package:stey_ui_demo/gallery.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 
 void main() {
   for (final brightness in Brightness.values) {
-    for (final width in [390.0, 1280.0]) {
+    for (final width in [320.0, 390.0, 1280.0]) {
       testWidgets('Every preview renders at $width in ${brightness.name}', (
         tester,
       ) async {
@@ -17,6 +18,9 @@ void main() {
         for (final id in componentIds) {
           await tester.pumpWidget(
             MaterialApp(
+              locale: const Locale('ja'),
+              supportedLocales: const [Locale('ja')],
+              localizationsDelegates: GlobalMaterialLocalizations.delegates,
               theme: SteyTheme.material(brightness),
               home: SteyTheme(
                 brightness: brightness,

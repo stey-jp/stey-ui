@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'button.dart';
 import 'display.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 class SteyTab {
   const SteyTab(this.value, this.label, {this.disabled = false});
@@ -165,7 +166,7 @@ class SteyPagination extends StatelessWidget {
     children: [
       SteyButton(
         onPressed: page > 1 ? () => onChanged(page - 1) : null,
-        semanticLabel: 'Previous page',
+        semanticLabel: MaterialLocalizations.of(context).previousPageTooltip,
         child: const Icon(Icons.chevron_left, size: 16),
       ),
       ...List.generate(totalPages, (index) => index + 1)
@@ -178,14 +179,15 @@ class SteyPagination extends StatelessWidget {
                 variant: p == page
                     ? SteyButtonVariant.primary
                     : SteyButtonVariant.ghost,
-                semanticLabel: '$label $p',
+                semanticLabel:
+                    '${label == 'Page' ? SteyMessages.of(context).page : label} $p',
                 child: Text('$p'),
               ),
             ),
           ),
       SteyButton(
         onPressed: page < totalPages ? () => onChanged(page + 1) : null,
-        semanticLabel: 'Next page',
+        semanticLabel: MaterialLocalizations.of(context).nextPageTooltip,
         child: const Icon(Icons.chevron_right, size: 16),
       ),
     ],
@@ -591,8 +593,8 @@ class _SidebarResizeHandleState extends State<_SidebarResizeHandle> {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Resize sidebar',
-    value: '${widget.value.round()} pixels',
+    label: SteyMessages.of(context).resizeSidebar,
+    value: SteyMessages.of(context).pixels(widget.value.round()),
     button: true,
     child: MouseRegion(
       cursor: SystemMouseCursors.resizeColumn,

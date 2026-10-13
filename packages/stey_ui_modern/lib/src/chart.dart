@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'button.dart';
 import 'display.dart';
 import 'theme.dart';
+import 'messages.dart';
 
 /// Native chart primitives. ECharts options are intentionally not accepted.
 class SteyChartPoint {
@@ -119,7 +120,7 @@ class _SteyTimeseriesChartState extends State<SteyTimeseriesChart> {
     if (points.isEmpty) {
       return SizedBox(
         height: widget.height,
-        child: const SteyEmpty(title: 'No data available'),
+        child: SteyEmpty(title: SteyMessages.of(context).noData),
       );
     }
     final c = SteyTheme.colorsOf(context);
@@ -141,7 +142,7 @@ class _SteyTimeseriesChartState extends State<SteyTimeseriesChart> {
         Semantics(
           label: widget.label,
           value: current == null
-              ? '${visible.length} series'
+              ? SteyMessages.of(context).series(visible.length)
               : visible
                     .where((s) => current < s.points.length)
                     .map((s) => '${s.name}: ${value(s.points[current].y)}')
