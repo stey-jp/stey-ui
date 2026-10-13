@@ -599,6 +599,27 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
       info.childPaintTransform,
       Offset.zero & info.childSize,
     );
+    // SafeArea removes inherited padding. Use original view metrics in this
+    // overlay's coordinates, including keyboard insets.
+    final metrics = MediaQueryData.fromView(View.of(context));
+    final overlayBox =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final origin = overlayBox.localToGlobal(Offset.zero);
+    final safeBounds =
+        Rect.fromLTRB(
+              math.max(metrics.viewPadding.left, metrics.viewInsets.left),
+              math.max(metrics.viewPadding.top, metrics.viewInsets.top),
+              metrics.size.width -
+                  math.max(metrics.viewPadding.right, metrics.viewInsets.right),
+              metrics.size.height -
+                  math.max(
+                    metrics.viewPadding.bottom,
+                    metrics.viewInsets.bottom,
+                  ),
+            )
+            .shift(-origin)
+            .intersect(Offset.zero & info.overlaySize)
+            .deflate(widget.collisionPadding);
     return Stack(
       children: [
         Positioned.fill(
@@ -619,7 +640,7 @@ class _SteySelectState<T> extends State<SteySelect<T>> {
                 .x,
             gap: widget.sideOffset,
             offset: widget.alignOffset,
-            padding: widget.collisionPadding,
+            available: safeBounds,
             width: widget.popupWidth,
             maxHeight: widget.maxPopupHeight,
           ),
@@ -768,21 +789,22 @@ class _SelectPopupLayout extends SingleChildLayoutDelegate {
     required this.alignment,
     required this.gap,
     required this.offset,
-    required this.padding,
+    required this.available,
     this.width,
     this.maxHeight,
   });
   final Rect anchor;
+  final Rect available;
   final bool above;
-  final double alignment, gap, offset, padding;
+  final double alignment, gap, offset;
   final double? width, maxHeight;
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    final availableWidth = math.max(0.0, constraints.maxWidth - padding * 2);
+    final availableWidth = math.max(0.0, available.width);
     final popupWidth = (width ?? anchor.width).clamp(0.0, availableWidth);
     final room = math.max(
-      anchor.top - gap - padding,
-      constraints.maxHeight - anchor.bottom - gap - padding,
+      anchor.top - gap - available.top,
+      available.bottom - anchor.bottom - gap,
     );
     return BoxConstraints(
       minWidth: popupWidth,
@@ -793,8 +815,8 @@ class _SelectPopupLayout extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    final below = size.height - anchor.bottom - gap - padding;
-    final top = anchor.top - gap - padding;
+    final below = available.bottom - anchor.bottom - gap;
+    final top = anchor.top - gap - available.top;
     final flip = above
         ? childSize.height > top && below > top
         : childSize.height > below && top > below;
@@ -805,10 +827,13 @@ class _SelectPopupLayout extends SingleChildLayoutDelegate {
         offset;
     return Offset(
       x.clamp(
-        padding,
-        math.max(padding, size.width - padding - childSize.width),
+        available.left,
+        math.max(available.left, available.right - childSize.width),
       ),
-      atTop ? anchor.top - gap - childSize.height : anchor.bottom + gap,
+      (atTop ? anchor.top - gap - childSize.height : anchor.bottom + gap).clamp(
+        available.top,
+        math.max(available.top, available.bottom - childSize.height),
+      ),
     );
   }
 
@@ -819,7 +844,7 @@ class _SelectPopupLayout extends SingleChildLayoutDelegate {
       alignment != old.alignment ||
       gap != old.gap ||
       offset != old.offset ||
-      padding != old.padding ||
+      available != old.available ||
       width != old.width ||
       maxHeight != old.maxHeight;
 }

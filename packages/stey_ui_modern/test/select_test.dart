@@ -24,6 +24,35 @@ Widget host(
 );
 
 void main() {
+  testWidgets('Popup respects system and keyboard insets under SafeArea', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(800, 600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    tester.view.viewInsets = const FakeViewPadding(bottom: 120);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+    addTearDown(tester.view.resetViewInsets);
+    await tester.pumpWidget(
+      host(
+        SafeArea(
+          child: SteySelect<int>(
+            controlled: false,
+            options: {for (var i = 0; i < 30; i++) i: 'Plan $i'},
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Select an option'));
+    await tester.pumpAndSettle();
+    final popup = tester.getRect(find.byType(ListView));
+    expect(popup.bottom, lessThanOrEqualTo(600 - 120 - 8));
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('System back closes the select popup before leaving the route', (
     tester,
   ) async {

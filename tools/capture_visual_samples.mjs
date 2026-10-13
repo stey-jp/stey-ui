@@ -55,10 +55,14 @@ try{
    const role=component==='checkbox'?'checkbox':component==='switch'?'switch':component==='radio'?'radio':component==='input'?'textbox':'button';
    const name=['checkbox','switch','radio'].includes(component)?'Toggle':component==='input'?'Name':'Save';
    const target=page=>component==='select'?page.getByRole(page===reference?'combobox':'button',{name:/^Choice(?:\s|$)/}):page.getByRole(role,{name,exact:true});
-   await reference.goto('http://127.0.0.1:8767/?'+new URLSearchParams({component,...parameters}),{waitUntil:'networkidle'});
+   const referenceResponse=await reference.goto('http://127.0.0.1:8767/?'+new URLSearchParams({component,...parameters}),{waitUntil:'networkidle'});
+   if(!referenceResponse.ok())throw Error('SAMPLE_REFERENCE_HTTP_ERROR:'+id+':'+referenceResponse.status());
    if(component==='input')await reference.locator('input').waitFor();
    else if(component==='badge')await reference.getByText('Active',{exact:true}).waitFor();
-   else await target(reference).waitFor();
+   else await target(reference).waitFor().catch(async error=>{
+    await reference.screenshot({path:resolve(output,id+'-reference-failed.png')});
+    throw Error('SAMPLE_REFERENCE_NOT_RENDERED:'+id,{cause:error});
+   });
    await reference.evaluate(()=>document.fonts.ready);
    await candidate.goto('http://127.0.0.1:8766/?'+new URLSearchParams({sample:component,...parameters,variant}),{waitUntil:'networkidle'});
    if(component==='badge')await candidate.getByText('Active',{exact:true}).waitFor();
@@ -97,7 +101,7 @@ try{
     boundsComparison={componentPixelBounds:bounds,componentChangedPixels:count,componentChangedRatio:count/(bounds.width*bounds.height)};
    }
    await writeFile(resolve(output,id+'-diff.png'),PNG.sync.write(diff));
-   rows.push({id,component,state,checked,candidateSourceSha,candidateWasmSha256,referenceRuntime,...boundsComparison,changedPixels:changed,totalPixels:a.width*a.height,changedRatio:changed/(a.width*a.height),animationPhaseAligned:state==='loading'?false:null});
+   rows.push({id,component,state,checked,candidateSourceSha,candidateWasmSha256,referenceRuntime,referenceScreenshotSha256:createHash('sha256').update(ref).digest('hex'),candidateScreenshotSha256:createHash('sha256').update(actual).digest('hex'),...boundsComparison,changedPixels:changed,totalPixels:a.width*a.height,changedRatio:changed/(a.width*a.height),animationPhaseAligned:state==='loading'?false:null});
    await context.close();
    if(rows.length%20===0)console.log(JSON.stringify({completed:rows.length,total:selectedSamples.length*2}));
   }
