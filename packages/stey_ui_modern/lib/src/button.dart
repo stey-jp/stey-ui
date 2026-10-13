@@ -135,30 +135,34 @@ class _SteyButtonState extends State<SteyButton> {
               ? 'Loading'
               : null,
           child: TextButton(
+            clipBehavior: Clip.none,
             focusNode: widget.focusNode,
             autofocus: widget.autofocus,
             onPressed: disabled ? null : widget.onPressed,
             style: ButtonStyle(
               backgroundBuilder: emphasis
-                  ? (context, states, child) => DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: radius,
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            (danger
-                                ? (states.contains(WidgetState.hovered)
-                                      ? c.dangerEmphasisHover
-                                      : c.dangerEmphasisStart)
-                                : (states.contains(WidgetState.hovered)
-                                      ? c.brandEmphasisHover
-                                      : c.brandEmphasisStart)),
-                            accent,
-                          ],
+                  ? (context, states, child) => ClipRRect(
+                      borderRadius: radius,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: radius,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              (danger
+                                  ? (states.contains(WidgetState.hovered)
+                                        ? c.dangerEmphasisHover
+                                        : c.dangerEmphasisStart)
+                                  : (states.contains(WidgetState.hovered)
+                                        ? c.brandEmphasisHover
+                                        : c.brandEmphasisStart)),
+                              accent,
+                            ],
+                          ),
                         ),
+                        child: child,
                       ),
-                      child: child,
                     )
                   : null,
               alignment: widget.alignment,
@@ -228,7 +232,9 @@ class _SteyButtonState extends State<SteyButton> {
               overlayColor: const WidgetStatePropertyAll(Colors.transparent),
               side: WidgetStateProperty.resolveWith(
                 (states) => BorderSide(
-                  color: states.contains(WidgetState.focused)
+                  color: emphasis
+                      ? border
+                      : states.contains(WidgetState.focused)
                       ? c.brand
                       : states.contains(WidgetState.hovered) &&
                             !disabled &&

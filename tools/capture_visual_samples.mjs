@@ -14,9 +14,9 @@ samples.push({component:'input',variant:'default'});
 const browser=await chromium.launch({channel:'chrome',headless:true});const rows=[];
 try{
  for(const mode of ['light','dark']){
-  const context=await browser.newContext({viewport:{width:600,height:160}});
-  const reference=await context.newPage(),candidate=await context.newPage();
   for(const sample of samples){
+   const context=await browser.newContext({viewport:{width:600,height:160}});
+   const reference=await context.newPage(),candidate=await context.newPage();
    const {component,variant,size='base',shape='base',state='idle',appearance='filled'}=sample;
    const id=[component,variant,appearance==='dot'?'dot':null,size!=='base'?size:null,shape!=='base'?shape:null,state!=='idle'?state:null,mode].filter(Boolean).join('-');
    const upstreamVariant=variant==='secondaryDestructive'?'secondary-destructive':variant==='tealSubtle'?'teal-subtle':variant;
@@ -32,7 +32,7 @@ try{
    for(const page of [reference,candidate]){
     await page.mouse.click(20,20);
     if(state==='hover')await page.getByRole('button',{name:'Save',exact:true}).hover();
-    if(state==='focus'){await page.getByRole('button',{name:'Save',exact:true}).focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');}
+    if(state==='focus'){await page.getByRole('button',{name:'Save',exact:true}).click();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');}
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
    }
    const ref=await reference.screenshot({path:resolve(output,id+'-reference.png')});
@@ -41,8 +41,9 @@ try{
    const changed=pixelmatch(a.data,b.data,diff.data,a.width,a.height,{threshold:.1,includeAA:true});
    await writeFile(resolve(output,id+'-diff.png'),PNG.sync.write(diff));
    rows.push({id,state,changedPixels:changed,totalPixels:a.width*a.height,changedRatio:changed/(a.width*a.height),animationPhaseAligned:state==='loading'?false:null});
+   await context.close();
+   if(rows.length%20===0)console.log(JSON.stringify({completed:rows.length,total:samples.length*2}));
   }
-  await context.close();
  }
 }finally{await browser.close();}
 const report={upstreamSha:'f46e8bc9922c37dc1d3e7da779e589fe171df306',source:'Exact upstream source rendered in a temporary Vite fixture',note:'Diagnostic samples only. Loading timelines are not phase-aligned; no sample certifies full component or interaction parity.',rows};
