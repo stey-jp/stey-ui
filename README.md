@@ -47,6 +47,12 @@ MaterialApp(
 デモはルートで `flutter pub get`、`cd apps/demo`、`flutter run -d chrome`。
 検索・テーマ切替・コンポーネント操作・公式デモ／固定SHAソースへの比較リンクを備えます。
 直接URLは `?component=button&mode=dark` の形式です。
+選択とテーマをURLへ保存し、戻る／進むで復元します。
+リリースデモはWasm＋JavaScriptフォールバックで生成します。
+ビルド後は `python tools/prepare_web_artifacts.py`、ローカル配信は
+`python tools/serve_demo.py --cross-origin-isolated`。Wasmの並列描画には
+COOP `same-origin` とCOEP `credentialless` を配信環境へ設定します。
+[Flutter公式Wasm仕様](https://docs.flutter.dev/platform-integration/web/wasm)
 
 ## 検証と共通CI
 

@@ -5,10 +5,10 @@
 ## 成功した検証
 
 - Flutter 3.47.0 / Dart 3.13.0で `flutter analyze`：指摘0。
-- ライブラリのWidget test：14件成功。キーボード、無効／loading、入力、秘密表示、タグ、タブ、検索候補、ダイアログ、折り畳み、カレンダー3モードと年境界を検証。
+- ライブラリのWidget test：19件成功。キーボード、無効／loading、入力、秘密表示、タグ、タブ、検索候補、ダイアログ、折り畳み、カレンダー3モードと年境界、Sidebarの読み上げ名、CommandPaletteのグループ・無効項目・Ctrl+Enter・検索・強調・loading・Escapeを検証。
 - デモtest：5件成功。52群をLight/Dark・390px/1280pxで描画し、例外とoverflowを検査。
 - Python同期テスト：13件成功。予約前保存、予算上限、受付不明時停止、失敗要求だけの再処理、競合とパス制限、提案適用からPR作成までの模擬フロー。
-- Webリリースビルド成功。ローカル配信、ソースマップ、`-O4`。
+- Webリリースビルド成功。Wasm＋JavaScriptフォールバック、ローカル配信、ソースマップ、`-O4`。生成mapへビルド入力ソースを埋め込み、Flutter loader mapも配信。
 - Windowsリリースビルド成功。製品の実機起動／操作は未検証。
 - shared-ci中央テスト85件、設定検査、coverage contract、actionlint、GitHub Verify shared CI成功。中央mainとローカルmainのSHA一致を確認。
 
@@ -18,7 +18,7 @@
 
 49コンポーネント群＋3ブロックの一覧は upstream/inventory.json に記録。
 51群に基本のネイティブ実装と操作例を用意しましたが、全プロパティ・全状態・全複合部品との一致は未認証です。
-特にSidebarのリサイズ／sliding views、CommandPaletteのグループ／結果footer、汎用ChartのECharts全option、Sankeyのdrilldown、Globeの地形、Codeの構文強調、フォームの全検証match等が残っています。
+特にSidebarのリサイズ／sliding views、CommandPaletteの全複合API、汎用ChartのECharts全option、Sankeyのdrilldown、Globeの地形、CodeHighlightedの構文強調、フォームの全検証match等が残っています。旧Code／CodeBlockは公式の透明背景／10px padding・6px radius・borderへ修正。
 CloudflareLogo／PoweredByCloudflareのアセットは公式商標ガイドラインにより書面許可待ちです。
 
 公式固定SHAのButton/Badge/Inputを20サンプルで描画し、実Flutter描画とピクセル比較しました。

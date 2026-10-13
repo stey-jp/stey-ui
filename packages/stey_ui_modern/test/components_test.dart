@@ -14,6 +14,33 @@ Widget host(Widget child, {Brightness brightness = Brightness.light}) =>
       ),
     );
 void main() {
+  testWidgets(
+    'Sidebar labels are announced once in expanded and collapsed modes',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      for (final collapsed in [false, true]) {
+        await tester.pumpWidget(
+          host(
+            SizedBox(
+              height: 200,
+              child: SteySidebar(
+                items: const [
+                  SteySidebarItem('workers', 'Workers', icon: Icons.cloud),
+                ],
+                selected: 'workers',
+                collapsed: collapsed,
+                onSelected: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        expect(find.bySemanticsLabel('Workers'), findsOneWidget);
+        expect(find.bySemanticsLabel('Workers Workers'), findsNothing);
+      }
+      semantics.dispose();
+    },
+  );
   testWidgets('Button activates with keyboard and disabled/loading are inert', (
     tester,
   ) async {

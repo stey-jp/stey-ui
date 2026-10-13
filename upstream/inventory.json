@@ -229,12 +229,12 @@
         "packages/kumo/src/components/command-palette/types.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/overlay.dart"
+        "packages/stey_ui_modern/lib/src/command.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Core grouped search, disabled items, keyboard/new-tab selection, highlight ranges and loading state are tested. Full compound API and visual parity remain to be certified."
     },
     {
       "id": "date-picker",

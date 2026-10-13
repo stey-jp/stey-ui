@@ -349,9 +349,10 @@ class _SteySidebarState extends State<SteySidebar> {
             ),
             child: Tooltip(
               message: entry.label,
+              excludeFromSemantics: true,
               child: SteyButton(
                 variant: SteyButtonVariant.ghost,
-                semanticLabel: entry.label,
+                semanticLabel: widget.collapsed ? entry.label : null,
                 alignment: Alignment.centerLeft,
                 onPressed: () {
                   if (entry.children.isNotEmpty) {

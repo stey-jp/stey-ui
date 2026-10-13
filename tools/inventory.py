@@ -63,7 +63,7 @@ def oklch_values(value):
 FIELDS = {
     'canvas':'color-kumo-canvas', 'base':'color-kumo-base',
     'elevated':'color-kumo-elevated', 'recessed':'color-kumo-recessed',
-    'tint':'color-kumo-tint', 'fill':'color-kumo-fill',
+    'tint':'color-kumo-tint', 'fill':'color-kumo-fill', 'overlay':'color-kumo-overlay',
     'control':'color-kumo-control', 'contrast':'color-kumo-contrast',
     'brand':'color-kumo-brand', 'line':'color-kumo-line',
     'hairline':'color-kumo-hairline', 'focus':'color-kumo-focus',

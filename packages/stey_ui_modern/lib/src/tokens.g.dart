@@ -11,6 +11,7 @@ class SteyColors {
   Color get recessed => Color(dark ? 0xff0b0b0b : 0xfff2f2f2);
   Color get tint => Color(dark ? 0xff262626 : 0xfff5f5f5);
   Color get fill => Color(dark ? 0xff262626 : 0xffe5e5e5);
+  Color get overlay => Color(dark ? 0xff262626 : 0xfff7f7f7);
   Color get control => Color(dark ? 0xff18181b : 0xffffffff);
   Color get contrast => Color(dark ? 0xfffafafa : 0xff020202);
   Color get brand => Color(dark ? 0xff045ede : 0xff056dff);

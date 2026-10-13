@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,294 +20,376 @@ class _SteyGalleryState extends State<SteyGallery> {
       ? Uri.base.queryParameters['component']!
       : 'button';
   String filter = '';
-  void select(String value) => setState(() => selected = value);
+  late final _GalleryRouter router;
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    router = _GalleryRouter(
+      Uri(path: '/', queryParameters: Uri.base.queryParameters),
+      (uri) => setState(() {
+        selected = componentIds.contains(uri.queryParameters['component'])
+            ? uri.queryParameters['component']!
+            : 'button';
+        dark = uri.queryParameters['mode'] == 'dark';
+      }),
+      content,
+    );
+  }
+
+  @override
+  void dispose() {
+    router.dispose();
+    super.dispose();
+  }
+
+  void select(String value) => router.navigate(
+    router.uri.replace(
+      queryParameters: {
+        ...router.uri.queryParameters,
+        'component': value,
+        'mode': dark ? 'dark' : 'light',
+      },
+    ),
+  );
+
+  void toggleMode() => router.navigate(
+    router.uri.replace(
+      queryParameters: {
+        ...router.uri.queryParameters,
+        'mode': dark ? 'light' : 'dark',
+      },
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) => MaterialApp.router(
+    title: 'Stey UI — Flutter component gallery',
+    debugShowCheckedModeBanner: false,
+    theme: SteyTheme.material(dark ? Brightness.dark : Brightness.light),
+    routerDelegate: router,
+    routeInformationParser: const _GalleryRouteParser(),
+  );
+
+  Widget content(BuildContext context) {
     final brightness = dark ? Brightness.dark : Brightness.light;
-    return MaterialApp(
-      title: 'Stey UI — Flutter component gallery',
-      debugShowCheckedModeBanner: false,
-      theme: SteyTheme.material(brightness),
-      home: SteyTheme(
-        brightness: brightness,
-        child: Builder(
-          builder: (context) {
-            final c = SteyTheme.colorsOf(context);
-            final sample = Uri.base.queryParameters['sample'];
-            if (sample != null) {
-              final variant =
-                  Uri.base.queryParameters['variant'] ?? 'secondary';
-              final child = switch (sample) {
-                'badge' => SteyBadge(
-                  variant: SteyBadgeVariant.values.firstWhere(
-                    (v) => v.name == variant,
-                    orElse: () => SteyBadgeVariant.secondary,
-                  ),
-                  child: const Text('Active'),
+    return SteyTheme(
+      brightness: brightness,
+      child: Builder(
+        builder: (context) {
+          final c = SteyTheme.colorsOf(context);
+          final sample = router.uri.queryParameters['sample'];
+          if (sample != null) {
+            final variant =
+                router.uri.queryParameters['variant'] ?? 'secondary';
+            final child = switch (sample) {
+              'badge' => SteyBadge(
+                variant: SteyBadgeVariant.values.firstWhere(
+                  (v) => v.name == variant,
+                  orElse: () => SteyBadgeVariant.secondary,
                 ),
-                'input' => const SizedBox(
-                  width: 280,
-                  child: SteyInput(
-                    placeholder: 'Project name',
-                    semanticLabel: 'Name',
-                  ),
+                child: const Text('Active'),
+              ),
+              'input' => const SizedBox(
+                width: 280,
+                child: SteyInput(
+                  placeholder: 'Project name',
+                  semanticLabel: 'Name',
                 ),
-                _ => SteyButton(
-                  onPressed: () {},
-                  variant: SteyButtonVariant.values.firstWhere(
-                    (v) => v.name == variant,
-                    orElse: () => SteyButtonVariant.secondary,
-                  ),
-                  child: const Text('Save'),
+              ),
+              _ => SteyButton(
+                onPressed: () {},
+                variant: SteyButtonVariant.values.firstWhere(
+                  (v) => v.name == variant,
+                  orElse: () => SteyButtonVariant.secondary,
                 ),
-              };
-              return Scaffold(
-                backgroundColor: c.base,
-                body: Center(child: child),
-              );
-            }
-            if (Uri.base.queryParameters['fixture'] == '1') {
-              return Scaffold(
-                backgroundColor: c.base,
-                body: Center(
-                  child: SizedBox(
-                    width: 600,
-                    child: ComponentExample(id: selected),
-                  ),
-                ),
-              );
-            }
+                child: const Text('Save'),
+              ),
+            };
             return Scaffold(
-              body: SafeArea(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final wide = constraints.maxWidth >= 900;
-                    final ids = componentIds
-                        .where((id) => id.contains(filter.toLowerCase()))
-                        .toList();
-                    return Column(
-                      children: [
-                        Container(
-                          height: 64,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: c.base,
-                            border: Border(bottom: BorderSide(color: c.line)),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 32,
-                                height: 32,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: c.contrast,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  's',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
-                                    color: c.inverse,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              const SteyText('Stey UI', heading: 4),
-                              if (wide) ...[
-                                const SizedBox(width: 12),
-                                const SteyBadge(child: Text('Flutter')),
-                              ],
-                              const Spacer(),
-                              SteyButton(
-                                onPressed: () => setState(() => dark = !dark),
-                                semanticLabel: dark
-                                    ? 'Switch to light mode'
-                                    : 'Switch to dark mode',
-                                shape: SteyButtonShape.square,
-                                variant: SteyButtonVariant.ghost,
-                                child: Icon(
-                                  dark
-                                      ? Icons.light_mode_outlined
-                                      : Icons.dark_mode_outlined,
-                                  size: 18,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              SteyButton(
-                                onPressed: () => launchUrl(
-                                  Uri.parse(
-                                    'https://github.com/stey-jp/stey-ui',
-                                  ),
-                                ),
-                                child: const Text('GitHub'),
-                              ),
-                            ],
-                          ),
+              backgroundColor: c.base,
+              body: Center(child: child),
+            );
+          }
+          if (router.uri.queryParameters['fixture'] == '1') {
+            return Scaffold(
+              backgroundColor: c.base,
+              body: Center(
+                child: SizedBox(
+                  width: 600,
+                  child: ComponentExample(id: selected),
+                ),
+              ),
+            );
+          }
+          return Scaffold(
+            body: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final wide = constraints.maxWidth >= 900;
+                  final ids = componentIds
+                      .where((id) => id.contains(filter.toLowerCase()))
+                      .toList();
+                  return Column(
+                    children: [
+                      Container(
+                        height: 64,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: c.base,
+                          border: Border(bottom: BorderSide(color: c.line)),
                         ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              if (wide)
-                                SizedBox(
-                                  width: 240,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: SteyInput(
-                                          placeholder: 'Search components',
-                                          prefix: const Icon(
-                                            Icons.search,
-                                            size: 16,
-                                          ),
-                                          onChanged: (v) =>
-                                              setState(() => filter = v),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: SteySidebar(
-                                          items: ids
-                                              .map(
-                                                (id) => SteySidebarItem(
-                                                  id,
-                                                  title(id),
-                                                ),
-                                              )
-                                              .toList(),
-                                          selected: selected,
-                                          onSelected: select,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: c.contrast,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                's',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  color: c.inverse,
                                 ),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  padding: EdgeInsets.all(wide ? 40 : 20),
-                                  child: Center(
-                                    child: ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                        maxWidth: 1000,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const SteyText('Stey UI', heading: 4),
+                            if (wide) ...[
+                              const SizedBox(width: 12),
+                              const SteyBadge(child: Text('Flutter')),
+                            ],
+                            const Spacer(),
+                            SteyButton(
+                              onPressed: toggleMode,
+                              semanticLabel: dark
+                                  ? 'Switch to light mode'
+                                  : 'Switch to dark mode',
+                              shape: SteyButtonShape.square,
+                              variant: SteyButtonVariant.ghost,
+                              child: Icon(
+                                dark
+                                    ? Icons.light_mode_outlined
+                                    : Icons.dark_mode_outlined,
+                                size: 18,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SteyButton(
+                              onPressed: () => launchUrl(
+                                Uri.parse('https://github.com/stey-jp/stey-ui'),
+                              ),
+                              child: const Text('GitHub'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            if (wide)
+                              SizedBox(
+                                width: 240,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: SteyInput(
+                                        placeholder: 'Search components',
+                                        prefix: const Icon(
+                                          Icons.search,
+                                          size: 16,
+                                        ),
+                                        onChanged: (v) =>
+                                            setState(() => filter = v),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          if (!wide) ...[
-                                            SteySelect(
-                                              value: selected,
-                                              options: {
-                                                for (final id in componentIds)
-                                                  id: title(id),
-                                              },
-                                              onChanged: (v) {
-                                                if (v != null) select(v);
-                                              },
-                                              label: 'Component',
-                                            ),
-                                            const SizedBox(height: 24),
-                                          ],
-                                          SteyBreadcrumbs(
-                                            items: [
-                                              SteyBreadcrumb(
-                                                'Components',
-                                                onPressed: () =>
-                                                    select('button'),
+                                    ),
+                                    Expanded(
+                                      child: SteySidebar(
+                                        items: ids
+                                            .map(
+                                              (id) => SteySidebarItem(
+                                                id,
+                                                title(id),
                                               ),
-                                              SteyBreadcrumb(title(selected)),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 12),
-                                          SteyText(title(selected), heading: 1),
-                                          const SizedBox(height: 6),
-                                          const SteyText(
-                                            'Native Flutter components inspired by Cloudflare Kumo.',
-                                            subtle: true,
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Wrap(
-                                            spacing: 8,
-                                            runSpacing: 8,
-                                            children: [
-                                              SteyLink(
-                                                external: true,
-                                                onPressed: () => launchUrl(
-                                                  Uri.parse(
-                                                    'https://kumo-ui.com/components/${selected == 'dropdown' ? 'dropdown-menu' : selected}/',
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'Compare with Kumo',
-                                                ),
-                                              ),
-                                              SteyLink(
-                                                external: true,
-                                                onPressed: () => launchUrl(
-                                                  Uri.parse(
-                                                    'https://github.com/cloudflare/kumo/tree/f46e8bc9922c37dc1d3e7da779e589fe171df306/packages/kumo/src/${{'page-header', 'resource-list', 'delete-resource'}.contains(selected) ? 'blocks' : 'components'}/$selected',
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'Reference source',
-                                                ),
-                                              ),
-                                            ],
+                                            )
+                                            .toList(),
+                                        selected: selected,
+                                        onSelected: select,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                padding: EdgeInsets.all(wide ? 40 : 20),
+                                child: Center(
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 1000,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        if (!wide) ...[
+                                          SteySelect(
+                                            value: selected,
+                                            options: {
+                                              for (final id in componentIds)
+                                                id: title(id),
+                                            },
+                                            onChanged: (v) {
+                                              if (v != null) select(v);
+                                            },
+                                            label: 'Component',
                                           ),
                                           const SizedBox(height: 24),
-                                          SteyLayerCard(
-                                            header: const Row(
-                                              children: [
-                                                Expanded(
-                                                  child: SteyText(
-                                                    'Interactive preview',
-                                                    bold: true,
-                                                  ),
-                                                ),
-                                                Spacer(),
-                                                SteyBadge(
-                                                  child: Text('Preview'),
-                                                ),
-                                              ],
-                                            ),
-                                            child: ComponentExample(
-                                              key: ValueKey(selected),
-                                              id: selected,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 24),
-                                          const SteyBanner(
-                                            tone: SteyTone.warning,
-                                            child: Text(
-                                              'Development preview. Complete visual and behavior parity with Kumo has not been certified.',
-                                            ),
-                                          ),
-                                          const SizedBox(height: 24),
-                                          const SteyText(
-                                            'Independent MIT project. Cloudflare and Kumo are trademarks of their respective owners. No affiliation or endorsement.',
-                                            subtle: true,
-                                          ),
                                         ],
-                                      ),
+                                        SteyBreadcrumbs(
+                                          items: [
+                                            SteyBreadcrumb(
+                                              'Components',
+                                              onPressed: () => select('button'),
+                                            ),
+                                            SteyBreadcrumb(title(selected)),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        SteyText(title(selected), heading: 1),
+                                        const SizedBox(height: 6),
+                                        const SteyText(
+                                          'Native Flutter components inspired by Cloudflare Kumo.',
+                                          subtle: true,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Wrap(
+                                          spacing: 8,
+                                          runSpacing: 8,
+                                          children: [
+                                            SteyLink(
+                                              external: true,
+                                              onPressed: () => launchUrl(
+                                                Uri.parse(
+                                                  'https://kumo-ui.com/components/${selected == 'dropdown' ? 'dropdown-menu' : selected}/',
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                'Compare with Kumo',
+                                              ),
+                                            ),
+                                            SteyLink(
+                                              external: true,
+                                              onPressed: () => launchUrl(
+                                                Uri.parse(
+                                                  'https://github.com/cloudflare/kumo/tree/f46e8bc9922c37dc1d3e7da779e589fe171df306/packages/kumo/src/${{'page-header', 'resource-list', 'delete-resource'}.contains(selected) ? 'blocks' : 'components'}/$selected',
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                'Reference source',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 24),
+                                        SteyLayerCard(
+                                          header: const Row(
+                                            children: [
+                                              Expanded(
+                                                child: SteyText(
+                                                  'Interactive preview',
+                                                  bold: true,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              SteyBadge(child: Text('Preview')),
+                                            ],
+                                          ),
+                                          child: ComponentExample(
+                                            key: ValueKey(selected),
+                                            id: selected,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                        const SteyBanner(
+                                          tone: SteyTone.warning,
+                                          child: Text(
+                                            'Development preview. Complete visual and behavior parity with Kumo has not been certified.',
+                                          ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                        const SteyText(
+                                          'Independent MIT project. Cloudflare and Kumo are trademarks of their respective owners. No affiliation or endorsement.',
+                                          subtle: true,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                ),
+                      ),
+                    ],
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
+}
+
+class _GalleryRouteParser extends RouteInformationParser<Uri> {
+  const _GalleryRouteParser();
+  @override
+  Future<Uri> parseRouteInformation(RouteInformation information) =>
+      SynchronousFuture(information.uri);
+  @override
+  RouteInformation restoreRouteInformation(Uri configuration) =>
+      RouteInformation(uri: configuration);
+}
+
+class _GalleryRouter extends RouterDelegate<Uri>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<Uri> {
+  _GalleryRouter(this.uri, this.onChanged, this.builder);
+  Uri uri;
+  final ValueChanged<Uri> onChanged;
+  final WidgetBuilder builder;
+  @override
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  @override
+  Uri get currentConfiguration => uri;
+  void navigate(Uri next) {
+    if (uri == next) return;
+    uri = next;
+    onChanged(uri);
+    notifyListeners();
+  }
+
+  @override
+  Future<void> setNewRoutePath(Uri configuration) =>
+      Future<void>.microtask(() => navigate(configuration));
+
+  @override
+  Widget build(BuildContext context) => Navigator(
+    key: navigatorKey,
+    pages: [
+      MaterialPage<void>(
+        key: const ValueKey('gallery'),
+        child: builder(context),
+      ),
+    ],
+    onDidRemovePage: (_) {},
+  );
 }
 
 String title(String id) {
@@ -810,10 +893,43 @@ class _ComponentExampleState extends State<ComponentExample> {
         onPressed: () => SteyCommandPalette.show(
           context,
           commands: [
-            SteyCommand('Create worker', action),
-            SteyCommand('Open settings', action),
-            SteyCommand('View analytics', action),
+            SteyCommand(
+              'Create worker',
+              action,
+              group: 'Compute',
+              icon: const Icon(Icons.cloud_outlined, size: 16),
+              breadcrumbs: const ['Workers'],
+              description: 'Deploy a serverless application',
+              highlights: const [(0, 5)],
+            ),
+            SteyCommand(
+              'Open settings',
+              action,
+              group: 'Account',
+              icon: const Icon(Icons.settings_outlined, size: 16),
+              onSelect: (newTab) => SteyToast.show(
+                context,
+                message: newTab
+                    ? 'Open settings in a new tab'
+                    : 'Open settings',
+              ),
+            ),
+            SteyCommand(
+              'View analytics',
+              action,
+              group: 'Account',
+              external: true,
+            ),
+            SteyCommand(
+              'Unavailable action',
+              action,
+              group: 'Account',
+              disabled: true,
+            ),
           ],
+          footer: const Text(
+            '↑↓ Navigate · Enter Select · Ctrl/Cmd+Enter New tab',
+          ),
         ),
         child: const Text('Open commands'),
       ),

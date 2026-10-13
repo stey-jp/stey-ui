@@ -21,7 +21,16 @@ try {
       const url=new URL(base);url.searchParams.set('component',item.id);url.searchParams.set('mode',mode);
       await page.goto(url.href,{waitUntil:'networkidle'});
       await page.getByText('Interactive preview',{exact:true}).waitFor({timeout:30000});
-      results.push({url:url.href,component:item.id,mode,issues:[...issues],errors:[...errors]});
+      const nodes=[];
+      for(const issue of issues) {
+        const id=issue.details.genericIssueDetails?.violatingNodeId;
+        if(!id||nodes.some(node=>node.backendNodeId===id))continue;
+        try {
+          const {node}=await cdp.send('DOM.describeNode',{backendNodeId:id,depth:0});
+          nodes.push({backendNodeId:id,nodeName:node.nodeName,attributes:node.attributes});
+        } catch { nodes.push({backendNodeId:id,unavailable:true}); }
+      }
+      results.push({url:url.href,component:item.id,mode,issues:[...issues],issueNodes:nodes,errors:[...errors]});
       if(['button','input','chart'].includes(item.id))await page.screenshot({path:resolve(output,`${item.id}-${mode}.png`)});
       await page.close();
     }

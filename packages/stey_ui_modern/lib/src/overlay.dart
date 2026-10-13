@@ -5,6 +5,8 @@ import 'display.dart';
 import 'input.dart';
 import 'theme.dart';
 
+export 'command.dart';
+
 class SteyDialog {
   static Future<T?> show<T>(
     BuildContext context, {
@@ -240,76 +242,6 @@ class SteyToast {
           style: TextStyle(fontSize: 14, color: tone.foreground(c)),
         ),
       ),
-    );
-  }
-}
-
-class SteyCommand {
-  const SteyCommand(
-    this.label,
-    this.onPressed, {
-    this.group = 'Commands',
-    this.keywords = const [],
-  });
-  final String label, group;
-  final VoidCallback onPressed;
-  final List<String> keywords;
-}
-
-class SteyCommandPalette extends StatefulWidget {
-  const SteyCommandPalette({super.key, required this.commands});
-  final List<SteyCommand> commands;
-  static Future<void> show(
-    BuildContext context, {
-    required List<SteyCommand> commands,
-  }) => SteyDialog.show<void>(
-    context,
-    title: 'Command palette',
-    child: SteyCommandPalette(commands: commands),
-  );
-  @override
-  State<SteyCommandPalette> createState() => _SteyCommandPaletteState();
-}
-
-class _SteyCommandPaletteState extends State<SteyCommandPalette> {
-  String query = '';
-  @override
-  Widget build(BuildContext context) {
-    final filtered = widget.commands
-        .where(
-          (c) => '${c.label} ${c.keywords.join(' ')}'.toLowerCase().contains(
-            query.toLowerCase(),
-          ),
-        )
-        .toList();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SteyInput(
-          placeholder: 'Search commands',
-          autofocus: true,
-          onChanged: (v) => setState(() => query = v),
-        ),
-        const SizedBox(height: 8),
-        if (filtered.isEmpty) const SteyEmpty(title: 'No commands found'),
-        SizedBox(
-          height: 240,
-          child: ListView(
-            children: [
-              for (final command in filtered)
-                SteyButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    command.onPressed();
-                  },
-                  variant: SteyButtonVariant.ghost,
-                  child: Text(command.label),
-                ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

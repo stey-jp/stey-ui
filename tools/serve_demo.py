@@ -7,6 +7,8 @@ from pathlib import Path
 
 
 class Handler(SimpleHTTPRequestHandler):
+    cross_origin_isolated = False
+
     def log_message(self, format, *args):
         pass
 
@@ -17,7 +19,7 @@ class Handler(SimpleHTTPRequestHandler):
         data=path.read_bytes()
         tag='"'+hashlib.sha256(data).hexdigest()+'"'
         if self.headers.get('If-None-Match')==tag:
-            self.send_response(304);self.end_headers();return
+            self.send_response(304);self.send_header('ETag',tag);self.end_headers();return
         mime=self.guess_type(str(path))
         compress=('gzip' in self.headers.get('Accept-Encoding','') and
                   (mime.startswith('text/') or path.suffix in ('.js','.json','.wasm','.map')))
@@ -30,12 +32,19 @@ class Handler(SimpleHTTPRequestHandler):
                          path.name.startswith(('canvaskit','skwasm')) or path.name.endswith(('.ttf','.otf','.png')) else 'no-cache')
         self.send_header('X-Content-Type-Options','nosniff')
         self.send_header('Vary','Accept-Encoding')
+        if self.cross_origin_isolated:
+            self.send_header('Cross-Origin-Opener-Policy','same-origin')
+            self.send_header('Cross-Origin-Embedder-Policy','credentialless')
         if compress:self.send_header('Content-Encoding','gzip')
         self.end_headers();self.wfile.write(data)
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8766)
-    parser.add_argument('--directory',default='apps/demo/build/web');args=parser.parse_args()
+    parser.add_argument('--directory',default='apps/demo/build/web')
+    parser.add_argument('--cross-origin-isolated',action='store_true');args=parser.parse_args()
+    Handler.cross_origin_isolated=args.cross_origin_isolated
     from functools import partial
-    ThreadingHTTPServer(('127.0.0.1',args.port),partial(Handler,directory=args.directory)).serve_forever()
+    server=ThreadingHTTPServer(('127.0.0.1',args.port),partial(Handler,directory=args.directory))
+    print('{"port":'+str(server.server_port)+'}',flush=True)
+    server.serve_forever()

@@ -474,11 +474,14 @@ class SteyCode extends StatelessWidget {
   final bool block, copyable;
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(block ? 16 : 3),
-    decoration: BoxDecoration(
-      color: SteyTheme.colorsOf(context).recessed,
-      borderRadius: BorderRadius.circular(block ? 8 : 3),
-    ),
+    padding: EdgeInsets.all(block ? 10 : 0),
+    decoration: block
+        ? BoxDecoration(
+            color: SteyTheme.colorsOf(context).base,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: SteyTheme.colorsOf(context).fill),
+          )
+        : null,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -487,8 +490,9 @@ class SteyCode extends StatelessWidget {
           code,
           style: TextStyle(
             fontFamily: 'monospace',
-            fontSize: block ? 13 : 12.6,
-            height: 1.5,
+            fontSize: 14,
+            height: 20 / 14,
+            color: SteyTheme.colorsOf(context).subtle,
           ),
         ),
         if (copyable)
