@@ -51,6 +51,8 @@ MaterialApp(
 ```
 
 デモはルートで `flutter pub get`、`cd apps/demo`、`flutter run -d chrome`。
+デモの表示・操作ラベル・日時UIは日本語です。日本語名と英語のコンポーネント名で検索できます。
+見出しには英語名も併記し、公式との視覚比較用の `?sample=...` は英語の比較文言を保持しています。
 検索・テーマ切替・コンポーネント操作・公式デモ／固定SHAソースへの比較リンクを備えます。
 直接URLは `?component=button&mode=dark` の形式です。
 選択とテーマをURLへ保存し、戻る／進むで復元します。
