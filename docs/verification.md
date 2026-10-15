@@ -1,4 +1,4 @@
-# 検証結果（ButtonGroup／Flow更新：2026-10-16）
+# 検証結果（Flow構成・自動レイアウト更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -198,3 +198,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・DiagnosticsもJSONのgroup_flowへ保持しています。SDKのIntl.v8BreakIterator、SkWasm source map、配信・起動負荷、gallery desktopでviewport端に切れたSidebar行などが残り、全100点は未達です。意味情報やSDKを改造・抑止していません。Linux／macOS／iOSの今回ビルドと物理実機・screen reader操作は未検証です。
 
 FlowのList／Parallel全構成、自動寸法・縦配置・canvas挙動、ButtonGroupの全任意Widget／intrinsic制約などは継続対応です。6工程の進行状況は[完成までの工程](completion-plan.md)に記録しました。同期済みSHAは進めず、共有CIの公開repo除外・クラウド接続保留を維持しています。実Batch往復は未検証、API呼出・費用は0です。本番反映先はGitHub mainで、Webホスティング・pub.dev公開は行っていません。
+
+## Flow構成・自動レイアウトの追加検証（2026-10-16）
+
+ソースSHAは `f2181caa553fc6c2e300b934b9a5de9ad86a4737`。静的解析0件、ライブラリ119件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。構成／配置／動的内容／文字拡大の8テストを追加し、既存アンカー6テストも維持しています。
+
+SteyFlow.composed／SteyFlowList／SteyFlowParallelを追加し、内容寸法の測定・自動接続・入れ子・空構成・隣接Parallelの規則、縦横・中央／末尾揃えと動的な再配置を実装しました。子Widgetの状態を保持し、既存の明示DAG APIも維持しています。ノードの影は公式の2層とringの重ね順・blurを補正しました。日本語デモで方向・配置・分岐の揃え・内容の長さを操作できます。[API対応と制限](flow-api-mapping.md)を参照してください。
+
+実Chromeの新規10項目とButtonGroup／アンカーの既存12項目が成功しました。1280px Light/Dark、320px Light/Dark、390px Lightで5ノードの維持と自動寸法変更を確認し、実行時エラーは0件です。操作中のSDK警告はそれぞれ5／10件。全URL監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件残っています。
+
+公式SHA `7e0ff40` とLight/Dark・縦横・start/center/end・直列／分岐／入れ子／隣接Parallel／内容展開の48条件を比較しました。全組で図全体の寸法と各ノードの位置・寸法が0.1 CSS px以内でした。threshold 0.1の画像差分は0.45〜1.78%です。公式側は標準モード・幅1000pxのホスト・padding 0、1200×1000pxのviewportです。初期の絶対配置の縮小測定が折り返しへ影響するため、狭い親幅のCSS shrink-to-fitは別途未認証と記録しました。文字描画等の差があり、全状態の完全一致・承認済み視覚ゲートとは扱いません。同期済みSHAも進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- flow_gallery_mobile：79 / 100 / 81 / 100。実行警告0件。
+- flow_gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- flow_composed_mobile：92 / 100 / 81 / 100。実行警告0件。
+- flow_composed_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのflow_compositionへ保持しています。SDKのIntl.v8BreakIterator、SkWasm source map、配信・起動負荷、gallery desktopでviewport端に切れたSidebar行などが残り、全100点は未達です。意味情報やSDKを改造・抑止していません。Linux／macOS／iOSの今回ビルドと全物理実機・screen reader操作は未検証です。
+
+次の不足はFlowのcanvas全操作・狭い親幅での測定・極端なmarginと全視覚状態です。他の群も含む[6工程](completion-plan.md)は継続中です。共有CIの公開repo除外とクラウド接続保留を維持し、実Batch往復は未検証です。API呼出・費用は0、本番反映先はGitHub mainです。Webホスティング・pub.dev公開は行っていません。
+
+残る指摘の内訳：Intlの非推奨呼出はFlutter SDK、SkWasm mapは公式配布物の不足です。アプリとloaderのmapは配信済みで、SDK改造・警告抑止・架空mapの追加は行いません。Desktopのtarget-sizeはviewport端で224×2pxだけ見える「グリッド」行の意味情報が原因です。スクロール・focus・読み上げを保持する修正は未解決です。Wasm／renderer／fontの配信量と初期処理の最適化も継続課題です。
