@@ -85,7 +85,10 @@ class SteyTableOfContentsController extends ChangeNotifier {
   }
 
   void updateSections(Map<String, GlobalKey> sections) {
-    if (mapEquals(_sections, sections)) return;
+    if (mapEquals(_sections, sections) &&
+        listEquals(_sections.keys.toList(), sections.keys.toList())) {
+      return;
+    }
     _sections = Map.of(sections);
     if (trackHash) syncFromFragment(fragments.readFragment());
     refresh();

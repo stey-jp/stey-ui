@@ -147,9 +147,19 @@ void main() {
       });
       await tester.pump();
       expect(doc.tracker.activeId, 'two');
+      doc.tracker.updateSections({
+        'one': doc.keys['one']!,
+        'two': doc.keys['two']!,
+      });
+      await tester.pump();
+      expect(
+        doc.tracker.activeId,
+        'one',
+        reason: 'Order-only changes must refresh',
+      );
       doc.tracker.updateSections({});
       await tester.pump();
-      expect(doc.tracker.activeId, 'two');
+      expect(doc.tracker.activeId, 'one');
     },
   );
 
