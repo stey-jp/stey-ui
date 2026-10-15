@@ -5,6 +5,7 @@
 | 公式の仕様 | Flutter側 | 対応範囲 |
 | --- | --- | --- |
 | ButtonGroup | SteyButtonGroup | 内容幅、1pxの境界共有、外側だけの角丸 |
+| primary / destructiveの上辺 | SteyButton | 公式の1px inset highlightを描画。グループ内でも保持 |
 | focus-visibleの重なり | 専用RenderBox | フォーカスした子を最後に描画・優先してhit test。子とTabの順序は維持 |
 | Tooltip / LinkButtonを含む子 | SteyButtonを内部に持つWidget | Tooltip・SteyLink・Dropdown triggerへ形状を継承 |
 | group / aria-label | Semanticsのcontainer / label | nativeのグループと名前を公開。実Chromeでもrole=groupを確認 |

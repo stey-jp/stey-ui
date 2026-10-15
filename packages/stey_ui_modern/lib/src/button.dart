@@ -204,7 +204,14 @@ class _SteyButtonState extends State<SteyButton> {
                             ],
                           ),
                         ),
-                        child: child,
+                        child: CustomPaint(
+                          painter: _ButtonTopHighlight(
+                            danger
+                                ? c.dangerEmphasisHover
+                                : c.brandEmphasisHover,
+                          ),
+                          child: child,
+                        ),
                       ),
                     )
                   : null,
@@ -323,6 +330,21 @@ class _SteyButtonState extends State<SteyButton> {
       ),
     );
   }
+}
+
+/// Kumo's emphasis surface has a one-pixel inset highlight. It remains present
+/// inside ButtonGroup, where only the control's outside drop shadow is removed.
+class _ButtonTopHighlight extends CustomPainter {
+  const _ButtonTopHighlight(this.color);
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawRect(
+    Rect.fromLTWH(0, 0, size.width, 1),
+    Paint()..color = color,
+  );
+  @override
+  bool shouldRepaint(_ButtonTopHighlight oldDelegate) =>
+      color != oldDelegate.color;
 }
 
 class SteyRefreshButton extends StatelessWidget {
