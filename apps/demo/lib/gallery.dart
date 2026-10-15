@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'catalog.g.dart';
 import 'demo_labels.dart';
+import 'dropdown_example.dart';
 import 'gallery_route_uri.dart';
 import 'table_of_contents_example.dart';
 
@@ -103,6 +104,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'dropdown' => const DropdownExample(fixture: true),
               'select' => SizedBox(
                 width: 280,
                 child: SteySelect<String>(
@@ -1156,15 +1158,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         ),
         child: const Text('ダイアログを開く'),
       ),
-      'dropdown' => SteyDropdownMenu(
-        items: [
-          SteyMenuItem('編集', onPressed: action, icon: Icons.edit_outlined),
-          SteyMenuItem('複製', onPressed: action),
-          const SteyMenuItem('利用不可', disabled: true),
-          SteyMenuItem('削除', onPressed: action, destructive: true),
-        ],
-        child: const Text('操作'),
-      ),
+      'dropdown' => const DropdownExample(),
       'popover' => const SteyPopover(
         trigger: Text('ポップオーバーを開く'),
         title: 'デプロイの詳細',

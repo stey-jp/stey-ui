@@ -4,7 +4,7 @@
   "observed_sha": "1846759162f8dd1cd6028738fceefd2e0cd97d66",
   "upstream_commit_time": "2026-10-14T10:02:10-04:00",
   "upstream_commit_url": "https://github.com/cloudflare/kumo/commit/1846759162f8dd1cd6028738fceefd2e0cd97d66",
-  "summary": "Added the native Table of Contents tracking counterpart and malformed-fragment fix. Four later upstream commits also change LayerDialog aliases, Sidebar semantics, Button optical padding and Dropdown submenu behavior; these are detected but not synchronized.",
+  "summary": "Added native Table of Contents tracking and the current Dropdown submenu/selection counterpart. LayerDialog aliases, Sidebar semantics and Button optical padding remain pending; full parity is not synchronized.",
   "classification": "mixed",
   "affected_components": [
     "table-of-contents",
@@ -35,22 +35,24 @@
     "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.ts",
     "packages/kumo/src/index.ts"
   ],
-  "current_implementation": "SteyTableOfContents now provides compound title/list/item/group widgets and a controller for native scrolling, quiet-period pinning and Web hashchange. The Japanese demo includes deep links, nested selection and native scrolling. Full parity certification and the later upstream changes remain outstanding.",
+  "current_implementation": "SteyTableOfContents now provides compound title/list/item/group widgets and a controller for native scrolling, quiet-period pinning and Web hashchange. The Japanese demo includes deep links, nested selection and native scrolling. Full parity certification and the later upstream changes remain outstanding. SteyDropdownMenu adds nested children, group/label/separator, controlled checkbox/radio items, icon slots, popup-local auto-inset, submenu offsets, focus/typeahead and native menu roles against 1846759.",
   "remaining_work": [
     "Certify Table of Contents across all physical platforms, screen readers and complete visual states.",
     "Review and implement d97d751 LayerDialog Actions.Primary compatibility.",
     "Review and implement 17d094e Sidebar MenuSub aria-hidden guide semantics.",
     "Review and implement cdb7e0f Button optical text centering and icon spacing.",
-    "Review and implement 1846759 Dropdown submenu styling, positioning, icon API and auto-inset."
+    "Certify Dropdown animation, all collision fallbacks, arbitrary triggers/portals, inherited Base UI APIs and complete visual/physical screen-reader states."
   ],
   "implementation_synchronized": false,
   "synchronized_sha_advanced": false,
   "reference_fixture_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
-  "reference_fixture_note": "Visual comparison remains pinned at the recorded baseline. The Table of Contents visual source has not changed in the later commits; the malformed-fragment hook fix is tested separately. Baseline and synchronization ledger are not advanced.",
+  "reference_fixture_note": "Visual comparison remains pinned at the recorded baseline. The Table of Contents visual source has not changed in the later commits; the malformed-fragment hook fix is tested separately. Baseline and synchronization ledger are not advanced. Dropdown diagnostic captures use the exact dropdown.tsx from 1846759 with the pinned baseline CSS and dependencies; this is a component-level comparison, not an advanced synchronized baseline.",
   "batch_api_calls": 0,
   "openai_api_cost_usd": 0,
   "cloud_workflow_executed": false,
   "review_kind": "manual CLI source diff review; does not update the cloud synchronization ledger",
   "table_of_contents_fix_source_sha": "dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1",
-  "table_of_contents_regression_tests": 12
+  "table_of_contents_regression_tests": 12,
+  "dropdown_review_source_sha": "1846759162f8dd1cd6028738fceefd2e0cd97d66",
+  "dropdown_regression_tests": 14
 }

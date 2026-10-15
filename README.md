@@ -16,6 +16,8 @@ Selectもネイティブのポップアップ、単一／複数選択、グル�
 既存の値管理APIを維持し、[SelectのAPI対応](docs/select-api-mapping.md)に差異を記録しています。
 目次の階層表示・スクロール追跡・URLハッシュ連携を追加しています。
 [目次のAPI対応](docs/table-of-contents-api-mapping.md)で利用方法と未検証範囲を確認できます。
+Dropdownに階層メニュー・Checkbox／Radio選択・自動字下げ・キーボード操作を追加しています。
+日本語デモと[DropdownのAPI対応](docs/dropdown-api-mapping.md)で操作と制限を確認できます。
 固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 
 ```text

@@ -7,6 +7,7 @@ import 'theme.dart';
 import 'messages.dart';
 
 export 'command.dart';
+export 'dropdown.dart';
 
 class SteyDialog {
   static Future<T?> show<T>(
@@ -100,64 +101,6 @@ class SteyLayerDialog {
     child: SteyLayerCard(child: child),
     actions: actions,
     width: width,
-  );
-}
-
-class SteyMenuItem {
-  const SteyMenuItem(
-    this.label, {
-    this.onPressed,
-    this.icon,
-    this.disabled = false,
-    this.destructive = false,
-    this.checked,
-  });
-  final String label;
-  final VoidCallback? onPressed;
-  final IconData? icon;
-  final bool disabled, destructive;
-  final bool? checked;
-}
-
-class SteyDropdownMenu extends StatelessWidget {
-  const SteyDropdownMenu({super.key, required this.items, required this.child});
-  final List<SteyMenuItem> items;
-  final Widget child;
-  @override
-  Widget build(BuildContext context) => MenuAnchor(
-    style: MenuStyle(
-      backgroundColor: WidgetStatePropertyAll(SteyTheme.colorsOf(context).base),
-      shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      padding: const WidgetStatePropertyAll(EdgeInsets.all(4)),
-    ),
-    menuChildren: items
-        .map(
-          (item) => MenuItemButton(
-            onPressed: item.disabled ? null : item.onPressed,
-            leadingIcon: item.icon == null ? null : Icon(item.icon, size: 16),
-            trailingIcon: item.checked == true
-                ? const Icon(Icons.check, size: 14)
-                : null,
-            style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(
-                item.destructive
-                    ? SteyTheme.colorsOf(context).dangerText
-                    : SteyTheme.colorsOf(context).text,
-              ),
-              textStyle: const WidgetStatePropertyAll(TextStyle(fontSize: 14)),
-            ),
-            child: Text(item.label),
-          ),
-        )
-        .toList(),
-    builder: (context, controller, _) => SteyButton(
-      onPressed: () =>
-          controller.isOpen ? controller.close() : controller.open(),
-      trailing: const Icon(Icons.expand_more, size: 16),
-      child: child,
-    ),
   );
 }
 

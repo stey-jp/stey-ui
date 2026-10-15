@@ -31,7 +31,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | date-picker | Calendar各mode、年境界、locale、min/max、disabled日、popover/focus | Calendarの一部操作済み。日付制約等の全比較待ち |
 | date-range-picker | 開始/終了、range hover、連続月、制約、確定/取消 | 全比較待ち |
 | dialog | 全parts、制御/非制御、modal、portal、scroll/focus lock、Escape/外側、復帰 | 基本開閉テストあり。全比較待ち |
-| dropdown | Item/Group/Separator/Checkbox/Radio/Submenu、disabled、keyboard、位置/衝突 | 全比較待ち |
+| dropdown | Item/Group/Separator/Checkbox/Radio/Submenu、disabled、keyboard、位置/衝突 | native階層・選択・位置・RTLの14テストと日本語デモを追加。アニメーション・全衝突規則・全比較は未完了。[API対応](dropdown-api-mapping.md) |
 | empty | variant、icon、title、description、action、狭幅 | 全比較待ち |
 | field | 全parts、validation match、error/helper優先、label、required/optional、ID | 一部読み上げ済み。全validation match待ち |
 | flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | 全比較待ち |

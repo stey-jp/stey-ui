@@ -291,12 +291,12 @@
         "packages/kumo/src/components/dropdown/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/overlay.dart"
+        "packages/stey_ui_modern/lib/src/dropdown.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native nested menus, groups, separators, controlled checkbox/radio, icon slots, auto-inset and keyboard navigation are implemented against 1846759. Animation, all positioning cases, inherited APIs, physical screen readers and complete visual parity remain to be certified."
     },
     {
       "id": "empty",
