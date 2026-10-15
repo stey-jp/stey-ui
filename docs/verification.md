@@ -1,4 +1,4 @@
-# 検証結果（LayerDialog更新：2026-10-16）
+# 検証結果（ButtonGroup／Flow更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -175,3 +175,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・Diagnosticsを含む監査値をJSONのlayer_dialogへ保持しています。SDKのIntl.v8BreakIterator、SkWasm未同梱source map、Wasm／フォントの配信・起動処理、gallery desktopのviewport端で切れたSidebar行などが残り、全カテゴリ100点は未達です。SDK／DOM改造や意味情報の抑止は行っていません。
 
 Linux／macOS／iOSの今回ビルドと、全物理実機・screen reader操作は未検証です。Drawerの全体スワイプ・速度連動時間・scroll fade・任意portal／Root APIなども未完了です。Flowのanchor margin補正が対応待ちです。同期済みSHA・承認済み視覚ゲートは進めていません。共有CIは最新設定で公開repoを対象外としており、クラウド同期と実Batch往復は無効／未検証、API呼出・費用は0です。本番反映先はGitHub mainで、Webホスティング・pub.dev公開は行っていません。
+
+## ButtonGroup・Flowアンカーの追加検証（2026-10-16）
+
+ソースSHAは `00e26b98bc213fe6d5fa3381c877297f836420d9`。静的解析0件、ライブラリ111件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。ButtonGroup 5件・Flowアンカー6件の回帰テストを追加しました。
+
+ButtonGroupは外側だけの角丸・1px境界共有・RTLとwrapped controlを実装し、focus時もWidget／Tabの順序を変えずに描画・hit testの順序を調整します。Flowはstart／end／bothの実座標を計測し、正負の外側余白・内側移動・サイズ変更・登録解除・canvas変換へ追従します。2pxの丸い経路・矢印・disabled opacityを追加し、技術IDを読まずにlist／listItemを公開します。[API対応と未対応範囲](group-flow-api-mapping.md)を参照してください。
+
+実ChromeでButtonGroup／Flowの12項目（1280px Light/Dark、320px Light/Dark、390px Light）とLayerDialogの24回帰項目が成功しました。グループ名とrole=group、Flowのlistと3つのlistItemを確認しています。全URL監査は106 URL・108条件、実行時エラー0件。残る108件のIssueと操作検証の10／6件はSDKのIntlV8BreakIteratorです。
+
+公式SHA `7e0ff40` とButtonGroup 24画面・Flowアンカー 10画面を比較し、全組で幅・高さが0.1 CSS px以内でした。threshold 0.1の差分はButtonGroup 0.69〜9.18%、Flow 0.75〜2.35%です。Flowは120×40pxの明示寸法・padding 0・488×40pxのclipped canvas条件で比較し、見える範囲外も含む接続位置は別のRenderBoxテストで確認しています。公式fixtureは標準モード、公式側のIssue・実行時エラーは0件です。完全一致・全状態認証・承認済み視覚ゲートとは扱いません。
+
+小さいprimaryボタンの比較で上辺1pxのinset highlight不足を検出して修正しました。Button／Sidebarの既存78画面も再比較し、78組で寸法が一致しました。通常Buttonのicon・文字・描画差と位相未同期のloadingは残り、完全一致とは扱いません。修正前の画像・Lighthouse結果もJSONへ保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- button_group_mobile：83 / 100 / 81 / 100。実行警告0件。
+- button_group_desktop：99 / 96 / 81 / 100。実行警告0件。
+- flow_mobile：77 / 100 / 81 / 100。実行警告0件。
+- flow_desktop：93 / 96 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのgroup_flowへ保持しています。SDKのIntl.v8BreakIterator、SkWasm source map、配信・起動負荷、gallery desktopでviewport端に切れたSidebar行などが残り、全100点は未達です。意味情報やSDKを改造・抑止していません。Linux／macOS／iOSの今回ビルドと物理実機・screen reader操作は未検証です。
+
+FlowのList／Parallel全構成、自動寸法・縦配置・canvas挙動、ButtonGroupの全任意Widget／intrinsic制約などは継続対応です。6工程の進行状況は[完成までの工程](completion-plan.md)に記録しました。同期済みSHAは進めず、共有CIの公開repo除外・クラウド接続保留を維持しています。実Batch往復は未検証、API呼出・費用は0です。本番反映先はGitHub mainで、Webホスティング・pub.dev公開は行っていません。
