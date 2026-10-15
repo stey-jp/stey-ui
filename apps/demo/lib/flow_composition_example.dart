@@ -252,3 +252,110 @@ Widget flowCanvasSample(Map<String, String> q) {
     ),
   );
 }
+
+class FlowWrapExample extends StatefulWidget {
+  const FlowWrapExample({super.key});
+  @override
+  State<FlowWrapExample> createState() => _FlowWrapExampleState();
+}
+
+class _FlowWrapExampleState extends State<FlowWrapExample> {
+  bool wide = false, long = true, vertical = true;
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SteyText('ノードの折り返し', heading: 4),
+      const SizedBox(height: 8),
+      const Text('最大幅を指定すると、説明を折り返した高さに合わせて後続のノードと接続位置も更新されます。'),
+      const SizedBox(height: 12),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          SteyButton(
+            onPressed: () => setState(() => wide = !wide),
+            child: Text('最大幅：${wide ? 240 : 120}px'),
+          ),
+          SteyButton(
+            onPressed: () => setState(() => long = !long),
+            child: Text(long ? '説明を短くする' : '説明を長くする'),
+          ),
+          SteyButton(
+            onPressed: () => setState(() => vertical = !vertical),
+            child: Text('配置方向：${vertical ? '縦' : '横'}'),
+          ),
+        ],
+      ),
+      const SizedBox(height: 8),
+      Semantics(
+        container: true,
+        explicitChildNodes: true,
+        label: '折り返しプレビュー',
+        child: SizedBox(
+          width: 320,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final cap = (wide ? 240.0 : 120.0).clamp(
+                0.0,
+                (constraints.maxWidth - 32).clamp(0.0, double.infinity),
+              );
+              return SteyFlow.composed(
+                padding: const EdgeInsets.all(16),
+                orientation: vertical
+                    ? SteyFlowOrientation.vertical
+                    : SteyFlowOrientation.horizontal,
+                align: SteyFlowAlign.center,
+                children: [
+                  const SteyFlowNode('start', Text('受信')),
+                  SteyFlowNode(
+                    'process',
+                    SteyFlowAnchor(
+                      child: Text(
+                        long ? '保存する前に、入力内容とアクセス権限を確認してください。' : '入力を確認',
+                      ),
+                    ),
+                    maxWidth: cap,
+                  ),
+                  const SteyFlowNode('review', Text('承認')),
+                  const SteyFlowNode('end', Text('完了')),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget flowWrapSample(Map<String, String> q) => Semantics(
+  container: true,
+  explicitChildNodes: true,
+  label: 'Flow wrapping preview',
+  child: SizedBox(
+    width: double.tryParse(q['host'] ?? '') ?? 320,
+    child: SteyFlow.composed(
+      viewportHeight: 500,
+      padding: const EdgeInsets.all(16),
+      orientation: q['orientation'] == 'horizontal'
+          ? SteyFlowOrientation.horizontal
+          : SteyFlowOrientation.vertical,
+      align: SteyFlowAlign.center,
+      children: [
+        const SteyFlowNode('start', Text('Start')),
+        SteyFlowNode(
+          'process',
+          Text(
+            q['content'] == 'short'
+                ? 'Check'
+                : 'Review access permissions before saving changes',
+          ),
+          maxWidth: double.tryParse(q['cap'] ?? '') ?? 120,
+        ),
+        const SteyFlowNode('review', Text('Review')),
+        const SteyFlowNode('end', Text('End')),
+      ],
+    ),
+  ),
+);

@@ -14,6 +14,7 @@ margin付きアンカーは[既存のAPI対応](group-flow-api-mapping.md)も参
 | Parallel align=end | alignEnd: true | 横配置は右端、縦配置は下端で分岐を揃える |
 | DOM寸法測定 | native RenderBox測定 | 内容を同じlayout passで実測して配置。テキスト・custom Widgetの寸法変更へ追従 |
 | 明示的な寸法 | Node.width／height、Flow.nodeWidth／nodeHeight | 指定した軸だけ固定。composedの既定は内容サイズ |
+| CSS max-width | Node.maxWidth | padding込みの最大幅。短い内容は自然幅、長い内容は折り返す。widthより優先 |
 | gap | gap／verticalGap | Listの主軸64px、Parallelの交差軸16px |
 | padding | EdgeInsetsGeometry | 既定左右16px・上下64px。論理方向の指定も可 |
 | canvasの有無 | canvas: false | canvas操作を挟まず自然寸法の図を返す |
@@ -50,8 +51,16 @@ SteyFlow.composed(
 自然寸法の測定と座標計算はRenderBoxで行い、DOMやFlutter SDKの書き換えは行いません。
 標準ノードの影は公式の2層とringを再現し、CSSとFlutterの描画順・blurの定義を補正しています。
 
-自然寸法の画像比較は、公式側を幅1000pxのホストへ置いた条件で行います。
-狭い親幅でのCSS shrink-to-fitや折り返しを含む全条件は未認証です。
+自然寸法の既存比較は公式側の幅1000pxホストで行っています。
+追加の最大幅比較は160／280／320pxのcanvasで、公式のCSS max-width指定と照合します。
+maxWidthは外側の幅（既定paddingを含む）です。widthと併用すると小さい方を使い、
+未指定の高さは折り返しに応じて計測します。短い内容を最大幅まで引き伸ばしません。
+自然寸法を先に測って必要な場合だけ幅を制限するため、intrinsic APIを持たないcustom Widgetも使用できます。
+親幅へ追従させる場合はLayoutBuilderでmaxWidthを計算してください。
+既定の自然幅を維持しており、ブラウザの初期CSS shrink-to-fit・履歴依存の測定全体は未対応です。
+公式の縦配置では、初期host 160pxで128×100pxになった説明がhost拡大後も同寸法を保ち、
+初期host 320pxで288×58pxになった説明はhost縮小後も同寸法を保つことを実測しました。
+maxWidth未指定時のこの履歴依存動作とFlutterの既定自然幅には差があります。
 
 公式canvasの倍率は1倍固定です。旧InteractiveViewerのzoomを廃止し、公式の背景移動へ合わせました。
 interactive: falseは既存の横スクロール表示を維持します（この経路ではonOverflowChangeは通知しません）。

@@ -27,6 +27,7 @@ ButtonGroupの連結境界・RTL・フォーカス描画と、Flowの余白付�
 FlowのList／Parallel構成からの自動接続、内容の実測、縦方向・中央・末尾揃えも追加しています。
 [Flowの構成API](docs/flow-api-mapping.md)を参照してください。
 canvasは公式と同じ倍率固定で、背景のパン・縦横wheel・はみ出し通知・スクロール表示に対応します。
+Node.maxWidthで説明を折り返し、内容と幅の変化に合わせてノード・接続を再配置できます。
 固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 
 ```text

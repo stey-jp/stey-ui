@@ -39,7 +39,8 @@ class SteyFlowNode extends SteyFlowElement {
     this.margin = EdgeInsets.zero,
     this.width,
     this.height,
-  });
+    this.maxWidth,
+  }) : assert(maxWidth == null || maxWidth >= 0);
   final String id;
   final Widget child;
   final bool disabled;
@@ -47,6 +48,10 @@ class SteyFlowNode extends SteyFlowElement {
   final bool custom;
   final EdgeInsetsGeometry margin;
   final double? width, height;
+
+  /// Limits the outer node width, including default padding, like CSS max-width.
+  /// Short content keeps its natural width. A cap takes priority over width.
+  final double? maxWidth;
 }
 
 class SteyFlowEdge {
@@ -333,13 +338,25 @@ class _RenderFlowLayout extends RenderBox
     final boxes = getChildrenAsList(), sizes = <String, Size>{};
     for (var i = 0; i < boxes.length; i++) {
       final n = config.nodes[i];
+      final width = n.width ?? c.nodeWidth;
       boxes[i].layout(
         BoxConstraints.tightFor(
-          width: n.width ?? c.nodeWidth,
+          width: width == null ? null : math.min(width, n.maxWidth ?? width),
           height: n.height ?? c.nodeHeight,
         ),
         parentUsesSize: true,
       );
+      if (width == null &&
+          n.maxWidth != null &&
+          boxes[i].size.width > n.maxWidth!) {
+        boxes[i].layout(
+          BoxConstraints.tightFor(
+            width: n.maxWidth,
+            height: n.height ?? c.nodeHeight,
+          ),
+          parentUsesSize: true,
+        );
+      }
       sizes[n.id] = boxes[i].size;
     }
     final positions = <String, Offset>{};
