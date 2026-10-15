@@ -18,7 +18,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | badge | 全variant、filled/dot、色、beta破線、リンク内hover | 静止サンプルあり。リンク内と全機能待ち |
 | banner | variant、icon、本文、action、dismiss、折返し | 全API・機能・視覚比較待ち |
 | breadcrumbs | link/current、separator、折返し、狭幅 | 全比較待ち |
-| button | 全variant/size/shape、hover/focus、disabled/loading、icon、asChild | サンプルと操作テストあり。複合API・位相比較待ち |
+| button | 全variant/size/shape、hover/focus、disabled/loading、icon、asChild | 文字位置・iconの補正、空children、全サイズとRTLの5テストを追加。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
 | button-group | orientation、連結border/radius、size伝播、focus | 全比較待ち |
 | chart | 全export、ECharts option、legend/tooltip、resize、Chart/Sankey/Globe固有操作 | 汎用option、drilldown、地形を含む実装不足 |
 | checkbox | 単体/Item/Group/Legend、mixed、parent/allValues、cardの縦/横結合、error、disabled | ネイティブ描画・グループ・親の部分選択復元をテスト。イベント詳細・子との読み上げ関連付け・拡張hit area・全視覚認証待ち |
@@ -51,7 +51,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | radio | Group/Item/Legend、inline/card/segmented、description、矢印/Tab、generic値、rich label | RawRadioの操作・native描画・縦/二列グループを追加。イベント詳細・フォーム・拡張hit area・全視覚比較待ち |
 | select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | native overlay、複数選択、group/disabled、readOnly、typeahead、画面端の反転を追加。Form・任意anchor/trigger・SDKのWeb役割制約・全比較待ち |
 | sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | reveal/valueの基本テストあり。全比較待ち |
-| sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | resize/状態保持テストあり。peeking/mobile sheet等待ち |
+| sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | MenuSub/Item/Buttonと装飾ガイドを追加し、階層リスト・選択保持の2テストを追加。resize／sliding views検証も維持。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
 | slider | 値域、step、複数thumb、orientation、keyboard、label/tooltip | 全比較待ち |
 | surface | variant、境界、nested構成、padding、theme | 全比較待ち |
 | switch | 単体/Item/Group/Legend、default/neutral、3size、busy、150ms遷移 | ネイティブ描画・グループ・操作テスト追加。全API・位相比較待ち |

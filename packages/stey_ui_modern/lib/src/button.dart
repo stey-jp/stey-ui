@@ -104,6 +104,23 @@ class _SteyButtonState extends State<SteyButton> {
         widget.variant == SteyButtonVariant.secondaryDestructive;
     final ghost = widget.variant == SteyButtonVariant.ghost;
     final disabled = widget.onPressed == null || widget.loading;
+    final hasContent = switch (widget.child) {
+      Text(:final data, :final textSpan) =>
+        (data ?? textSpan?.toPlainText() ?? '').isNotEmpty,
+      SizedBox(width: 0, height: 0, child: null) => false,
+      _ => true,
+    };
+    final hasLeading = widget.icon != null || widget.loading;
+    final textLift = widget.shape == SteyButtonShape.base && hasContent
+        ? (widget.size == SteySize.xs || widget.size == SteySize.sm ? .5 : 1.0)
+        : 0.0;
+    final gap = emphasis
+        ? 6.0
+        : switch (widget.size) {
+            SteySize.xs || SteySize.sm => 4.0,
+            SteySize.base => 6.0,
+            SteySize.lg => 8.0,
+          };
     final compactHeight = widget.size == SteySize.xs
         ? 14.0
         : widget.size.height;
@@ -125,6 +142,26 @@ class _SteyButtonState extends State<SteyButton> {
               ? c.dangerEmphasisRing
               : c.brandEmphasisRing
         : c.line;
+    Widget? leading;
+    if (hasLeading) {
+      leading = Transform.translate(
+        offset: Offset(0, textLift),
+        child: widget.loading
+            ? SteyLoader(size: widget.size == SteySize.lg ? 16 : 14)
+            : IconTheme(
+                data: IconThemeData(
+                  size: widget.size.fontSize,
+                  color: foreground,
+                ),
+                child: widget.icon!,
+              ),
+      );
+      if (widget.shape != SteyButtonShape.base) {
+        leading = Flexible(
+          child: FittedBox(fit: BoxFit.scaleDown, child: leading),
+        );
+      }
+    }
     return Opacity(
       opacity: widget.onPressed == null || (widget.loading && emphasis)
           ? .5
@@ -183,10 +220,15 @@ class _SteyButtonState extends State<SteyButton> {
                   ? null
                   : WidgetStatePropertyAll(Size.square(compactHeight)),
               padding: WidgetStatePropertyAll(
-                EdgeInsets.symmetric(
-                  horizontal: widget.shape == SteyButtonShape.base
+                EdgeInsets.only(
+                  left: widget.shape == SteyButtonShape.base
+                      ? widget.size.padding -
+                            (hasLeading && textLift > 0 ? 2 : 0)
+                      : 0,
+                  right: widget.shape == SteyButtonShape.base
                       ? widget.size.padding
                       : 0,
+                  bottom: textLift * 2,
                 ),
               ),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -197,6 +239,8 @@ class _SteyButtonState extends State<SteyButton> {
                   package: 'stey_ui_modern',
                   fontSize: widget.size.fontSize,
                   fontWeight: FontWeight.w500,
+                  height: widget.size.fontSize == 12 ? 16 / 12 : 1.5,
+                  letterSpacing: 0,
                 ),
               ),
               foregroundColor: WidgetStateProperty.resolveWith((states) {
@@ -259,18 +303,11 @@ class _SteyButtonState extends State<SteyButton> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (widget.loading)
-                    SteyLoader(size: widget.size == SteySize.lg ? 16 : 14)
-                  else if (widget.icon != null)
-                    IconTheme(
-                      data: IconThemeData(size: 16, color: foreground),
-                      child: widget.icon!,
-                    ),
-                  if (widget.icon != null || widget.loading)
-                    const SizedBox(width: 6),
-                  Flexible(child: widget.child),
+                  ?leading,
+                  if (hasLeading && hasContent) SizedBox(width: gap),
+                  if (hasContent) Flexible(child: widget.child),
                   if (widget.trailing != null) ...[
-                    const SizedBox(width: 6),
+                    SizedBox(width: gap),
                     widget.trailing!,
                   ],
                 ],

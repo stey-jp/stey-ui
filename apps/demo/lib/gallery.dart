@@ -104,6 +104,23 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'sidebar-menu-sub' => SizedBox(
+                width: 240,
+                child: SteySidebarMenuSub(
+                  semanticLabel: 'Projects',
+                  children: [
+                    SteySidebarMenuSubButton(
+                      onPressed: () {},
+                      selected: sampleState == 'active',
+                      child: const Text('Workers'),
+                    ),
+                    SteySidebarMenuSubButton(
+                      onPressed: () {},
+                      child: const Text('Pages'),
+                    ),
+                  ],
+                ),
+              ),
               'dropdown' => const DropdownExample(fixture: true),
               'select' => SizedBox(
                 width: 280,
@@ -227,16 +244,37 @@ class _SteyGalleryState extends State<SteyGallery> {
                 semanticLabel: 'Save',
                 size: sampleSize,
                 shape: sampleShape,
+                icon: router.uri.queryParameters['icon'] == 'leading'
+                    ? const Icon(Icons.add, size: 16)
+                    : router.uri.queryParameters['icon'] == 'default'
+                    ? const Icon(Icons.add)
+                    : null,
                 variant: SteyButtonVariant.values.firstWhere(
                   (v) => v.name == variant,
                   orElse: () => SteyButtonVariant.secondary,
                 ),
-                child: Text(sampleShape == SteyButtonShape.base ? 'Save' : '+'),
+                child:
+                    router.uri.queryParameters['content'] == 'empty' ||
+                        sampleShape != SteyButtonShape.base &&
+                            [
+                              'leading',
+                              'default',
+                            ].contains(router.uri.queryParameters['icon'])
+                    ? const SizedBox.shrink()
+                    : Text(sampleShape == SteyButtonShape.base ? 'Save' : '+'),
               ),
             };
             return Scaffold(
               backgroundColor: c.base,
-              body: Center(child: child),
+              body: Center(
+                child: Directionality(
+                  textDirection:
+                      router.uri.queryParameters['direction'] == 'rtl'
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: child,
+                ),
+              ),
             );
           }
           if (router.uri.queryParameters['fixture'] == '1') {
@@ -616,6 +654,22 @@ class _ComponentExampleState extends State<ComponentExample> {
     return switch (widget.id) {
       'button' => form([
         group(buttons),
+        const SteyText('文字とアイコンの位置'),
+        group([
+          for (final size in SteySize.values)
+            SteyButton(
+              onPressed: action,
+              size: size,
+              icon: const Icon(Icons.add, size: 16),
+              child: Text('${sizeLabel(size.name)}で追加'),
+            ),
+          SteyButton(
+            onPressed: action,
+            semanticLabel: 'アイコンのみで追加',
+            icon: const Icon(Icons.add, size: 16),
+            child: const SizedBox.shrink(),
+          ),
+        ]),
         group([
           for (final size in SteySize.values)
             SteyButton(
@@ -1054,7 +1108,18 @@ class _ComponentExampleState extends State<ComponentExample> {
                       'settings',
                       '設定',
                       icon: Icons.settings_outlined,
-                      children: [SteySidebarItem('profile', 'プロフィール')],
+                      children: [
+                        SteySidebarItem('profile', 'プロフィール'),
+                        SteySidebarItem('notifications', '通知'),
+                        SteySidebarItem(
+                          'security',
+                          'セキュリティ',
+                          children: [
+                            SteySidebarItem('keys', 'APIキー'),
+                            SteySidebarItem('tokens', 'トークン'),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                   selected: tab,

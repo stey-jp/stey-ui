@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsRole;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +14,146 @@ Widget host(Widget child) => MaterialApp(
 );
 
 void main() {
+  testWidgets(
+    'Submenu exposes only real list items and its guide ignores input',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      var selected = '';
+      await tester.pumpWidget(
+        host(
+          SizedBox(
+            width: 240,
+            child: SteySidebarMenuSub(
+              semanticLabel: 'Projects',
+              children: [
+                SteySidebarMenuSubButton(
+                  onPressed: () => selected = 'workers',
+                  child: const Text('Workers'),
+                ),
+                SteySidebarMenuSubItem(
+                  child: SteySidebarMenuSubButton(
+                    onPressed: () => selected = 'pages',
+                    child: const Text('Pages'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      expect(
+        find.semantics.byPredicate(
+          (n) =>
+              !n.isMergedIntoParent &&
+              n.getSemanticsData().role == SemanticsRole.list,
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.semantics.byPredicate(
+          (n) =>
+              !n.isMergedIntoParent &&
+              n.getSemanticsData().role == SemanticsRole.listItem,
+        ),
+        findsNWidgets(2),
+      );
+      expect(find.bySemanticsLabel('Workers'), findsOneWidget);
+      expect(find.bySemanticsLabel('Pages'), findsOneWidget);
+      final list = tester.getRect(find.byType(SteySidebarMenuSub));
+      await tester.tapAt(Offset(list.left + 19.5, list.top + 17));
+      expect(selected, '');
+      await tester.tap(find.text('Workers'));
+      expect(selected, 'workers');
+      expect(tester.takeException(), isNull);
+      semantics.dispose();
+    },
+  );
+
+  testWidgets(
+    'Nested sidebar selection survives folding without extra focus targets',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      var selected = '', selections = 0;
+      await tester.pumpWidget(
+        host(
+          SizedBox(
+            height: 260,
+            child: StatefulBuilder(
+              builder: (context, setState) => SteySidebar(
+                items: const [
+                  SteySidebarItem(
+                    'settings',
+                    'Settings',
+                    children: [
+                      SteySidebarItem('profile', 'Profile'),
+                      SteySidebarItem(
+                        'security',
+                        'Security',
+                        children: [
+                          SteySidebarItem('keys', 'API keys'),
+                          SteySidebarItem('tokens', 'Tokens'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+                selected: selected,
+                onSelected: (value) => setState(() {
+                  selected = value;
+                  selections++;
+                }),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Security'));
+      await tester.pumpAndSettle();
+      expect(
+        find.semantics.byPredicate(
+          (n) =>
+              !n.isMergedIntoParent &&
+              n.getSemanticsData().role == SemanticsRole.list,
+        ),
+        findsNWidgets(2),
+      );
+      expect(
+        find.semantics.byPredicate(
+          (n) =>
+              !n.isMergedIntoParent &&
+              n.getSemanticsData().role == SemanticsRole.listItem,
+        ),
+        findsNWidgets(4),
+      );
+      await tester.tap(find.text('API keys'));
+      await tester.pumpAndSettle();
+      expect([selected, selections], ['keys', 1]);
+      Focus.of(tester.element(find.text('API keys'))).requestFocus();
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      await tester.pumpAndSettle();
+      expect(selections, 2);
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(SteySidebarMenuSub), findsNothing);
+      expect(find.bySemanticsLabel('API keys'), findsNothing);
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<SteySidebarMenuSubButton>(
+              find.widgetWithText(SteySidebarMenuSubButton, 'API keys'),
+            )
+            .selected,
+        isTrue,
+      );
+      expect(selections, 2);
+      semantics.dispose();
+    },
+  );
+
   testWidgets(
     'Resize handle clamps drag width and collapses below the minimum',
     (tester) async {

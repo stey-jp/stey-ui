@@ -7,6 +7,9 @@ The Table of Contents fragment correction additionally references
 https://github.com/cloudflare/kumo/commit/dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1.
 The Dropdown submenu update additionally references
 https://github.com/cloudflare/kumo/commit/1846759162f8dd1cd6028738fceefd2e0cd97d66.
+The Button optical alignment and Sidebar submenu updates additionally reference
+https://github.com/cloudflare/kumo/commit/cdb7e0fd930b9ecadc4904b0f153b42ab4d7e273
+and https://github.com/cloudflare/kumo/commit/17d094ec5f4d8ac7fbd7e3652a131c3c3afa0c5b.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.

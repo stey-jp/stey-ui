@@ -79,7 +79,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native optical text lift, icon compensation, content-aware left padding and size-specific gaps are implemented against cdb7e0f. Full props, custom layouts and visual/physical parity remain uncertified."
     },
     {
       "id": "button-group",
@@ -630,7 +630,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Resizing and sliding views are implemented and tested. Peeking, mobile sheet, collapse transitions, compound API and upstream visual parity remain pending."
+      "limitations": "Native submenu list/item/button, excluded decorative guide, retained nested selection and existing resize/sliding views are implemented. Full Sidebar parts, physical screen readers and visual parity remain uncertified."
     },
     {
       "id": "slider",

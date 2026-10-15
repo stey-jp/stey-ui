@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsRole;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -316,6 +318,137 @@ class SteySidebarItem {
 
 enum SteySidebarSide { left, right }
 
+/// A submenu list whose decorative guide is neither announced nor interactive.
+class SteySidebarMenuSub extends StatelessWidget {
+  const SteySidebarMenuSub({
+    super.key,
+    required this.children,
+    this.semanticLabel,
+  });
+  final List<Widget> children;
+  final String? semanticLabel;
+  @override
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    explicitChildNodes: true,
+    role: SemanticsRole.list,
+    label: semanticLabel,
+    child: Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 1,
+            children: [
+              for (final child in children)
+                child is SteySidebarMenuSubItem
+                    ? child
+                    : SteySidebarMenuSubItem(child: child),
+            ],
+          ),
+        ),
+        Positioned(
+          left: 19,
+          top: 1,
+          bottom: 1,
+          width: 1,
+          child: IgnorePointer(
+            child: ExcludeSemantics(
+              child: ColoredBox(color: SteyTheme.colorsOf(context).line),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class SteySidebarMenuSubItem extends StatelessWidget {
+  const SteySidebarMenuSubItem({super.key, required this.child});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    explicitChildNodes: true,
+    role: SemanticsRole.listItem,
+    child: child,
+  );
+}
+
+class SteySidebarMenuSubButton extends StatelessWidget {
+  const SteySidebarMenuSubButton({
+    super.key,
+    required this.child,
+    this.onPressed,
+    this.selected = false,
+    this.focusNode,
+    this.semanticLabel,
+  });
+  final Widget child;
+  final VoidCallback? onPressed;
+  final bool selected;
+  final FocusNode? focusNode;
+  final String? semanticLabel;
+  @override
+  Widget build(BuildContext context) {
+    final c = SteyTheme.colorsOf(context);
+    return MergeSemantics(
+      child: Semantics(
+        selected: selected,
+        label: semanticLabel,
+        child: TextButton(
+          focusNode: focusNode,
+          onPressed: onPressed,
+          style: ButtonStyle(
+            animationDuration: Duration.zero,
+            minimumSize: const WidgetStatePropertyAll(Size(0, 34)),
+            padding: const WidgetStatePropertyAll(
+              EdgeInsets.symmetric(horizontal: 12),
+            ),
+            alignment: Alignment.centerLeft,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.standard,
+            shape: const WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+            ),
+            backgroundColor: WidgetStateProperty.resolveWith(
+              (states) =>
+                  selected ||
+                      states.contains(WidgetState.hovered) ||
+                      states.contains(WidgetState.focused)
+                  ? c.tint
+                  : Colors.transparent,
+            ),
+            foregroundColor: WidgetStateProperty.resolveWith(
+              (states) =>
+                  states.contains(WidgetState.focused) ? c.strong : c.text,
+            ),
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+            textStyle: const WidgetStatePropertyAll(
+              TextStyle(
+                fontFamily: 'Inter',
+                package: 'stey_ui_modern',
+                fontSize: 13,
+                height: 1 / .85,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0,
+              ),
+            ),
+          ),
+          child: ExcludeSemantics(
+            excluding: semanticLabel != null,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class SteySidebar extends StatefulWidget {
   const SteySidebar({
     super.key,
@@ -426,70 +559,120 @@ class _SteySidebarState extends State<SteySidebar> {
   Widget build(BuildContext context) {
     final c = SteyTheme.colorsOf(context);
     Widget item(SteySidebarItem entry, {int depth = 0}) => Padding(
-      padding: EdgeInsets.only(left: depth * 12, bottom: 2),
+      padding: EdgeInsets.only(bottom: depth == 0 ? 2 : 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: widget.selected == entry.id ? c.tint : null,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Tooltip(
-              message: entry.label,
-              excludeFromSemantics: true,
-              child: SteyButton(
-                variant: SteyButtonVariant.ghost,
-                shape: isCollapsed
-                    ? SteyButtonShape.square
-                    : SteyButtonShape.base,
-                semanticLabel: isCollapsed ? entry.label : null,
-                alignment: isCollapsed
-                    ? Alignment.center
-                    : Alignment.centerLeft,
-                onPressed: () {
-                  if (entry.children.isNotEmpty) {
-                    setState(
-                      () => expanded.contains(entry.id)
-                          ? expanded.remove(entry.id)
-                          : expanded.add(entry.id),
-                    );
-                  } else {
-                    widget.onSelected(entry.id);
-                  }
-                },
-                icon: isCollapsed || entry.icon == null
-                    ? null
-                    : Icon(entry.icon, size: 16),
-                trailing: isCollapsed
-                    ? null
-                    : entry.children.isNotEmpty
-                    ? Icon(
-                        expanded.contains(entry.id)
-                            ? Icons.expand_less
-                            : Icons.expand_more,
-                        size: 14,
-                      )
-                    : entry.badge == null || isCollapsed
-                    ? null
-                    : SteyBadge(child: Text(entry.badge!)),
-                child: isCollapsed
-                    ? ExcludeSemantics(
-                        child: entry.icon != null
-                            ? Icon(entry.icon, size: 16)
-                            : Text(
-                                entry.label.isEmpty
-                                    ? ''
-                                    : entry.label.substring(0, 1),
-                              ),
-                      )
-                    : Text(entry.label),
-              ),
+          MergeSemantics(
+            child: Semantics(
+              expanded: entry.children.isEmpty
+                  ? null
+                  : expanded.contains(entry.id) && !isCollapsed,
+              child: depth > 0 && !isCollapsed
+                  ? SteySidebarMenuSubButton(
+                      selected: widget.selected == entry.id,
+                      onPressed: () {
+                        if (entry.children.isNotEmpty) {
+                          setState(
+                            () => expanded.contains(entry.id)
+                                ? expanded.remove(entry.id)
+                                : expanded.add(entry.id),
+                          );
+                        } else {
+                          widget.onSelected(entry.id);
+                        }
+                      },
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          if (entry.icon != null) Icon(entry.icon, size: 16),
+                          Expanded(
+                            child: Text(
+                              entry.label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (entry.children.isNotEmpty)
+                            Icon(
+                              expanded.contains(entry.id)
+                                  ? Icons.expand_less
+                                  : Icons.expand_more,
+                              size: 14,
+                            )
+                          else if (entry.badge != null)
+                            SteyBadge(child: Text(entry.badge!)),
+                        ],
+                      ),
+                    )
+                  : DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: widget.selected == entry.id ? c.tint : null,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Tooltip(
+                        message: entry.label,
+                        excludeFromSemantics: true,
+                        child: SteyButton(
+                          variant: SteyButtonVariant.ghost,
+                          shape: isCollapsed
+                              ? SteyButtonShape.square
+                              : SteyButtonShape.base,
+                          semanticLabel: isCollapsed ? entry.label : null,
+                          alignment: isCollapsed
+                              ? Alignment.center
+                              : Alignment.centerLeft,
+                          onPressed: () {
+                            if (entry.children.isNotEmpty) {
+                              setState(
+                                () => expanded.contains(entry.id)
+                                    ? expanded.remove(entry.id)
+                                    : expanded.add(entry.id),
+                              );
+                            } else {
+                              widget.onSelected(entry.id);
+                            }
+                          },
+                          icon: isCollapsed || entry.icon == null
+                              ? null
+                              : Icon(entry.icon, size: 16),
+                          trailing: isCollapsed
+                              ? null
+                              : entry.children.isNotEmpty
+                              ? Icon(
+                                  expanded.contains(entry.id)
+                                      ? Icons.expand_less
+                                      : Icons.expand_more,
+                                  size: 14,
+                                )
+                              : entry.badge == null || isCollapsed
+                              ? null
+                              : SteyBadge(child: Text(entry.badge!)),
+                          child: isCollapsed
+                              ? ExcludeSemantics(
+                                  child: entry.icon != null
+                                      ? Icon(entry.icon, size: 16)
+                                      : Text(
+                                          entry.label.isEmpty
+                                              ? ''
+                                              : entry.label.substring(0, 1),
+                                        ),
+                                )
+                              : Text(entry.label),
+                        ),
+                      ),
+                    ),
             ),
           ),
           if (!isCollapsed && expanded.contains(entry.id))
-            ...entry.children.map((e) => item(e, depth: depth + 1)),
+            SteySidebarMenuSub(
+              semanticLabel: entry.label,
+              children: [
+                for (final child in entry.children)
+                  item(child, depth: depth + 1),
+              ],
+            ),
         ],
       ),
     );
