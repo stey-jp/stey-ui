@@ -41,7 +41,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | input-group | parts、padding、border/ring、icon/addon、disabled/focus | 全比較待ち |
 | label | tooltipのkeyboard/touch、optional、asContent、関連付け | 情報ボタンのタッチ・keyboardと読み上げテスト済み。全比較待ち |
 | layer-card | 複合parts、nested radius、header/footer、border、responsive | 全比較待ち |
-| layer-dialog | 層構造、全parts、modal/focus、scroll、sticky境界 | 全比較待ち |
+| layer-dialog | 層構造、全parts、modal/focus、scroll、sticky境界 | 専用多層面・640pxでのシート切替、Action／Primary alias、alert・pending・split menu、固定見出し／操作欄を追加。14回帰テスト。全portal／Drawer挙動・視覚／実機認証は未完了。[API対応](layer-dialog-api-mapping.md) |
 | link | variant、外部link、visited/hover/focus、disabled、asChild | 全比較待ち |
 | loader | 全size、三点の位相/opacity、loop、ラベル | 周期テストあり。公式との位相を揃えた視覚比較待ち |
 | menubar | 全parts、左右/上下、Submenu、focus、selection | 全比較待ち |

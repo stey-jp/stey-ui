@@ -13,6 +13,9 @@ class SteyMessages {
 
   String get loading => japanese ? '読み込み中' : 'Loading';
   String get closeDialog => japanese ? 'ダイアログを閉じる' : 'Close dialog';
+  String get close => japanese ? '閉じる' : 'Close';
+  String get cancel => japanese ? 'キャンセル' : 'Cancel';
+  String get moreActions => japanese ? 'その他の操作' : 'More actions';
   String get copied => japanese ? 'コピーしました' : 'Copied';
   String copy(String text) => japanese ? '$textをコピー' : 'Copy $text';
   String show(String label) => japanese ? '$labelを表示' : 'Show $label';

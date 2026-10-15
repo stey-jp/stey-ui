@@ -464,12 +464,12 @@
         "packages/kumo/src/components/layer-dialog/layer-dialog.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/overlay.dart"
+        "packages/stey_ui_modern/lib/src/layer_dialog.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native layered desktop/mobile surfaces, Action/Actions/Primary alias, split menu, alert/pending and sticky scrolling are implemented. Full portal/Root/Drawer APIs, swipe physics, scroll fades, physical screen readers and visual parity remain uncertified."
     },
     {
       "id": "link",

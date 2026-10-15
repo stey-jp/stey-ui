@@ -8,6 +8,7 @@ import 'messages.dart';
 
 export 'command.dart';
 export 'dropdown.dart';
+export 'layer_dialog.dart';
 
 class SteyDialog {
   static Future<T?> show<T>(
@@ -84,24 +85,6 @@ class SteyDialog {
       ),
     );
   }
-}
-
-class SteyLayerDialog {
-  static Future<T?> show<T>(
-    BuildContext context, {
-    required String title,
-    String? description,
-    required Widget child,
-    List<Widget> actions = const [],
-    double width = 600,
-  }) => SteyDialog.show<T>(
-    context,
-    title: title,
-    description: description,
-    child: SteyLayerCard(child: child),
-    actions: actions,
-    width: width,
-  );
 }
 
 class SteyPopover extends StatelessWidget {

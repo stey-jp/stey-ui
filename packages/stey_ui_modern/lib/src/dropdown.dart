@@ -107,6 +107,7 @@ class SteyDropdownMenu extends StatefulWidget {
     this.sideOffset = 8,
     this.alignOffset = 0,
     this.submenuSideOffset = 2,
+    this.triggerBuilder,
   }) : assert(width == null || width >= 144);
   final List<SteyMenuItem> items;
   final Widget child;
@@ -116,6 +117,10 @@ class SteyDropdownMenu extends StatefulWidget {
   final String? label;
   final double? width;
   final double sideOffset, alignOffset, submenuSideOffset;
+
+  /// Custom native trigger. Use the supplied callback and focus node so menu
+  /// dismissal restores focus and the existing keyboard shortcuts still apply.
+  final Widget Function(BuildContext, VoidCallback?, FocusNode)? triggerBuilder;
   @override
   State<SteyDropdownMenu> createState() => _DropdownState();
 }
@@ -176,7 +181,8 @@ class _DropdownState extends State<SteyDropdownMenu> {
       ],
       builder: (context, controller, _) => CallbackShortcuts(
         bindings: {
-          const SingleActivator(LogicalKeyboardKey.escape): controller.close,
+          if (open)
+            const SingleActivator(LogicalKeyboardKey.escape): controller.close,
           const SingleActivator(LogicalKeyboardKey.arrowDown): () =>
               openFromKeyboard(false),
           const SingleActivator(LogicalKeyboardKey.arrowUp): () =>
@@ -184,17 +190,27 @@ class _DropdownState extends State<SteyDropdownMenu> {
         },
         child: Semantics(
           expanded: open,
-          child: SteyButton(
-            focusNode: triggerFocus,
-            semanticLabel: widget.label,
-            onPressed: widget.disabled || widget.items.isEmpty
-                ? null
-                : () => controller.isOpen
-                      ? controller.close()
-                      : controller.open(),
-            trailing: const Icon(Icons.expand_more, size: 16),
-            child: widget.child,
-          ),
+          child:
+              widget.triggerBuilder?.call(
+                context,
+                widget.disabled || widget.items.isEmpty
+                    ? null
+                    : () => controller.isOpen
+                          ? controller.close()
+                          : controller.open(),
+                triggerFocus,
+              ) ??
+              SteyButton(
+                focusNode: triggerFocus,
+                semanticLabel: widget.label,
+                onPressed: widget.disabled || widget.items.isEmpty
+                    ? null
+                    : () => controller.isOpen
+                          ? controller.close()
+                          : controller.open(),
+                trailing: const Icon(Icons.expand_more, size: 16),
+                child: widget.child,
+              ),
         ),
       ),
     ),

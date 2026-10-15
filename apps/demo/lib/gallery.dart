@@ -9,6 +9,7 @@ import 'demo_labels.dart';
 import 'dropdown_example.dart';
 import 'gallery_route_uri.dart';
 import 'table_of_contents_example.dart';
+import 'layer_dialog_example.dart';
 
 const pendingComponents = {'cloudflare-logo'};
 
@@ -104,6 +105,9 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'layer-dialog' => LayerDialogSample(
+                parameters: router.uri.queryParameters,
+              ),
               'sidebar-menu-sub' => SizedBox(
                 width: 240,
                 child: SteySidebarMenuSub(
@@ -1214,7 +1218,8 @@ class _ComponentExampleState extends State<ComponentExample> {
         external: true,
         child: const Text('Kumoドキュメント'),
       ),
-      'dialog' || 'layer-dialog' => SteyButton(
+      'layer-dialog' => const LayerDialogExample(),
+      'dialog' => SteyButton(
         onPressed: () => SteyDialog.show(
           context,
           title: 'Workerを編集',
