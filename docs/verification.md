@@ -1,4 +1,4 @@
-# 検証結果（Dropdown更新：2026-10-15）
+# 検証結果（Button／Sidebar更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -131,3 +131,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - dropdown_desktop：93 / 96 / 81 / 100。実行警告0件。
 
 非スコア項目・Diagnosticsを含む監査値はJSONのdropdownへ保持しています。SDKの起動・配信量、Intl.v8BreakIterator、SkWasmの未同梱source map、viewport端で切れたSidebar行の意味情報等が残り、全カテゴリ100点は未達です。共有CIの最新設定で公開repoは対象外です。クラウド同期・実Batch往復は引き続き無効／未検証で、API費用は発生していません。本番反映先はGitHub main、公開Webホスティングとpub.dev公開は未実施です。
+
+## Button・Sidebarの追加検証（2026-10-16）
+
+最終ソースSHAは `00338bd4308021f053a3ac53270a0441fd7da8b9`。静的解析0件、ライブラリ86件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。新規8件で文字とiconの位置・空children・compact形状・RTL・loading、階層の意味情報／選択保持と640px境界を検査しています。Linux／macOS／iOSの今回ビルドと、全物理実機・screen reader操作は未検証です。Androidには既存SDK tools／Android StudioのXML世代差の警告が残ります。
+
+Buttonの文字を0.5／1px上げ、先頭iconを中央へ戻し、icon＋文字の左paddingを2px減らしました。既定iconは文字の12／14pxに追従し、明示サイズは保持します。Sidebar.MenuSub／Item／Buttonに相当するnative Widgetを追加し、装飾線を入力・読み上げ対象から除外しました。展開・現在項目はボタン自身へまとめています。[API対応](button-sidebar-api-mapping.md)を参照してください。
+
+Mobile監査で12pxのresize操作領域を検出したため、公式のhidden／sm:blockと同じ640px境界を適用しました。デスクトップの12px領域・2px線は維持し、Mobileでは実際のハンドルを描画しません。意味情報だけを消した対策ではありません。320／639pxの非表示、640／1280pxの表示とナビゲーション維持をWidget testで確認しました。
+
+実Chromeの10項目で1280px Light/Dark、320px Light/Dark、390px Lightの空childrenボタン、階層リスト、選択保持、開閉とkeyboardを確認し、実行時エラーは0件です。全URL監査は106 URL・108条件、実行時エラー0件。残る108件のIssueはFlutter SDKのIntlV8BreakIteratorです。
+
+公式SHA `7e0ff40` とButton 70状態・Sidebar.MenuSub 8状態を比較し、全78組で幅・高さが0.1 CSS px以内でした。Sidebarは240×69px。threshold 0.1の画像差分はButton 0.00〜16.81%、Sidebar 0.93〜1.24%です。icon・文字・影・gradient等の差分と、位相未同期のloadingが残り、完全一致の認証ではありません。画像は `e44e164db77f660859bc756967b387fc34e334b8` 時点で、後続のroot resizeハンドル切替はこのfixtureのWidgetを変えていません。比較用ページのDOCTYPE不足を修正して公式側を標準モードで再取得し、公式側のIssueは0件です。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- button_mobile：80 / 100 / 81 / 100。実行警告0件。
+- button_desktop：93 / 96 / 81 / 100。実行警告0件。
+- sidebar_mobile：74 / 100 / 81 / 100。実行警告0件。
+- sidebar_desktop：88 / 96 / 81 / 100。実行警告0件。
+
+非スコア項目・Diagnosticsと修正前の測定値もJSONのbutton_sidebarへ保持しています。Desktopでviewport端に2pxだけ見えるSidebar行、SDKのIntl.v8BreakIterator、SkWasmの未同梱source map、Wasm／フォントの配信と起動処理などが残り、全カテゴリ100点は未達です。SDK／DOM改造や検査時だけの機能抑止はしていません。
+
+公式の新しいFlow更新 `7e0ff40`（margin付きanchorとconnectorの位置補正）も検出し、LayerDialog aliasと併せて対応待ちに記録しました。同期済みSHAと承認済み視覚ゲートは進めていません。公開repoは共有CIの最新設定でも対象外です。クラウド同期と実Batch往復は無効／未検証、API呼出・費用は0です。本番反映先はGitHub mainで、Webホスティングとpub.dev公開は行っていません。
