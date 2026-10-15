@@ -1,8 +1,8 @@
-# 検証結果（2026-10-13、日本語デモ更新：2026-10-14）
+# 検証結果（目次更新：2026-10-15）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
-## 成功した検証
+## 過去の検証（各ソースSHA時点）
 
 - Flutter 3.47.0 / Dart 3.13.0で `flutter analyze`：指摘0。
 - ライブラリのWidget test：52件成功。キーボード、無効／loading、入力の重複しない読み上げ、フォームのrequired／optionalとエラー、Loaderの合成周期と動作低減設定、秘密表示、タグ、タブ、検索候補、ダイアログ、折り畳み、カレンダー3モードと年境界、Sidebarの読み上げ名・ドラッグの上下限・左右のキーボード操作・sliding viewsの入力保持と非表示画面のフォーカス／読み上げ除外、CommandPaletteのグループ・無効項目・Ctrl+Enter・検索・強調・loading・Escapeを検証。
@@ -73,7 +73,7 @@ Androidビルドには既存SDK command-line toolsとAndroid Studioの世代差�
 
 OpenAIの制限付きキーをGitHub SecretsのOPENAI_API_KEYへ保存済み。
 実Batch送信→回収→PR作成は、クラウド実行が未接続のため未検証・無効です。
-公式mainの更新 `dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1` をCLIで検出・解析しました。Table of Contentsの不正なURLハッシュ処理の修正です。Flutter側にはURLハッシュ／スクロール追跡hookが未実装のため、追加対応が必要です。同期済みSHAは進めていません。[差分レビュー](../upstream/latest-review.json)を記録し、Batch APIは呼んでいません。
+公式mainの更新 `dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1` をCLIで検出・解析しました。Table of Contentsの不正なURLハッシュ処理の修正です。当時未実装だったURLハッシュ／スクロール追跡は、2026-10-15に追加しました。全状態の認証は未完了です。同期済みSHAは進めていません。[差分レビュー](../upstream/latest-review.json)を記録し、Batch APIは呼んでいません。
 Webデモはローカルで検証済み、公開ホスティングは未設定です。pub.devへは公開していません。
 
 ## 日本語デモの追加検証（2026-10-14）
@@ -85,3 +85,26 @@ Webデモはローカルで検証済み、公開ホスティングは未設定�
 日本語版Lighthouse（Performance / Accessibility / Best practices / SEO）はMobile：73 / 100 / 81 / 100、Desktop：89 / 96 / 81 / 100。全カテゴリ100点は未達です。非スコア項目を含む診断はJSONの `japanese_demo` に記録しています。英語の公式比較サンプルと過去のnative検証は、それぞれのソースSHAの記録として保持しています。今回の本番反映先はユーザー指定のGitHub mainです。公開Webホスティングや新しいクラウド接続は追加していません。
 
 forced reflowの追加診断は、生成された `main.dart.mjs` のDOM focus・幅・scroll取得に対応していました。アプリ独自のbootstrapは入力IDの付与だけを行い、layout値を読みません。SDKのフォーカス／意味情報の処理を無効化する対策は採用していません。日本語フォントと標準ローカライズを保持した状態で、エンジン起動・配信量・実行負荷の指摘が残っています。
+
+## 目次の追加検証（2026-10-15）
+
+ソースSHAは `3c42e158f92a85f4a6f0ae44882318d3e8c288cd`。静的解析0件、ライブラリ64件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。目次12件とRouter通知2件の回帰テストを追加しています。今回のnative実機操作とLinux／macOS／iOSビルドは未検証です。
+
+Title／List／Item／Group、文書順の見出し追跡、150msの選択固定、offset、キー変更、破棄時の購読解除、raw %・Unicode・不正UTF-8のhashに対応しました。日本語デモでスクロール・階層・リンクを操作できます。[API対応](table-of-contents-api-mapping.md)に利用方法と制限を記載しています。
+
+実Chromeの14項目で初期deep link、子から親への誤選択防止、履歴、キーボード、ホイール、テーマ保持、320／390pxのLight/Darkとタッチを確認し、実行時エラーは0件です。既存のギャラリーURL・入力操作の回帰確認も成功しました。Flutter Webの既定URL設定によるhash消失、base hrefによるquery脱落、engineの不正UTF-8デコードは、標準設定とデモの通知境界で修正しています。
+
+全URLの実Chrome監査は106 URL・108画面条件、実行時エラー0件です。SDKのIntlV8BreakIteratorが108件残ります。追加の不正hash操作ではChromeのNavigationEntryMarkedSkippableが1件記録されました。スクリプトによる自動履歴へのブラウザ介入で、実際の戻る／進むと最終hash保持は成功しています。警告を無効化・除外していません。
+
+公式固定SHAとの6状態の描画領域はすべて280×180pxで一致しています。文字サイズ・字間・字下げ・長文のclipを修正後のpixelmatch差分は1.17〜1.36%（threshold 0.1）。残る文字描画等の差分があり、全状態の視覚認証・完全一致とは扱いません。承認済み視覚ゲートへの昇格、同期済みSHAの更新は行っていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：70 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：91 / 96 / 81 / 100。実行警告0件。
+- toc_mobile：65 / 100 / 81 / 100。実行警告0件。
+- toc_desktop：92 / 96 / 81 / 100。実行警告0件。
+
+非スコア項目を含む全監査値はJSONのtable_of_contentsへ保持しています。Flutter engineの起動・配信量、Intl.v8BreakIterator、SkWasmの未同梱source map、viewport端で切れたSidebar行の意味情報などの制限が残り、全カテゴリ100点は未達です。SDK・意味情報を改造／抑止する対策は採用していません。
+
+新たな公式main `1846759162f8dd1cd6028738fceefd2e0cd97d66` までの更新も検出しています。LayerDialogのalias、Sidebarの意味情報、Buttonの光学的な余白、Dropdownのsubmenu更新は対応待ちです。クラウド同期は引き続き無効で、Batch APIは呼び出していません。共有CIの最新設定も公開リポジトリを対象外としています。公開Webホスティングとpub.dev公開は行っていません。
