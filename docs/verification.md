@@ -1,4 +1,4 @@
-# 検証結果（Flow canvas更新：2026-10-16）
+# 検証結果（Flow最大幅・折り返し更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -242,3 +242,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・DiagnosticsもJSONのflow_canvasへ保持しています。SDKのIntl呼出・未配布のSkWasm map、配信／起動負荷、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機とscreen readerは未検証です。
 
 残りは狭幅のCSS縮小測定、極端なmargin、全入力／視覚状態と他コンポーネントの不足です。[6工程](completion-plan.md)を継続します。共有CIの最新main設定でも公開repoは対象外で、クラウド接続保留を維持しています。Workflow起動・実Batch往復は未実施、API呼出・費用は0です。GitHub mainが本番反映先で、Webホスティング・pub.dev公開は行っていません。
+
+## Flow最大幅・折り返しの追加検証（2026-10-16）
+
+ソースSHAは `33014820b5f786a4a58f61247a196fc422533c8c`。静的解析0件、ライブラリ138件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。追加7テストでpadding込みの最大幅、短い自然幅、明示／global幅との優先順位、固定高さ、幅の伸縮・状態保持、縦接続とアンカー、intrinsic不要のcustom Widget、文字拡大・RTLを検証しました。
+
+SteyFlowNode.maxWidthを追加し、必要な場合だけ自然幅を制限して折り返し、高さと後続の配置を再計測します。幅未指定時の従来の自然寸法は維持しています。日本語デモでは画面幅に合わせた上限・説明の長さ・配置方向を操作できます。[API対応と制限](flow-api-mapping.md)を参照してください。
+
+実Chromeの新規10項目と既存canvas 10・構成10・ButtonGroup／アンカー12項目が成功しました。1280px Light/Dark、320px Light/Dark、390px Lightで幅と高さの変化・復帰・ノード保持を確認し、実行時エラー0件。全URL監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。操作監査にも5／5／5／10件の同警告が残ります。
+
+公式SHA `7e0ff40` と、160／280／320pxの親幅・120／200pxの最大幅・長短の説明・縦横・Light/Darkの24条件を比較しました。canvas寸法は24組すべて、全ノードが見える縦配置12組のノード位置・寸法も0.1 CSS px以内でした。threshold 0.1の画像差分は0.05〜1.16%です。公式の未変更Flow.Nodeへ利用側のCSS max-widthを適用した比較です。横配置でclipされた意味情報を全ノードの座標とは扱いません。公式側は標準モード、Issue・実行時エラー0件。完全一致・全状態認証・承認済み視覚ゲートではありません。
+
+最大幅が実質無制限の公式縦配置では、初期host 160pxの説明が128×100px、初期host 320pxでは288×58pxになり、親幅を後から入れ替えてもそれぞれの寸法を保ちました。この履歴依存のCSS auto-widthはFlutterの既定自然幅と異なり、今回は未対応です。明示したmaxWidthでの折り返し成功と区別し、測定値をJSONへ保存しました。同期済みSHAは進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- flow_gallery_mobile：78 / 100 / 81 / 100。実行警告0件。
+- flow_gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- flow_wrap_mobile：96 / 100 / 81 / 100。実行警告0件。
+- flow_wrap_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのflow_wrapへ保持しています。SDKのIntl呼出・未配布のSkWasm map、配信／起動負荷、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
+
+既定のCSS縮小測定・全入力／視覚状態と他コンポーネントの不足は[6工程](completion-plan.md)で継続します。共有CIの最新mainでも公開repoは対象外で、クラウド接続保留を維持しています。Workflow起動・実Batch往復は未実施、API呼出・費用は0です。GitHub mainが本番反映先で、Webホスティング・pub.dev公開は行っていません。
