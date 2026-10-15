@@ -189,6 +189,7 @@ class _FlowCanvasViewport extends SingleChildRenderObjectWidget {
   void updateRenderObject(BuildContext context, _RenderFlowCanvas object) {
     object.config = this;
     object.markNeedsLayout();
+    object.markNeedsSemanticsUpdate();
   }
 }
 

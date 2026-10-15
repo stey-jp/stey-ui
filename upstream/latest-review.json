@@ -74,5 +74,5 @@
   "button_group_review_source_sha": "7e0ff40546f08405d05bc9754f0ff0fd009ece0a",
   "button_group_regression_tests": 5,
   "flow_composition_regression_tests": 8,
-  "flow_canvas_regression_tests": 11
+  "flow_canvas_regression_tests": 12
 }

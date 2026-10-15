@@ -162,43 +162,46 @@ class _SteyFlowState extends State<SteyFlow> {
                 explicitChildNodes: true,
                 role: SemanticsRole.listItem,
                 enabled: n.onPressed == null ? null : !n.disabled,
-                child: _AnchorScope(
-                  entry: geometry.nodes[n.id]!,
-                  child: n.custom
-                      ? n.child
-                      : n.onPressed != null
-                      ? SteyButton(
-                          onPressed: n.disabled ? null : n.onPressed,
-                          child: n.child,
-                        )
-                      : Container(
-                          alignment: AlignmentDirectional.centerStart,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.basic,
+                  child: _AnchorScope(
+                    entry: geometry.nodes[n.id]!,
+                    child: n.custom
+                        ? n.child
+                        : n.onPressed != null
+                        ? SteyButton(
+                            onPressed: n.disabled ? null : n.onPressed,
+                            child: n.child,
+                          )
+                        : Container(
+                            alignment: AlignmentDirectional.centerStart,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colors.base,
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: .1),
+                                  offset: const Offset(0, 1),
+                                  blurRadius: .8660254,
+                                  spreadRadius: -1,
+                                ),
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: .1),
+                                  offset: const Offset(0, 1),
+                                  blurRadius: 1.7320508,
+                                ),
+                                // CSS shadows paint front to back; Flutter paints
+                                // back to front. Match CSS blur/2 with Skia sigma.
+                                BoxShadow(color: colors.line, spreadRadius: 1),
+                              ],
+                            ),
+                            child: n.child,
                           ),
-                          decoration: BoxDecoration(
-                            color: colors.base,
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: .1),
-                                offset: const Offset(0, 1),
-                                blurRadius: .8660254,
-                                spreadRadius: -1,
-                              ),
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: .1),
-                                offset: const Offset(0, 1),
-                                blurRadius: 1.7320508,
-                              ),
-                              // CSS shadows paint front to back; Flutter paints
-                              // back to front. Match CSS blur/2 with Skia sigma.
-                              BoxShadow(color: colors.line, spreadRadius: 1),
-                            ],
-                          ),
-                          child: n.child,
-                        ),
+                  ),
                 ),
               ),
           ],

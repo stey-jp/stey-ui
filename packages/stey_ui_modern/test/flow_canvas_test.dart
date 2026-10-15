@@ -1,7 +1,6 @@
-import 'dart:ui' show SemanticsAction, SemanticsRole;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 
@@ -60,6 +59,42 @@ Future<void> wheel(WidgetTester tester, Offset delta) async {
 }
 
 void main() {
+  testWidgets('Mouse cursor distinguishes background, nodes, drag and cancel', (
+    t,
+  ) async {
+    await t.pumpWidget(host(diagram()));
+    await t.pumpAndSettle();
+    final mouse = await t.createGesture(kind: PointerDeviceKind.mouse);
+    final background = t.getTopLeft(viewport()) + const Offset(260, 8);
+    await mouse.addPointer(location: background);
+    await mouse.moveTo(background);
+    await t.pump();
+    expect(
+      RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+      SystemMouseCursors.grab,
+    );
+    await mouse.moveTo(t.getCenter(find.byKey(first)));
+    await t.pump();
+    expect(
+      RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+      SystemMouseCursors.basic,
+    );
+    await mouse.moveTo(background);
+    await mouse.down(background);
+    await mouse.moveBy(const Offset(-30, 0));
+    await t.pump();
+    expect(
+      RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+      SystemMouseCursors.grabbing,
+    );
+    await mouse.cancel();
+    await t.pumpAndSettle();
+    expect(
+      RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+      SystemMouseCursors.grab,
+    );
+    await mouse.removePointer();
+  });
   testWidgets('Trackpad pans without scaling and leaves node gestures alone', (
     t,
   ) async {
