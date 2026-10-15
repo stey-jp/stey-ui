@@ -1,4 +1,4 @@
-# 検証結果（Flow構成・自動レイアウト更新：2026-10-16）
+# 検証結果（Flow canvas更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -221,3 +221,24 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 次の不足はFlowのcanvas全操作・狭い親幅での測定・極端なmarginと全視覚状態です。他の群も含む[6工程](completion-plan.md)は継続中です。共有CIの公開repo除外とクラウド接続保留を維持し、実Batch往復は未検証です。API呼出・費用は0、本番反映先はGitHub mainです。Webホスティング・pub.dev公開は行っていません。
 
 残る指摘の内訳：Intlの非推奨呼出はFlutter SDK、SkWasm mapは公式配布物の不足です。アプリとloaderのmapは配信済みで、SDK改造・警告抑止・架空mapの追加は行いません。Desktopのtarget-sizeはviewport端で224×2pxだけ見える「グリッド」行の意味情報が原因です。スクロール・focus・読み上げを保持する修正は未解決です。Wasm／renderer／fontの配信量と初期処理の最適化も継続課題です。
+
+## Flow canvasの追加検証（2026-10-16）
+
+ソースSHAは `0d5ef64f954ddd7c26d056e4fe32787417087993`。静的解析0件、ライブラリ131件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。canvas専用12テストで独立したwheel軸・両端clamp・背景mouse/touch drag・ノード操作除外・trackpadの倍率固定・resize補正・親スクロールへの委譲・native Semantics移動・pointer cancel・ノードと背景のcursor・自然寸法を確認しました。
+
+従来のInteractiveViewerを公式と同じ1倍固定の背景パンに置き換え、hover時の6pxスクロール表示・10%以上のthumb・overflow通知を追加しました。ノード上のdragではcanvasを動かさず、ノード自身の操作を保持します。interactive: falseの既存横スクロールとcanvas: falseを維持します。[API対応と制限](flow-api-mapping.md)を参照してください。
+
+実Chromeの新規10項目、既存の構成10項目・ButtonGroup／アンカー12項目が成功しました。1280px Light/Dark、320px Light/Dark、390px Lightで、背景drag／wheel復帰・ノードdragの非移動・内容縮小後のclamp・callback・クリック状態保持を確認しています。狭幅ではcanvas全体をviewport内へスクロールして操作し、live-regionの読み上げ用複製を画面のstatusから区別しています。全URL監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。各操作監査の同警告は5／5／10件、実行時エラー0件でした。
+
+公式SHA `7e0ff40` と320×180px／280×180px・Light/Dark・初期／wheel／末端／収まる内容の16条件を比較しました。viewportの寸法は全組で0.1 CSS px以内、threshold 0.1の画像差分は0.08〜0.50%でした。paddingは16px、通常ノードは120×80px、hover表示ありです。公式側は標準モードでIssue・実行時エラー0件。clipされた意味情報を完全なノード座標の測定とは扱わず、全状態認証・承認済み視覚ゲート・同期済みSHAは進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- flow_gallery_mobile：74 / 100 / 81 / 100。実行警告0件。
+- flow_gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- flow_canvas_mobile：95 / 100 / 81 / 100。実行警告0件。
+- flow_canvas_desktop：98 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのflow_canvasへ保持しています。SDKのIntl呼出・未配布のSkWasm map、配信／起動負荷、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機とscreen readerは未検証です。
+
+残りは狭幅のCSS縮小測定、極端なmargin、全入力／視覚状態と他コンポーネントの不足です。[6工程](completion-plan.md)を継続します。共有CIの最新main設定でも公開repoは対象外で、クラウド接続保留を維持しています。Workflow起動・実Batch往復は未実施、API呼出・費用は0です。GitHub mainが本番反映先で、Webホスティング・pub.dev公開は行っていません。
