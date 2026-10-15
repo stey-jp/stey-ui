@@ -5,8 +5,8 @@
 個別のテスト成功や診断画像だけで全体の再現完了とは扱いません。
 
 1. **不足実装**：全群のAPI・複合構成・挙動を対応表に沿って埋める。
-   ButtonGroupの連結、Flowのmargin付きアンカーを追加。Flow全構成・自動寸法・縦配置、
-   Dropdownの全配置／遷移、LayerDialogの全Drawer挙動などは残る。
+   ButtonGroupの連結、Flowのmargin付きアンカー・List/Parallel・自動寸法・縦配置を追加。
+   Flowの全canvas操作、Dropdownの全配置／遷移、LayerDialogの全Drawer挙動などは残る。
 2. **全状態比較**：Light/Dark・画面幅・hover/focus/disabled/loading・動的内容を比較して修正する。
    診断画像を承認済み視覚ゲートと分け、完全検証後に同期済みSHAを進める。
 3. **アクセシビリティとWeb品質**：キーボード・読み上げ・拡大を検証する。

@@ -34,7 +34,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | dropdown | Item/Group/Separator/Checkbox/Radio/Submenu、disabled、keyboard、位置/衝突 | native階層・選択・位置・RTLの14テストと日本語デモを追加。アニメーション・全衝突規則・全比較は未完了。[API対応](dropdown-api-mapping.md) |
 | empty | variant、icon、title、description、action、狭幅 | 全比較待ち |
 | field | 全parts、validation match、error/helper優先、label、required/optional、ID | 一部読み上げ済み。全validation match待ち |
-| flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | 正負のmargin・内部移動に追従するstart/end/bothアンカー、動的寸法・登録解除、丸い2px接続線・技術IDを読まないリストを追加。6回帰テスト。List/Parallel・自動寸法・縦配置などは未完了。[API対応](group-flow-api-mapping.md) |
+| flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | List/Parallelからの自動接続、内容測定・動的再配置、縦／center／末尾揃えを追加。既存DAG・アンカー維持。全canvas・視覚／実機認証は未完了。[API対応](flow-api-mapping.md) |
 | grid | 全export、columns/gap、breakpoints、overflow | 全比較待ち |
 | inline-copy-text | copy、feedback、本文/tooltip、幅制約 | 全比較待ち |
 | input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | 描画・読み上げサンプルあり。全API比較待ち |

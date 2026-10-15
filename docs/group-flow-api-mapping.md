@@ -36,8 +36,7 @@ SteyFlowNode(
 )
 ```
 
-Flowは既存のnodes / edgesによるDAG APIを維持しています。
-公式のList / Parallelの全構成、隣接Parallel間の接続規則、内容からの自動寸法決定、
-vertical / align=end、canvasの全pan・scrollbar挙動は未完了です。
-今回の画像比較は寸法を固定したカスタムアンカーのcanvas表示とButtonGroupであり、
-Flow全体・全物理実機・全screen readerの完全一致認証ではありません。
+Flowは既存nodes / edges APIを維持し、追加のList / Parallel構成・自動寸法・
+vertical / alignEndは[Flowの構成API](flow-api-mapping.md)へ実装と検証を記録しています。
+このページの過去の診断画像は固定寸法のアンカーとButtonGroupの条件です。
+全canvas挙動・物理実機・screen reader・視覚の完全一致認証は未完了です。

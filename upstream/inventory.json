@@ -351,7 +351,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Measured start/end/both anchors include outside margins, internal offsets and transforms. Rounded 2px paths, native list semantics and explicit per-node sizes are implemented. Full List/Parallel composition, automatic content dimensions, vertical/end-aligned layouts and canvas behavior remain incomplete."
+      "limitations": "Native List/Parallel composition, structural entry/exit connections, natural content dimensions, dynamic resizing and horizontal/vertical center/end-aligned layouts are implemented. Existing explicit DAG and measured anchors are retained. Full canvas interactions, extreme margin routing, physical screen readers and visual parity remain uncertified."
     },
     {
       "id": "grid",

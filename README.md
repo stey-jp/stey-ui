@@ -24,6 +24,8 @@ LayerDialogを専用の多層表示とモバイルシートへ置き換え、主
 日本語デモと[LayerDialogのAPI対応](docs/layer-dialog-api-mapping.md)で操作と未対応範囲を確認できます。
 ButtonGroupの連結境界・RTL・フォーカス描画と、Flowの余白付きアンカー・丸い接続線を追加しています。
 [ButtonGroup／FlowのAPI対応](docs/group-flow-api-mapping.md)と[完成までの工程](docs/completion-plan.md)を参照してください。
+FlowのList／Parallel構成からの自動接続、内容の実測、縦方向・中央・末尾揃えも追加しています。
+[Flowの構成API](docs/flow-api-mapping.md)を参照してください。
 固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 
 ```text

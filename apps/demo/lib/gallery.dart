@@ -11,6 +11,7 @@ import 'gallery_route_uri.dart';
 import 'table_of_contents_example.dart';
 import 'layer_dialog_example.dart';
 import 'group_flow_examples.dart';
+import 'flow_composition_example.dart';
 
 const pendingComponents = {'cloudflare-logo'};
 
@@ -108,6 +109,9 @@ class _SteyGalleryState extends State<SteyGallery> {
             final child = switch (sample) {
               'button-group' => buttonGroupSample(router.uri.queryParameters),
               'flow-anchor' => flowAnchorSample(router.uri.queryParameters),
+              'flow-composed' => flowCompositionSample(
+                router.uri.queryParameters,
+              ),
               'layer-dialog' => LayerDialogSample(
                 parameters: router.uri.queryParameters,
               ),
@@ -1059,7 +1063,15 @@ class _ComponentExampleState extends State<ComponentExample> {
           ],
         ),
       ]),
-      'flow' => const FlowAnchorExample(),
+      'flow' => const Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FlowCompositionExample(),
+          SizedBox(height: 24),
+          FlowAnchorExample(),
+        ],
+      ),
       'sidebar' => form([
         group([
           SteyButton(
