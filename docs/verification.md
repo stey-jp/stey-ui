@@ -1,4 +1,4 @@
-# 検証結果（Button／Sidebar更新：2026-10-16）
+# 検証結果（LayerDialog更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -154,3 +154,24 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・Diagnosticsと修正前の測定値もJSONのbutton_sidebarへ保持しています。Desktopでviewport端に2pxだけ見えるSidebar行、SDKのIntl.v8BreakIterator、SkWasmの未同梱source map、Wasm／フォントの配信と起動処理などが残り、全カテゴリ100点は未達です。SDK／DOM改造や検査時だけの機能抑止はしていません。
 
 公式の新しいFlow更新 `7e0ff40`（margin付きanchorとconnectorの位置補正）も検出し、LayerDialog aliasと併せて対応待ちに記録しました。同期済みSHAと承認済み視覚ゲートは進めていません。公開repoは共有CIの最新設定でも対象外です。クラウド同期と実Batch往復は無効／未検証、API呼出・費用は0です。本番反映先はGitHub mainで、Webホスティングとpub.dev公開は行っていません。
+
+## LayerDialogの追加検証（2026-10-16）
+
+ソースSHAは `60d839ba435af18fae9a0db4408562b93f50f9a3`。静的解析0件、ライブラリ100件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。専用14テストで4サイズと640px境界、通常／alert／pendingの終了、split menu、固定見出し・操作欄と説明の縮小、短いoverflowの安定性、ハンドル操作、動作低減設定、重複close、Tab循環とfocus復帰、ソフトキーボード上への配置を検証しています。入力欄を含むdebug検証で必要なMaterial祖先も確認しました。
+
+通常Dialogへの委譲を専用の多層面・モバイルシートへ置き換えました。Action／Actionsと非推奨Primary alias、関連操作メニュー、削除確認、処理中のdismiss禁止とprogrammatic closeを追加し、日本語デモを実装しています。[API対応と未対応範囲](layer-dialog-api-mapping.md)を参照してください。showのFutureは終了アニメーション後に完了します。
+
+実Chromeの24項目で1280px Light/Dark、320px Light/Dark、639px・640px Lightを確認し、実行時エラーは0件です。全URL監査は106 URL・108条件、実行時エラー0件。残る108件のIssueと操作監査の6件はFlutter SDKのIntlV8BreakIteratorです。
+
+公式SHA `7e0ff40` の28画面（4サイズ、320／390／639／640px、Light/Dark、上部配置、説明なし、操作なし、alert）と比較し、全組で幅・高さが0.1 CSS px以内でした。threshold 0.1の画像差分は0.59〜1.75%です。文字・icon・影・描画方式などの差分が残り、全状態の完全一致や承認済み視覚ゲートとは扱いません。公式fixtureは標準モードで、公式側のIssue・実行時エラーは0件です。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：84 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：99 / 96 / 81 / 100。実行警告0件。
+- open_mobile：89 / 100 / 81 / 100。実行警告0件。
+- open_desktop：93 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・Diagnosticsを含む監査値をJSONのlayer_dialogへ保持しています。SDKのIntl.v8BreakIterator、SkWasm未同梱source map、Wasm／フォントの配信・起動処理、gallery desktopのviewport端で切れたSidebar行などが残り、全カテゴリ100点は未達です。SDK／DOM改造や意味情報の抑止は行っていません。
+
+Linux／macOS／iOSの今回ビルドと、全物理実機・screen reader操作は未検証です。Drawerの全体スワイプ・速度連動時間・scroll fade・任意portal／Root APIなども未完了です。Flowのanchor margin補正が対応待ちです。同期済みSHA・承認済み視覚ゲートは進めていません。共有CIは最新設定で公開repoを対象外としており、クラウド同期と実Batch往復は無効／未検証、API呼出・費用は0です。本番反映先はGitHub mainで、Webホスティング・pub.dev公開は行っていません。
