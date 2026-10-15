@@ -705,12 +705,15 @@
         "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/navigation.dart"
+        "packages/stey_ui_modern/lib/src/navigation.dart",
+        "packages/stey_ui_modern/lib/src/table_of_contents.dart",
+        "packages/stey_ui_modern/lib/src/toc_fragment_native.dart",
+        "packages/stey_ui_modern/lib/src/toc_fragment_web.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Compound title/list/item/group, native scroll tracking and Web fragment integration implemented. Twelve regression tests cover scrolling, pinning, malformed/raw/Unicode fragments, keyboard, groups, RTL and text scaling. Full visual and physical-platform certification remains incomplete."
     },
     {
       "id": "tabs",

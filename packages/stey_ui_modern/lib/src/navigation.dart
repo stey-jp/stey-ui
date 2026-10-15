@@ -6,6 +6,8 @@ import 'display.dart';
 import 'theme.dart';
 import 'messages.dart';
 
+export 'table_of_contents.dart';
+
 class SteyTab {
   const SteyTab(this.value, this.label, {this.disabled = false});
   final String value, label;
@@ -738,39 +740,6 @@ class _SteySidebarSlidingViewsState extends State<SteySidebarSlidingViews>
       ),
     );
   }
-}
-
-class SteyTableOfContents extends StatelessWidget {
-  const SteyTableOfContents({
-    super.key,
-    required this.items,
-    required this.activeId,
-    required this.onSelected,
-    this.title = 'On this page',
-  });
-  final Map<String, String> items;
-  final String? activeId;
-  final ValueChanged<String> onSelected;
-  final String title;
-  @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SteyText(title, bold: true),
-      const SizedBox(height: 8),
-      ...items.entries.map(
-        (e) => Semantics(
-          selected: e.key == activeId,
-          child: SteyButton(
-            variant: SteyButtonVariant.ghost,
-            onPressed: () => onSelected(e.key),
-            child: Text(e.value),
-          ),
-        ),
-      ),
-    ],
-  );
 }
 
 class SteyTable extends StatelessWidget {

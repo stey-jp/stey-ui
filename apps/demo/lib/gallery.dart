@@ -6,6 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'catalog.g.dart';
 import 'demo_labels.dart';
+import 'gallery_route_uri.dart';
+import 'table_of_contents_example.dart';
 
 const pendingComponents = {'cloudflare-logo'};
 
@@ -27,7 +29,11 @@ class _SteyGalleryState extends State<SteyGallery> {
   void initState() {
     super.initState();
     router = _GalleryRouter(
-      Uri(path: '/', queryParameters: Uri.base.queryParameters),
+      Uri(
+        path: '/',
+        queryParameters: Uri.base.queryParameters,
+        fragment: Uri.base.hasFragment ? Uri.base.fragment : null,
+      ),
       (uri) => setState(() {
         selected = componentIds.contains(uri.queryParameters['component'])
             ? uri.queryParameters['component']!
@@ -46,6 +52,7 @@ class _SteyGalleryState extends State<SteyGallery> {
 
   void select(String value) => router.navigate(
     router.uri.replace(
+      fragment: '',
       queryParameters: {
         ...router.uri.queryParameters,
         'component': value,
@@ -166,6 +173,52 @@ class _SteyGalleryState extends State<SteyGallery> {
                   semanticLabel: 'Name',
                 ),
               ),
+              'table-of-contents' => SizedBox(
+                width: 280,
+                child: SteyTableOfContents(
+                  activeId: sampleState == 'active' ? 'intro' : null,
+                  onSelected: (_) {},
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SteyTableOfContentsTitle('On this page'),
+                      SteyTableOfContentsList(
+                        children: [
+                          SteyTableOfContentsItem(
+                            label: 'Introduction',
+                            href: '#intro',
+                            active: sampleState == 'active',
+                            onPressed: () {},
+                          ),
+                          SteyTableOfContentsGroup(
+                            label: 'API',
+                            href: '#api',
+                            onPressed: () {},
+                            children: [
+                              SteyTableOfContentsItem(
+                                label: 'Methods',
+                                href: '#methods',
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                          SteyTableOfContentsGroup(
+                            label: 'More',
+                            children: [
+                              SteyTableOfContentsItem(
+                                label: 'A very long heading that must truncate at the available width',
+                                href: '#long',
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               _ => SteyButton(
                 onPressed: sampleState == 'disabled' ? null : () {},
                 loading: sampleState == 'loading',
@@ -190,7 +243,12 @@ class _SteyGalleryState extends State<SteyGallery> {
               body: Center(
                 child: SizedBox(
                   width: 600,
-                  child: ComponentExample(id: selected),
+                  child: ComponentExample(
+                    id: selected,
+                    sectionLocation: router.uri,
+                    onSectionSelected: (id) =>
+                        router.navigate(router.uri.replace(fragment: id)),
+                  ),
                 ),
               ),
             );
@@ -388,6 +446,13 @@ class _SteyGalleryState extends State<SteyGallery> {
                                           child: ComponentExample(
                                             key: ValueKey(selected),
                                             id: selected,
+                                            sectionLocation: router.uri,
+                                            onSectionSelected: (id) =>
+                                                router.navigate(
+                                                  router.uri.replace(
+                                                    fragment: id,
+                                                  ),
+                                                ),
                                           ),
                                         ),
                                         const SizedBox(height: 24),
@@ -430,7 +495,7 @@ class _GalleryRouteParser extends RouteInformationParser<Uri> {
       SynchronousFuture(information.uri);
   @override
   RouteInformation restoreRouteInformation(Uri configuration) =>
-      RouteInformation(uri: configuration);
+      RouteInformation(uri: galleryRouteUri(configuration));
 }
 
 class _GalleryRouter extends RouterDelegate<Uri>
@@ -472,8 +537,15 @@ String title(String id) {
 }
 
 class ComponentExample extends StatefulWidget {
-  const ComponentExample({super.key, required this.id});
+  const ComponentExample({
+    super.key,
+    required this.id,
+    this.onSectionSelected,
+    this.sectionLocation,
+  });
   final String id;
+  final ValueChanged<String>? onSectionSelected;
+  final Uri? sectionLocation;
   @override
   State<ComponentExample> createState() => _ComponentExampleState();
 }
@@ -1010,11 +1082,9 @@ class _ComponentExampleState extends State<ComponentExample> {
           ),
         ),
       ]),
-      'table-of-contents' => SteyTableOfContents(
-        title: 'このページの内容',
-        items: const {'overview': '概要', 'analytics': '分析', 'settings': '設定'},
-        activeId: tab,
-        onSelected: (v) => setState(() => tab = v),
+      'table-of-contents' => TableOfContentsExample(
+        onSelected: widget.onSectionSelected,
+        location: widget.sectionLocation,
       ),
       'tag-input' => SteyTagInput(
         value: tags,

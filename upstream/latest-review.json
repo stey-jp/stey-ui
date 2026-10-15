@@ -1,29 +1,56 @@
 {
-  "reviewed_at": "2026-10-13T13:48:50Z",
+  "reviewed_at": "2026-10-15T02:59:04.032798+00:00",
   "baseline_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
-  "observed_sha": "dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1",
-  "upstream_commit_time": "2026-10-13T08:41:07-04:00",
-  "upstream_commit_url": "https://github.com/cloudflare/kumo/commit/dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1",
-  "summary": "Ignore malformed Table of Contents URL hashes, match raw fragments on percent-decoding failure, and continue syncing subsequent valid hashes.",
-  "classification": "bug_fix",
-  "affected_components": ["table-of-contents"],
-  "changed_files": [
-    ".changeset/calm-hashes-ignore.md",
-    "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.test.tsx",
-    "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.ts"
+  "observed_sha": "1846759162f8dd1cd6028738fceefd2e0cd97d66",
+  "upstream_commit_time": "2026-10-14T10:02:10-04:00",
+  "upstream_commit_url": "https://github.com/cloudflare/kumo/commit/1846759162f8dd1cd6028738fceefd2e0cd97d66",
+  "summary": "Added the native Table of Contents tracking counterpart and malformed-fragment fix. Four later upstream commits also change LayerDialog aliases, Sidebar semantics, Button optical padding and Dropdown submenu behavior; these are detected but not synchronized.",
+  "classification": "mixed",
+  "affected_components": [
+    "table-of-contents",
+    "layer-dialog",
+    "sidebar",
+    "button",
+    "dropdown"
   ],
-  "current_implementation": "SteyTableOfContents is presentational and receives activeId/onSelected from its consumer. The upstream URL-hash/scroll tracking hook has no equivalent yet; there is no corresponding URI-decoding call to patch.",
+  "changed_files": [
+    ".changeset/button-icon-padding.md",
+    ".changeset/calm-hashes-ignore.md",
+    ".changeset/dropdown-submenu-polish.md",
+    ".changeset/layer-dialog-primary-alias.md",
+    ".changeset/sidebar-menu-sub-li.md",
+    "packages/kumo-docs-astro/src/components/demos/DropdownDemo.tsx",
+    "packages/kumo-docs-astro/src/pages/components/dropdown.mdx",
+    "packages/kumo-figma/src/generators/dropdown.ts",
+    "packages/kumo/src/components/button/button.test.tsx",
+    "packages/kumo/src/components/button/button.tsx",
+    "packages/kumo/src/components/dropdown/dropdown.test.tsx",
+    "packages/kumo/src/components/dropdown/dropdown.tsx",
+    "packages/kumo/src/components/layer-dialog/index.ts",
+    "packages/kumo/src/components/layer-dialog/layer-dialog.test.tsx",
+    "packages/kumo/src/components/layer-dialog/layer-dialog.tsx",
+    "packages/kumo/src/components/sidebar/sidebar.test.tsx",
+    "packages/kumo/src/components/sidebar/sidebar.tsx",
+    "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.test.tsx",
+    "packages/kumo/src/components/table-of-contents/use-table-of-contents-active-id.ts",
+    "packages/kumo/src/index.ts"
+  ],
+  "current_implementation": "SteyTableOfContents now provides compound title/list/item/group widgets and a controller for native scrolling, quiet-period pinning and Web hashchange. The Japanese demo includes deep links, nested selection and native scrolling. Full parity certification and the later upstream changes remain outstanding.",
   "remaining_work": [
-    "Implement the native active-section tracking counterpart, including URL fragment integration on Web and scroll tracking on supported Flutter platforms.",
-    "Compare malformed %, %ZZ and literal 50%-off fragments, percent-encoded Unicode, unknown fragments, and later valid hash changes against the new upstream tests.",
-    "Verify complete Table of Contents compound APIs, functionality and visual states."
+    "Certify Table of Contents across all physical platforms, screen readers and complete visual states.",
+    "Review and implement d97d751 LayerDialog Actions.Primary compatibility.",
+    "Review and implement 17d094e Sidebar MenuSub aria-hidden guide semantics.",
+    "Review and implement cdb7e0f Button optical text centering and icon spacing.",
+    "Review and implement 1846759 Dropdown submenu styling, positioning, icon API and auto-inset."
   ],
   "implementation_synchronized": false,
   "synchronized_sha_advanced": false,
   "reference_fixture_sha": "f46e8bc9922c37dc1d3e7da779e589fe171df306",
-  "reference_fixture_note": "The fixed reference and the Select/checkable/radio sources remain at the recorded baseline; this upstream update only changes the Table of Contents hook and its tests.",
+  "reference_fixture_note": "Visual comparison remains pinned at the recorded baseline. The Table of Contents visual source has not changed in the later commits; the malformed-fragment hook fix is tested separately. Baseline and synchronization ledger are not advanced.",
   "batch_api_calls": 0,
   "openai_api_cost_usd": 0,
   "cloud_workflow_executed": false,
-  "review_kind": "manual CLI source diff review; does not update the cloud synchronization ledger"
+  "review_kind": "manual CLI source diff review; does not update the cloud synchronization ledger",
+  "table_of_contents_fix_source_sha": "dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1",
+  "table_of_contents_regression_tests": 12
 }

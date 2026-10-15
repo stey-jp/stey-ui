@@ -3,6 +3,8 @@
 Stey UI is an independent project. Design tokens and component specifications
 are derived from Cloudflare, Inc.'s Kumo source at
 https://github.com/cloudflare/kumo/commit/f46e8bc9922c37dc1d3e7da779e589fe171df306.
+The Table of Contents fragment correction additionally references
+https://github.com/cloudflare/kumo/commit/dc7c513f6f2db54aa6a0b58555b7fd9e413ee3b1.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.
