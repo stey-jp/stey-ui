@@ -266,7 +266,16 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(tester.getSize(find.byType(InteractiveViewer)).height, 248);
+    expect(
+      tester
+          .getSize(
+            find.byWidgetPredicate(
+              (w) => w.runtimeType.toString() == '_FlowCanvasViewport',
+            ),
+          )
+          .height,
+      248,
+    );
     expect(tester.takeException(), isNull);
   });
 }

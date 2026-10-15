@@ -1,11 +1,14 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'button.dart';
 import 'theme.dart';
 import 'messages.dart';
+
+part 'flow_canvas.dart';
 
 enum SteyFlowOrientation { horizontal, vertical }
 
@@ -67,6 +70,7 @@ class SteyFlow extends StatefulWidget {
     this.align = SteyFlowAlign.start,
     this.canvas = true,
     this.viewportHeight,
+    this.onOverflowChange,
   }) : structure = null;
 
   /// Native counterpart of Flow's List/Parallel composition. Nodes are measured
@@ -84,6 +88,7 @@ class SteyFlow extends StatefulWidget {
     this.align = SteyFlowAlign.start,
     this.canvas = true,
     this.viewportHeight,
+    this.onOverflowChange,
   }) : structure = children,
        nodes = const [],
        edges = const [];
@@ -91,6 +96,7 @@ class SteyFlow extends StatefulWidget {
   final List<SteyFlowEdge> edges;
   final List<SteyFlowElement>? structure;
   final double? nodeWidth, nodeHeight, viewportHeight;
+  final ValueChanged<({bool x, bool y})>? onOverflowChange;
   final double gap, verticalGap;
   final bool interactive;
   final bool canvas;
@@ -103,26 +109,10 @@ class SteyFlow extends StatefulWidget {
 
 class _SteyFlowState extends State<SteyFlow> {
   final geometry = _FlowGeometry();
-  Size measuredSize = Size.zero;
-  bool sizeScheduled = false;
   @override
   void dispose() {
     geometry.dispose();
     super.dispose();
-  }
-
-  void measured(Size size) {
-    if (!widget.canvas ||
-        !widget.interactive ||
-        measuredSize == size ||
-        sizeScheduled) {
-      return;
-    }
-    sizeScheduled = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      sizeScheduled = false;
-      if (mounted && measuredSize != size) setState(() => measuredSize = size);
-    });
   }
 
   @override
@@ -163,7 +153,6 @@ class _SteyFlowState extends State<SteyFlow> {
           edges: edges,
           tree: tree,
           geometry: geometry,
-          onMeasured: measured,
           direction: Directionality.of(context),
           children: [
             for (final n in nodes)
@@ -223,16 +212,12 @@ class _SteyFlowState extends State<SteyFlow> {
         child: diagram,
       );
     }
-    return SizedBox(
-      height:
-          widget.viewportHeight ??
-          (measuredSize.height > 0 ? measuredSize.height : 172),
-      child: InteractiveViewer(
-        constrained: false,
-        minScale: .3,
-        maxScale: 3,
-        child: diagram,
-      ),
+    return _FlowCanvas(
+      geometry: geometry,
+      padding: widget.padding.resolve(Directionality.of(context)),
+      height: widget.viewportHeight,
+      onOverflowChange: widget.onOverflowChange,
+      child: diagram,
     );
   }
 }
@@ -304,7 +289,6 @@ class _FlowLayout extends MultiChildRenderObjectWidget {
     required this.edges,
     required this.tree,
     required this.geometry,
-    required this.onMeasured,
     required this.direction,
     required super.children,
   });
@@ -313,7 +297,6 @@ class _FlowLayout extends MultiChildRenderObjectWidget {
   final List<SteyFlowEdge> edges;
   final SteyFlowList? tree;
   final _FlowGeometry geometry;
-  final ValueChanged<Size> onMeasured;
   final TextDirection direction;
   @override
   RenderObject createRenderObject(BuildContext context) =>
@@ -455,7 +438,6 @@ class _RenderFlowLayout extends RenderBox
       config.geometry.rects[node.id] = origin & boxes[i].size;
     }
     config.geometry.changed();
-    config.onMeasured(wanted);
   }
 
   @override

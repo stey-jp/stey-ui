@@ -346,12 +346,13 @@
         "packages/kumo/src/components/flow/use-children.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/flow.dart"
+        "packages/stey_ui_modern/lib/src/flow.dart",
+        "packages/stey_ui_modern/lib/src/flow_canvas.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Native List/Parallel composition, structural entry/exit connections, natural content dimensions, dynamic resizing and horizontal/vertical center/end-aligned layouts are implemented. Existing explicit DAG and measured anchors are retained. Full canvas interactions, extreme margin routing, physical screen readers and visual parity remain uncertified."
+      "limitations": "Native List/Parallel composition, content measurement, both orientations, alignment, anchors and bounded canvas pan/wheel/overflow indicators are implemented. Constrained-host wrapping, all input/visual states and physical screen-reader certification remain incomplete."
     },
     {
       "id": "grid",

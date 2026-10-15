@@ -132,3 +132,123 @@ Widget flowCompositionSample(Map<String, String> q) {
     children: children,
   );
 }
+
+class FlowCanvasExample extends StatefulWidget {
+  const FlowCanvasExample({super.key});
+  @override
+  State<FlowCanvasExample> createState() => _FlowCanvasExampleState();
+}
+
+class _FlowCanvasExampleState extends State<FlowCanvasExample> {
+  bool compact = false;
+  ({bool x, bool y}) overflow = (x: false, y: false);
+  int calls = 0;
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SteyText('キャンバスの移動', heading: 4),
+      const SizedBox(height: 8),
+      const Text('余白をドラッグして移動できます。トラックパッドは縦横のスクロールに対応します。'),
+      const SizedBox(height: 12),
+      SteyButton(
+        onPressed: () => setState(() => compact = !compact),
+        child: Text(compact ? '分岐を増やす' : '分岐を減らす'),
+      ),
+      const SizedBox(height: 8),
+      Semantics(
+        container: true,
+        label: 'フローの移動プレビュー',
+        explicitChildNodes: true,
+        child: SizedBox(
+          width: 320,
+          child: SteyFlow.composed(
+            viewportHeight: 180,
+            padding: const EdgeInsets.all(16),
+            onOverflowChange: (value) {
+              if (overflow != value) setState(() => overflow = value);
+            },
+            children: [
+              SteyFlowNode(
+                'start',
+                SizedBox(
+                  width: 96,
+                  height: 64,
+                  child: Center(
+                    child: SteyButton(
+                      onPressed: () => setState(() => calls++),
+                      child: const Text('受信を確認'),
+                    ),
+                  ),
+                ),
+              ),
+              if (!compact) ...[
+                const SteyFlowParallel([
+                  SteyFlowNode(
+                    'process',
+                    SizedBox(
+                      width: 96,
+                      height: 64,
+                      child: Center(child: Text('処理')),
+                    ),
+                  ),
+                  SteyFlowNode(
+                    'review',
+                    SizedBox(
+                      width: 96,
+                      height: 64,
+                      child: Center(child: Text('確認')),
+                    ),
+                  ),
+                ]),
+                const SteyFlowNode(
+                  'end',
+                  SizedBox(
+                    width: 96,
+                    height: 64,
+                    child: Center(child: Text('完了')),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+      Semantics(
+        liveRegion: true,
+        child: Text(
+          'はみ出し：横${overflow.x ? 'あり' : 'なし'}・縦${overflow.y ? 'あり' : 'なし'}／確認 $calls回',
+        ),
+      ),
+    ],
+  );
+}
+
+Widget flowCanvasSample(Map<String, String> q) {
+  SteyFlowNode node(String id, String text) => SteyFlowNode(
+    id,
+    SizedBox(width: 96, height: 64, child: Center(child: Text(text))),
+  );
+  return Semantics(
+    container: true,
+    label: 'Flow canvas preview',
+    explicitChildNodes: true,
+    child: SizedBox(
+      width: double.tryParse(q['viewport'] ?? '') ?? 320,
+      child: SteyFlow.composed(
+        viewportHeight: 180,
+        padding: const EdgeInsets.all(16),
+        children: [
+          node('start', 'Start'),
+          if (q['fit'] != 'true') ...[
+            SteyFlowParallel([
+              node('process', 'Process'),
+              node('review', 'Review'),
+            ]),
+            node('end', 'End'),
+          ],
+        ],
+      ),
+    ),
+  );
+}

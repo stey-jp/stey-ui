@@ -16,8 +16,13 @@ margin付きアンカーは[既存のAPI対応](group-flow-api-mapping.md)も参
 | 明示的な寸法 | Node.width／height、Flow.nodeWidth／nodeHeight | 指定した軸だけ固定。composedの既定は内容サイズ |
 | gap | gap／verticalGap | Listの主軸64px、Parallelの交差軸16px |
 | padding | EdgeInsetsGeometry | 既定左右16px・上下64px。論理方向の指定も可 |
-| canvasの有無 | canvas: false | スクロール／InteractiveViewerを挟まず自然寸法の図を返す |
-| 固定viewport | viewportHeight | InteractiveViewerの表示高さを固定。未指定は測定した図の高さ |
+| canvasの有無 | canvas: false | canvas操作を挟まず自然寸法の図を返す |
+| 固定viewport | viewportHeight | canvasの表示高さを固定。未指定は図の自然な高さ。親の制約を尊重 |
+| canvasのパン | 背景のmouse／touch／trackpadドラッグ | ノード上では開始せず、両軸の境界で停止。慣性・zoomなし |
+| wheel | PointerScrollEvent | deltaX／deltaYを独立に使用。はみ出し時は消費し、収まるときは親へ渡す |
+| はみ出し通知 | onOverflowChange | `(x: bool, y: bool)`。初回と状態変化を通知し、寸法変更で位置を補正 |
+| スクロール表示 | native paint | hover時に6pxのtrack、4pxの余白、最小10%のthumbを表示 |
+| 読み上げでの移動 | native Semantics scroll actions | 対応軸をページ単位で移動。全screen readerの認証は未完了 |
 | 既存DAG API | SteyFlow(nodes: ..., edges: ...) | 明示接続と既定160×44pxを維持。縦方向とcenterも指定可能 |
 
 ```dart
@@ -48,7 +53,9 @@ SteyFlow.composed(
 自然寸法の画像比較は、公式側を幅1000pxのホストへ置いた条件で行います。
 狭い親幅でのCSS shrink-to-fitや折り返しを含む全条件は未認証です。
 
-canvas上のpan／scrollbar／wheel／node操作の全仕様、全screen readerと物理実機、
-極端なmarginによる接続方向反転、全視覚状態の認証は未完了です。
-interactiveは既存のInteractiveViewerによるpan／zoomを維持しています。
+公式canvasの倍率は1倍固定です。旧InteractiveViewerのzoomを廃止し、公式の背景移動へ合わせました。
+interactive: falseは既存の横スクロール表示を維持します（この経路ではonOverflowChangeは通知しません）。
+スクロール表示は公式と同じインジケーターで、thumbのドラッグ専用操作はありません。
+全screen readerと物理実機、狭い親幅・極端なmarginによる接続方向反転、
+全canvas入力／視覚状態の認証は未完了です。
 完全なKumo parityや同期済みSHAの更新とは扱いません。
