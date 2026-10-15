@@ -1,4 +1,4 @@
-# 検証結果（目次更新：2026-10-15）
+# 検証結果（Dropdown更新：2026-10-15）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -108,3 +108,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目を含む全監査値はJSONのtable_of_contentsへ保持しています。Flutter engineの起動・配信量、Intl.v8BreakIterator、SkWasmの未同梱source map、viewport端で切れたSidebar行の意味情報などの制限が残り、全カテゴリ100点は未達です。SDK・意味情報を改造／抑止する対策は採用していません。
 
 新たな公式main `1846759162f8dd1cd6028738fceefd2e0cd97d66` までの更新も検出しています。LayerDialogのalias、Sidebarの意味情報、Buttonの光学的な余白、Dropdownのsubmenu更新は対応待ちです。クラウド同期は引き続き無効で、Batch APIは呼び出していません。共有CIの最新設定も公開リポジトリを対象外としています。公開Webホスティングとpub.dev公開は行っていません。
+
+## Dropdownの追加検証（2026-10-15）
+
+ソースSHAは `292aa0a1bd1814e5b89e9cf794677f50b2af737a`。静的解析0件、ライブラリ78件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。Dropdownの回帰テスト14件を追加しています。物理実機・screen reader、今回のLinux／macOS／iOSビルドは未検証です。
+
+3階層のsubmenu、Group／Label／Separator、制御Checkbox／Radio、shortcut、icon slotとpopup内の自動字下げ、33px行、root 8px／横submenu 2pxの間隔、左右反転、上下矢印・Home／End・文字検索・Escape／Tab・RTLを実装しました。日本語デモで選択状態と最後の操作を確認できます。[API対応](dropdown-api-mapping.md)に制限を記録しています。
+
+nested OverlayPortalでは画面にある子メニューの意味情報DOMが消える問題を再現したため、子メニューを独立したOverlayEntryで表示し、TapRegionをrootと共有しました。全階層のmenu／menuitem／menuitemcheckbox／menuitemradioとchecked／expandedが実Chromeに保持されます。DOM／SDKの改造や意味情報の無効化はしていません。
+
+実Chromeの12項目で1280px Light/Dark、320px Light/Dark、390px Lightの選択・排他選択・3階層の操作1回だけの発火・開き直した状態保持・Escape・矢印とEnd／Enter・画面内のpopup位置を確認しました。実行時エラーは0件です。
+
+全URL監査は106 URL・108画面条件、実行時エラー0件。Flutter SDKのIntlV8BreakIteratorが108件残ります。Dropdown操作監査にも同じSDK警告が5件記録され、抑止していません。
+
+公式Dropdown SHA `1846759` と6状態を比較しました。CSS／依存は固定baseline `f46e8bc`。root 224×360px、submenu 224×111pxの寸法は一致し、threshold 0.1の差分は2.28〜2.94%です。icon・文字・影等の差分と未検証状態が残り、完全一致や承認済み視覚ゲートとは扱いません。同期済みSHAは進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：73 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：84 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：93 / 96 / 81 / 100。実行警告0件。
+
+非スコア項目・Diagnosticsを含む監査値はJSONのdropdownへ保持しています。SDKの起動・配信量、Intl.v8BreakIterator、SkWasmの未同梱source map、viewport端で切れたSidebar行の意味情報等が残り、全カテゴリ100点は未達です。共有CIの最新設定で公開repoは対象外です。クラウド同期・実Batch往復は引き続き無効／未検証で、API費用は発生していません。本番反映先はGitHub main、公開Webホスティングとpub.dev公開は未実施です。
