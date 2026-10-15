@@ -39,7 +39,7 @@
     "packages/kumo/src/components/flow/flow.browser.test.tsx",
     "packages/kumo/src/components/flow/node.tsx"
   ],
-  "current_implementation": "SteyTableOfContents now provides compound title/list/item/group widgets and a controller for native scrolling, quiet-period pinning and Web hashchange. The Japanese demo includes deep links, nested selection and native scrolling. Full parity certification and the later upstream changes remain outstanding. SteyDropdownMenu adds nested children, group/label/separator, controlled checkbox/radio items, icon slots, popup-local auto-inset, submenu offsets, focus/typeahead and native menu roles against 1846759. SteyButton applies text lift, icon padding, content-aware spacing and default icon sizing; SteySidebarMenuSub/Item/Button provide native hierarchy lists and a noninteractive, unannounced guide.",
+  "current_implementation": "SteyTableOfContents now provides compound title/list/item/group widgets and a controller for native scrolling, quiet-period pinning and Web hashchange. The Japanese demo includes deep links, nested selection and native scrolling. Full parity certification and the later upstream changes remain outstanding. SteyDropdownMenu adds nested children, group/label/separator, controlled checkbox/radio items, icon slots, popup-local auto-inset, submenu offsets, focus/typeahead and native menu roles against 1846759. SteyButton applies text lift, icon padding, content-aware spacing and default icon sizing; SteySidebarMenuSub/Item/Button provide native hierarchy lists and a noninteractive, unannounced guide. The Sidebar resize handle follows the upstream hidden/sm:block breakpoint at 640 CSS pixels.",
   "remaining_work": [
     "Certify Table of Contents across all physical platforms, screen readers and complete visual states.",
     "Review and implement d97d751 LayerDialog Actions.Primary compatibility.",
@@ -63,5 +63,6 @@
   "button_review_source_sha": "cdb7e0fd930b9ecadc4904b0f153b42ab4d7e273",
   "sidebar_menu_sub_review_source_sha": "17d094ec5f4d8ac7fbd7e3652a131c3c3afa0c5b",
   "button_alignment_regression_tests": 5,
-  "sidebar_menu_sub_regression_tests": 2
+  "sidebar_menu_sub_regression_tests": 2,
+  "sidebar_responsive_regression_tests": 1
 }

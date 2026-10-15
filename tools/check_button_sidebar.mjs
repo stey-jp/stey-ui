@@ -18,6 +18,7 @@ try {
   await page.screenshot({path:`${output}/buttons-${width}-${mode}.png`});
   checks.push(`${width}px ${mode}: four icon/text sizes and empty-content icon-only action`);
   await page.goto(`${base}?component=sidebar&mode=${mode}`,{waitUntil:'networkidle'});
+  assert.equal(await page.getByRole('button',{name:/サイドバーの幅を変更/}).count(),width>=640?1:0);
   const settings=page.getByRole('button',{name:'設定',exact:true});
   await settings.click();
   const group=page.getByRole('list',{name:'設定',exact:true});await group.waitFor();

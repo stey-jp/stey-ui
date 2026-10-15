@@ -715,7 +715,7 @@ class _SteySidebarState extends State<SteySidebar> {
               ),
             ),
           ),
-          if (widget.resizable)
+          if (widget.resizable && MediaQuery.sizeOf(context).width >= 640)
             Positioned(
               top: 0,
               bottom: 0,

@@ -15,6 +15,7 @@ Buttonの変更元は `cdb7e0f`、Sidebar.MenuSubの変更元は `17d094e` で�
 | Sidebar.MenuSubItem | SteySidebarMenuSubItem | listItemを公開。MenuSubが未指定の子を自動で包み、二重には包まない |
 | Sidebar.MenuSubButton | SteySidebarMenuSubButton | 高さ34px、文字13px、角丸8px。selected／onPressed／focusNode／semanticLabelに対応 |
 | 階層の開閉・選択 | SteySidebarItem(children: ...) | 既存APIを維持。各階層のガイド、展開状態、現在項目を反映 |
+| ResizeHandleのhidden / sm:block | SteySidebar(resizable: true) | 公式と同じ640px以上のviewportで表示。線とdesktopの操作幅は維持 |
 
 ガイドはIgnorePointerとExcludeSemanticsで操作・読み上げ対象から外し、
 実際の子項目だけをlistItemとして公開します。DOMの後付け修正は行いません。

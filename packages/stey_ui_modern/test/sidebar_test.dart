@@ -14,6 +14,38 @@ Widget host(Widget child) => MaterialApp(
 );
 
 void main() {
+  testWidgets('Resize handle follows the official 640px viewport breakpoint', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    for (final width in [320.0, 639.0, 640.0, 1280.0]) {
+      tester.view.physicalSize = Size(width, 600);
+      await tester.pumpWidget(
+        host(
+          SizedBox(
+            height: 240,
+            child: SteySidebar(
+              resizable: true,
+              items: const [SteySidebarItem('home', 'Home')],
+              selected: 'home',
+              onSelected: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(
+        find.bySemanticsLabel('Resize sidebar'),
+        width >= 640 ? findsOneWidget : findsNothing,
+      );
+      expect(find.bySemanticsLabel('Home'), findsOneWidget);
+    }
+    semantics.dispose();
+  });
+
   testWidgets(
     'Submenu exposes only real list items and its guide ignores input',
     (tester) async {

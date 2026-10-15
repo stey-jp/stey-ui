@@ -18,7 +18,7 @@ Selectもネイティブのポップアップ、単一／複数選択、グル�
 [目次のAPI対応](docs/table-of-contents-api-mapping.md)で利用方法と未検証範囲を確認できます。
 Dropdownに階層メニュー・Checkbox／Radio選択・自動字下げ・キーボード操作を追加しています。
 日本語デモと[DropdownのAPI対応](docs/dropdown-api-mapping.md)で操作と制限を確認できます。
-Buttonの文字位置・アイコン余白と、Sidebarの階層リスト・装飾ガイドを追加対応しています。
+Buttonの文字位置・アイコン余白と、Sidebarの階層リスト・装飾ガイド・640pxでのリサイズ操作切替を追加対応しています。
 [Button／SidebarのAPI対応](docs/button-sidebar-api-mapping.md)に適用範囲を記録しています。
 固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 
