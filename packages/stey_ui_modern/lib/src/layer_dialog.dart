@@ -126,6 +126,7 @@ class SteyLayerDialogAction extends StatelessWidget {
     );
     if (menu.isEmpty) return button;
     return SteyButtonGroup(
+      semanticLabel: menuLabel ?? SteyMessages.of(context).moreActions,
       children: [
         button,
         SteyDropdownMenu(

@@ -10,6 +10,7 @@ import 'dropdown_example.dart';
 import 'gallery_route_uri.dart';
 import 'table_of_contents_example.dart';
 import 'layer_dialog_example.dart';
+import 'group_flow_examples.dart';
 
 const pendingComponents = {'cloudflare-logo'};
 
@@ -105,6 +106,8 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'button-group' => buttonGroupSample(router.uri.queryParameters),
+              'flow-anchor' => flowAnchorSample(router.uri.queryParameters),
               'layer-dialog' => LayerDialogSample(
                 parameters: router.uri.queryParameters,
               ),
@@ -699,7 +702,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         ]),
         SteyText('操作回数：$clicks回'),
       ]),
-      'button-group' => SteyButtonGroup(children: buttons.take(3).toList()),
+      'button-group' => const ButtonGroupExample(),
       'badge' => group([
         for (final variant in SteyBadgeVariant.values)
           SteyBadge(variant: variant, child: Text(variantLabel(variant.name))),
@@ -1056,20 +1059,7 @@ class _ComponentExampleState extends State<ComponentExample> {
           ],
         ),
       ]),
-      'flow' => SteyFlow(
-        nodes: [
-          SteyFlowNode('開始', const Text('リクエスト'), onPressed: action),
-          SteyFlowNode('キャッシュ', const Text('キャッシュ'), onPressed: action),
-          SteyFlowNode('オリジン', const Text('オリジン'), onPressed: action),
-          SteyFlowNode('応答', const Text('レスポンス'), onPressed: action),
-        ],
-        edges: const [
-          SteyFlowEdge('開始', 'キャッシュ'),
-          SteyFlowEdge('開始', 'オリジン'),
-          SteyFlowEdge('キャッシュ', '応答'),
-          SteyFlowEdge('オリジン', '応答'),
-        ],
-      ),
+      'flow' => const FlowAnchorExample(),
       'sidebar' => form([
         group([
           SteyButton(

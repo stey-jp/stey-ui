@@ -222,7 +222,11 @@ void main() {
             ),
           ),
     );
-    await tester.tap(find.bySemanticsLabel('More actions'));
+    await tester.tap(
+      find.byWidgetPredicate(
+        (w) => w is SteyButton && w.semanticLabel == 'More actions',
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Save draft'));
     await tester.pumpAndSettle();

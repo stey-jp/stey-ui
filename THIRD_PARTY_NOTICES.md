@@ -12,6 +12,8 @@ https://github.com/cloudflare/kumo/commit/cdb7e0fd930b9ecadc4904b0f153b42ab4d7e2
 and https://github.com/cloudflare/kumo/commit/17d094ec5f4d8ac7fbd7e3652a131c3c3afa0c5b.
 The LayerDialog implementation and Primary compatibility alias additionally
 reference https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
+The ButtonGroup specification and Flow anchor correction also reference
+https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.

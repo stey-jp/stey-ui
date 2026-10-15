@@ -95,7 +95,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Logical joined corners, one-pixel seams, focused paint/hit order, related-control semantics and wrapped Stey controls are implemented. Arbitrary widgets, intrinsic constraints, full visual and physical screen-reader parity remain uncertified."
     },
     {
       "id": "chart",
@@ -351,7 +351,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Measured start/end/both anchors include outside margins, internal offsets and transforms. Rounded 2px paths, native list semantics and explicit per-node sizes are implemented. Full List/Parallel composition, automatic content dimensions, vertical/end-aligned layouts and canvas behavior remain incomplete."
     },
     {
       "id": "grid",

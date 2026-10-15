@@ -19,7 +19,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | banner | variant、icon、本文、action、dismiss、折返し | 全API・機能・視覚比較待ち |
 | breadcrumbs | link/current、separator、折返し、狭幅 | 全比較待ち |
 | button | 全variant/size/shape、hover/focus、disabled/loading、icon、asChild | 文字位置・iconの補正、空children、全サイズとRTLの5テストを追加。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
-| button-group | orientation、連結border/radius、size伝播、focus | 全比較待ち |
+| button-group | orientation、連結border/radius、size伝播、focus | 1pxの境界共有・外側角丸・focus描画順・RTL・wrapped childを追加。5回帰テスト。全視覚・実機認証は未完了。[API対応](group-flow-api-mapping.md) |
 | chart | 全export、ECharts option、legend/tooltip、resize、Chart/Sankey/Globe固有操作 | 汎用option、drilldown、地形を含む実装不足 |
 | checkbox | 単体/Item/Group/Legend、mixed、parent/allValues、cardの縦/横結合、error、disabled | ネイティブ描画・グループ・親の部分選択復元をテスト。イベント詳細・子との読み上げ関連付け・拡張hit area・全視覚認証待ち |
 | clipboard-text | copy成功/失敗、非同期feedback、選択、tooltip、ellipsis | 全比較待ち |
@@ -34,7 +34,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | dropdown | Item/Group/Separator/Checkbox/Radio/Submenu、disabled、keyboard、位置/衝突 | native階層・選択・位置・RTLの14テストと日本語デモを追加。アニメーション・全衝突規則・全比較は未完了。[API対応](dropdown-api-mapping.md) |
 | empty | variant、icon、title、description、action、狭幅 | 全比較待ち |
 | field | 全parts、validation match、error/helper優先、label、required/optional、ID | 一部読み上げ済み。全validation match待ち |
-| flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | 全比較待ち |
+| flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | 正負のmargin・内部移動に追従するstart/end/bothアンカー、動的寸法・登録解除、丸い2px接続線・技術IDを読まないリストを追加。6回帰テスト。List/Parallel・自動寸法・縦配置などは未完了。[API対応](group-flow-api-mapping.md) |
 | grid | 全export、columns/gap、breakpoints、overflow | 全比較待ち |
 | inline-copy-text | copy、feedback、本文/tooltip、幅制約 | 全比較待ち |
 | input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | 描画・読み上げサンプルあり。全API比較待ち |

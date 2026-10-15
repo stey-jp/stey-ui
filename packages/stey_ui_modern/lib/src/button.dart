@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'theme.dart';
 import 'messages.dart';
@@ -132,9 +133,13 @@ class _SteyButtonState extends State<SteyButton> {
             : danger
             ? c.dangerText
             : c.text);
-    final radius = BorderRadius.circular(
+    final outerRadius = BorderRadius.circular(
       widget.shape == SteyButtonShape.circle ? 100 : widget.size.radius,
     );
+    final group = context
+        .dependOnInheritedWidgetOfExactType<_ButtonGroupSlot>();
+    final radius =
+        group?.radius(outerRadius, Directionality.of(context)) ?? outerRadius;
     final border = ghost
         ? Colors.transparent
         : emphasis
@@ -367,21 +372,211 @@ class SteyLink extends StatelessWidget {
   );
 }
 
-class SteyButtonGroup extends StatelessWidget {
+class SteyButtonGroup extends StatefulWidget {
   const SteyButtonGroup({
     super.key,
     required this.children,
     this.vertical = false,
+    this.semanticLabel,
   });
   final List<Widget> children;
   final bool vertical;
+  final String? semanticLabel;
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-    scrollDirection: vertical ? Axis.vertical : Axis.horizontal,
-    child: Flex(
-      direction: vertical ? Axis.vertical : Axis.horizontal,
-      mainAxisSize: MainAxisSize.min,
-      children: children,
+  State<SteyButtonGroup> createState() => _SteyButtonGroupState();
+}
+
+class _SteyButtonGroupState extends State<SteyButtonGroup> {
+  int? focused;
+  @override
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    explicitChildNodes: true,
+    label: widget.semanticLabel,
+    child: _ButtonGroupLayout(
+      vertical: widget.vertical,
+      direction: Directionality.of(context),
+      focused: focused,
+      children: [
+        for (var i = 0; i < widget.children.length; i++)
+          Focus(
+            key: ValueKey(widget.children[i].key ?? i),
+            canRequestFocus: false,
+            includeSemantics: false,
+            onFocusChange: (value) {
+              if (value || focused == i) {
+                setState(() => focused = value ? i : null);
+              }
+            },
+            child: _ButtonGroupSlot(
+              first: i == 0,
+              last: i == widget.children.length - 1,
+              vertical: widget.vertical,
+              child: widget.children[i],
+            ),
+          ),
+      ],
     ),
   );
+}
+
+class _ButtonGroupSlot extends InheritedWidget {
+  const _ButtonGroupSlot({
+    required this.first,
+    required this.last,
+    required this.vertical,
+    required super.child,
+  });
+  final bool first, last, vertical;
+  BorderRadius radius(BorderRadius outer, TextDirection direction) {
+    if (vertical) {
+      return BorderRadius.only(
+        topLeft: first ? outer.topLeft : Radius.zero,
+        topRight: first ? outer.topRight : Radius.zero,
+        bottomLeft: last ? outer.bottomLeft : Radius.zero,
+        bottomRight: last ? outer.bottomRight : Radius.zero,
+      );
+    }
+    final left = direction == TextDirection.ltr ? first : last;
+    final right = direction == TextDirection.ltr ? last : first;
+    return BorderRadius.only(
+      topLeft: left ? outer.topLeft : Radius.zero,
+      bottomLeft: left ? outer.bottomLeft : Radius.zero,
+      topRight: right ? outer.topRight : Radius.zero,
+      bottomRight: right ? outer.bottomRight : Radius.zero,
+    );
+  }
+
+  @override
+  bool updateShouldNotify(_ButtonGroupSlot oldWidget) =>
+      first != oldWidget.first ||
+      last != oldWidget.last ||
+      vertical != oldWidget.vertical;
+}
+
+class _GroupParentData extends ContainerBoxParentData<RenderBox> {}
+
+class _ButtonGroupLayout extends MultiChildRenderObjectWidget {
+  const _ButtonGroupLayout({
+    required this.vertical,
+    required this.direction,
+    required this.focused,
+    required super.children,
+  });
+  final bool vertical;
+  final TextDirection direction;
+  final int? focused;
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderButtonGroup(vertical, direction, focused);
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderButtonGroup renderObject,
+  ) {
+    renderObject
+      ..vertical = vertical
+      ..direction = direction
+      ..focused = focused
+      ..markNeedsLayout();
+  }
+}
+
+/// A one-pixel overlap without translating the controls away from their hit
+/// regions. Paint order changes on focus; semantics and Tab order stay stable.
+class _RenderButtonGroup extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _GroupParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _GroupParentData> {
+  _RenderButtonGroup(this.vertical, this.direction, this.focused);
+  bool vertical;
+  TextDirection direction;
+  int? focused;
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! _GroupParentData) {
+      child.parentData = _GroupParentData();
+    }
+  }
+
+  BoxConstraints get childConstraints => vertical
+      ? BoxConstraints(maxWidth: constraints.maxWidth)
+      : BoxConstraints(maxHeight: constraints.maxHeight);
+  @override
+  void performLayout() {
+    var main = 0.0, cross = 0.0;
+    final children = getChildrenAsList();
+    for (final child in children) {
+      child.layout(childConstraints, parentUsesSize: true);
+      main += vertical ? child.size.height : child.size.width;
+      cross = (vertical ? child.size.width : child.size.height) > cross
+          ? (vertical ? child.size.width : child.size.height)
+          : cross;
+    }
+    if (children.length > 1) main -= children.length - 1;
+    size = constraints.constrain(
+      vertical ? Size(cross, main) : Size(main, cross),
+    );
+    var cursor = 0.0;
+    for (final child in children) {
+      child.layout(
+        vertical
+            ? BoxConstraints.tightFor(width: cross)
+            : BoxConstraints.tightFor(height: cross),
+        parentUsesSize: true,
+      );
+      final data = child.parentData! as _GroupParentData;
+      data.offset = vertical
+          ? Offset(0, cursor)
+          : Offset(
+              direction == TextDirection.rtl
+                  ? main - cursor - child.size.width
+                  : cursor,
+              0,
+            );
+      cursor += (vertical ? child.size.height : child.size.width) - 1;
+    }
+  }
+
+  Iterable<RenderBox> get paintOrder sync* {
+    final children = getChildrenAsList();
+    for (var i = 0; i < children.length; i++) {
+      if (i != focused) yield children[i];
+    }
+    if (focused != null && focused! < children.length) yield children[focused!];
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    for (final child in paintOrder) {
+      context.paintChild(
+        child,
+        offset + (child.parentData! as _GroupParentData).offset,
+      );
+    }
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    for (final child in paintOrder.toList().reversed) {
+      if (result.addWithPaintOffset(
+        offset: (child.parentData! as _GroupParentData).offset,
+        position: position,
+        hitTest: (result, transformed) =>
+            child.hitTest(result, position: transformed),
+      )) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  void applyPaintTransform(RenderBox child, Matrix4 transform) =>
+      transform.translateByDouble(
+        (child.parentData! as _GroupParentData).offset.dx,
+        (child.parentData! as _GroupParentData).offset.dy,
+        0,
+        1,
+      );
 }

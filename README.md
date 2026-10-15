@@ -22,6 +22,8 @@ Buttonの文字位置・アイコン余白と、Sidebarの階層リスト・装�
 [Button／SidebarのAPI対応](docs/button-sidebar-api-mapping.md)に適用範囲を記録しています。
 LayerDialogを専用の多層表示とモバイルシートへ置き換え、主操作・関連メニュー・削除確認・処理中の終了制御を追加しています。
 日本語デモと[LayerDialogのAPI対応](docs/layer-dialog-api-mapping.md)で操作と未対応範囲を確認できます。
+ButtonGroupの連結境界・RTL・フォーカス描画と、Flowの余白付きアンカー・丸い接続線を追加しています。
+[ButtonGroup／FlowのAPI対応](docs/group-flow-api-mapping.md)と[完成までの工程](docs/completion-plan.md)を参照してください。
 固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 
 ```text
