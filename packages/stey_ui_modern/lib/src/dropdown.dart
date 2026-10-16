@@ -212,13 +212,23 @@ class _DropdownState extends State<SteyDropdownMenu>
   KeyEventResult keyEvent(KeyEvent event) {
     input.keyEvent(event);
     if (open &&
-        event.logicalKey == LogicalKeyboardKey.escape &&
-        event is KeyDownEvent) {
+        event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.escape) {
       if (input.dismissals.isEmpty) {
         closeMenu(true);
       } else {
-        input.dismissals.last();
+        input.dismissals.last(true);
       }
+      return KeyEventResult.handled;
+    }
+    final back = Directionality.of(context) == TextDirection.rtl
+        ? LogicalKeyboardKey.arrowRight
+        : LogicalKeyboardKey.arrowLeft;
+    if (open &&
+        event is KeyDownEvent &&
+        event.logicalKey == back &&
+        input.dismissals.isNotEmpty) {
+      input.dismissals.last(false);
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -330,7 +340,7 @@ class _DropdownState extends State<SteyDropdownMenu>
 
 class _MenuInput {
   bool keyboard = false, active = false;
-  final dismissals = <VoidCallback>[];
+  final dismissals = <ValueChanged<bool>>[];
   KeyEventResult keyEvent(KeyEvent event) {
     keyboard =
         event.logicalKey == LogicalKeyboardKey.enter ||
@@ -705,9 +715,9 @@ class _MenuPanelState extends State<_MenuPanel> {
     final inset = entries.any((e) => e.leading != null || e.icon != null);
     var index = 0;
     Widget groupLabel(SteyMenuItem item) => Padding(
-      padding: EdgeInsetsDirectional.only(
-        start: inset || item.inset ? 32 : 8,
-        end: 8,
+      padding: EdgeInsets.only(
+        left: inset || item.inset ? 32 : 8,
+        right: 8,
         top: 6,
         bottom: 6,
       ),
@@ -931,8 +941,8 @@ class _MenuRowState extends State<_MenuRow>
 
   void openSubmenu() => showPopup(true);
 
-  void dismiss() {
-    closePopup(true);
+  void dismiss(bool instant) {
+    closePopup(instant);
     widget.focusNode.requestFocus();
   }
 
@@ -1082,7 +1092,7 @@ class _MenuRowState extends State<_MenuRow>
     final style = ButtonStyle(
       animationDuration: Duration.zero,
       padding: WidgetStatePropertyAll(
-        EdgeInsetsDirectional.only(start: left, end: 8, top: 6, bottom: 6),
+        EdgeInsets.only(left: left, right: 8, top: 6, bottom: 6),
       ),
       minimumSize: const WidgetStatePropertyAll(Size(0, 33)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -1158,6 +1168,22 @@ class _MenuRowState extends State<_MenuRow>
         ? const ExcludeSemantics(child: Icon(Icons.check, size: 16))
         : null;
     final submenu = item.children.isNotEmpty;
+    final direction = Directionality.of(context);
+    final decoration = submenu
+        ? const ExcludeSemantics(child: Icon(Icons.chevron_right, size: 16))
+        : trailing;
+    // Kumo uses physical `pl-8`, `left-2`, and `ml-auto`. In RTL the auto
+    // margin occupies the space after the decoration, rather than before it.
+    final autoMargin = submenu || item.shortcut != null || radio;
+    final rowContent = Row(
+      children: [
+        if (decoration != null && autoMargin && direction == TextDirection.ltr)
+          Expanded(child: content)
+        else
+          Flexible(child: content),
+        if (decoration != null) ...[const SizedBox(width: 8), decoration],
+      ],
+    );
     final button = MenuItemButton(
       overflowAxis: Axis.vertical,
       key: anchorKey,
@@ -1187,17 +1213,7 @@ class _MenuRowState extends State<_MenuRow>
       semanticsLabel: item.shortcut == null
           ? item.label
           : '${item.label} ${item.shortcut}',
-      trailingIcon: submenu
-          ? ExcludeSemantics(
-              child: Icon(
-                Directionality.of(context) == TextDirection.ltr
-                    ? Icons.chevron_right
-                    : Icons.chevron_left,
-                size: 16,
-              ),
-            )
-          : trailing,
-      child: content,
+      child: rowContent,
     );
     return MergeSemantics(
       child: Semantics(
@@ -1226,13 +1242,16 @@ class _MenuRowState extends State<_MenuRow>
               else
                 button,
               if (checkbox && item.selection == true)
-                PositionedDirectional(
-                  start: 8,
+                Positioned(
+                  left: 8,
+                  width: 14,
                   top: 0,
                   bottom: 0,
                   child: IgnorePointer(
                     child: ExcludeSemantics(
-                      child: Icon(Icons.check, size: 12, color: foreground),
+                      child: Center(
+                        child: Icon(Icons.check, size: 12, color: foreground),
+                      ),
                     ),
                   ),
                 ),

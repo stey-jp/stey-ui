@@ -8,6 +8,7 @@ FlutterのRawMenuAnchor・OverlayEntry・MenuItemButtonを使い、React／WebVi
 | Root / Trigger / Content | SteyDropdownMenu(items, child) | 既存のitems APIを維持。triggerはSteyButton |
 | open / onOpenChange | MenuController / onOpenChanged | controllerから開閉可能。イベント原因・取消は未対応 |
 | Item / onClick | SteyMenuItem / onPressed | disabled、destructive、child、shortcutに対応 |
+| RTL行レイアウト | 物理left余白／check、ml-auto相当 | 左32pxの字下げ・左8pxの14px check slotを方向で反転しない。RTLではshortcut・radio check・子のcaretを文字の隣に配置。caretは公式と同じ右向き、開くキーはRTLで左矢印。戻るキーはfocus移動待ち中でも最上位の子を閉じる |
 | icon component / element | icon: IconData / leading: Widget | 16pxの共通slot。独自Widgetの色指定を保持 |
 | Item / Label / SubTriggerの自動字下げ | 同一popup内のiconを検出 | 閉じたsubmenuのiconは親の判定へ含めない。insetの明示指定も可能 |
 | Group / Label / Separator | SteyMenuGroup / SteyMenuSeparator | グループごとの読み上げ名。ラベルと区切りは選択対象外 |
@@ -27,10 +28,12 @@ Webにはmenu／menuitem／menuitemcheckbox／menuitemradioとchecked／expanded
 物理実機・全screen readerの操作は未検証です。
 
 上下へ回り込むsubmenuの配置規則、
-すべてのBase UI継承prop、portal／任意trigger、RTL行の物理的な字下げ・checkbox／shortcut位置、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
+すべてのBase UI継承prop、portal／任意trigger、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
 画像比較は診断用サンプルであり、承認済み視覚ゲートや全状態の認証ではありません。
 同期済みSHAは進めていません。
 
 子メニューを独立したOverlayEntryへ配置し、nested OverlayPortalで発生したWebの意味情報消失を避けています。TapRegionをrootと共有し、子項目の選択で外側クリック扱いにならないようにしています。DOM／SDKの改造は行っていません。任意のrich contentによる寸法とpointerの斜め移動の全仕様は未認証です。
 
 RawMenuAnchorは150ms後までoverlayを保持し、onOpenChangedは遷移の開始時に通知します。MenuController.isOpenは終了アニメーションの間もtrueです。終了中の再表示と通知内での再表示は古い完了処理で閉じないように扱います。終了開始後に遅延したMenuItemButton callbackが届いても再実行しません。動作低減設定でも遷移を実行する点は、ユーザーのグローバル指示による公式との差異です。任意portal・すべての継承イベント理由／衝突配置の認証は残ります。
+
+RTLの行レイアウトを同梱Interによる8テストで検証します。物理余白・グループ見出し・icon有無・shortcut／radio／通常selectedの配置、子メニューのキーとcaret、制御値と意味情報の更新、2倍文字拡大とrich childの方向を含みます。公式のselectedは隣接、radio indicatorは物理auto marginという違いも維持します。全Base UI APIと全入力／描画状態の認証は未完了です。

@@ -9,7 +9,7 @@ class DropdownExample extends StatefulWidget {
 }
 
 class _DropdownExampleState extends State<DropdownExample> {
-  bool alerts = true;
+  bool alerts = true, rtl = false;
   String environment = 'production';
   String lastAction = '';
   int actions = 0;
@@ -25,89 +25,96 @@ class _DropdownExampleState extends State<DropdownExample> {
     crossAxisAlignment: CrossAxisAlignment.start,
     spacing: 16,
     children: [
-      SteyDropdownMenu(
-        label: text('操作メニュー', 'Actions'),
-        width: 224,
-        items: [
-          SteyMenuGroup(
-            text('プロジェクト', 'Project'),
-            children: [
-              SteyMenuItem(
-                text('編集', 'Edit'),
-                icon: Icons.edit_outlined,
-                shortcut: '⌘E',
-                onPressed: () => action(text('編集', 'Edit')),
-              ),
-              SteyMenuItem(
-                text('複製', 'Duplicate'),
-                onPressed: () => action(text('複製', 'Duplicate')),
-              ),
-              SteyMenuItem(
-                text('移動', 'Move'),
-                leading: const Icon(Icons.drive_file_move_outlined),
-                children: [
-                  SteyMenuItem(
-                    text('個人アカウント', 'Personal account'),
-                    onPressed: () =>
-                        action(text('個人アカウントへ移動', 'Move to personal')),
-                  ),
-                  SteyMenuItem(
-                    text('チームアカウント', 'Team account'),
-                    onPressed: () =>
-                        action(text('チームアカウントへ移動', 'Move to team')),
-                  ),
-                  SteyMenuItem(
-                    text('詳細', 'More'),
-                    children: [
-                      SteyMenuItem(
-                        text('新しいフォルダー', 'New folder'),
-                        onPressed: () =>
-                            action(text('フォルダーを作成', 'Create folder')),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SteyMenuItem(
-                text('利用不可', 'Unavailable'),
-                disabled: true,
-                onPressed: () => action('disabled'),
-              ),
-            ],
-          ),
-          const SteyMenuSeparator(),
-          SteyMenuCheckboxItem(
-            text('通知を受け取る', 'Receive alerts'),
-            value: alerts,
-            closeOnActivate: false,
-            onChanged: (value) => setState(() => alerts = value),
-          ),
-          SteyMenuGroup(
-            text('環境', 'Environment'),
-            children: [
-              for (final entry in {
-                'production': text('本番', 'Production'),
-                'staging': text('ステージング', 'Staging'),
-              }.entries)
-                SteyMenuRadioItem(
-                  entry.value,
-                  value: entry.key,
-                  groupValue: environment,
-                  closeOnActivate: false,
-                  onChanged: (value) => setState(() => environment = value),
+      Directionality(
+        textDirection: rtl ? TextDirection.rtl : Directionality.of(context),
+        child: SteyDropdownMenu(
+          label: text('操作メニュー', 'Actions'),
+          width: 224,
+          items: [
+            SteyMenuGroup(
+              text('プロジェクト', 'Project'),
+              children: [
+                SteyMenuItem(
+                  text('編集', 'Edit'),
+                  icon: Icons.edit_outlined,
+                  shortcut: '⌘E',
+                  onPressed: () => action(text('編集', 'Edit')),
                 ),
-            ],
-          ),
-          const SteyMenuSeparator(),
-          SteyMenuItem(
-            text('削除', 'Delete'),
-            destructive: true,
-            onPressed: () => action(text('削除', 'Delete')),
-          ),
-        ],
-        child: Text(text('操作', 'Actions')),
+                SteyMenuItem(
+                  text('複製', 'Duplicate'),
+                  onPressed: () => action(text('複製', 'Duplicate')),
+                ),
+                SteyMenuItem(
+                  text('移動', 'Move'),
+                  leading: const Icon(Icons.drive_file_move_outlined),
+                  children: [
+                    SteyMenuItem(
+                      text('個人アカウント', 'Personal account'),
+                      onPressed: () =>
+                          action(text('個人アカウントへ移動', 'Move to personal')),
+                    ),
+                    SteyMenuItem(
+                      text('チームアカウント', 'Team account'),
+                      onPressed: () =>
+                          action(text('チームアカウントへ移動', 'Move to team')),
+                    ),
+                    SteyMenuItem(
+                      text('詳細', 'More'),
+                      children: [
+                        SteyMenuItem(
+                          text('新しいフォルダー', 'New folder'),
+                          onPressed: () =>
+                              action(text('フォルダーを作成', 'Create folder')),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SteyMenuItem(
+                  text('利用不可', 'Unavailable'),
+                  disabled: true,
+                  onPressed: () => action('disabled'),
+                ),
+              ],
+            ),
+            const SteyMenuSeparator(),
+            SteyMenuCheckboxItem(
+              text('通知を受け取る', 'Receive alerts'),
+              value: alerts,
+              closeOnActivate: false,
+              onChanged: (value) => setState(() => alerts = value),
+            ),
+            SteyMenuGroup(
+              text('環境', 'Environment'),
+              children: [
+                for (final entry in {
+                  'production': text('本番', 'Production'),
+                  'staging': text('ステージング', 'Staging'),
+                }.entries)
+                  SteyMenuRadioItem(
+                    entry.value,
+                    value: entry.key,
+                    groupValue: environment,
+                    closeOnActivate: false,
+                    onChanged: (value) => setState(() => environment = value),
+                  ),
+              ],
+            ),
+            const SteyMenuSeparator(),
+            SteyMenuItem(
+              text('削除', 'Delete'),
+              destructive: true,
+              onPressed: () => action(text('削除', 'Delete')),
+            ),
+          ],
+          child: Text(text('操作', 'Actions')),
+        ),
       ),
       if (!widget.fixture) ...[
+        SteyButton(
+          onPressed: () => setState(() => rtl = !rtl),
+          child: Text(rtl ? '表示方向：右から左' : '表示方向：左から右'),
+        ),
         const SteyText(
           '移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'
           'ポインターでの開閉は150msで拡縮・透過し、Enter・Spaceでの選択とEscでの終了は即時に切り替わります。',

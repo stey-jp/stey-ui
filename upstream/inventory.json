@@ -296,7 +296,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Native nested menus, groups, controlled selection, icons, auto-inset and keyboard navigation are present. Whole-surface 150ms scale/opacity, instant keyboard/dismiss paths, inert exit and interrupted/reentrant opening are implemented against 7e0ff40. RTL row inset/indicator/shortcut placement, all collision fallbacks, inherited event reasons, physical screen readers and complete visual/behavior parity remain uncertified."
+      "limitations": "Native nested menus, groups, controlled selection, icons, auto-inset and keyboard navigation are present. Whole-surface 150ms scale/opacity, instant keyboard/dismiss paths, inert exit and interrupted/reentrant opening are implemented against 7e0ff40. Physical RTL padding/checkbox slots, adjacent RTL shortcut/radio/caret and selected-item layout are implemented. All collision fallbacks, inherited event reasons, physical screen readers and complete visual/behavior parity remain uncertified."
     },
     {
       "id": "empty",
