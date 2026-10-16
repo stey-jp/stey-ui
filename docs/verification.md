@@ -1,4 +1,4 @@
-# 検証結果（Dropdown衝突配置更新：2026-10-16）
+# 検証結果（Dropdown表示中の追従更新：2026-10-17）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -353,3 +353,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 Floating UIのMIT原文を第三者表記とパッケージLICENSEへ追加し、Base UIの表記対象をmenu配置にも広げました。ライセンスのみの増分ビルド後も比較済みWasmのhashは不変で、Web／Windows／Android配布のNOTICESへ新表記が入ることを確認しています。
 
 任意境界・sticky・開いたままのresize／anchor追従、custom submenu寸法、全イベント理由／APIと他群の不足は[6工程](completion-plan.md)で継続します。同期済みSHAと承認済み視覚ゲートは進めていません。shared-ciの最新README／setup／登録設定は前回と同じblobで、公開repoの除外とクラウド接続保留を維持しています。Workflow起動・実Batch往復は未実施、API呼出・費用0です。GitHub mainが本番反映先です。
+
+## Dropdown表示中の追従の追加検証（2026-10-17）
+
+ソースSHAは `faaccd206beae338b163ea302e1a3c6d3c77f1d2`。静的解析0件、ライブラリ192件・デモ11件、Web・Windows・Androidリリースビルドが成功しました。新規12テストでLTR／RTLのリサイズ、paint transformによる3階層移動、祖先のanimated scroll、scroll中のresize、外部controllerの終了とresize時post-frame終了、長い子のキーボード上の高さ制約、項目数変更、停止中のframe要求なし・破棄を確認しました。
+
+RawMenuAnchorのサイズ変更・祖先scrollによる自動close要求を扱い、表示中に配置を更新します。選択・focus・開閉状態・進行中の遷移を作り直しません。子は独立OverlayEntryの意味情報を保ち、layout後のgeometry変化だけで再配置します。Scaffoldが除去したViewのキーボード／notch余白を回復し、キーボードとの間に5pxを確保します。MediaQueryの文字倍率は継承します。SDK／DOMの改造と常時Tickerの追加は行っていません。[API対応](dropdown-api-mapping.md)。
+
+公式SHA `7e0ff40` と実ChromeのLight/Dark・LTR/RTL、1200／390pxからの開始、2／3階層の表示、起点移動・祖先scroll・320／1200×600pxへのresize・子12項目追加という40状態を比較しました。全40状態の位置・寸法が0.1 CSS px以内で、最大差は0.000000 CSS pxでした。通知の選択値と開いた階層を維持し、Escで終了しました。子surfaceの画像差分（threshold 0.1）は1.69〜5.82%です。表示開始の遷移を待ってから追従操作を測定しており、遷移中の全フレーム比較ではありません。
+
+既定衝突の48条件も再比較して一致しました。公式の既存静止画像を再利用し、今回のWasmとのhash・比較元fixtureと実行スクリプト・全viewport／切出しPNGを保持しています。既存Dropdown・motion・RTL・LayerDialogは計56項目が成功しました。全URLの実Chrome CDP監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。新規比較の8コンテキストにもSDKの同Issueが8件残ります。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：73 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：93 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_mobile：88 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア監査・DiagnosticsもJSONのdropdown_trackingへ保持しました。SDKのIntl呼出・未配布SkWasm map、起動負荷・転送量、Desktop Sidebarのviewport端の操作領域が残り、全100点・Issues 0件は未達です。AndroidにはSDK tool／metadata XML版の不一致警告がありましたが、APKは成功しました。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。キーボードはWidget testのView Insetsで検証しました。
+
+任意境界・sticky・anchorがclip領域から消えた場合の全hide規則、rich child寸法と全イベント／API・描画状態の認証は残ります。画像は診断用で、完全再現や承認済み視覚ゲートとは扱いません。同期済みSHAは進めず、shared-ciの最新README／setup／登録設定のblobが前回と同じことを確認し、公開repo除外・クラウド接続保留を維持しました。実Batch往復は未実施、API呼出・費用0です。GitHub mainが本番反映先です。
