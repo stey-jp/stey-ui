@@ -108,6 +108,8 @@ class SteyDropdownMenu extends StatefulWidget {
     this.sideOffset = 8,
     this.alignOffset = 0,
     this.submenuSideOffset = 2,
+    this.collisionBoundary,
+    this.collisionPadding = const EdgeInsets.all(5),
     this.triggerBuilder,
   }) : assert(width == null || width >= 144);
   final List<SteyMenuItem> items;
@@ -118,6 +120,14 @@ class SteyDropdownMenu extends StatefulWidget {
   final String? label;
   final double? width;
   final double sideOffset, alignOffset, submenuSideOffset;
+
+  /// Collision rectangle in root-overlay logical pixels. Intersected with the
+  /// viewport; null uses the viewport. Applies to every level of this menu.
+  /// Rebuild with a new rectangle when the containing region moves or resizes.
+  final Rect? collisionBoundary;
+
+  /// Physical insets inside the collision boundary, including in RTL layouts.
+  final EdgeInsets collisionPadding;
 
   /// Custom native trigger. Use the supplied callback and focus node so menu
   /// dismissal restores focus and the existing keyboard shortcuts still apply.
@@ -337,6 +347,8 @@ class _DropdownState extends State<SteyDropdownMenu>
             width: widget.width,
             offset: Offset(widget.alignOffset, widget.sideOffset),
             placement: placement,
+            boundary: widget.collisionBoundary,
+            padding: widget.collisionPadding,
           ),
           child: Listener(
             onPointerDown: (_) => input.keyboard = false,
@@ -356,6 +368,8 @@ class _DropdownState extends State<SteyDropdownMenu>
                       direction: Directionality.of(context),
                       label: widget.label,
                       submenuSideOffset: widget.submenuSideOffset,
+                      boundary: widget.collisionBoundary,
+                      padding: widget.collisionPadding,
                       width: widget.width,
                     ),
                   ),
@@ -474,6 +488,42 @@ class _MenuPlacement {
   Offset origin = Offset.zero;
 }
 
+Rect _menuSafe(
+  Size size,
+  MediaQueryData media,
+  Rect? boundary,
+  EdgeInsets padding,
+) {
+  assert(padding.isNonNegative);
+  final region = boundary ?? Offset.zero & size;
+  final left = math.max(
+    media.padding.left,
+    math.max(0.0, region.left) + padding.left,
+  );
+  final top = math.max(
+    media.padding.top,
+    math.max(0.0, region.top) + padding.top,
+  );
+  final right = math.min(
+    size.width - media.padding.right,
+    math.min(size.width, region.right) - padding.right,
+  );
+  final bottom = math.min(
+    size.height -
+        math.max(
+          media.padding.bottom,
+          media.viewInsets.bottom + padding.bottom,
+        ),
+    math.min(size.height, region.bottom) - padding.bottom,
+  );
+  return Rect.fromLTRB(left, top, math.max(left, right), math.max(top, bottom));
+}
+
+// Floating UI's default limitShift keeps an offscreen popup attached to its
+// reference rather than pinning a detached menu to the viewport edge.
+double _attachedShift(double value, double start, double end, double extent) =>
+    value.clamp(start - extent, end);
+
 enum _MenuSide { right, left, bottom, top }
 
 /// Default Base UI submenu order: preferred side/start, its end alignment,
@@ -580,24 +630,34 @@ enum _MenuSide { right, left, bottom, top }
   rect = position(
     candidate.side,
     candidate.end,
-    math.min(size.height, math.max(0, availableHeight)),
+    math.min(size.height, math.max(0, math.min(safe.height, availableHeight))),
   );
   final unshifted = rect;
   rect = rect.shift(
     vertical
         ? Offset(
-            rect.left.clamp(
-                  safe.left,
-                  math.max(safe.left, safe.right - rect.width),
+            _attachedShift(
+                  rect.left.clamp(
+                    safe.left,
+                    math.max(safe.left, safe.right - rect.width),
+                  ),
+                  anchor.left,
+                  anchor.right,
+                  rect.width,
                 ) -
                 rect.left,
             0,
           )
         : Offset(
             0,
-            rect.top.clamp(
-                  safe.top,
-                  math.max(safe.top, safe.bottom - rect.height),
+            _attachedShift(
+                  rect.top.clamp(
+                    safe.top,
+                    math.max(safe.top, safe.bottom - rect.height),
+                  ),
+                  anchor.top,
+                  anchor.bottom,
+                  rect.height,
                 ) -
                 rect.top,
           ),
@@ -632,6 +692,8 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
     required this.width,
     required this.offset,
     required this.placement,
+    required this.boundary,
+    required this.padding,
   });
   final RawMenuOverlayInfo info;
   final MediaQueryData media;
@@ -639,16 +701,9 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
   final double? width;
   final Offset offset;
   final _MenuPlacement placement;
-  Rect get safe => Rect.fromLTRB(
-    math.max(5, media.padding.left),
-    math.max(5, media.padding.top),
-    info.overlaySize.width - math.max(5, media.padding.right),
-    info.overlaySize.height -
-        math.max(
-          5,
-          math.max(media.padding.bottom, media.viewInsets.bottom + 5),
-        ),
-  );
+  final Rect? boundary;
+  final EdgeInsets padding;
+  Rect get safe => _menuSafe(info.overlaySize, media, boundary, padding);
   Rect get anchor => info.position == null
       ? info.anchorRect
       : Rect.fromLTWH(
@@ -671,7 +726,10 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
       maxWidth: math.min(width ?? available, available),
       // Measure on the larger side, then choose using the actual laid-out
       // height. Rich children must not be reduced to estimated text rows.
-      maxHeight: math.max(0, math.max(aboveSpace, belowSpace)),
+      maxHeight: math.max(
+        0,
+        math.min(safe.height, math.max(aboveSpace, belowSpace)),
+      ),
     );
   }
 
@@ -687,8 +745,16 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
         childSize.width / 2 +
         (direction == TextDirection.ltr ? offset.dx : -offset.dx);
     final position = Offset(
-      left.clamp(safe.left, math.max(safe.left, safe.right - childSize.width)),
-      top.clamp(safe.top, math.max(safe.top, safe.bottom - childSize.height)),
+      _attachedShift(
+        left.clamp(
+          safe.left,
+          math.max(safe.left, safe.right - childSize.width),
+        ),
+        rect.left,
+        rect.right,
+        childSize.width,
+      ),
+      top,
     );
     placement.origin = Offset(
       rect.center.dx.clamp(position.dx, position.dx + childSize.width),
@@ -863,6 +929,8 @@ class _MenuPanel extends StatefulWidget {
     required this.input,
     required this.direction,
     required this.submenuSideOffset,
+    required this.boundary,
+    required this.padding,
     this.width,
     this.label,
     this.onBack,
@@ -874,6 +942,8 @@ class _MenuPanel extends StatefulWidget {
   final _MenuInput input;
   final TextDirection direction;
   final double submenuSideOffset;
+  final Rect? boundary;
+  final EdgeInsets padding;
   final double? width;
   final String? label;
   final ValueChanged<bool>? onBack;
@@ -1049,6 +1119,8 @@ class _MenuPanelState extends State<_MenuPanel> {
         focusNode: nodes[i],
         inset: inset,
         submenuSideOffset: widget.submenuSideOffset,
+        boundary: widget.boundary,
+        padding: widget.padding,
         width: widget.width,
       );
     }
@@ -1130,6 +1202,8 @@ class _MenuRow extends StatefulWidget {
     required this.focusNode,
     required this.inset,
     required this.submenuSideOffset,
+    required this.boundary,
+    required this.padding,
     this.width,
   });
   final SteyMenuItem item;
@@ -1141,6 +1215,8 @@ class _MenuRow extends StatefulWidget {
   final FocusNode focusNode;
   final bool inset;
   final double submenuSideOffset;
+  final Rect? boundary;
+  final EdgeInsets padding;
   final double? width;
   @override
   State<_MenuRow> createState() => _MenuRowState();
@@ -1280,24 +1356,17 @@ class _MenuRowState extends State<_MenuRow>
           final rect = current.anchor;
           final direction = Directionality.of(context);
           final media = current.media;
-          final safeLeft = math.max(5.0, media.padding.left);
-          final safeRight =
-              current.overlay.width - math.max(5.0, media.padding.right);
-          final safeTop = math.max(5.0, media.padding.top);
-          final safeBottom =
-              current.overlay.height -
-              math.max(
-                5.0,
-                math.max(media.padding.bottom, media.viewInsets.bottom + 5),
-              );
-          final measured = _popupSize(context, widget.item.children);
-          final width = math.min(
-            widget.width ?? measured.width,
-            safeRight - safeLeft,
+          final safe = _menuSafe(
+            current.overlay,
+            media,
+            widget.boundary,
+            widget.padding,
           );
+          final measured = _popupSize(context, widget.item.children);
+          final width = math.min(widget.width ?? measured.width, safe.width);
           final geometry = _submenuPlacement(
             anchor: rect,
-            safe: Rect.fromLTRB(safeLeft, safeTop, safeRight, safeBottom),
+            safe: safe,
             size: Size(width, measured.height),
             direction: direction,
             sideOffset: widget.submenuSideOffset,
@@ -1348,6 +1417,8 @@ class _MenuRowState extends State<_MenuRow>
                                         widget.isActive() && popupOpen,
                                     direction: direction,
                                     submenuSideOffset: widget.submenuSideOffset,
+                                    boundary: widget.boundary,
+                                    padding: widget.padding,
                                     width: width,
                                     onBack: (instant) {
                                       closePopup(instant);

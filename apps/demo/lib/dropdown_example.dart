@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 
 class DropdownExample extends StatefulWidget {
-  const DropdownExample({super.key, this.fixture = false, this.extraItems = 0});
+  const DropdownExample({
+    super.key,
+    this.fixture = false,
+    this.extraItems = 0,
+    this.collisionBoundary,
+    this.collisionPadding = const EdgeInsets.all(5),
+  });
   final bool fixture;
   final int extraItems;
+  final Rect? collisionBoundary;
+  final EdgeInsets collisionPadding;
   @override
   State<DropdownExample> createState() => _DropdownExampleState();
 }
 
 class _DropdownExampleState extends State<DropdownExample> {
-  bool alerts = true, rtl = false;
+  bool alerts = true, rtl = false, bounded = false;
   String environment = 'production';
   String lastAction = '';
   int actions = 0;
@@ -31,6 +39,10 @@ class _DropdownExampleState extends State<DropdownExample> {
         child: SteyDropdownMenu(
           label: text('操作メニュー', 'Actions'),
           width: 224,
+          collisionBoundary: bounded
+              ? (Offset.zero & MediaQuery.sizeOf(context)).deflate(40)
+              : widget.collisionBoundary,
+          collisionPadding: widget.collisionPadding,
           items: [
             SteyMenuGroup(
               text('プロジェクト', 'Project'),
@@ -122,10 +134,15 @@ class _DropdownExampleState extends State<DropdownExample> {
           onPressed: () => setState(() => rtl = !rtl),
           child: Text(rtl ? '表示方向：右から左' : '表示方向：左から右'),
         ),
+        SteyButton(
+          onPressed: () => setState(() => bounded = !bounded),
+          child: Text(bounded ? '配置境界：画面の内側40px' : '配置境界：画面全体'),
+        ),
         const SteyText(
           '移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'
           '画面端では子メニューの左右を反転し、両側が狭い場合は下または上へ配置します。'
           '開いたままウィンドウを変更したり、親の一覧をスクロールすると配置が追従します。'
+          '配置境界と各辺の余白を指定でき、起点が隠れてもメニューは開いた状態を保ちます。'
           'ポインターでの開閉は150msで拡縮・透過し、Enter・Spaceでの選択とEscでの終了は即時に切り替わります。',
         ),
         SteyText(

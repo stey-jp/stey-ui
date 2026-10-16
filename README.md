@@ -18,6 +18,7 @@ Selectもネイティブのポップアップ、単一／複数選択、グル�
 [目次のAPI対応](docs/table-of-contents-api-mapping.md)で利用方法と未検証範囲を確認できます。
 Dropdownに階層メニュー・Checkbox／Radio選択・自動字下げ・キーボード操作と150msの開閉遷移を追加しています。
 公式の物理余白に合わせたRTL行を実装し、日本語デモで表示方向を切り替えられます。
+矩形の配置境界・各辺の余白を指定でき、表示中のresize・scrollと、起点が隠れた際の追従に対応します。
 日本語デモと[DropdownのAPI対応](docs/dropdown-api-mapping.md)で操作と制限を確認できます。
 Buttonの文字位置・アイコン余白と、Sidebarの階層リスト・装飾ガイド・640pxでのリサイズ操作切替を追加対応しています。
 [Button／SidebarのAPI対応](docs/button-sidebar-api-mapping.md)に適用範囲を記録しています。

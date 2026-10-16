@@ -21,7 +21,9 @@ FlutterのRawMenuAnchor・OverlayEntry・MenuItemButtonを使い、React／WebVi
 | data-instant | Enter／Spaceでの開閉・項目選択、Esc、プログラムによるclose | これらは即時。上下・左右矢印による表示、pointerでの選択・外側押下は遷移を使用。システムBackとTabもnative操作として即時終了 |
 | popup className / width | width | 指定幅、既定最小144px。既定の衝突余白5pxと端末の安全領域を考慮。左右反転・start/end反転を試し、両側が狭い子は下／上へ回り込む。空き高さでスクロールし、rootは選択した上下の側に収める |
 | anchor追従 / autoUpdate | 標準Overlayのlayout情報と子のgeometry観測 | 開いたままのviewport変更、祖先scroll、paint transform、子項目数変更に追従。開閉状態・選択・focus・150ms遷移を作り直さない。SDKによるサイズ変更／祖先scrollの自動close要求を抑え、Esc・外側押下・controller closeは維持 |
-| Portal / Positioner / Popup / render / container | 未対応 | 任意trigger、anchor、境界、portal先、CSS表現の互換APIは未実装 |
+| collisionBoundary / collisionPadding | Rect? / EdgeInsets | root overlayのlogical pxによる矩形をviewportと交差し、各辺の物理余白を適用。既定はviewport・5px。全階層へ適用し、矩形変更のrebuildでも選択とfocusを維持。Element／複数境界の参照APIは未対応 |
+| anchorHidden / limitShift | 起点との接続を維持するshift | 公式の既定スタイルはanchorHiddenでも自動close／非表示にしない。起点がclipされてもメニューを維持し、横のshiftは起点から離れない範囲へ制限。縦のroot配置は起点を追従。anchorHiddenの公開状態・独自renderによる表示制御は未対応 |
+| Portal / Positioner / Popup / render / container | 未対応 | 任意anchor、portal先、CSS表現の互換APIは未実装。triggerBuilderによるnative trigger指定は可能 |
 
 上下矢印、Home／End、繰り返し文字を含む文字検索、Enter／Space、Escape、
 左右矢印によるsubmenuの開閉、RTL、disabled、外側クリック、Androidの戻る通知をWidget testで検査します。
@@ -29,7 +31,7 @@ Webにはmenu／menuitem／menuitemcheckbox／menuitemradioとchecked／expanded
 物理実機・全screen readerの操作は未検証です。
 
 既定のsubmenu衝突処理を追加しました。横の配置を優先し、両側で主軸の幅が不足するときだけ上下を試します。横のどちらかに幅がある場合は縦位置のshift／高さ制約で収めます。上下では解決した側に合わせて8pxの間隔と変形原点を使います。
-任意の衝突境界・sticky、すべてのBase UI継承prop、portal／任意trigger、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
+Element／複数の衝突境界・sticky、すべてのBase UI継承prop、portal、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
 画像比較は診断用サンプルであり、承認済み視覚ゲートや全状態の認証ではありません。
 同期済みSHAは進めていません。
 
@@ -41,6 +43,8 @@ RTLの行レイアウトを同梱Interによる8テストで検証します。�
 
 RTL診断の公式fixtureには文書のdirとBase UIのDirectionProviderを両方指定します。CSSだけのRTLではBase UIの論理配置・キーボード文脈がLTRのままになるため、行の描画と子メニューの挙動を同じ条件で比較します。React／Base UIは比較用fixtureだけの依存で、Flutterパッケージには含めません。
 
-子のgeometry観測は、開いている間の実際の描画フレームにだけ参加します。変化がなければ新しいフレームを要求せず、最後の子が閉じる／破棄されると観測を解除します。RawMenuAnchorの既存のフレーム観測を増やす常時Tickerは追加しません。独立Overlayのため階層ごとの再配置はlayout後に順次反映されます。任意のclip境界からanchorが消えた場合の全hide規則、custom childの自動寸法と全実機のフレーム単位比較は未認証です。
+子のgeometry観測は、開いている間の実際の描画フレームにだけ参加します。変化がなければ新しいフレームを要求せず、最後の子が閉じる／破棄されると観測を解除します。RawMenuAnchorの既存のフレーム観測を増やす常時Tickerは追加しません。独立Overlayのため階層ごとの再配置はlayout後に順次反映されます。任意のclip形状・custom renderでの全hide規則、custom childの自動寸法と全実機のフレーム単位比較は未認証です。
 
 Root overlayの衝突領域では、anchor側のMediaQueryに加えてFlutter Viewの物理padding／viewInsetsをlogical pxへ換算して使います。Scaffoldがbodyから除去したキーボード・notch余白も保持し、長い子メニューをその空き領域でスクロールさせます。呼出側の文字倍率などはMediaQueryから継承します。
+
+collisionBoundaryは移動・resize後の矩形を呼出側で更新してください。独立root overlayへの配置は、公式の既定body portalと同様に、anchor側ScrollViewのclipでpopup自体を切り取りません。完全に隠れた起点を理由とする独自の自動終了は追加していません。[公式Kumo](https://github.com/cloudflare/kumo/blob/7e0ff40546f08405d05bc9754f0ff0fd009ece0a/packages/kumo/src/components/dropdown/dropdown.tsx)とBase UI 1.9.0のuseAnchorPositioning／hideMiddlewareを参照しています。
