@@ -359,3 +359,125 @@ Widget flowWrapSample(Map<String, String> q) => Semantics(
     ),
   ),
 );
+
+class FlowAutoExample extends StatefulWidget {
+  const FlowAutoExample({super.key, this.parameters});
+  final Map<String, String>? parameters;
+  @override
+  State<FlowAutoExample> createState() => _FlowAutoExampleState();
+}
+
+class _FlowAutoExampleState extends State<FlowAutoExample> {
+  late double width;
+  bool short = false;
+  int epoch = 0;
+  bool get fixture => widget.parameters != null;
+  @override
+  void initState() {
+    super.initState();
+    width = double.tryParse(widget.parameters?['host'] ?? '') ?? 160;
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      if (!fixture) ...[
+        const SteyText('初期幅と自動測定', heading: 4),
+        const SizedBox(height: 8),
+        const Text('初期表示で測った図の幅を保持します。親幅を変えても折り返しを維持し、図を作り直すと現在の幅で再測定します。'),
+        const SizedBox(height: 12),
+      ],
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          SteyButton(
+            onPressed: () => setState(() => width = width == 160 ? 320 : 160),
+            child: Text(
+              fixture ? 'Resize host' : '親幅：${width == 160 ? '狭い' : '広い'}',
+            ),
+          ),
+          SteyButton(
+            onPressed: () => setState(() => short = !short),
+            child: Text(
+              fixture
+                  ? 'Toggle content'
+                  : short
+                  ? '自動測定の説明を長くする'
+                  : '自動測定の説明を短くする',
+            ),
+          ),
+          SteyButton(
+            onPressed: () => setState(() => epoch++),
+            child: Text(fixture ? 'Reset diagram' : '図を作り直す'),
+          ),
+        ],
+      ),
+      const SizedBox(height: 8),
+      Semantics(
+        container: true,
+        explicitChildNodes: true,
+        label: fixture ? 'Flow auto width preview' : '自動幅プレビュー',
+        child: SizedBox(
+          width: width,
+          child: SteyFlow.composed(
+            key: ValueKey(epoch),
+            viewportHeight: fixture ? 800 : 500,
+            padding: const EdgeInsets.all(16),
+            orientation: widget.parameters?['orientation'] == 'horizontal'
+                ? SteyFlowOrientation.horizontal
+                : SteyFlowOrientation.vertical,
+            align: SteyFlowAlign.center,
+            children: _autoNodes(
+              widget.parameters?['position'] ?? 'middle',
+              short: short,
+              japanese: !fixture,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+List<SteyFlowElement> _autoNodes(
+  String position, {
+  required bool short,
+  required bool japanese,
+}) {
+  final labels = japanese
+      ? ['受信', '処理', '承認', '完了']
+      : ['Start', 'Process', 'Review', 'End'];
+  const ids = ['start', 'process', 'review', 'end'];
+  final description = japanese
+      ? '保存する前に、入力内容とアクセス権限を確認してください。'
+      : 'Review access permissions before saving changes';
+  SteyFlowNode node(int index, {bool long = false}) => SteyFlowNode(
+    ids[index],
+    Text(!short && long ? description : labels[index]),
+  );
+  if (position == 'only') {
+    return [node(1, long: true)];
+  }
+  if (position == 'parallel' || position == 'parallel-last') {
+    return [
+      node(0),
+      SteyFlowParallel(
+        position == 'parallel'
+            ? [node(1, long: true), node(2)]
+            : [node(2), node(1, long: true)],
+      ),
+      node(3),
+    ];
+  }
+  final target = position == 'first'
+      ? 0
+      : position == 'last'
+      ? 3
+      : 1;
+  return [
+    for (var i = 0; i < 4; i++) node(i, long: position == 'all' || i == target),
+  ];
+}

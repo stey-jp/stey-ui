@@ -12,6 +12,7 @@ margin付きアンカーは[既存のAPI対応](group-flow-api-mapping.md)も参
 | orientation | SteyFlowOrientation | horizontalは右端→左端、verticalは下端中央→上端中央 |
 | align | SteyFlowAlign | Listの交差軸をstart／centerへ揃える |
 | Parallel align=end | alignEnd: true | 横配置は右端、縦配置は下端で分岐を揃える |
+| 自動幅 | autoWidth | 初期幅・最小単語幅・直前の図幅を使い、親幅変更後も履歴を保持 |
 | DOM寸法測定 | native RenderBox測定 | 内容を同じlayout passで実測して配置。テキスト・custom Widgetの寸法変更へ追従 |
 | 明示的な寸法 | Node.width／height、Flow.nodeWidth／nodeHeight | 指定した軸だけ固定。composedの既定は内容サイズ |
 | CSS max-width | Node.maxWidth | padding込みの最大幅。短い内容は自然幅、長い内容は折り返す。widthより優先 |
@@ -57,10 +58,18 @@ maxWidthは外側の幅（既定paddingを含む）です。widthと併用する
 未指定の高さは折り返しに応じて計測します。短い内容を最大幅まで引き伸ばしません。
 自然寸法を先に測って必要な場合だけ幅を制限するため、intrinsic APIを持たないcustom Widgetも使用できます。
 親幅へ追従させる場合はLayoutBuilderでmaxWidthを計算してください。
-既定の自然幅を維持しており、ブラウザの初期CSS shrink-to-fit・履歴依存の測定全体は未対応です。
-公式の縦配置では、初期host 160pxで128×100pxになった説明がhost拡大後も同寸法を保ち、
-初期host 320pxで288×58pxになった説明はhost縮小後も同寸法を保つことを実測しました。
-maxWidth未指定時のこの履歴依存動作とFlutterの既定自然幅には差があります。
+composedのautoWidthは既定trueです。標準ノードで幅・最大幅が未指定なら、
+初期の利用可能幅・単語を分割しない最小幅・自然幅と直前の図幅から寸法を求めます。
+親だけを拡大・縮小しても、既に測定した図幅を保持します。内容変更時はその図幅で再計算し、
+keyを変えて図を作り直すと現在の親幅で測定し直します。
+公式の初期host 160px→説明128×100px、初期host 320px→288×58pxの履歴依存を再現しています。
+横配置では前方のノードが図の拡大に従って自然幅へ戻り、末尾は初期幅を保持します。
+計算が長い場合は1フレーム8回まで測定し、次のフレームで収束を続けます。
+
+明示したwidth／maxWidth、customノード、intrinsic非対応の子は従来の測定を優先します。
+maxWidthの明示指定は利用側で幅を制御するAPIであり、CSS auto-widthの履歴測定と区別します。
+autoWidth: falseは従来の自然幅を使用します。既存DAG APIのautoWidthは既定falseです。
+任意のcustom CSS／Widget、非収束レイアウトと全状態の一致は未認証です。
 
 公式canvasの倍率は1倍固定です。旧InteractiveViewerのzoomを廃止し、公式の背景移動へ合わせました。
 interactive: falseは既存の横スクロール表示を維持します（この経路ではonOverflowChangeは通知しません）。

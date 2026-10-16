@@ -97,6 +97,7 @@ class _FlowCanvasState extends State<_FlowCanvas> {
           },
           child: _FlowCanvasViewport(
             position: position,
+            geometry: widget.geometry,
             padding: widget.padding,
             height: widget.height,
             hovered: hovered,
@@ -171,6 +172,7 @@ class _FlowCanvasPosition extends ChangeNotifier {
 class _FlowCanvasViewport extends SingleChildRenderObjectWidget {
   const _FlowCanvasViewport({
     required this.position,
+    required this.geometry,
     required this.padding,
     required this.height,
     required this.hovered,
@@ -178,6 +180,7 @@ class _FlowCanvasViewport extends SingleChildRenderObjectWidget {
     required super.child,
   });
   final _FlowCanvasPosition position;
+  final _FlowGeometry geometry;
   final EdgeInsets padding;
   final double? height;
   final bool hovered;
@@ -201,6 +204,9 @@ class _RenderFlowCanvas extends RenderProxyBox {
       Offset(math.max(0, (size.width - child!.size.width) / 2), 0);
   @override
   void performLayout() {
+    config.geometry.viewportWidth = constraints.hasBoundedWidth
+        ? constraints.maxWidth
+        : null;
     child!.layout(const BoxConstraints(), parentUsesSize: true);
     size = constraints.constrain(
       Size(

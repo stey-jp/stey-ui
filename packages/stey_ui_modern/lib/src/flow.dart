@@ -76,6 +76,7 @@ class SteyFlow extends StatefulWidget {
     this.canvas = true,
     this.viewportHeight,
     this.onOverflowChange,
+    this.autoWidth = false,
   }) : structure = null;
 
   /// Native counterpart of Flow's List/Parallel composition. Nodes are measured
@@ -94,6 +95,7 @@ class SteyFlow extends StatefulWidget {
     this.canvas = true,
     this.viewportHeight,
     this.onOverflowChange,
+    this.autoWidth = true,
   }) : structure = children,
        nodes = const [],
        edges = const [];
@@ -105,6 +107,10 @@ class SteyFlow extends StatefulWidget {
   final double gap, verticalGap;
   final bool interactive;
   final bool canvas;
+
+  /// Uses the initial available width and the previous diagram width for
+  /// automatic, default-styled nodes. Explicit widths/caps take priority.
+  final bool autoWidth;
   final SteyFlowOrientation orientation;
   final SteyFlowAlign align;
   final EdgeInsetsGeometry padding;
@@ -324,6 +330,21 @@ class _RenderFlowLayout extends RenderBox
         RenderBoxContainerDefaultsMixin<RenderBox, _FlowParentData> {
   _RenderFlowLayout(this.config);
   _FlowLayout config;
+  double? previousWidth;
+  bool settling = false;
+
+  bool supportsIntrinsics(RenderObject object) {
+    if (object is RenderAbstractLayoutBuilderMixin ||
+        object is RenderViewportBase) {
+      return false;
+    }
+    var supported = true;
+    object.visitChildren((child) {
+      supported = supported && supportsIntrinsics(child);
+    });
+    return supported;
+  }
+
   @override
   void setupParentData(RenderBox child) {
     if (child.parentData is! _FlowParentData) {
@@ -336,20 +357,29 @@ class _RenderFlowLayout extends RenderBox
     final c = config.config,
         vertical = c.orientation == SteyFlowOrientation.vertical;
     final boxes = getChildrenAsList(), sizes = <String, Size>{};
+    final preferred = <String, double>{}, minimum = <String, double>{};
+    final padding = c.padding.resolve(config.direction);
+    final initialWidth =
+        (c.canvas && c.interactive ? config.geometry.viewportWidth : null) ??
+        (constraints.hasBoundedWidth ? constraints.maxWidth : null);
+    var availableWidth =
+        previousWidth ??
+        (initialWidth == null
+            ? null
+            : math.max(0.0, initialWidth - padding.horizontal));
+    final automatic = <String>{};
     for (var i = 0; i < boxes.length; i++) {
-      final n = config.nodes[i];
+      final n = config.nodes[i], box = boxes[i];
       final width = n.width ?? c.nodeWidth;
-      boxes[i].layout(
+      box.layout(
         BoxConstraints.tightFor(
           width: width == null ? null : math.min(width, n.maxWidth ?? width),
           height: n.height ?? c.nodeHeight,
         ),
         parentUsesSize: true,
       );
-      if (width == null &&
-          n.maxWidth != null &&
-          boxes[i].size.width > n.maxWidth!) {
-        boxes[i].layout(
+      if (width == null && n.maxWidth != null && box.size.width > n.maxWidth!) {
+        box.layout(
           BoxConstraints.tightFor(
             width: n.maxWidth,
             height: n.height ?? c.nodeHeight,
@@ -357,7 +387,24 @@ class _RenderFlowLayout extends RenderBox
           parentUsesSize: true,
         );
       }
-      sizes[n.id] = boxes[i].size;
+      preferred[n.id] = box.size.width;
+      minimum[n.id] = box.size.width;
+      if (c.autoWidth &&
+          width == null &&
+          n.maxWidth == null &&
+          !n.custom &&
+          availableWidth != null &&
+          supportsIntrinsics(box)) {
+        try {
+          minimum[n.id] = box
+              .getMinIntrinsicWidth(double.infinity)
+              .clamp(0.0, box.size.width);
+          automatic.add(n.id);
+        } on FlutterError {
+          // Unsupported intrinsic measurements keep their native natural size.
+        }
+      }
+      sizes[n.id] = box.size;
     }
     final positions = <String, Offset>{};
     double main(Size s) => vertical ? s.height : s.width;
@@ -409,39 +456,114 @@ class _RenderFlowLayout extends RenderBox
       }
     }
 
-    Size content;
-    if (config.tree != null) {
-      content = measure(config.tree!);
-      place(config.tree!, Offset.zero);
-    } else {
-      final depths = _flowDepths(config.nodes, config.edges),
-          maxDepth = depths.values.fold(0, math.max);
-      final columns = [
-        for (var d = 0; d <= maxDepth; d++)
-          config.nodes.where((n) => depths[n.id] == d).toList(),
-      ];
-      final breadth = [
-        for (final col in columns)
-          col.fold(0.0, (v, n) => v + cross(sizes[n.id]!)) +
-              math.max(0, col.length - 1) * c.verticalGap,
-      ];
-      final widest = breadth.fold(0.0, math.max);
-      var cursor = 0.0;
-      for (var d = 0; d < columns.length; d++) {
-        var crossCursor = c.align == SteyFlowAlign.center
-            ? (widest - breadth[d]) / 2
-            : 0.0;
-        var maxMain = 0.0;
-        for (final n in columns[d]) {
-          positions[n.id] = offset(cursor, crossCursor);
-          crossCursor += cross(sizes[n.id]!) + c.verticalGap;
-          maxMain = math.max(maxMain, main(sizes[n.id]!));
+    Size layoutDiagram() {
+      groupSizes.clear();
+      positions.clear();
+      if (config.tree != null) {
+        measure(config.tree!);
+        place(config.tree!, Offset.zero);
+        return Size(
+          config.nodes.fold(
+            0.0,
+            (v, n) => math.max(v, positions[n.id]!.dx + sizes[n.id]!.width),
+          ),
+          config.nodes.fold(
+            0.0,
+            (v, n) => math.max(v, positions[n.id]!.dy + sizes[n.id]!.height),
+          ),
+        );
+      } else {
+        final depths = _flowDepths(config.nodes, config.edges),
+            maxDepth = depths.values.fold(0, math.max);
+        final columns = [
+          for (var d = 0; d <= maxDepth; d++)
+            config.nodes.where((n) => depths[n.id] == d).toList(),
+        ];
+        final breadth = [
+          for (final col in columns)
+            col.fold(0.0, (v, n) => v + cross(sizes[n.id]!)) +
+                math.max(0, col.length - 1) * c.verticalGap,
+        ];
+        final widest = breadth.fold(0.0, math.max);
+        var cursor = 0.0;
+        for (var d = 0; d < columns.length; d++) {
+          var crossCursor = c.align == SteyFlowAlign.center
+              ? (widest - breadth[d]) / 2
+              : 0.0;
+          var maxMain = 0.0;
+          for (final n in columns[d]) {
+            positions[n.id] = offset(cursor, crossCursor);
+            crossCursor += cross(sizes[n.id]!) + c.verticalGap;
+            maxMain = math.max(maxMain, main(sizes[n.id]!));
+          }
+          cursor += maxMain + (d < columns.length - 1 ? c.gap : 0);
         }
-        cursor += maxMain + (d < columns.length - 1 ? c.gap : 0);
+        return fromAxes(cursor, widest);
       }
-      content = fromAxes(cursor, widest);
     }
-    final padding = c.padding.resolve(config.direction);
+
+    // Absolute CSS nodes use the previous containing width and their previous
+    // left position. Iterate measured layout, keeping each child element/state.
+    final left = <String, double>{
+      for (final n in config.nodes)
+        n.id: config.geometry.rects[n.id] == null
+            ? 0.0
+            : config.geometry.rects[n.id]!.left -
+                  padding.left -
+                  n.margin.resolve(config.direction).left,
+    };
+    var content = Size.zero, converged = false;
+    for (var pass = 0; pass < 8; pass++) {
+      var changed = false;
+      if (availableWidth != null) {
+        for (var i = 0; i < boxes.length; i++) {
+          final n = config.nodes[i];
+          if (!automatic.contains(n.id)) continue;
+          final remaining = math.max(
+            0.0,
+            availableWidth -
+                left[n.id]! -
+                n.margin.resolve(config.direction).horizontal,
+          );
+          final target = math.min(
+            preferred[n.id]!,
+            math.max(minimum[n.id]!, remaining),
+          );
+          boxes[i].layout(
+            BoxConstraints.tightFor(
+              width: target,
+              height: n.height ?? c.nodeHeight,
+            ),
+            parentUsesSize: true,
+          );
+          changed =
+              changed ||
+              (boxes[i].size.width - sizes[n.id]!.width).abs() > .0001 ||
+              (boxes[i].size.height - sizes[n.id]!.height).abs() > .0001;
+          sizes[n.id] = boxes[i].size;
+        }
+      }
+      content = layoutDiagram();
+      final widthChanged =
+          availableWidth != null &&
+          (content.width - availableWidth).abs() > .0001;
+      for (final n in config.nodes) {
+        left[n.id] = positions[n.id]!.dx;
+      }
+      availableWidth = content.width;
+      if (!changed && !widthChanged) {
+        converged = true;
+        break;
+      }
+    }
+    previousWidth = c.autoWidth && content.width > 0 ? content.width : null;
+    if (!converged && automatic.isNotEmpty && !settling) {
+      settling = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        settling = false;
+        if (attached) markNeedsLayout();
+      });
+    }
     final wanted = Size(
       content.width + padding.horizontal,
       content.height + padding.vertical,
@@ -637,6 +759,7 @@ class _FlowGeometry extends ChangeNotifier {
   final rects = <String, Rect>{};
   final diagramKey = GlobalKey();
   final nodes = <String, _NodeGeometry>{};
+  double? viewportWidth;
   bool disposed = false;
   void changed() {
     if (!disposed) notifyListeners();

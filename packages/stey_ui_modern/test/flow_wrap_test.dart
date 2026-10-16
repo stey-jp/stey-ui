@@ -141,7 +141,7 @@ void main() {
     },
   );
 
-  testWidgets('Uncapped nodes preserve natural sizing in a narrow canvas', (
+  testWidgets('autoWidth false retains natural sizing in a narrow canvas', (
     t,
   ) async {
     await t.pumpWidget(
@@ -149,6 +149,7 @@ void main() {
         const SizedBox(
           width: 160,
           child: SteyFlow.composed(
+            autoWidth: false,
             children: [SteyFlowNode('a', Text(longText))],
           ),
         ),

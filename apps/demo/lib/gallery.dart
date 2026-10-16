@@ -114,6 +114,9 @@ class _SteyGalleryState extends State<SteyGallery> {
               ),
               'flow-canvas' => flowCanvasSample(router.uri.queryParameters),
               'flow-wrap' => flowWrapSample(router.uri.queryParameters),
+              'flow-auto' => FlowAutoExample(
+                parameters: router.uri.queryParameters,
+              ),
               'layer-dialog' => LayerDialogSample(
                 parameters: router.uri.queryParameters,
               ),
@@ -1074,6 +1077,8 @@ class _ComponentExampleState extends State<ComponentExample> {
           FlowCanvasExample(),
           SizedBox(height: 24),
           FlowWrapExample(),
+          SizedBox(height: 24),
+          FlowAutoExample(),
           SizedBox(height: 24),
           FlowAnchorExample(),
         ],

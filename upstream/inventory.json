@@ -352,7 +352,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Native composition, measurement, layout, anchors, bounded canvas and explicit maxWidth wrapping are implemented. Default CSS shrink-to-fit/history, all input/visual states and physical screen-reader certification remain incomplete."
+      "limitations": "Native composition, anchors, bounded canvas, explicit maxWidth and standard uncapped node auto-width/history/remount sizing are implemented. Arbitrary custom CSS/Widget sizes, nonconvergent layouts, all input/visual states and physical screen-reader certification remain incomplete."
     },
     {
       "id": "grid",
