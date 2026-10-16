@@ -388,21 +388,12 @@ class _RenderFlowLayout extends RenderBox
         );
       }
       preferred[n.id] = box.size.width;
-      minimum[n.id] = box.size.width;
       if (c.autoWidth &&
           width == null &&
           n.maxWidth == null &&
           !n.custom &&
-          availableWidth != null &&
-          supportsIntrinsics(box)) {
-        try {
-          minimum[n.id] = box
-              .getMinIntrinsicWidth(double.infinity)
-              .clamp(0.0, box.size.width);
-          automatic.add(n.id);
-        } on FlutterError {
-          // Unsupported intrinsic measurements keep their native natural size.
-        }
+          availableWidth != null) {
+        automatic.add(n.id);
       }
       sizes[n.id] = box.size;
     }
@@ -525,10 +516,23 @@ class _RenderFlowLayout extends RenderBox
                 left[n.id]! -
                 n.margin.resolve(config.direction).horizontal,
           );
-          final target = math.min(
-            preferred[n.id]!,
-            math.max(minimum[n.id]!, remaining),
-          );
+          final natural = preferred[n.id]!;
+          var target = natural;
+          if (remaining < natural) {
+            final floor = minimum.putIfAbsent(n.id, () {
+              if (supportsIntrinsics(boxes[i])) {
+                try {
+                  return boxes[i]
+                      .getMinIntrinsicWidth(double.infinity)
+                      .clamp(0.0, natural);
+                } on FlutterError {
+                  // Unsupported intrinsic measurements retain native sizing.
+                }
+              }
+              return natural;
+            });
+            target = math.min(natural, math.max(floor, remaining));
+          }
           boxes[i].layout(
             BoxConstraints.tightFor(
               width: target,

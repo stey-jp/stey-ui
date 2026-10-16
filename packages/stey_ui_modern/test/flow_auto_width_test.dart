@@ -1,11 +1,30 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 
 const description = 'Review access permissions before saving changes';
+
+class _IntrinsicProbe extends SingleChildRenderObjectWidget {
+  const _IntrinsicProbe(this.onMinimum, {required super.child});
+  final VoidCallback onMinimum;
+  @override
+  RenderObject createRenderObject(BuildContext context) => _ProbeBox(onMinimum);
+}
+
+class _ProbeBox extends RenderProxyBox {
+  _ProbeBox(this.onMinimum);
+  final VoidCallback onMinimum;
+  @override
+  double computeMinIntrinsicWidth(double height) {
+    onMinimum();
+    return super.computeMinIntrinsicWidth(height);
+  }
+}
+
 Widget host(Widget child) => MaterialApp(
   theme: SteyTheme.material(Brightness.light),
   home: Scaffold(body: Center(child: child)),
@@ -205,6 +224,43 @@ void main() {
     expect(rect(t, 'process').width, greaterThan(80));
     expect(rect(t, 'process').height, 37);
   });
+  testWidgets(
+    'Only shrinking nodes query intrinsic minimums and cache each pass',
+    (t) async {
+      var shortCalls = 0, longCalls = 0;
+      await t.pumpWidget(
+        host(
+          SizedBox(
+            width: 160,
+            child: SteyFlow.composed(
+              padding: const EdgeInsets.all(16),
+              orientation: SteyFlowOrientation.vertical,
+              children: [
+                SteyFlowNode(
+                  'a',
+                  _IntrinsicProbe(
+                    () => shortCalls++,
+                    child: const Text('Start'),
+                  ),
+                ),
+                SteyFlowNode(
+                  'b',
+                  _IntrinsicProbe(
+                    () => longCalls++,
+                    child: const Text(description),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await t.pumpAndSettle();
+      expect(shortCalls, 0);
+      expect(longCalls, 1);
+      expect(rect(t, 'b').size, const Size(128, 100));
+    },
+  );
   testWidgets(
     'Parallel branch order and direction use the measured containing width',
     (t) async {

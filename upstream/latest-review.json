@@ -76,5 +76,5 @@
   "flow_composition_regression_tests": 8,
   "flow_canvas_regression_tests": 12,
   "flow_wrap_regression_tests": 7,
-  "flow_auto_width_regression_tests": 10
+  "flow_auto_width_regression_tests": 11
 }
