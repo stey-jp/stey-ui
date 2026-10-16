@@ -1,4 +1,4 @@
-# 検証結果（Dropdown RTL行更新：2026-10-16）
+# 検証結果（Dropdown衝突配置更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -330,3 +330,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・DiagnosticsもJSONのdropdown_rtlへ保持しています。SDKのIntl呼出・未配布SkWasm map、起動負荷・転送量、Desktopのviewport端で切れたSidebarの意味情報などが残り、全100点は未達です。初回のAndroidビルドではSDK command-line toolsとSDK metadataのXML版の不一致警告がありましたが、リリースAPKは成功しました。SDK／DOMの改造や機能・意味情報の抑制は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
 
 全submenu衝突規則・継承イベント理由・任意portal／triggerと他群の不足は[6工程](completion-plan.md)で継続します。共有CIの公開repo除外とクラウド接続保留を維持し、Workflow起動・実Batch往復は未実施です。API呼出・費用0、GitHub mainが本番反映先です。Webホスティング・pub.dev公開は行っていません。
+
+## Dropdown衝突配置の追加検証（2026-10-16）
+
+ソースSHAは `7bdf141b791eb557f8270c14e87daa7d701e6270`。静的解析0件、ライブラリ180件・デモ11件、Web・Windows・Androidのリリースビルドが成功しました。追加12テストでLTR／RTLの横反転優先、上下配置の8px間隔と論理揃え、横配置の末尾揃え、rootの高さ制約とscroll、端末の安全領域、rich childの実測高さによるroot反転を確認しています。
+
+左右に幅がある間は横配置を維持し、start／end揃えとshiftを試します。両側が狭いときだけ下／上を試し、上下では8px間隔・配置に応じた変形原点を使います。既定の衝突余白は公式と同じ5px。rootは大きい空き領域で実測してから側を選び、起点を覆わずスクロールします。日本語デモの案内と[API対応](dropdown-api-mapping.md)を更新しました。
+
+公式SHA `7e0ff40` との48条件（Light/Dark・LTR/RTL、1200／700／600／320px、短い500／400px、移動したanchor、長い子メニュー）でrootと子の位置・寸法・配置方向が一致しました。最大座標／寸法差は0.000000 CSS px、許容値は0.1 CSS pxです。子のsurface画像のthreshold 0.1差分は2.17〜9.05%です。スクロール時にmenu内容の意味情報へpaddingを足すだけでは面が6px大きく見えるため、clip／scroll viewportそのものを測定します。全viewport画像・切出し・hashと公式fixtureを記録しました。影・icon・文字等の差は残り、承認済み視覚ゲートや全状態認証とは扱いません。
+
+新規比較の各48条件で子を矢印で開く／戻るとEscを確認し、既存のDropdown・motion・RTL・LayerDialogは計56項目成功しました。実行時エラー0件。全URLの実Chrome CDP監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：77 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：95 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：95 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア監査・DiagnosticsもJSONのdropdown_positioningへ保持しています。SDKのIntl呼出・未配布SkWasm map、起動負荷・転送量、Desktop Sidebarのviewport端の小さい意味情報が残り、全100点・Issues 0件は未達です。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
+
+Floating UIのMIT原文を第三者表記とパッケージLICENSEへ追加し、Base UIの表記対象をmenu配置にも広げました。ライセンスのみの増分ビルド後も比較済みWasmのhashは不変で、Web／Windows／Android配布のNOTICESへ新表記が入ることを確認しています。
+
+任意境界・sticky・開いたままのresize／anchor追従、custom submenu寸法、全イベント理由／APIと他群の不足は[6工程](completion-plan.md)で継続します。同期済みSHAと承認済み視覚ゲートは進めていません。shared-ciの最新README／setup／登録設定は前回と同じblobで、公開repoの除外とクラウド接続保留を維持しています。Workflow起動・実Batch往復は未実施、API呼出・費用0です。GitHub mainが本番反映先です。
