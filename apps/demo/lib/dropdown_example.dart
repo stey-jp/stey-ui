@@ -8,17 +8,20 @@ class DropdownExample extends StatefulWidget {
     this.extraItems = 0,
     this.collisionBoundary,
     this.collisionPadding = const EdgeInsets.all(5),
+    this.sticky = false,
   });
   final bool fixture;
   final int extraItems;
   final Rect? collisionBoundary;
   final EdgeInsets collisionPadding;
+  final bool sticky;
   @override
   State<DropdownExample> createState() => _DropdownExampleState();
 }
 
 class _DropdownExampleState extends State<DropdownExample> {
   bool alerts = true, rtl = false, bounded = false;
+  bool? sticky;
   String environment = 'production';
   String lastAction = '';
   int actions = 0;
@@ -43,6 +46,7 @@ class _DropdownExampleState extends State<DropdownExample> {
               ? (Offset.zero & MediaQuery.sizeOf(context)).deflate(40)
               : widget.collisionBoundary,
           collisionPadding: widget.collisionPadding,
+          sticky: sticky ?? widget.sticky,
           items: [
             SteyMenuGroup(
               text('プロジェクト', 'Project'),
@@ -138,11 +142,18 @@ class _DropdownExampleState extends State<DropdownExample> {
           onPressed: () => setState(() => bounded = !bounded),
           child: Text(bounded ? '配置境界：画面の内側40px' : '配置境界：画面全体'),
         ),
+        SteyButton(
+          onPressed: () => setState(() => sticky = !(sticky ?? widget.sticky)),
+          child: Text(
+            (sticky ?? widget.sticky) ? '起点が隠れたとき：境界内に保持' : '起点が隠れたとき：起点に追従',
+          ),
+        ),
         const SteyText(
           '移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'
           '画面端では子メニューの左右を反転し、両側が狭い場合は下または上へ配置します。'
           '開いたままウィンドウを変更したり、親の一覧をスクロールすると配置が追従します。'
           '配置境界と各辺の余白を指定でき、起点が隠れてもメニューは開いた状態を保ちます。'
+          '境界内に保持へ切り替えると、起点が隠れた後もメニューを境界内に表示します。'
           'ポインターでの開閉は150msで拡縮・透過し、Enter・Spaceでの選択とEscでの終了は即時に切り替わります。',
         ),
         SteyText(

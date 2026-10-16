@@ -31,7 +31,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | date-picker | Calendar各mode、年境界、locale、min/max、disabled日、popover/focus | Calendarの一部操作済み。日付制約等の全比較待ち |
 | date-range-picker | 開始/終了、range hover、連続月、制約、確定/取消 | 全比較待ち |
 | dialog | 全parts、制御/非制御、modal、portal、scroll/focus lock、Escape/外側、復帰 | 基本開閉テストあり。全比較待ち |
-| dropdown | Item/Group/Separator/Checkbox/Radio/Submenu、disabled、keyboard、位置/衝突 | native階層・選択・RTL、150msの開閉・即時切替、物理余白・shortcut、横反転・上下回り込み・高さ制約に対応。表示中のresize・祖先scroll・paint transform・項目数変更へ追従。矩形境界・辺ごとの余白と隠れた起点への追従を追加。Element／複数境界・sticky・全hide規則・継承イベント理由・全比較は未完了。[API対応](dropdown-api-mapping.md) |
+| dropdown | Item/Group/Separator/Checkbox/Radio/Submenu、disabled、keyboard、位置/衝突 | native階層・選択・RTL、150msの開閉・即時切替、物理余白・shortcut、横反転・上下回り込み・高さ制約に対応。表示中のresize・祖先scroll・paint transform・項目数変更へ追従。矩形境界・辺ごとの余白、隠れた起点への追従とstickyによる境界内保持を追加。Element／複数境界・全hide規則・継承イベント理由・全比較は未完了。[API対応](dropdown-api-mapping.md) |
 | empty | variant、icon、title、description、action、狭幅 | 全比較待ち |
 | field | 全parts、validation match、error/helper優先、label、required/optional、ID | 一部読み上げ済み。全validation match待ち |
 | flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | List/Parallelからの自動接続、内容測定・動的再配置、縦／center／末尾揃えを追加。既存DAG・アンカー維持。背景pan・両軸wheel・overflow通知・scroll表示を追加。maxWidthでの折り返しと再配置を追加。標準ノードの自動幅・初期幅履歴・再作成時の測定を追加。全custom／入力・視覚／実機認証は未完了。[API対応](flow-api-mapping.md) |

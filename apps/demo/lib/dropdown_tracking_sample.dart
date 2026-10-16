@@ -14,6 +14,7 @@ class DropdownTrackingSample extends StatefulWidget {
 class _TrackingState extends State<DropdownTrackingSample> {
   final scroll = ScrollController();
   bool moved = false, expanded = false, inset = false;
+  bool sticky = Uri.base.queryParameters['sticky'] == 'true', detached = false;
   int clipped = 0;
   KeyEventResult keyEvent(KeyEvent event) {
     if (event is! KeyDownEvent ||
@@ -33,6 +34,10 @@ class _TrackingState extends State<DropdownTrackingSample> {
       setState(() => expanded = !expanded);
     } else if (event.logicalKey == LogicalKeyboardKey.keyB) {
       setState(() => inset = !inset);
+    } else if (event.logicalKey == LogicalKeyboardKey.keyT) {
+      setState(() => sticky = !sticky);
+    } else if (event.logicalKey == LogicalKeyboardKey.keyX) {
+      setState(() => detached = !detached);
     } else if (event.logicalKey == LogicalKeyboardKey.keyH) {
       clipped = (clipped + 1) % 4;
       final height = MediaQuery.sizeOf(context).height;
@@ -82,12 +87,19 @@ class _TrackingState extends State<DropdownTrackingSample> {
             child: Padding(
               padding: EdgeInsets.only(top: box.maxHeight / 2 - 18),
               child: Transform.translate(
-                offset: moved ? const Offset(20, -80) : Offset.zero,
+                offset:
+                    Offset(0, double.tryParse(query['anchorY'] ?? '') ?? 0) +
+                    (detached
+                        ? const Offset(-600, 0)
+                        : moved
+                        ? const Offset(20, -80)
+                        : Offset.zero),
                 child: DropdownExample(
                   fixture: true,
                   extraItems: expanded ? 12 : 0,
                   collisionBoundary: inset ? boundary?.deflate(40) : boundary,
                   collisionPadding: padding,
+                  sticky: sticky,
                 ),
               ),
             ),

@@ -110,6 +110,7 @@ class SteyDropdownMenu extends StatefulWidget {
     this.submenuSideOffset = 2,
     this.collisionBoundary,
     this.collisionPadding = const EdgeInsets.all(5),
+    this.sticky = false,
     this.triggerBuilder,
   }) : assert(width == null || width >= 144);
   final List<SteyMenuItem> items;
@@ -128,6 +129,10 @@ class SteyDropdownMenu extends StatefulWidget {
 
   /// Physical insets inside the collision boundary, including in RTL layouts.
   final EdgeInsets collisionPadding;
+
+  /// Keep every popup inside its collision boundary when the anchor leaves
+  /// that region. The default instead limits shifting to stay attached.
+  final bool sticky;
 
   /// Custom native trigger. Use the supplied callback and focus node so menu
   /// dismissal restores focus and the existing keyboard shortcuts still apply.
@@ -349,6 +354,7 @@ class _DropdownState extends State<SteyDropdownMenu>
             placement: placement,
             boundary: widget.collisionBoundary,
             padding: widget.collisionPadding,
+            sticky: widget.sticky,
           ),
           child: Listener(
             onPointerDown: (_) => input.keyboard = false,
@@ -370,6 +376,7 @@ class _DropdownState extends State<SteyDropdownMenu>
                       submenuSideOffset: widget.submenuSideOffset,
                       boundary: widget.collisionBoundary,
                       padding: widget.collisionPadding,
+                      sticky: widget.sticky,
                       width: widget.width,
                     ),
                   ),
@@ -535,7 +542,9 @@ enum _MenuSide { right, left, bottom, top }
   required Size size,
   required TextDirection direction,
   required double sideOffset,
+  required bool sticky,
 }) {
+  if (sticky) size = Size(size.width, math.min(size.height, safe.height));
   final rtl = direction == TextDirection.rtl;
   final preferred = rtl ? _MenuSide.left : _MenuSide.right;
   final opposite = rtl ? _MenuSide.right : _MenuSide.left;
@@ -622,7 +631,7 @@ enum _MenuSide { right, left, bottom, top }
   final vertical =
       candidate.side == _MenuSide.top || candidate.side == _MenuSide.bottom;
   var rect = position(candidate.side, candidate.end, size.height);
-  final availableHeight = vertical
+  final availableHeight = vertical && !sticky
       ? candidate.side == _MenuSide.top
             ? rect.bottom - safe.top
             : safe.bottom - rect.top
@@ -633,35 +642,48 @@ enum _MenuSide { right, left, bottom, top }
     math.min(size.height, math.max(0, math.min(safe.height, availableHeight))),
   );
   final unshifted = rect;
-  rect = rect.shift(
-    vertical
-        ? Offset(
-            _attachedShift(
-                  rect.left.clamp(
-                    safe.left,
-                    math.max(safe.left, safe.right - rect.width),
-                  ),
-                  anchor.left,
-                  anchor.right,
-                  rect.width,
-                ) -
-                rect.left,
-            0,
-          )
-        : Offset(
-            0,
-            _attachedShift(
-                  rect.top.clamp(
-                    safe.top,
-                    math.max(safe.top, safe.bottom - rect.height),
-                  ),
-                  anchor.top,
-                  anchor.bottom,
-                  rect.height,
-                ) -
-                rect.top,
+  rect = sticky
+      ? Rect.fromLTWH(
+          rect.left.clamp(
+            safe.left,
+            math.max(safe.left, safe.right - rect.width),
           ),
-  );
+          rect.top.clamp(
+            safe.top,
+            math.max(safe.top, safe.bottom - rect.height),
+          ),
+          rect.width,
+          rect.height,
+        )
+      : rect.shift(
+          vertical
+              ? Offset(
+                  _attachedShift(
+                        rect.left.clamp(
+                          safe.left,
+                          math.max(safe.left, safe.right - rect.width),
+                        ),
+                        anchor.left,
+                        anchor.right,
+                        rect.width,
+                      ) -
+                      rect.left,
+                  0,
+                )
+              : Offset(
+                  0,
+                  _attachedShift(
+                        rect.top.clamp(
+                          safe.top,
+                          math.max(safe.top, safe.bottom - rect.height),
+                        ),
+                        anchor.top,
+                        anchor.bottom,
+                        rect.height,
+                      ) -
+                      rect.top,
+                ),
+        );
   return (
     rect: rect,
     origin: vertical
@@ -671,10 +693,16 @@ enum _MenuSide { right, left, bottom, top }
                       ? rect.right
                       : rect.left
                 : anchor.center.dx.clamp(rect.left, rect.right),
-            candidate.side == _MenuSide.top ? anchor.top : anchor.bottom,
+            (rect.top - unshifted.top).abs() > 8
+                ? anchor.center.dy
+                : candidate.side == _MenuSide.top
+                ? rect.bottom + 8
+                : rect.top - 8,
           )
         : Offset(
-            candidate.side == _MenuSide.left ? anchor.left : anchor.right,
+            candidate.side == _MenuSide.left
+                ? rect.right + sideOffset
+                : rect.left - sideOffset,
             (rect.top - unshifted.top).abs() <= 1
                 ? candidate.end
                       ? rect.bottom
@@ -694,6 +722,7 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
     required this.placement,
     required this.boundary,
     required this.padding,
+    required this.sticky,
   });
   final RawMenuOverlayInfo info;
   final MediaQueryData media;
@@ -703,6 +732,7 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
   final _MenuPlacement placement;
   final Rect? boundary;
   final EdgeInsets padding;
+  final bool sticky;
   Rect get safe => _menuSafe(info.overlaySize, media, boundary, padding);
   Rect get anchor => info.position == null
       ? info.anchorRect
@@ -722,13 +752,15 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
     final available = math.max(0.0, safe.width);
     return BoxConstraints(
-      minWidth: math.min(width ?? 144, available),
-      maxWidth: math.min(width ?? available, available),
+      minWidth: width ?? math.min(144, available),
+      maxWidth: width ?? available,
       // Measure on the larger side, then choose using the actual laid-out
       // height. Rich children must not be reduced to estimated text rows.
       maxHeight: math.max(
         0,
-        math.min(safe.height, math.max(aboveSpace, belowSpace)),
+        sticky
+            ? safe.height
+            : math.min(safe.height, math.max(aboveSpace, belowSpace)),
       ),
     );
   }
@@ -744,25 +776,27 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
         rect.center.dx -
         childSize.width / 2 +
         (direction == TextDirection.ltr ? offset.dx : -offset.dx);
+    final shiftedLeft = left
+        .clamp(safe.left, math.max(safe.left, safe.right - childSize.width))
+        .toDouble();
     final position = Offset(
-      _attachedShift(
-        left.clamp(
-          safe.left,
-          math.max(safe.left, safe.right - childSize.width),
-        ),
-        rect.left,
-        rect.right,
-        childSize.width,
-      ),
-      top,
+      sticky
+          ? shiftedLeft
+          : _attachedShift(shiftedLeft, rect.left, rect.right, childSize.width),
+      sticky
+          ? top.clamp(
+              safe.top,
+              math.max(safe.top, safe.bottom - childSize.height),
+            )
+          : top,
     );
     placement.origin = Offset(
       rect.center.dx.clamp(position.dx, position.dx + childSize.width),
       (position.dy - top).abs() > offset.dy.abs()
           ? rect.center.dy
           : above
-          ? rect.top
-          : rect.bottom,
+          ? position.dy + childSize.height + offset.dy
+          : position.dy - offset.dy,
     );
     return position;
   }
@@ -931,6 +965,7 @@ class _MenuPanel extends StatefulWidget {
     required this.submenuSideOffset,
     required this.boundary,
     required this.padding,
+    required this.sticky,
     this.width,
     this.label,
     this.onBack,
@@ -944,6 +979,7 @@ class _MenuPanel extends StatefulWidget {
   final double submenuSideOffset;
   final Rect? boundary;
   final EdgeInsets padding;
+  final bool sticky;
   final double? width;
   final String? label;
   final ValueChanged<bool>? onBack;
@@ -1121,6 +1157,7 @@ class _MenuPanelState extends State<_MenuPanel> {
         submenuSideOffset: widget.submenuSideOffset,
         boundary: widget.boundary,
         padding: widget.padding,
+        sticky: widget.sticky,
         width: widget.width,
       );
     }
@@ -1204,6 +1241,7 @@ class _MenuRow extends StatefulWidget {
     required this.submenuSideOffset,
     required this.boundary,
     required this.padding,
+    required this.sticky,
     this.width,
   });
   final SteyMenuItem item;
@@ -1217,6 +1255,7 @@ class _MenuRow extends StatefulWidget {
   final double submenuSideOffset;
   final Rect? boundary;
   final EdgeInsets padding;
+  final bool sticky;
   final double? width;
   @override
   State<_MenuRow> createState() => _MenuRowState();
@@ -1363,13 +1402,14 @@ class _MenuRowState extends State<_MenuRow>
             widget.padding,
           );
           final measured = _popupSize(context, widget.item.children);
-          final width = math.min(widget.width ?? measured.width, safe.width);
+          final width = widget.width ?? math.min(measured.width, safe.width);
           final geometry = _submenuPlacement(
             anchor: rect,
             safe: safe,
             size: Size(width, measured.height),
             direction: direction,
             sideOffset: widget.submenuSideOffset,
+            sticky: widget.sticky,
           );
           final c = SteyTheme.colorsOf(context);
           // OverlayEntry keeps nested menu semantics independent of portal traversal
@@ -1419,6 +1459,7 @@ class _MenuRowState extends State<_MenuRow>
                                     submenuSideOffset: widget.submenuSideOffset,
                                     boundary: widget.boundary,
                                     padding: widget.padding,
+                                    sticky: widget.sticky,
                                     width: width,
                                     onBack: (instant) {
                                       closePopup(instant);
@@ -1576,7 +1617,24 @@ class _MenuRowState extends State<_MenuRow>
       style: style,
       onHover: onHover,
       onFocusChange: (focused) {
-        if (focused) widget.onActive(submenu ? closePopup : null);
+        if (!focused) return;
+        widget.onActive(submenu ? closePopup : null);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || !widget.focusNode.hasPrimaryFocus) return;
+          final object = anchorKey.currentContext?.findRenderObject();
+          final scroll = Scrollable.maybeOf(context)?.position;
+          if (object == null || !object.attached || scroll == null) return;
+          // Reveal only this menu's focused row, as scrollIntoView(nearest)
+          // does in Base UI. Do not scroll the anchor's application viewport.
+          scroll.ensureVisible(
+            object,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+          );
+          scroll.ensureVisible(
+            object,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+          );
+        });
       },
       onPressed: !item.enabled
           ? null

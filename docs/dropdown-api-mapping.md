@@ -22,6 +22,7 @@ FlutterのRawMenuAnchor・OverlayEntry・MenuItemButtonを使い、React／WebVi
 | popup className / width | width | 指定幅、既定最小144px。既定の衝突余白5pxと端末の安全領域を考慮。左右反転・start/end反転を試し、両側が狭い子は下／上へ回り込む。空き高さでスクロールし、rootは選択した上下の側に収める |
 | anchor追従 / autoUpdate | 標準Overlayのlayout情報と子のgeometry観測 | 開いたままのviewport変更、祖先scroll、paint transform、子項目数変更に追従。開閉状態・選択・focus・150ms遷移を作り直さない。SDKによるサイズ変更／祖先scrollの自動close要求を抑え、Esc・外側押下・controller closeは維持 |
 | collisionBoundary / collisionPadding | Rect? / EdgeInsets | root overlayのlogical pxによる矩形をviewportと交差し、各辺の非負の物理余白を適用。既定はviewport・5px。全階層へ適用し、矩形変更のrebuildでも選択とfocusを維持。Element／複数境界と負のpaddingは未対応 |
+| sticky | bool（既定false） | trueは親・子を可能な範囲で配置境界内に保ち、起点が隠れても表示を維持。高さは境界全体の空き領域で制約し、重なる場合の変形原点を調整。開いたままの切替でも選択・focus・階層を維持 |
 | anchorHidden / limitShift | 起点との接続を維持するshift | 公式の既定スタイルはanchorHiddenでも自動close／非表示にしない。起点がclipされてもメニューを維持し、横のshiftは起点から離れない範囲へ制限。縦のroot配置は起点を追従。anchorHiddenの公開状態・独自renderによる表示制御は未対応 |
 | Portal / Positioner / Popup / render / container | 未対応 | 任意anchor、portal先、CSS表現の互換APIは未実装。triggerBuilderによるnative trigger指定は可能 |
 
@@ -31,7 +32,7 @@ Webにはmenu／menuitem／menuitemcheckbox／menuitemradioとchecked／expanded
 物理実機・全screen readerの操作は未検証です。
 
 既定のsubmenu衝突処理を追加しました。横の配置を優先し、両側で主軸の幅が不足するときだけ上下を試します。横のどちらかに幅がある場合は縦位置のshift／高さ制約で収めます。上下では解決した側に合わせて8pxの間隔と変形原点を使います。
-Element／複数の衝突境界・sticky、すべてのBase UI継承prop、portal、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
+Element／複数の衝突境界、すべてのBase UI継承prop、portal、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
 画像比較は診断用サンプルであり、承認済み視覚ゲートや全状態の認証ではありません。
 同期済みSHAは進めていません。
 
@@ -48,3 +49,11 @@ RTL診断の公式fixtureには文書のdirとBase UIのDirectionProviderを両�
 Root overlayの衝突領域では、anchor側のMediaQueryに加えてFlutter Viewの物理padding／viewInsetsをlogical pxへ換算して使います。Scaffoldがbodyから除去したキーボード・notch余白も保持し、長い子メニューをその空き領域でスクロールさせます。呼出側の文字倍率などはMediaQueryから継承します。
 
 collisionBoundaryは移動・resize後の矩形を呼出側で更新してください。独立root overlayへの配置は、公式の既定body portalと同様に、anchor側ScrollViewのclipでpopup自体を切り取りません。完全に隠れた起点を理由とする独自の自動終了は追加していません。[公式Kumo](https://github.com/cloudflare/kumo/blob/7e0ff40546f08405d05bc9754f0ff0fd009ece0a/packages/kumo/src/components/dropdown/dropdown.tsx)とBase UI 1.9.0のuseAnchorPositioning／hideMiddlewareを参照しています。
+
+stickyは全階層で共通です。rootでは選択した上下の側から境界内へ移動し、子では左右反転・上下への回り込みを選んだ後に両軸を境界内へ移動します。falseは起点と接する範囲にshiftを制限する既定動作を維持します。任意のrich childの測定・全配置propとの組合せは未認証です。
+
+明示したwidthは公式の固定幅と同様に維持します。境界がそれより狭い場合は境界外へ出ることがあり、呼出側で収まる幅を指定してください。幅を省略したrootは利用可能幅に制約します。短いメニュー内でキーボードの選択先が隠れる場合、そのメニュー内だけを必要な分だけスクロールします。画面本体のscroll位置は変更しません。
+
+公式Base UIの既定はdisabled行にも矢印キーでfocusを移せます。現実装はFlutter標準のdisabled focusを維持してその行をskipするため、この点の互換性は未完了です。無効な操作は実行しません。sticky比較では両者に同じ文字検索・Home・矢印・Spaceを送り、同じ選択行と値にそろえて配置を検証します。
+
+公式は500msの文字検索中にSpaceを押すと検索文字として扱います。現実装のSpaceは項目の実行となるため、検索継続中のSpace仕様も残課題です。sticky比較は文字検索の終了を600ms待ち、Spaceで選択してから配置を測定します。
