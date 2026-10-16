@@ -1,4 +1,4 @@
-# 検証結果（Dropdown開閉遷移更新：2026-10-16）
+# 検証結果（Dropdown RTL行更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -309,3 +309,24 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・DiagnosticsもJSONのdropdown_motionへ保持しています。SDKのIntl呼出・未配布のSkWasm map、起動負荷・転送量、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
 
 全submenu衝突規則・継承イベント理由・任意portalなどと他群の不足は[6工程](completion-plan.md)で継続します。共有CIの公開repo除外とクラウド接続保留を維持し、Workflow起動・実Batch往復は未実施です。API呼出・費用0、GitHub mainが本番反映先です。Webホスティング・pub.dev公開は行っていません。
+
+## Dropdown RTL行の追加検証（2026-10-16）
+
+ソースSHAは `8df20b746e539a1aa991716c0bc37f18ffbbaec7`。静的解析0件、ライブラリ168件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。追加8テストで同梱Interを読み込み、物理leftの字下げ／見出し／icon、14pxのcheckbox slot内に置く12pxのcheck、shortcut／radio checkと通常selectedの配置差、右向きcaretとRTLの左／右矢印とfocus移動前の戻るキー、制御値と意味情報、2倍文字とrich childの方向・収まりを確認しました。
+
+公式はpl-8／left-2／ml-autoという物理CSSを使います。RTLで余白を反転させず、shortcut・radio check・caretを文字に隣接させ、通常selectedはLTRでも隣接させました。caretの描画は公式と同じ右向きで、RTLでは左矢印で子を開き右矢印で戻ります。日本語デモには「表示方向：左から右／右から左」の切替を追加し、選択状態を維持します。[API対応と制限](dropdown-api-mapping.md)を参照してください。
+
+実Chromeの新規RTL 10項目、時間制御 10項目、既存Dropdown 12項目、LayerDialog 24項目、合計56項目が成功しました。1280／320pxのLight/Darkと390px、LayerDialogの639／640px境界を含みます。実行時エラー0件。全URL監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。
+
+公式SHA `7e0ff40` と48条件を比較しました。公式側は文書のdirに加えてBase UIのDirectionProviderを指定し、論理配置とキー方向もRTLに揃えています。Light/Dark、1200／320pxのLTR・RTL root、1200pxのLTR・RTL submenuについて、開く遷移の開始・64ms・128ms・完了後を比較しています。全48組の完了後の位置・寸法が0.1 CSS px以内でした。threshold 0.1の画像差分は0.00〜2.90%です。全viewport PNGと、固定した面＋影8pxの切出しPNG・hash・経過時間を保持しています。公式の文字・icon・indicatorの相対座標もsource-layout.jsonから保持しました。影・icon・文字などの描画差は残り、全状態認証や承認済み視覚ゲートとは扱いません。同期済みSHAは進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：77 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：95 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのdropdown_rtlへ保持しています。SDKのIntl呼出・未配布SkWasm map、起動負荷・転送量、Desktopのviewport端で切れたSidebarの意味情報などが残り、全100点は未達です。初回のAndroidビルドではSDK command-line toolsとSDK metadataのXML版の不一致警告がありましたが、リリースAPKは成功しました。SDK／DOMの改造や機能・意味情報の抑制は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
+
+全submenu衝突規則・継承イベント理由・任意portal／triggerと他群の不足は[6工程](completion-plan.md)で継続します。共有CIの公開repo除外とクラウド接続保留を維持し、Workflow起動・実Batch往復は未実施です。API呼出・費用0、GitHub mainが本番反映先です。Webホスティング・pub.dev公開は行っていません。
