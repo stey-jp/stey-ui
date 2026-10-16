@@ -1,4 +1,4 @@
-# 検証結果（Flow自動幅・履歴測定更新：2026-10-16）
+# 検証結果（Dropdown開閉遷移更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -288,3 +288,24 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・DiagnosticsもJSONのflow_auto_widthへ保持しています。必要なノードだけ最小幅を求める最適化前の4測定値も別SHA／artifactで保持しました。SDKのIntl呼出・未配布のSkWasm map、配信／起動負荷と追加デモの処理、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
 
 任意のcustom CSS／Widget、非収束レイアウト、全入力／視覚状態と他コンポーネントの不足は[6工程](completion-plan.md)で継続します。共有CIの公開repo除外とクラウド接続保留を維持し、Workflow起動・実Batch往復は未実施です。API呼出・費用は0、GitHub mainが本番反映先です。Webホスティング・pub.dev公開は行っていません。
+
+## Dropdown開閉遷移の追加検証（2026-10-16）
+
+ソースSHAは `a2f76504685cdb5b317acf362a2e2bc04f534baa`。静的解析0件、ライブラリ160件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。追加11テストで150msの開始／中間／終了、面全体のscale .95→1とopacity 0→1、公式のcubic-bezier(.4, 0, .2, 1)、親子の終了・二重実行防止、キーボード即時切替、親の中央揃え・上側反転・RTL、終了途中／通知内の再表示、hover待機の取消、破棄、動作低減設定時も継続するユーザー指定を確認しています。
+
+RawMenuAnchorへ移し、終了アニメーション中もoverlayを保持します。終了開始時に操作・focus・意味情報を無効化し、post-frameで届く項目callbackも再実行しません。Enter／Spaceでの開閉・選択とEsc、プログラムのcloseは即時、pointerと矢印表示は150msです。onOpenChangedは開始時、MenuController.isOpenは終了中もtrueです。日本語デモを更新しました。実Chromeで発見したpointer表示後のEscを、階層ごとの終了処理で修正しました。[API対応と制限](dropdown-api-mapping.md)を参照してください。
+
+実Chromeの時間制御による新規10項目、既存Dropdown 12項目、LayerDialog 24項目、合計46項目が成功しました。1280／320pxのLight/Darkと390px、LayerDialogの639／640px境界も含みます。実行時エラー0件。全URL監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。
+
+公式SHA `7e0ff40` のCSS・ソースと32条件を比較しました。Light/Dark、1200／320px、LTR／RTLの親と横submenuについて、開く遷移の開始・64ms・128ms・完了後の固定した面領域と影の8px文脈を比較しています。全32組の完了後の寸法が0.1 CSS px以内でした。threshold 0.1の画像差分は0.00〜3.68%です。原本の全viewport PNGも保持し、切出し・タイミング条件・hashをJSONに記録しました。影・icon・文字に加え、RTL行の物理的な字下げ・checkbox・shortcut位置の差も残り、閉じる全位相／全状態の認証や承認済み視覚ゲートとは扱いません。同期済みSHAは進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：78 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：90 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのdropdown_motionへ保持しています。SDKのIntl呼出・未配布のSkWasm map、起動負荷・転送量、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
+
+全submenu衝突規則・継承イベント理由・任意portalなどと他群の不足は[6工程](completion-plan.md)で継続します。共有CIの公開repo除外とクラウド接続保留を維持し、Workflow起動・実Batch往復は未実施です。API呼出・費用0、GitHub mainが本番反映先です。Webホスティング・pub.dev公開は行っていません。

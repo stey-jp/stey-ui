@@ -27,7 +27,7 @@ Webにはmenu／menuitem／menuitemcheckbox／menuitemradioとchecked／expanded
 物理実機・全screen readerの操作は未検証です。
 
 上下へ回り込むsubmenuの配置規則、
-すべてのBase UI継承prop、portal／任意trigger、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
+すべてのBase UI継承prop、portal／任意trigger、RTL行の物理的な字下げ・checkbox／shortcut位置、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
 画像比較は診断用サンプルであり、承認済み視覚ゲートや全状態の認証ではありません。
 同期済みSHAは進めていません。
 
