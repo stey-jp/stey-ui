@@ -20,6 +20,7 @@ FlutterのRawMenuAnchor・OverlayEntry・MenuItemButtonを使い、React／WebVi
 | 開閉遷移 | 親／子の面全体を150msでscale .95→1・opacity 0→1 | ring・影も同時に変化。CSS既定のcubic-bezier(.4, 0, .2, 1)、解決後の配置原点を使用。親は既定の中央揃え、子は先頭揃え。終了中はmountを維持し、操作・focus・意味情報を無効化 |
 | data-instant | Enter／Spaceでの開閉・項目選択、Esc、プログラムによるclose | これらは即時。上下・左右矢印による表示、pointerでの選択・外側押下は遷移を使用。システムBackとTabもnative操作として即時終了 |
 | popup className / width | width | 指定幅、既定最小144px。既定の衝突余白5pxと端末の安全領域を考慮。左右反転・start/end反転を試し、両側が狭い子は下／上へ回り込む。空き高さでスクロールし、rootは選択した上下の側に収める |
+| anchor追従 / autoUpdate | 標準Overlayのlayout情報と子のgeometry観測 | 開いたままのviewport変更、祖先scroll、paint transform、子項目数変更に追従。開閉状態・選択・focus・150ms遷移を作り直さない。SDKによるサイズ変更／祖先scrollの自動close要求を抑え、Esc・外側押下・controller closeは維持 |
 | Portal / Positioner / Popup / render / container | 未対応 | 任意trigger、anchor、境界、portal先、CSS表現の互換APIは未実装 |
 
 上下矢印、Home／End、繰り返し文字を含む文字検索、Enter／Space、Escape、
@@ -28,7 +29,7 @@ Webにはmenu／menuitem／menuitemcheckbox／menuitemradioとchecked／expanded
 物理実機・全screen readerの操作は未検証です。
 
 既定のsubmenu衝突処理を追加しました。横の配置を優先し、両側で主軸の幅が不足するときだけ上下を試します。横のどちらかに幅がある場合は縦位置のshift／高さ制約で収めます。上下では解決した側に合わせて8pxの間隔と変形原点を使います。
-任意の衝突境界・sticky・開いたままの画面寸法／anchor追従、すべてのBase UI継承prop、portal／任意trigger、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
+任意の衝突境界・sticky、すべてのBase UI継承prop、portal／任意trigger、描画エンジンをまたぐ影・icon・文字の完全一致は未完了です。
 画像比較は診断用サンプルであり、承認済み視覚ゲートや全状態の認証ではありません。
 同期済みSHAは進めていません。
 
@@ -39,3 +40,7 @@ RawMenuAnchorは150ms後までoverlayを保持し、onOpenChangedは遷移の開
 RTLの行レイアウトを同梱Interによる8テストで検証します。物理余白・グループ見出し・icon有無・shortcut／radio／通常selectedの配置、子メニューのキーとcaret、制御値と意味情報の更新、2倍文字拡大とrich childの方向を含みます。公式のselectedは隣接、radio indicatorは物理auto marginという違いも維持します。全Base UI APIと全入力／描画状態の認証は未完了です。
 
 RTL診断の公式fixtureには文書のdirとBase UIのDirectionProviderを両方指定します。CSSだけのRTLではBase UIの論理配置・キーボード文脈がLTRのままになるため、行の描画と子メニューの挙動を同じ条件で比較します。React／Base UIは比較用fixtureだけの依存で、Flutterパッケージには含めません。
+
+子のgeometry観測は、開いている間の実際の描画フレームにだけ参加します。変化がなければ新しいフレームを要求せず、最後の子が閉じる／破棄されると観測を解除します。RawMenuAnchorの既存のフレーム観測を増やす常時Tickerは追加しません。独立Overlayのため階層ごとの再配置はlayout後に順次反映されます。任意のclip境界からanchorが消えた場合の全hide規則、custom childの自動寸法と全実機のフレーム単位比較は未認証です。
+
+Root overlayの衝突領域では、anchor側のMediaQueryに加えてFlutter Viewの物理padding／viewInsetsをlogical pxへ換算して使います。Scaffoldがbodyから除去したキーボード・notch余白も保持し、長い子メニューをその空き領域でスクロールさせます。呼出側の文字倍率などはMediaQueryから継承します。

@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'catalog.g.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
+import 'dropdown_tracking_sample.dart';
 import 'gallery_route_uri.dart';
 import 'table_of_contents_example.dart';
 import 'layer_dialog_example.dart';
@@ -155,6 +156,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                           .clamp(0, 30),
                 ),
               ),
+              'dropdown-tracking' => const DropdownTrackingSample(),
               'select' => SizedBox(
                 width: 280,
                 child: SteySelect<String>(

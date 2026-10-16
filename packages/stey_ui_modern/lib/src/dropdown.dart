@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' show SemanticsRole;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import 'button.dart';
@@ -126,7 +127,7 @@ class SteyDropdownMenu extends StatefulWidget {
 }
 
 class _DropdownState extends State<SteyDropdownMenu>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final internalController = MenuController();
   final triggerFocus = FocusNode();
   final menuFocus = FocusScopeNode();
@@ -141,12 +142,41 @@ class _DropdownState extends State<SteyDropdownMenu>
   final input = _MenuInput();
   bool instantOpen = false, instantClose = true;
   int revision = 0;
+  ScrollPosition? ancestorScroll;
+  Size? viewSize;
+  bool resizing = false, scrollNotification = false, explicitClose = false;
   MenuController get controller => widget.controller ?? internalController;
 
   void closeMenu(bool instant) {
     if (!open) return;
     instantClose = instant;
-    controller.close();
+    explicitClose = true;
+    try {
+      controller.close();
+    } finally {
+      explicitClose = false;
+    }
+  }
+
+  void ancestorScrolled() {
+    if (!open) return;
+    // RawMenuAnchor registers its listener after this parent. Its automatic
+    // close request is synchronous with this notifier, not the whole scroll.
+    scrollNotification = true;
+    scheduleMicrotask(() => scrollNotification = false);
+  }
+
+  void requestHide(VoidCallback hideOverlay) {
+    final metricNotification =
+        resizing &&
+        SchedulerBinding.instance.schedulerPhase ==
+            SchedulerPhase.postFrameCallbacks;
+    if (!explicitClose && (metricNotification || scrollNotification)) {
+      resizing = false;
+      scrollNotification = false;
+      return;
+    }
+    hide(hideOverlay);
   }
 
   void toggle() {
@@ -237,12 +267,45 @@ class _DropdownState extends State<SteyDropdownMenu>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     FocusManager.instance.addEarlyKeyEventHandler(keyEvent);
   }
 
   @override
+  void didChangeMetrics() {
+    if (!open) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && open) setState(() {});
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final scroll = Scrollable.maybeOf(context)?.position;
+    if (scroll != ancestorScroll) {
+      ancestorScroll?.isScrollingNotifier.removeListener(ancestorScrolled);
+      ancestorScroll = scroll;
+      scroll?.isScrollingNotifier.addListener(ancestorScrolled);
+    }
+    final size = MediaQuery.sizeOf(context);
+    if (viewSize != null && viewSize != size && open) {
+      resizing = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // RawMenuAnchor also defers its resize close until post-frame. Clear
+        // only after those callbacks have delivered their single request.
+        scheduleMicrotask(() => resizing = false);
+      });
+    }
+    viewSize = size;
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     FocusManager.instance.removeEarlyKeyEventHandler(keyEvent);
+    ancestorScroll?.isScrollingNotifier.removeListener(ancestorScrolled);
+    input.dispose();
     motion.dispose();
     menuFocus.dispose();
     triggerFocus.dispose();
@@ -261,7 +324,7 @@ class _DropdownState extends State<SteyDropdownMenu>
       useRootOverlay: true,
       consumeOutsideTaps: true,
       onOpenRequested: show,
-      onCloseRequested: hide,
+      onCloseRequested: requestHide,
       onOpen: () => changed(true),
       overlayBuilder: (context, info) => _MenuTransition(
         motion: motion,
@@ -269,7 +332,7 @@ class _DropdownState extends State<SteyDropdownMenu>
         child: CustomSingleChildLayout(
           delegate: _MenuPositioner(
             info: info,
-            media: MediaQuery.of(context),
+            media: _menuMedia(context),
             direction: Directionality.of(context),
             width: widget.width,
             offset: Offset(widget.alignOffset, widget.sideOffset),
@@ -341,6 +404,38 @@ class _DropdownState extends State<SteyDropdownMenu>
 class _MenuInput {
   bool keyboard = false, active = false;
   final dismissals = <ValueChanged<bool>>[];
+  final geometryObservers = <VoidCallback>{};
+  int geometryEpoch = 0;
+
+  void observeGeometry(VoidCallback observer) {
+    geometryObservers.add(observer);
+    if (geometryObservers.length != 1) return;
+    final epoch = ++geometryEpoch;
+    void afterLayout(Duration _) {
+      if (epoch != geometryEpoch) return;
+      for (final observer in geometryObservers.toList()) {
+        observer();
+      }
+      if (epoch == geometryEpoch) {
+        // Observe frames produced by layout/scroll/animation. Do not request
+        // frames when nothing changes or keep a ticker running while idle.
+        WidgetsBinding.instance.addPostFrameCallback(afterLayout);
+      }
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback(afterLayout);
+  }
+
+  void unobserveGeometry(VoidCallback observer) {
+    geometryObservers.remove(observer);
+    if (geometryObservers.isEmpty) geometryEpoch++;
+  }
+
+  void dispose() {
+    geometryObservers.clear();
+    geometryEpoch++;
+  }
+
   KeyEventResult keyEvent(KeyEvent event) {
     keyboard =
         event.logicalKey == LogicalKeyboardKey.enter ||
@@ -351,6 +446,29 @@ class _MenuInput {
 
 const _menuDuration = Duration(milliseconds: 150);
 const _menuCurve = Curves.fastOutSlowIn;
+
+MediaQueryData _menuMedia(BuildContext context) {
+  final media = MediaQuery.of(context), view = View.of(context);
+  EdgeInsets includeView(EdgeInsets local, EdgeInsets physical) =>
+      EdgeInsets.fromLTRB(
+        math.max(local.left, physical.left),
+        math.max(local.top, physical.top),
+        math.max(local.right, physical.right),
+        math.max(local.bottom, physical.bottom),
+      );
+  // A Scaffold may already have removed the keyboard/notch insets from the
+  // anchor's MediaQuery. Root overlays still span the complete Flutter view.
+  return media.copyWith(
+    padding: includeView(
+      media.padding,
+      EdgeInsets.fromViewPadding(view.padding, view.devicePixelRatio),
+    ),
+    viewInsets: includeView(
+      media.viewInsets,
+      EdgeInsets.fromViewPadding(view.viewInsets, view.devicePixelRatio),
+    ),
+  );
+}
 
 class _MenuPlacement {
   Offset origin = Offset.zero;
@@ -526,7 +644,10 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
     math.max(5, media.padding.top),
     info.overlaySize.width - math.max(5, media.padding.right),
     info.overlaySize.height -
-        math.max(5, math.max(media.padding.bottom, media.viewInsets.bottom)),
+        math.max(
+          5,
+          math.max(media.padding.bottom, media.viewInsets.bottom + 5),
+        ),
   );
   Rect get anchor => info.position == null
       ? info.anchorRect
@@ -1038,6 +1159,36 @@ class _MenuRowState extends State<_MenuRow>
   OverlayEntry? popup;
   final anchorKey = GlobalKey();
   final submenuKey = GlobalKey<_MenuPanelState>();
+  ({Rect anchor, Size overlay, MediaQueryData media})? popupSnapshot;
+
+  ({Rect anchor, Size overlay, MediaQueryData media})? snapshot() {
+    if (!mounted) return null;
+    final anchor = anchorKey.currentContext?.findRenderObject();
+    final overlay = Overlay.of(
+      context,
+      rootOverlay: true,
+    ).context.findRenderObject();
+    if (anchor is! RenderBox ||
+        overlay is! RenderBox ||
+        !anchor.attached ||
+        !overlay.attached ||
+        !anchor.hasSize ||
+        !overlay.hasSize) {
+      return null;
+    }
+    return (
+      anchor:
+          anchor.localToGlobal(Offset.zero, ancestor: overlay) & anchor.size,
+      overlay: overlay.size,
+      media: _menuMedia(context),
+    );
+  }
+
+  void trackGeometry() {
+    if (!popupOpen || popup == null) return;
+    final current = snapshot();
+    if (current != null && current != popupSnapshot) popup?.markNeedsBuild();
+  }
 
   @override
   void didUpdateWidget(_MenuRow oldWidget) {
@@ -1053,6 +1204,7 @@ class _MenuRowState extends State<_MenuRow>
   void dispose() {
     hoverTimer?.cancel();
     widget.input.dismissals.remove(dismiss);
+    widget.input.unobserveGeometry(trackGeometry);
     motion.dispose();
     popup?.remove();
     popup?.dispose();
@@ -1063,6 +1215,7 @@ class _MenuRowState extends State<_MenuRow>
     hoverTimer?.cancel();
     final entry = popup;
     if (entry == null || !popupOpen) return;
+    widget.input.unobserveGeometry(trackGeometry);
     widget.input.dismissals.remove(dismiss);
     final request = ++revision;
     setState(() => popupOpen = false);
@@ -1108,91 +1261,99 @@ class _MenuRowState extends State<_MenuRow>
     if (!widget.item.enabled || !widget.isActive()) return;
     hoverTimer?.cancel();
     revision++;
-    if (!popupOpen) widget.input.dismissals.add(dismiss);
+    if (!popupOpen) {
+      widget.input.dismissals.add(dismiss);
+      widget.input.observeGeometry(trackGeometry);
+    }
     popupOpen = true;
     widget.onActive(closePopup);
     if (popup == null) {
       final overlay = Overlay.of(context, rootOverlay: true);
-      final anchor = anchorKey.currentContext!.findRenderObject()! as RenderBox;
-      final overlayBox = overlay.context.findRenderObject()! as RenderBox;
-      final rect =
-          anchor.localToGlobal(Offset.zero, ancestor: overlayBox) & anchor.size;
-      final direction = Directionality.of(context);
-      final media = MediaQuery.of(context);
-      final safeLeft = math.max(5.0, media.padding.left);
-      final safeRight =
-          overlayBox.size.width - math.max(5.0, media.padding.right);
-      final safeTop = math.max(5.0, media.padding.top);
-      final safeBottom =
-          overlayBox.size.height -
-          math.max(
-            5.0,
-            math.max(media.padding.bottom, media.viewInsets.bottom),
-          );
-      final measured = _popupSize(context, widget.item.children);
-      final width = math.min(
-        widget.width ?? measured.width,
-        safeRight - safeLeft,
-      );
-      final geometry = _submenuPlacement(
-        anchor: rect,
-        safe: Rect.fromLTRB(safeLeft, safeTop, safeRight, safeBottom),
-        size: Size(width, measured.height),
-        direction: direction,
-        sideOffset: widget.submenuSideOffset,
-      );
-      final c = SteyTheme.colorsOf(context);
-      // OverlayEntry keeps nested menu semantics independent of portal traversal
-      // reparenting. No DOM or SDK patch is required.
+      // Independent entries preserve Web semantics for cascading menus. Read
+      // geometry inside the builder so anchor/viewport changes keep state,
+      // focus and the current transition rather than reopening the submenu.
       popup = OverlayEntry(
-        builder: (_) => _MenuTransition(
-          motion: motion,
-          origin: () => geometry.origin,
-          child: Stack(
-            children: [
-              Positioned(
-                left: geometry.rect.left,
-                top: geometry.rect.top,
-                width: width,
-                child: InheritedTheme.captureAll(
-                  context,
-                  Directionality(
-                    textDirection: direction,
-                    child: Listener(
-                      onPointerDown: (_) => widget.input.keyboard = false,
-                      child: TapRegion(
-                        groupId: widget.rootController,
-                        child: Material(
-                          color: c.control,
-                          surfaceTintColor: Colors.transparent,
-                          elevation: 8,
-                          shadowColor: c.shadowDrop,
-                          shape: _MenuRingBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(color: c.line),
-                          ),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: geometry.rect.height,
+        builder: (_) {
+          final current = snapshot();
+          if (current == null) return const SizedBox.shrink();
+          popupSnapshot = current;
+          final rect = current.anchor;
+          final direction = Directionality.of(context);
+          final media = current.media;
+          final safeLeft = math.max(5.0, media.padding.left);
+          final safeRight =
+              current.overlay.width - math.max(5.0, media.padding.right);
+          final safeTop = math.max(5.0, media.padding.top);
+          final safeBottom =
+              current.overlay.height -
+              math.max(
+                5.0,
+                math.max(media.padding.bottom, media.viewInsets.bottom + 5),
+              );
+          final measured = _popupSize(context, widget.item.children);
+          final width = math.min(
+            widget.width ?? measured.width,
+            safeRight - safeLeft,
+          );
+          final geometry = _submenuPlacement(
+            anchor: rect,
+            safe: Rect.fromLTRB(safeLeft, safeTop, safeRight, safeBottom),
+            size: Size(width, measured.height),
+            direction: direction,
+            sideOffset: widget.submenuSideOffset,
+          );
+          final c = SteyTheme.colorsOf(context);
+          // OverlayEntry keeps nested menu semantics independent of portal traversal
+          // reparenting. No DOM or SDK patch is required.
+          return _MenuTransition(
+            motion: motion,
+            origin: () => geometry.origin,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: geometry.rect.left,
+                  top: geometry.rect.top,
+                  width: width,
+                  child: InheritedTheme.captureAll(
+                    context,
+                    Directionality(
+                      textDirection: direction,
+                      child: Listener(
+                        onPointerDown: (_) => widget.input.keyboard = false,
+                        child: TapRegion(
+                          groupId: widget.rootController,
+                          child: Material(
+                            color: c.control,
+                            surfaceTintColor: Colors.transparent,
+                            elevation: 8,
+                            shadowColor: c.shadowDrop,
+                            shape: _MenuRingBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(color: c.line),
                             ),
-                            child: SingleChildScrollView(
-                              padding: const EdgeInsets.all(6),
-                              child: FocusScope(
-                                child: _MenuPanel(
-                                  key: submenuKey,
-                                  items: widget.item.children,
-                                  rootController: widget.rootController,
-                                  closeRoot: widget.closeRoot,
-                                  input: widget.input,
-                                  isActive: () =>
-                                      widget.isActive() && popupOpen,
-                                  direction: direction,
-                                  submenuSideOffset: widget.submenuSideOffset,
-                                  width: width,
-                                  onBack: (instant) {
-                                    closePopup(instant);
-                                    widget.focusNode.requestFocus();
-                                  },
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: geometry.rect.height,
+                              ),
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.all(6),
+                                child: FocusScope(
+                                  child: _MenuPanel(
+                                    key: submenuKey,
+                                    items: widget.item.children,
+                                    rootController: widget.rootController,
+                                    closeRoot: widget.closeRoot,
+                                    input: widget.input,
+                                    isActive: () =>
+                                        widget.isActive() && popupOpen,
+                                    direction: direction,
+                                    submenuSideOffset: widget.submenuSideOffset,
+                                    width: width,
+                                    onBack: (instant) {
+                                      closePopup(instant);
+                                      widget.focusNode.requestFocus();
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -1202,10 +1363,10 @@ class _MenuRowState extends State<_MenuRow>
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       );
       overlay.insert(popup!);
       setState(() {});

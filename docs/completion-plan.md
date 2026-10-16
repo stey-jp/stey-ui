@@ -7,7 +7,7 @@
 1. **不足実装**：全群のAPI・複合構成・挙動を対応表に沿って埋める。
    ButtonGroupの連結、Flowのmargin付きアンカー・List/Parallel・自動寸法・縦配置を追加。
    Flowの境界付きパン・wheel・overflow通知・スクロール表示を追加。
-   Node.maxWidthでの折り返しと再配置を追加。標準ノードの初期幅・測定履歴・再作成時の自動測定を追加。Dropdownの150ms開閉・即時切替、RTL行、既定の上下回り込み・空き高さ制約も追加。全custom／CSS・canvas入力の認証、Dropdownの任意境界・追従／イベント、LayerDialogの全Drawer挙動などは残る。
+   Node.maxWidthでの折り返しと再配置を追加。標準ノードの初期幅・測定履歴・再作成時の自動測定を追加。Dropdownの150ms開閉・即時切替、RTL行、既定の上下回り込み・高さ制約、表示中のresize／祖先scroll／anchor移動追従も追加。全custom／CSS・canvas入力の認証、Dropdownの任意境界・全hide規則／イベント、LayerDialogの全Drawer挙動などは残る。
 2. **全状態比較**：Light/Dark・画面幅・hover/focus/disabled/loading・動的内容を比較して修正する。
    診断画像を承認済み視覚ゲートと分け、完全検証後に同期済みSHAを進める。
 3. **アクセシビリティとWeb品質**：キーボード・読み上げ・拡大を検証する。

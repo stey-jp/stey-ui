@@ -125,6 +125,7 @@ class _DropdownExampleState extends State<DropdownExample> {
         const SteyText(
           '移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'
           '画面端では子メニューの左右を反転し、両側が狭い場合は下または上へ配置します。'
+          '開いたままウィンドウを変更したり、親の一覧をスクロールすると配置が追従します。'
           'ポインターでの開閉は150msで拡縮・透過し、Enter・Spaceでの選択とEscでの終了は即時に切り替わります。',
         ),
         SteyText(
