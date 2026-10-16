@@ -180,6 +180,10 @@ void main() {
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
       expect(find.byIcon(Icons.chevron_left), findsNothing);
       expect(
+        tester.widget<Icon>(find.byIcon(Icons.chevron_right)).textDirection,
+        TextDirection.ltr,
+      );
+      expect(
         tester.getRect(find.text('More')).left -
             tester.getRect(find.byIcon(Icons.chevron_right)).right,
         8,

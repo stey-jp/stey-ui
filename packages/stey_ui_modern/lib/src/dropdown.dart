@@ -1170,7 +1170,13 @@ class _MenuRowState extends State<_MenuRow>
     final submenu = item.children.isNotEmpty;
     final direction = Directionality.of(context);
     final decoration = submenu
-        ? const ExcludeSemantics(child: Icon(Icons.chevron_right, size: 16))
+        ? const ExcludeSemantics(
+            child: Icon(
+              Icons.chevron_right,
+              size: 16,
+              textDirection: TextDirection.ltr,
+            ),
+          )
         : trailing;
     // Kumo uses physical `pl-8`, `left-2`, and `ml-auto`. In RTL the auto
     // margin occupies the space after the decoration, rather than before it.

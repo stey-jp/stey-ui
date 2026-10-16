@@ -5,6 +5,7 @@ const output='output/playwright/dropdown-rtl';await mkdir(output,{recursive:true
 const browser=await chromium.launch({channel:'chrome',headless:true}),checks=[],issues=[],errors=[];
 try{
  for(const [width,mode] of [[1280,'light'],[1280,'dark'],[320,'light'],[320,'dark'],[390,'light']]){
+  console.log(JSON.stringify({checking:width,mode}));
   const context=await browser.newContext({viewport:{width,height:1000},colorScheme:mode,isMobile:width<500,hasTouch:width<500});
   const page=await context.newPage(),cdp=await context.newCDPSession(page);
   cdp.on('Audits.issueAdded',({issue})=>issues.push({width,mode,...issue}));await cdp.send('Audits.enable');
@@ -21,7 +22,7 @@ try{
   await page.screenshot({path:`${output}/japanese-rtl-${width}-${mode}.png`});
   checks.push(`${width}px ${mode}: Japanese RTL switch preserves checkbox/radio roles and controlled state`);
   await menu.getByRole('menuitem',{name:'移動',exact:true}).focus();await page.keyboard.press('ArrowLeft');
-  await page.getByRole('menuitem',{name:'個人アカウント',exact:true}).and(page.locator(':focus')).waitFor();assert.equal(await page.getByRole('menu').count(),2);
+  await page.getByRole('menuitem',{name:'個人アカウント',exact:true}).waitFor();assert.equal(await page.getByRole('menu').count(),2);
   await page.keyboard.press('ArrowRight');await page.getByRole('menuitem',{name:'個人アカウント',exact:true}).waitFor({state:'hidden'});
   assert.equal(await page.getByRole('menu').count(),1);await page.keyboard.press('Escape');await menu.waitFor({state:'hidden'});
   await page.getByRole('button',{name:'表示方向：右から左',exact:true}).click();await trigger.click();await menu.waitFor();
