@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stey_ui_modern/stey_ui_modern.dart';
 
 class DropdownExample extends StatefulWidget {
-  const DropdownExample({super.key, this.fixture = false});
+  const DropdownExample({super.key, this.fixture = false, this.extraItems = 0});
   final bool fixture;
+  final int extraItems;
   @override
   State<DropdownExample> createState() => _DropdownExampleState();
 }
@@ -58,6 +59,12 @@ class _DropdownExampleState extends State<DropdownExample> {
                       onPressed: () =>
                           action(text('チームアカウントへ移動', 'Move to team')),
                     ),
+                    for (var i = 0; i < widget.extraItems; i++)
+                      SteyMenuItem(
+                        text('アカウント ${i + 1}', 'Account ${i + 1}'),
+                        onPressed: () =>
+                            action(text('アカウント ${i + 1}', 'Account ${i + 1}')),
+                      ),
                     SteyMenuItem(
                       text('詳細', 'More'),
                       children: [
@@ -117,6 +124,7 @@ class _DropdownExampleState extends State<DropdownExample> {
         ),
         const SteyText(
           '移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'
+          '画面端では子メニューの左右を反転し、両側が狭い場合は下または上へ配置します。'
           'ポインターでの開閉は150msで拡縮・透過し、Enter・Spaceでの選択とEscでの終了は即時に切り替わります。',
         ),
         SteyText(

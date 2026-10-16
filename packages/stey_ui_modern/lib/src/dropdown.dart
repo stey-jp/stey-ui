@@ -356,6 +356,156 @@ class _MenuPlacement {
   Offset origin = Offset.zero;
 }
 
+enum _MenuSide { right, left, bottom, top }
+
+/// Default Base UI submenu order: preferred side/start, its end alignment,
+/// opposite side/start/end, then bottom/start, top/start, bottom/end, top/end.
+/// Only leave the horizontal axis when neither horizontal side has room.
+({Rect rect, Offset origin}) _submenuPlacement({
+  required Rect anchor,
+  required Rect safe,
+  required Size size,
+  required TextDirection direction,
+  required double sideOffset,
+}) {
+  final rtl = direction == TextDirection.rtl;
+  final preferred = rtl ? _MenuSide.left : _MenuSide.right;
+  final opposite = rtl ? _MenuSide.right : _MenuSide.left;
+  final candidates = [
+    for (final side in [preferred, opposite])
+      for (final end in [false, true]) (side: side, end: end),
+    for (final end in [false, true])
+      for (final side in [_MenuSide.bottom, _MenuSide.top])
+        (side: side, end: end),
+  ];
+  Rect position(_MenuSide side, bool end, double height) {
+    final vertical = side == _MenuSide.top || side == _MenuSide.bottom;
+    return Rect.fromLTWH(
+      vertical
+          ? (end != rtl ? anchor.right - size.width : anchor.left)
+          : side == _MenuSide.left
+          ? anchor.left - size.width - sideOffset
+          : anchor.right + sideOffset,
+      vertical
+          ? side == _MenuSide.top
+                ? anchor.top - height - 8
+                : anchor.bottom + 8
+          : end
+          ? anchor.bottom - height + 6
+          : anchor.top - 6,
+      size.width,
+      height,
+    );
+  }
+
+  final tried = <({int index, double main, double cross, double total})>[];
+  var chosen = 0;
+  for (var i = 0; i < candidates.length; i++) {
+    if (i == 4 && tried.any((entry) => entry.main <= 0)) break;
+    final candidate = candidates[i];
+    final rect = position(candidate.side, candidate.end, size.height);
+    final overflow = {
+      _MenuSide.left: safe.left + 1 + (rtl ? 1 : 0) - rect.left,
+      _MenuSide.right: rect.right - safe.right + 1 + (rtl ? 0 : 1),
+      _MenuSide.top: safe.top + 1 - rect.top,
+      _MenuSide.bottom: rect.bottom - safe.bottom + 1,
+    };
+    final vertical =
+        candidate.side == _MenuSide.top || candidate.side == _MenuSide.bottom;
+    var cross = vertical
+        ? candidate.end == rtl
+              ? _MenuSide.right
+              : _MenuSide.left
+        : candidate.end
+        ? _MenuSide.top
+        : _MenuSide.bottom;
+    if (vertical ? anchor.width > size.width : anchor.height > size.height) {
+      cross = switch (cross) {
+        _MenuSide.right => _MenuSide.left,
+        _MenuSide.left => _MenuSide.right,
+        _MenuSide.top => _MenuSide.bottom,
+        _MenuSide.bottom => _MenuSide.top,
+      };
+    }
+    final main = overflow[candidate.side]!;
+    final crossValue = overflow[cross]!;
+    final values = vertical
+        ? [main, overflow[_MenuSide.left]!, overflow[_MenuSide.right]!]
+        : [main, overflow[_MenuSide.top]!, overflow[_MenuSide.bottom]!];
+    tried.add((
+      index: i,
+      main: main,
+      cross: crossValue,
+      total: values.fold(0.0, (sum, value) => sum + math.max(0, value)),
+    ));
+    chosen = i;
+    if (values.every((value) => value <= 0)) break;
+    final fitting = tried.where((entry) => entry.main <= 0).toList();
+    final ranked = fitting.isEmpty ? tried.toList() : fitting;
+    ranked.sort((a, b) {
+      final order = fitting.isEmpty
+          ? a.total.compareTo(b.total)
+          : a.cross.compareTo(b.cross);
+      return order == 0 ? a.index.compareTo(b.index) : order;
+    });
+    chosen = ranked.first.index;
+  }
+  final candidate = candidates[chosen];
+  final vertical =
+      candidate.side == _MenuSide.top || candidate.side == _MenuSide.bottom;
+  var rect = position(candidate.side, candidate.end, size.height);
+  final availableHeight = vertical
+      ? candidate.side == _MenuSide.top
+            ? rect.bottom - safe.top
+            : safe.bottom - rect.top
+      : safe.height;
+  rect = position(
+    candidate.side,
+    candidate.end,
+    math.min(size.height, math.max(0, availableHeight)),
+  );
+  final unshifted = rect;
+  rect = rect.shift(
+    vertical
+        ? Offset(
+            rect.left.clamp(
+                  safe.left,
+                  math.max(safe.left, safe.right - rect.width),
+                ) -
+                rect.left,
+            0,
+          )
+        : Offset(
+            0,
+            rect.top.clamp(
+                  safe.top,
+                  math.max(safe.top, safe.bottom - rect.height),
+                ) -
+                rect.top,
+          ),
+  );
+  return (
+    rect: rect,
+    origin: vertical
+        ? Offset(
+            (rect.left - unshifted.left).abs() <= 1
+                ? candidate.end != rtl
+                      ? rect.right
+                      : rect.left
+                : anchor.center.dx.clamp(rect.left, rect.right),
+            candidate.side == _MenuSide.top ? anchor.top : anchor.bottom,
+          )
+        : Offset(
+            candidate.side == _MenuSide.left ? anchor.left : anchor.right,
+            (rect.top - unshifted.top).abs() <= 1
+                ? candidate.end
+                      ? rect.bottom
+                      : rect.top
+                : anchor.center.dy.clamp(rect.top, rect.bottom),
+          ),
+  );
+}
+
 class _MenuPositioner extends SingleChildLayoutDelegate {
   _MenuPositioner({
     required this.info,
@@ -372,37 +522,45 @@ class _MenuPositioner extends SingleChildLayoutDelegate {
   final Offset offset;
   final _MenuPlacement placement;
   Rect get safe => Rect.fromLTRB(
-    math.max(8, media.padding.left),
-    math.max(8, media.padding.top),
-    info.overlaySize.width - math.max(8, media.padding.right),
+    math.max(5, media.padding.left),
+    math.max(5, media.padding.top),
+    info.overlaySize.width - math.max(5, media.padding.right),
     info.overlaySize.height -
-        math.max(8, math.max(media.padding.bottom, media.viewInsets.bottom)),
+        math.max(5, math.max(media.padding.bottom, media.viewInsets.bottom)),
   );
+  Rect get anchor => info.position == null
+      ? info.anchorRect
+      : Rect.fromLTWH(
+          info.anchorRect.left + info.position!.dx,
+          info.anchorRect.top + info.position!.dy,
+          0,
+          0,
+        );
+  double get belowSpace => safe.bottom - anchor.bottom - offset.dy;
+  double get aboveSpace => anchor.top - offset.dy - safe.top;
+  // Base UI biases flip detection by 1px, plus 1px on the preferred side.
+  bool above(double height) =>
+      height > belowSpace - 2 &&
+      (height <= aboveSpace - 1 || aboveSpace > belowSpace);
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
     final available = math.max(0.0, safe.width);
     return BoxConstraints(
       minWidth: math.min(width ?? 144, available),
       maxWidth: math.min(width ?? available, available),
-      maxHeight: math.max(0, safe.height),
+      // Measure on the larger side, then choose using the actual laid-out
+      // height. Rich children must not be reduced to estimated text rows.
+      maxHeight: math.max(0, math.max(aboveSpace, belowSpace)),
     );
   }
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    final rect = info.position == null
-        ? info.anchorRect
-        : Rect.fromLTWH(
-            info.anchorRect.left + info.position!.dx,
-            info.anchorRect.top + info.position!.dy,
-            0,
-            0,
-          );
-    var top = rect.bottom + offset.dy;
-    final above =
-        top + childSize.height > safe.bottom &&
-        rect.top - offset.dy - childSize.height >= safe.top;
-    if (above) top = rect.top - offset.dy - childSize.height;
+    final rect = anchor;
+    final above = this.above(childSize.height);
+    final top = above
+        ? rect.top - offset.dy - childSize.height
+        : rect.bottom + offset.dy;
     final left =
         rect.center.dx -
         childSize.width / 2 +
@@ -961,14 +1119,14 @@ class _MenuRowState extends State<_MenuRow>
           anchor.localToGlobal(Offset.zero, ancestor: overlayBox) & anchor.size;
       final direction = Directionality.of(context);
       final media = MediaQuery.of(context);
-      final safeLeft = math.max(8.0, media.padding.left);
+      final safeLeft = math.max(5.0, media.padding.left);
       final safeRight =
-          overlayBox.size.width - math.max(8.0, media.padding.right);
-      final safeTop = math.max(8.0, media.padding.top);
+          overlayBox.size.width - math.max(5.0, media.padding.right);
+      final safeTop = math.max(5.0, media.padding.top);
       final safeBottom =
           overlayBox.size.height -
           math.max(
-            8.0,
+            5.0,
             math.max(media.padding.bottom, media.viewInsets.bottom),
           );
       final measured = _popupSize(context, widget.item.children);
@@ -976,36 +1134,25 @@ class _MenuRowState extends State<_MenuRow>
         widget.width ?? measured.width,
         safeRight - safeLeft,
       );
-      final height = measured.height;
-      var left = direction == TextDirection.ltr
-          ? rect.right + widget.submenuSideOffset
-          : rect.left - width - widget.submenuSideOffset;
-      if (left + width > safeRight || left < safeLeft) {
-        left = direction == TextDirection.ltr
-            ? rect.left - width - widget.submenuSideOffset
-            : rect.right + widget.submenuSideOffset;
-      }
-      left = left.clamp(safeLeft, math.max(safeLeft, safeRight - width));
-      final top = (rect.top - 6)
-          .clamp(safeTop, math.max(safeTop, safeBottom - height))
-          .toDouble();
+      final geometry = _submenuPlacement(
+        anchor: rect,
+        safe: Rect.fromLTRB(safeLeft, safeTop, safeRight, safeBottom),
+        size: Size(width, measured.height),
+        direction: direction,
+        sideOffset: widget.submenuSideOffset,
+      );
       final c = SteyTheme.colorsOf(context);
       // OverlayEntry keeps nested menu semantics independent of portal traversal
       // reparenting. No DOM or SDK patch is required.
       popup = OverlayEntry(
         builder: (_) => _MenuTransition(
           motion: motion,
-          origin: () => Offset(
-            left < rect.left ? rect.left : rect.right,
-            (top - (rect.top - 6)).abs() <= 1
-                ? top
-                : rect.center.dy.clamp(top, top + height),
-          ),
+          origin: () => geometry.origin,
           child: Stack(
             children: [
               Positioned(
-                left: left,
-                top: top,
+                left: geometry.rect.left,
+                top: geometry.rect.top,
                 width: width,
                 child: InheritedTheme.captureAll(
                   context,
@@ -1026,7 +1173,7 @@ class _MenuRowState extends State<_MenuRow>
                           ),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxHeight: math.max(0, safeBottom - top),
+                              maxHeight: geometry.rect.height,
                             ),
                             child: SingleChildScrollView(
                               padding: const EdgeInsets.all(6),

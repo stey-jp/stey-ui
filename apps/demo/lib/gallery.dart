@@ -137,7 +137,24 @@ class _SteyGalleryState extends State<SteyGallery> {
                   ],
                 ),
               ),
-              'dropdown' => const DropdownExample(fixture: true),
+              'dropdown' => Transform.translate(
+                offset: Offset(
+                  0,
+                  double.tryParse(
+                        router.uri.queryParameters['anchorY'] ?? '',
+                      ) ??
+                      0,
+                ),
+                child: DropdownExample(
+                  fixture: true,
+                  extraItems:
+                      (int.tryParse(
+                                router.uri.queryParameters['extraItems'] ?? '',
+                              ) ??
+                              0)
+                          .clamp(0, 30),
+                ),
+              ),
               'select' => SizedBox(
                 width: 280,
                 child: SteySelect<String>(
