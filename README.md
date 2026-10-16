@@ -16,7 +16,7 @@ Selectもネイティブのポップアップ、単一／複数選択、グル�
 既存の値管理APIを維持し、[SelectのAPI対応](docs/select-api-mapping.md)に差異を記録しています。
 目次の階層表示・スクロール追跡・URLハッシュ連携を追加しています。
 [目次のAPI対応](docs/table-of-contents-api-mapping.md)で利用方法と未検証範囲を確認できます。
-Dropdownに階層メニュー・Checkbox／Radio選択・自動字下げ・キーボード操作を追加しています。
+Dropdownに階層メニュー・Checkbox／Radio選択・自動字下げ・キーボード操作と150msの開閉遷移を追加しています。
 日本語デモと[DropdownのAPI対応](docs/dropdown-api-mapping.md)で操作と制限を確認できます。
 Buttonの文字位置・アイコン余白と、Sidebarの階層リスト・装飾ガイド・640pxでのリサイズ操作切替を追加対応しています。
 [Button／SidebarのAPI対応](docs/button-sidebar-api-mapping.md)に適用範囲を記録しています。

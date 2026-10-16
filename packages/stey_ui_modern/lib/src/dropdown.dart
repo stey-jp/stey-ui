@@ -125,12 +125,74 @@ class SteyDropdownMenu extends StatefulWidget {
   State<SteyDropdownMenu> createState() => _DropdownState();
 }
 
-class _DropdownState extends State<SteyDropdownMenu> {
+class _DropdownState extends State<SteyDropdownMenu>
+    with SingleTickerProviderStateMixin {
   final internalController = MenuController();
   final triggerFocus = FocusNode();
+  final menuFocus = FocusScopeNode();
   final panelKey = GlobalKey<_MenuPanelState>();
+  final placement = _MenuPlacement();
+  late final motion = AnimationController(
+    vsync: this,
+    duration: _menuDuration,
+    animationBehavior: AnimationBehavior.preserve,
+  );
   bool open = false;
+  final input = _MenuInput();
+  bool instantOpen = false, instantClose = true;
+  int revision = 0;
   MenuController get controller => widget.controller ?? internalController;
+
+  void closeMenu(bool instant) {
+    if (!open) return;
+    instantClose = instant;
+    controller.close();
+  }
+
+  void toggle() {
+    if (open) {
+      closeMenu(input.keyboard);
+    } else {
+      instantOpen = input.keyboard;
+      controller.open();
+    }
+    input.keyboard = false;
+  }
+
+  void show(Offset? position, VoidCallback showOverlay) {
+    revision++;
+    instantClose = true;
+    showOverlay();
+    if (instantOpen) {
+      motion.value = 1;
+    } else {
+      motion.animateTo(1, duration: _menuDuration, curve: _menuCurve);
+    }
+    instantOpen = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && open) panelKey.currentState?.focusPanel();
+    });
+  }
+
+  void hide(VoidCallback hideOverlay) {
+    if (!open) return;
+    final request = ++revision;
+    changed(false);
+    if (revision != request) return;
+    panelKey.currentState?.closeChild?.call(instantClose);
+    if (menuFocus.hasFocus) triggerFocus.requestFocus();
+    if (instantClose) {
+      motion.value = 0;
+      hideOverlay();
+    } else {
+      motion.animateBack(0, duration: _menuDuration, curve: _menuCurve).then((
+        _,
+      ) {
+        if (mounted && revision == request) hideOverlay();
+      });
+    }
+    instantClose = true;
+  }
 
   void openFromKeyboard(bool last) {
     if (widget.disabled || widget.items.isEmpty) return;
@@ -142,12 +204,37 @@ class _DropdownState extends State<SteyDropdownMenu> {
 
   void changed(bool value) {
     if (open == value) return;
+    input.active = value;
     setState(() => open = value);
     widget.onOpenChanged?.call(value);
   }
 
+  KeyEventResult keyEvent(KeyEvent event) {
+    input.keyEvent(event);
+    if (open &&
+        event.logicalKey == LogicalKeyboardKey.escape &&
+        event is KeyDownEvent) {
+      if (input.dismissals.isEmpty) {
+        closeMenu(true);
+      } else {
+        input.dismissals.last();
+      }
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FocusManager.instance.addEarlyKeyEventHandler(keyEvent);
+  }
+
   @override
   void dispose() {
+    FocusManager.instance.removeEarlyKeyEventHandler(keyEvent);
+    motion.dispose();
+    menuFocus.dispose();
     triggerFocus.dispose();
     super.dispose();
   }
@@ -156,86 +243,239 @@ class _DropdownState extends State<SteyDropdownMenu> {
   Widget build(BuildContext context) => PopScope(
     canPop: !open,
     onPopInvokedWithResult: (didPop, _) {
-      if (!didPop) controller.close();
+      if (!didPop) closeMenu(true);
     },
-    child: MenuAnchor(
-      clipBehavior: Clip.none,
+    child: RawMenuAnchor(
       controller: controller,
       childFocusNode: triggerFocus,
       useRootOverlay: true,
-      consumeOutsideTap: true,
-      alignmentOffset: Offset(widget.alignOffset, widget.sideOffset),
-      style: _menuStyle(context, width: widget.width),
+      consumeOutsideTaps: true,
+      onOpenRequested: show,
+      onCloseRequested: hide,
       onOpen: () => changed(true),
-      onClose: () => changed(false),
-      menuChildren: [
-        _MenuPanel(
-          key: panelKey,
-          items: widget.items,
-          rootController: controller,
-          direction: Directionality.of(context),
-          label: widget.label,
-          submenuSideOffset: widget.submenuSideOffset,
-          width: widget.width,
+      overlayBuilder: (context, info) => _MenuTransition(
+        motion: motion,
+        origin: () => placement.origin,
+        child: CustomSingleChildLayout(
+          delegate: _MenuPositioner(
+            info: info,
+            media: MediaQuery.of(context),
+            direction: Directionality.of(context),
+            width: widget.width,
+            offset: Offset(widget.alignOffset, widget.sideOffset),
+            placement: placement,
+          ),
+          child: Listener(
+            onPointerDown: (_) => input.keyboard = false,
+            child: TapRegion(
+              groupId: info.tapRegionGroupId,
+              onTapOutside: (_) => closeMenu(false),
+              child: IntrinsicWidth(
+                child: _MenuSurface(
+                  child: FocusScope(
+                    node: menuFocus,
+                    child: _MenuPanel(
+                      key: panelKey,
+                      items: widget.items,
+                      rootController: controller,
+                      closeRoot: closeMenu,
+                      input: input,
+                      direction: Directionality.of(context),
+                      label: widget.label,
+                      submenuSideOffset: widget.submenuSideOffset,
+                      width: widget.width,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
-      ],
+      ),
       builder: (context, controller, _) => CallbackShortcuts(
         bindings: {
           if (open)
-            const SingleActivator(LogicalKeyboardKey.escape): controller.close,
+            const SingleActivator(LogicalKeyboardKey.escape): () =>
+                closeMenu(true),
           const SingleActivator(LogicalKeyboardKey.arrowDown): () =>
               openFromKeyboard(false),
           const SingleActivator(LogicalKeyboardKey.arrowUp): () =>
               openFromKeyboard(true),
         },
-        child: Semantics(
-          expanded: open,
-          child:
-              widget.triggerBuilder?.call(
-                context,
-                widget.disabled || widget.items.isEmpty
-                    ? null
-                    : () => controller.isOpen
-                          ? controller.close()
-                          : controller.open(),
-                triggerFocus,
-              ) ??
-              SteyButton(
-                focusNode: triggerFocus,
-                semanticLabel: widget.label,
-                onPressed: widget.disabled || widget.items.isEmpty
-                    ? null
-                    : () => controller.isOpen
-                          ? controller.close()
-                          : controller.open(),
-                trailing: const Icon(Icons.expand_more, size: 16),
-                child: widget.child,
-              ),
+        child: Listener(
+          onPointerDown: (_) => input.keyboard = false,
+          child: Semantics(
+            expanded: open,
+            child:
+                widget.triggerBuilder?.call(
+                  context,
+                  widget.disabled || widget.items.isEmpty ? null : toggle,
+                  triggerFocus,
+                ) ??
+                SteyButton(
+                  focusNode: triggerFocus,
+                  semanticLabel: widget.label,
+                  onPressed: widget.disabled || widget.items.isEmpty
+                      ? null
+                      : toggle,
+                  trailing: const Icon(Icons.expand_more, size: 16),
+                  child: widget.child,
+                ),
+          ),
         ),
       ),
     ),
   );
 }
 
-MenuStyle _menuStyle(BuildContext context, {double? width}) {
-  final c = SteyTheme.colorsOf(context);
-  return MenuStyle(
-    backgroundColor: WidgetStatePropertyAll(c.control),
-    surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
-    shadowColor: WidgetStatePropertyAll(c.shadowDrop),
-    elevation: const WidgetStatePropertyAll(8),
-    side: WidgetStatePropertyAll(BorderSide(color: c.line)),
-    shape: const WidgetStatePropertyAll(
-      _MenuRingBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-    ),
-    padding: const WidgetStatePropertyAll(EdgeInsets.all(6)),
-    minimumSize: const WidgetStatePropertyAll(Size(144, 0)),
-    fixedSize: width == null
-        ? null
-        : WidgetStatePropertyAll(Size(width, double.infinity)),
-    alignment: AlignmentDirectional.bottomStart,
-    visualDensity: VisualDensity.standard,
+class _MenuInput {
+  bool keyboard = false, active = false;
+  final dismissals = <VoidCallback>[];
+  KeyEventResult keyEvent(KeyEvent event) {
+    keyboard =
+        event.logicalKey == LogicalKeyboardKey.enter ||
+        event.logicalKey == LogicalKeyboardKey.space;
+    return KeyEventResult.ignored;
+  }
+}
+
+const _menuDuration = Duration(milliseconds: 150);
+const _menuCurve = Curves.fastOutSlowIn;
+
+class _MenuPlacement {
+  Offset origin = Offset.zero;
+}
+
+class _MenuPositioner extends SingleChildLayoutDelegate {
+  _MenuPositioner({
+    required this.info,
+    required this.media,
+    required this.direction,
+    required this.width,
+    required this.offset,
+    required this.placement,
+  });
+  final RawMenuOverlayInfo info;
+  final MediaQueryData media;
+  final TextDirection direction;
+  final double? width;
+  final Offset offset;
+  final _MenuPlacement placement;
+  Rect get safe => Rect.fromLTRB(
+    math.max(8, media.padding.left),
+    math.max(8, media.padding.top),
+    info.overlaySize.width - math.max(8, media.padding.right),
+    info.overlaySize.height -
+        math.max(8, math.max(media.padding.bottom, media.viewInsets.bottom)),
   );
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    final available = math.max(0.0, safe.width);
+    return BoxConstraints(
+      minWidth: math.min(width ?? 144, available),
+      maxWidth: math.min(width ?? available, available),
+      maxHeight: math.max(0, safe.height),
+    );
+  }
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final rect = info.position == null
+        ? info.anchorRect
+        : Rect.fromLTWH(
+            info.anchorRect.left + info.position!.dx,
+            info.anchorRect.top + info.position!.dy,
+            0,
+            0,
+          );
+    var top = rect.bottom + offset.dy;
+    final above =
+        top + childSize.height > safe.bottom &&
+        rect.top - offset.dy - childSize.height >= safe.top;
+    if (above) top = rect.top - offset.dy - childSize.height;
+    final left =
+        rect.center.dx -
+        childSize.width / 2 +
+        (direction == TextDirection.ltr ? offset.dx : -offset.dx);
+    final position = Offset(
+      left.clamp(safe.left, math.max(safe.left, safe.right - childSize.width)),
+      top.clamp(safe.top, math.max(safe.top, safe.bottom - childSize.height)),
+    );
+    placement.origin = Offset(
+      rect.center.dx.clamp(position.dx, position.dx + childSize.width),
+      (position.dy - top).abs() > offset.dy.abs()
+          ? rect.center.dy
+          : above
+          ? rect.top
+          : rect.bottom,
+    );
+    return position;
+  }
+
+  @override
+  bool shouldRelayout(_MenuPositioner oldDelegate) => true;
+}
+
+/// Scale the whole positioned surface around the anchor, including its ring
+/// and shadow. Keep the child mounted, but inert, during the exit transition.
+class _MenuTransition extends StatelessWidget {
+  const _MenuTransition({
+    required this.motion,
+    required this.origin,
+    required this.child,
+  });
+  final AnimationController motion;
+  final Offset Function() origin;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: motion,
+    child: child,
+    builder: (_, child) {
+      final closing = motion.status == AnimationStatus.reverse;
+      return ExcludeSemantics(
+        excluding: closing,
+        child: ExcludeFocus(
+          excluding: closing,
+          child: IgnorePointer(
+            ignoring: closing,
+            child: Opacity(
+              opacity: motion.value,
+              child: Transform.scale(
+                alignment: Alignment.topLeft,
+                origin: origin(),
+                scale: .95 + .05 * motion.value,
+                child: child,
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+class _MenuSurface extends StatelessWidget {
+  const _MenuSurface({required this.child});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    final c = SteyTheme.colorsOf(context);
+    return Material(
+      color: c.control,
+      surfaceTintColor: Colors.transparent,
+      elevation: 8,
+      shadowColor: c.shadowDrop,
+      shape: _MenuRingBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: c.line),
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(6),
+        child: child,
+      ),
+    );
+  }
 }
 
 class _MenuRingBorder extends RoundedRectangleBorder {
@@ -330,30 +570,40 @@ class _MenuPanel extends StatefulWidget {
     super.key,
     required this.items,
     required this.rootController,
+    required this.closeRoot,
+    required this.input,
     required this.direction,
     required this.submenuSideOffset,
     this.width,
     this.label,
     this.onBack,
+    this.isActive,
   });
   final List<SteyMenuItem> items;
   final MenuController rootController;
+  final ValueChanged<bool> closeRoot;
+  final _MenuInput input;
   final TextDirection direction;
   final double submenuSideOffset;
   final double? width;
   final String? label;
-  final VoidCallback? onBack;
+  final ValueChanged<bool>? onBack;
+  final ValueGetter<bool>? isActive;
   @override
   State<_MenuPanel> createState() => _MenuPanelState();
 }
 
 class _MenuPanelState extends State<_MenuPanel> {
   final nodes = <FocusNode>[];
+  final panelFocus = FocusNode(skipTraversal: true);
+  void focusPanel() => panelFocus.requestFocus();
+  bool get interactive =>
+      widget.input.active && (widget.isActive?.call() ?? true);
   Timer? searchTimer;
   String search = '';
-  VoidCallback? closeChild;
-  void activateRow(VoidCallback? close) {
-    if (closeChild != close) closeChild?.call();
+  ValueChanged<bool>? closeChild;
+  void activateRow(ValueChanged<bool>? close) {
+    if (closeChild != close) closeChild?.call(false);
     closeChild = close;
   }
 
@@ -383,6 +633,7 @@ class _MenuPanelState extends State<_MenuPanel> {
 
   @override
   void dispose() {
+    panelFocus.dispose();
     searchTimer?.cancel();
     for (final node in nodes) {
       node.dispose();
@@ -417,7 +668,7 @@ class _MenuPanelState extends State<_MenuPanel> {
   KeyEventResult keyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
     if (event.logicalKey == LogicalKeyboardKey.tab) {
-      widget.rootController.close();
+      widget.closeRoot(true);
       return KeyEventResult.ignored;
     }
     if (event.logicalKey == LogicalKeyboardKey.home ||
@@ -502,6 +753,9 @@ class _MenuPanelState extends State<_MenuPanel> {
         key: ValueKey(nodes[i]),
         item: item,
         rootController: widget.rootController,
+        closeRoot: widget.closeRoot,
+        input: widget.input,
+        isActive: () => interactive,
         onActive: activateRow,
         focusNode: nodes[i],
         inset: inset,
@@ -523,8 +777,8 @@ class _MenuPanelState extends State<_MenuPanel> {
             width: widget.width == null ? null : widget.width! - 12,
             child: CallbackShortcuts(
               bindings: {
-                const SingleActivator(LogicalKeyboardKey.escape):
-                    widget.onBack ?? widget.rootController.close,
+                const SingleActivator(LogicalKeyboardKey.escape): () =>
+                    (widget.onBack ?? widget.closeRoot)(true),
                 const SingleActivator(LogicalKeyboardKey.arrowDown): () =>
                     focusRelative(1),
                 const SingleActivator(LogicalKeyboardKey.arrowUp): () =>
@@ -538,10 +792,12 @@ class _MenuPanelState extends State<_MenuPanel> {
                     widget.direction == TextDirection.ltr
                         ? LogicalKeyboardKey.arrowLeft
                         : LogicalKeyboardKey.arrowRight,
-                  ): widget.onBack!,
+                  ): () =>
+                      widget.onBack!(false),
                 },
               },
               child: Focus(
+                focusNode: panelFocus,
                 autofocus: true,
                 includeSemantics: false,
                 skipTraversal: true,
@@ -578,6 +834,9 @@ class _MenuRow extends StatefulWidget {
     super.key,
     required this.item,
     required this.rootController,
+    required this.closeRoot,
+    required this.input,
+    required this.isActive,
     required this.onActive,
     required this.focusNode,
     required this.inset,
@@ -586,7 +845,10 @@ class _MenuRow extends StatefulWidget {
   });
   final SteyMenuItem item;
   final MenuController rootController;
-  final ValueChanged<VoidCallback?> onActive;
+  final ValueChanged<bool> closeRoot;
+  final _MenuInput input;
+  final ValueGetter<bool> isActive;
+  final ValueChanged<ValueChanged<bool>?> onActive;
   final FocusNode focusNode;
   final bool inset;
   final double submenuSideOffset;
@@ -595,8 +857,15 @@ class _MenuRow extends StatefulWidget {
   State<_MenuRow> createState() => _MenuRowState();
 }
 
-class _MenuRowState extends State<_MenuRow> {
-  bool hovered = false;
+class _MenuRowState extends State<_MenuRow>
+    with SingleTickerProviderStateMixin {
+  bool hovered = false, popupOpen = false;
+  late final motion = AnimationController(
+    vsync: this,
+    duration: _menuDuration,
+    animationBehavior: AnimationBehavior.preserve,
+  );
+  int revision = 0;
   Timer? hoverTimer;
   OverlayEntry? popup;
   final anchorKey = GlobalKey();
@@ -615,25 +884,42 @@ class _MenuRowState extends State<_MenuRow> {
   @override
   void dispose() {
     hoverTimer?.cancel();
+    widget.input.dismissals.remove(dismiss);
+    motion.dispose();
     popup?.remove();
     popup?.dispose();
     super.dispose();
   }
 
-  void closePopup() {
+  void closePopup(bool instant) {
     hoverTimer?.cancel();
     final entry = popup;
-    if (entry == null) return;
-    popup = null;
-    entry.remove();
-    entry.dispose();
-    if (mounted) setState(() {});
+    if (entry == null || !popupOpen) return;
+    widget.input.dismissals.remove(dismiss);
+    final request = ++revision;
+    setState(() => popupOpen = false);
+    submenuKey.currentState?.closeChild?.call(instant);
+    void remove() {
+      if (!mounted || request != revision || popup != entry) return;
+      popup = null;
+      entry.remove();
+      entry.dispose();
+    }
+
+    if (instant) {
+      motion.value = 0;
+      remove();
+    } else {
+      motion
+          .animateBack(0, duration: _menuDuration, curve: _menuCurve)
+          .then((_) => remove());
+    }
   }
 
   void onHover(bool value) {
     hovered = value;
     hoverTimer?.cancel();
-    if (!value || !widget.item.enabled) return;
+    if (!value || !widget.item.enabled || !widget.isActive()) return;
     widget.onActive(widget.item.children.isEmpty ? null : closePopup);
     if (widget.item.children.isNotEmpty) {
       hoverTimer = Timer(
@@ -645,8 +931,17 @@ class _MenuRowState extends State<_MenuRow> {
 
   void openSubmenu() => showPopup(true);
 
-  void showPopup(bool focusFirst) {
-    if (!widget.item.enabled) return;
+  void dismiss() {
+    closePopup(true);
+    widget.focusNode.requestFocus();
+  }
+
+  void showPopup(bool focusFirst, {bool instant = false}) {
+    if (!widget.item.enabled || !widget.isActive()) return;
+    hoverTimer?.cancel();
+    revision++;
+    if (!popupOpen) widget.input.dismissals.add(dismiss);
+    popupOpen = true;
     widget.onActive(closePopup);
     if (popup == null) {
       final overlay = Overlay.of(context, rootOverlay: true);
@@ -688,61 +983,89 @@ class _MenuRowState extends State<_MenuRow> {
       // OverlayEntry keeps nested menu semantics independent of portal traversal
       // reparenting. No DOM or SDK patch is required.
       popup = OverlayEntry(
-        builder: (_) => Positioned(
-          left: left,
-          top: top,
-          width: width,
-          child: InheritedTheme.captureAll(
-            context,
-            Directionality(
-              textDirection: direction,
-              child: TapRegion(
-                groupId: widget.rootController,
-                child: Material(
-                  color: c.control,
-                  surfaceTintColor: Colors.transparent,
-                  elevation: 8,
-                  shadowColor: c.shadowDrop,
-                  shape: _MenuRingBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(color: c.line),
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: math.max(0, safeBottom - top),
-                    ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(6),
-                      child: FocusScope(
-                        child: _MenuPanel(
-                          key: submenuKey,
-                          items: widget.item.children,
-                          rootController: widget.rootController,
-                          direction: direction,
-                          submenuSideOffset: widget.submenuSideOffset,
-                          width: width,
-                          onBack: () {
-                            closePopup();
-                            widget.focusNode.requestFocus();
-                          },
+        builder: (_) => _MenuTransition(
+          motion: motion,
+          origin: () => Offset(
+            left < rect.left ? rect.left : rect.right,
+            (top - (rect.top - 6)).abs() <= 1
+                ? top
+                : rect.center.dy.clamp(top, top + height),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                left: left,
+                top: top,
+                width: width,
+                child: InheritedTheme.captureAll(
+                  context,
+                  Directionality(
+                    textDirection: direction,
+                    child: Listener(
+                      onPointerDown: (_) => widget.input.keyboard = false,
+                      child: TapRegion(
+                        groupId: widget.rootController,
+                        child: Material(
+                          color: c.control,
+                          surfaceTintColor: Colors.transparent,
+                          elevation: 8,
+                          shadowColor: c.shadowDrop,
+                          shape: _MenuRingBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            side: BorderSide(color: c.line),
+                          ),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: math.max(0, safeBottom - top),
+                            ),
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.all(6),
+                              child: FocusScope(
+                                child: _MenuPanel(
+                                  key: submenuKey,
+                                  items: widget.item.children,
+                                  rootController: widget.rootController,
+                                  closeRoot: widget.closeRoot,
+                                  input: widget.input,
+                                  isActive: () =>
+                                      widget.isActive() && popupOpen,
+                                  direction: direction,
+                                  submenuSideOffset: widget.submenuSideOffset,
+                                  width: width,
+                                  onBack: (instant) {
+                                    closePopup(instant);
+                                    widget.focusNode.requestFocus();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       );
       overlay.insert(popup!);
       setState(() {});
     }
-    if (focusFirst) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) submenuKey.currentState?.focusBoundary(false);
-      });
+    if (instant) {
+      motion.value = 1;
+    } else {
+      motion.animateTo(1, duration: _menuDuration, curve: _menuCurve);
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !popupOpen) return;
+      if (focusFirst) {
+        submenuKey.currentState?.focusBoundary(false);
+      } else {
+        submenuKey.currentState?.focusPanel();
+      }
+    });
   }
 
   @override
@@ -785,7 +1108,7 @@ class _MenuRowState extends State<_MenuRow> {
       iconSize: const WidgetStatePropertyAll(16),
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) =>
-            popup != null ||
+            popupOpen ||
                 states.contains(WidgetState.hovered) ||
                 states.contains(WidgetState.focused)
             ? (item.destructive ? c.danger.withValues(alpha: .05) : c.tint)
@@ -847,10 +1170,16 @@ class _MenuRowState extends State<_MenuRow> {
       onPressed: !item.enabled
           ? null
           : () {
+              if (!widget.isActive()) return;
               if (submenu) {
-                showPopup(false);
+                showPopup(
+                  widget.input.keyboard,
+                  instant: widget.input.keyboard,
+                );
               } else {
-                if (item.closeOnActivate) widget.rootController.close();
+                if (item.closeOnActivate) {
+                  widget.closeRoot(widget.input.keyboard);
+                }
                 item.activate();
               }
             },
@@ -873,7 +1202,7 @@ class _MenuRowState extends State<_MenuRow> {
     return MergeSemantics(
       child: Semantics(
         role: item.role,
-        expanded: submenu ? popup != null : null,
+        expanded: submenu ? popupOpen : null,
         checked: checkbox || radio ? item.selection : null,
         inMutuallyExclusiveGroup: radio,
         link: item.href == null ? null : true,

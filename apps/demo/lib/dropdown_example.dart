@@ -108,7 +108,10 @@ class _DropdownExampleState extends State<DropdownExample> {
         child: Text(text('操作', 'Actions')),
       ),
       if (!widget.fixture) ...[
-        const SteyText('移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'),
+        const SteyText(
+          '移動のサブメニュー、通知と環境の選択、キーボードの矢印・文字検索を操作できます。'
+          'ポインターでの開閉は150msで拡縮・透過し、Enter・Spaceでの選択とEscでの終了は即時に切り替わります。',
+        ),
         SteyText(
           '通知：${alerts ? '有効' : '無効'}／環境：${environment == 'production' ? '本番' : 'ステージング'}',
         ),
