@@ -1,4 +1,4 @@
-# 検証結果（Dropdown表示中の追従更新：2026-10-17）
+# 検証結果（Dropdown配置境界・起点のclip：2026-10-17）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -376,3 +376,30 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア監査・DiagnosticsもJSONのdropdown_trackingへ保持しました。SDKのIntl呼出・未配布SkWasm map、起動負荷・転送量、Desktop Sidebarのviewport端の操作領域が残り、全100点・Issues 0件は未達です。AndroidにはSDK tool／metadata XML版の不一致警告がありましたが、APKは成功しました。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。キーボードはWidget testのView Insetsで検証しました。
 
 任意境界・sticky・anchorがclip領域から消えた場合の全hide規則、rich child寸法と全イベント／API・描画状態の認証は残ります。画像は診断用で、完全再現や承認済み視覚ゲートとは扱いません。同期済みSHAは進めず、shared-ciの最新README／setup／登録設定のblobが前回と同じことを確認し、公開repo除外・クラウド接続保留を維持しました。実Batch往復は未実施、API呼出・費用0です。GitHub mainが本番反映先です。
+
+## Dropdown配置境界・隠れた起点の追加検証（2026-10-17）
+
+ソースSHAは `8f6a628a0f2dbc4ea61451cb8030bc257eef0947`。静的解析0件、ライブラリ200件・デモ11件、Web・Windows・Androidリリースビルドが成功しました。新規8テストは左右両方向の矩形境界・各辺の物理余白、長い子の高さ制約、境界更新後の子のprimary focus、2階層を開いたまま起点を部分／完全にclipして戻す操作、画面外の起点から離れないshiftを検証します。
+
+公式Kumo／Base UI 1.9.0はanchorHiddenだけを理由に既定popupを自動close／非表示にしません。この仕様に合わせ、rootの縦位置を起点へ追従させ、横のshiftと子の縦shiftを起点につながる範囲へ制限しました。collisionBoundary（root overlay logical pxのRect）とcollisionPadding（物理EdgeInsets）は全階層へ適用します。画面との交差と端末の安全領域・キーボード余白を考慮し、移動した矩形は呼出側がrebuildで更新します。日本語デモに配置境界の切替を追加しました。[API対応](dropdown-api-mapping.md)。
+
+実ChromeのLight/Dark・LTR/RTL、800×800px、既定viewport／内側矩形／画面外にはみ出す矩形＋非対称余白の12条件で、初期・境界40px縮小・部分clip・完全anchor clip・子の完全画面外・復帰の計72状態を公式SHA `7e0ff40` と比較しました。可視surfaceの位置・寸法は全72状態で0.1 CSS px以内（最大0.000000px）でした。選択を保持し、復帰後も2階層が開き、Escで終了します。画面全体の画像差分はthreshold 0.1で0.05〜1.22%です。影・glyph・focus描画などが残り、完全な視覚一致とは扱いません。
+
+Flutterは完全に画面外の意味情報を省略し、部分表示の意味情報矩形をviewportに切り詰めます。ReactのDOM順とFlutterの座標による順序も異なるため、rootのlabelで階層を識別し、両者のviewport交差を比較しました。内部の開閉状態・画面外配置・focusはWidget testでも確認しています。物理screen readerでの同等性は未認証です。診断fixtureのCtrl+Alt B/Hは外側クリックを伴わずに配置を変更するためのもので、製品の操作APIではありません。
+
+日本語ギャラリーの「配置境界」を切り替え、390px／1280pxの実Chromeでpopupが40pxの内側の境界＋5px余白に収まり、Escで終了することも確認しました。
+
+既定配置48条件と表示中の追従40状態の回帰比較も成功しました。既存Dropdown・motion・RTL・LayerDialogの56項目が成功。全URL Chrome CDP監査は106 URL・108条件、実行時エラー0件、SDK IntlV8BreakIterator 108件です。新規比較の12コンテキストにも同じSDK Issueが12件残ります。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：74 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：95 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_mobile：94 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全非スコア監査・DiagnosticsをJSONのdropdown_boundaryへ保持しました。全100点・対応可能なIssues 0件は未達です。SDKのIntl呼出・未配布SkWasm map、自社の起動負荷・転送量とDesktop Sidebar端の操作領域が残ります。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。Android APKは開発用署名です。
+
+Element／複数境界・sticky・anchorHiddenの公開状態と独自render、rich child測定、全イベントと全入力・描画状態の認証は残ります。診断画像を承認済み視覚ゲートへ昇格せず、同期済みSHAも進めていません。shared-ciの最新README／setup／登録設定のblobが前回と同じこととWorkflow 0件を確認し、公開repo除外・クラウド接続保留を維持しました。実Batch往復は未実施、API呼出・費用0です。本番反映先はGitHub mainです。

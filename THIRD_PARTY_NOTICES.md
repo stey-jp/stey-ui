@@ -128,9 +128,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Floating UI menu collision order
+## Floating UI menu collision order and shift limiter
 
-The native submenu collision selection follows the Base UI / Floating UI default candidate order and best-fit rules. No Floating UI JavaScript runtime is bundled.
+The native menu positioning follows the Base UI / Floating UI default candidate order, best-fit rules and attachment-preserving shift limiter. No Floating UI JavaScript runtime is bundled.
 
 MIT License
 

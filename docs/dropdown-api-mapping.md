@@ -21,7 +21,7 @@ FlutterのRawMenuAnchor・OverlayEntry・MenuItemButtonを使い、React／WebVi
 | data-instant | Enter／Spaceでの開閉・項目選択、Esc、プログラムによるclose | これらは即時。上下・左右矢印による表示、pointerでの選択・外側押下は遷移を使用。システムBackとTabもnative操作として即時終了 |
 | popup className / width | width | 指定幅、既定最小144px。既定の衝突余白5pxと端末の安全領域を考慮。左右反転・start/end反転を試し、両側が狭い子は下／上へ回り込む。空き高さでスクロールし、rootは選択した上下の側に収める |
 | anchor追従 / autoUpdate | 標準Overlayのlayout情報と子のgeometry観測 | 開いたままのviewport変更、祖先scroll、paint transform、子項目数変更に追従。開閉状態・選択・focus・150ms遷移を作り直さない。SDKによるサイズ変更／祖先scrollの自動close要求を抑え、Esc・外側押下・controller closeは維持 |
-| collisionBoundary / collisionPadding | Rect? / EdgeInsets | root overlayのlogical pxによる矩形をviewportと交差し、各辺の物理余白を適用。既定はviewport・5px。全階層へ適用し、矩形変更のrebuildでも選択とfocusを維持。Element／複数境界の参照APIは未対応 |
+| collisionBoundary / collisionPadding | Rect? / EdgeInsets | root overlayのlogical pxによる矩形をviewportと交差し、各辺の非負の物理余白を適用。既定はviewport・5px。全階層へ適用し、矩形変更のrebuildでも選択とfocusを維持。Element／複数境界と負のpaddingは未対応 |
 | anchorHidden / limitShift | 起点との接続を維持するshift | 公式の既定スタイルはanchorHiddenでも自動close／非表示にしない。起点がclipされてもメニューを維持し、横のshiftは起点から離れない範囲へ制限。縦のroot配置は起点を追従。anchorHiddenの公開状態・独自renderによる表示制御は未対応 |
 | Portal / Positioner / Popup / render / container | 未対応 | 任意anchor、portal先、CSS表現の互換APIは未実装。triggerBuilderによるnative trigger指定は可能 |
 
