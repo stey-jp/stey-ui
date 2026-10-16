@@ -1,4 +1,4 @@
-# 検証結果（Dropdown配置境界・起点のclip：2026-10-17）
+# 検証結果（Dropdown sticky配置：2026-10-17）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -403,3 +403,28 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 全非スコア監査・DiagnosticsをJSONのdropdown_boundaryへ保持しました。全100点・対応可能なIssues 0件は未達です。SDKのIntl呼出・未配布SkWasm map、自社の起動負荷・転送量とDesktop Sidebar端の操作領域が残ります。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。Android APKは開発用署名です。
 
 Element／複数境界・sticky・anchorHiddenの公開状態と独自render、rich child測定、全イベントと全入力・描画状態の認証は残ります。診断画像を承認済み視覚ゲートへ昇格せず、同期済みSHAも進めていません。shared-ciの最新README／setup／登録設定のblobが前回と同じこととWorkflow 0件を確認し、公開repo除外・クラウド接続保留を維持しました。実Batch往復は未実施、API呼出・費用0です。本番反映先はGitHub mainです。
+
+## Dropdown sticky配置の追加検証（2026-10-17）
+
+ソースSHAは `8cdb134ba3b4b7af619fff152bdb6e865791ff2b`。静的解析0件、ライブラリ212件・デモ11件、Web・Windows・Androidリリースビルドが成功しました。新規12テスト（関連計20件）で左右両方向の境界内保持、長い子、画面外の起点、表示中の切替とprimary focus・選択・階層保持、終了遷移の原点、キーボード上の高さ、狭い境界での指定幅維持、Home／Endでの項目表示と画面本体のscroll不変を確認しました。
+
+sticky（既定false）をtrueにすると、親・子の両軸を可能な範囲で境界内へ移動し、境界全体の高さを利用します。上下に配置した面が起点に重なる場合の変形原点も調整します。明示widthは公式の固定幅と同様に維持し、境界より広い場合ははみ出すため呼出側で幅を指定してください。短いメニューではkeyboardで選択した行だけを最寄りのmenu ScrollPositionで見える位置へ移し、起点側の画面本体をスクロールしません。日本語デモへ保持／追従の切替を追加しました。[API対応](dropdown-api-mapping.md)。
+
+公式SHA `7e0ff40` のKumoソース／CSS・Base UI 1.9.0を使い、実ChromeのLight/Dark・LTR/RTL、800／390px、通常境界・内側矩形・高さ200pxの矩形・起点を下へ300px移動した16条件を比較しました。起点の部分／完全clip、sticky off/on、復帰、横移動と復帰、子12件追加、境界縮小を含む176状態で可視位置・寸法が0.1 CSS px以内（最大0.000000px）でした。画面全体の画像差分はthreshold 0.1で0.00〜2.25%です。影・glyph・focusなどの差があり、完全な描画一致とは扱いません。
+
+比較では項目のDOM surrogateへのfocus指定を使わず、文字検索・Home・矢印・Spaceで通知を無効にしてから子を開きました。文字検索の終了を600ms待ってSpaceを押しています。短いメニューで生じるfocusによるscrollも比較対象です。公式の画面外transform追跡にはIntersectionObserverの再観測があるため、横移動は1300ms待って静止位置を測定しました。Flutterが画面外の意味情報を省略する点は前節と同じです。sticky offですべての面が画面外へ出ても、onに戻した後の2階層復帰と選択保持を確認しています。全フレーム・物理screen readerの認証ではありません。
+
+既定sticky=falseの境界比較72状態、既存Dropdown・motion・RTL・LayerDialog計56項目も成功しました。日本語ギャラリーは390／1280pxで切替・表示・Escを確認しました。全URLのChrome CDP監査は106 URL・108条件で実行時エラー0件、SDK IntlV8BreakIterator 108件です。新規比較16コンテキストにもSDKの同Issueが残ります。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：76 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：91 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_mobile：94 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・Diagnosticsを含む全監査をJSONのdropdown_stickyへ保持しました。全100点・Issues 0件は未達です。SDKのIntl・SkWasm map、自社の起動負荷・転送量とDesktop Sidebar端の操作領域が残ります。Linux／macOS／iOSの今回ビルド、物理実機・screen readerは未検証、Android APKは開発用署名です。
+
+Element／複数境界・負の余白、rich child測定、全配置prop／イベント／portalと全描画状態の認証は残ります。公式はdisabled行にも矢印focusを移せますが現実装はskipし、500msの文字検索中のSpaceも公式は検索・現実装は実行という差があり、API対応表へ残課題を追記しました。同期済みSHAと承認済み視覚ゲートは進めていません。shared-ciの最新README／setup／登録設定のblob不変とWorkflow 0件を確認し、公開repo除外・クラウド接続保留を維持しました。Batch API呼出・費用は0、実往復は未実施。本番反映先はGitHub mainです。
