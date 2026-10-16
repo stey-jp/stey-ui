@@ -1,4 +1,4 @@
-# 検証結果（Flow最大幅・折り返し更新：2026-10-16）
+# 検証結果（Flow自動幅・履歴測定更新：2026-10-16）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -265,3 +265,26 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・DiagnosticsもJSONのflow_wrapへ保持しています。SDKのIntl呼出・未配布のSkWasm map、配信／起動負荷、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
 
 既定のCSS縮小測定・全入力／視覚状態と他コンポーネントの不足は[6工程](completion-plan.md)で継続します。共有CIの最新mainでも公開repoは対象外で、クラウド接続保留を維持しています。Workflow起動・実Batch往復は未実施、API呼出・費用は0です。GitHub mainが本番反映先で、Webホスティング・pub.dev公開は行っていません。
+
+## Flow自動幅・履歴測定の追加検証（2026-10-16）
+
+ソースSHAは `0e32bcf1edba7acdb632519fc9b3069a7cfe151e`。静的解析0件、ライブラリ149件・デモ11件が成功し、Web・Windows・Androidのリリースビルドが成功しました。追加11テストで同梱Interを読み込み、初期幅・親幅変更後の保持・再作成・単独／先頭／中間／末尾／全ノード・分岐順序・方向・内容変更・最小単語幅・複数フレームの収束・unsupported intrinsic・空の末尾群を確認しています。収まるノードは最小幅計算0回、縮小が必要なノードはlayout内で1回と検証しました。
+
+composedの標準ノードはautoWidth既定trueとし、自然幅・単語を分割しない最小幅・初期の利用可能幅・直前の図幅／座標を使って測定します。親だけを変更しても幅を保持し、内容変更時は図を再計算、keyを変えた再作成では現在幅から測定し直します。明示width／maxWidth、custom／intrinsic非対応の子は既存測定を優先し、autoWidth: falseとDAG API既定falseで従来の自然幅を保持します。1フレーム8回まで測り、必要なら次フレームで収束を継続します。[API対応と制限](flow-api-mapping.md)を参照してください。
+
+実Chromeの新規10項目と既存の最大幅・canvas・構成各10項目、ButtonGroup／アンカー12項目、合計52項目が成功しました。1280px Light/Dark、320px Light/Dark、390px Lightで日本語の幅保持・再作成・内容変更を操作し、実行時エラー0件。全URL監査は106 URL・108条件、実行時エラー0件、SDKのIntlV8BreakIteratorが108件です。操作監査にも5／5／5／5／10件の同警告が残ります。
+
+公式SHA `7e0ff40` と64条件を比較しました。160／320pxの初期親幅、800pxのcanvas高さ、padding 16px、幅・最大幅未指定の公式Flow.Nodeを用い、縦横・Light/Dark・単独／前後／全ノード・分岐順序・親幅変更・内容の短縮／復帰・再作成を含みます。canvas寸法は64組すべて、全ノードが見える38組の位置・寸法も0.1 CSS px以内でした。threshold 0.1の画像差分は0.17〜3.25%です。元の外側8pxの画像・fixture操作欄とcomponent viewportを区別し、両方の画像hash・生データを保持しています。切れた意味情報の矩形は全ノード座標とは比較しません。公式側は標準モードでIssue・実行時エラー0件。文字・影の描画差は残り、全状態認証・承認済み視覚ゲートとは扱いません。
+
+過去に記録した初期host 160px→説明128×100px、初期host 320px→288×58pxの幅保持を標準ノードで再現しました。横配置では先頭／中間の説明が自然幅360.72pxへ広がり、末尾は初期幅を保つ条件も一致しています。以前の検証節は各SHA時点の結果として保持しています。同期済みSHAは進めていません。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- flow_gallery_mobile：68 / 100 / 81 / 100。実行警告0件。
+- flow_gallery_desktop：95 / 96 / 81 / 100。実行警告0件。
+- flow_auto_mobile：88 / 100 / 81 / 100。実行警告0件。
+- flow_auto_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+非スコア項目・DiagnosticsもJSONのflow_auto_widthへ保持しています。必要なノードだけ最小幅を求める最適化前の4測定値も別SHA／artifactで保持しました。SDKのIntl呼出・未配布のSkWasm map、配信／起動負荷と追加デモの処理、Desktopでviewport端に切れたSidebarの意味情報などが残り、全100点は未達です。機能・意味情報の抑制やSDK改造は行いません。Linux／macOS／iOSの今回ビルド、全物理実機・screen readerは未検証です。
+
+任意のcustom CSS／Widget、非収束レイアウト、全入力／視覚状態と他コンポーネントの不足は[6工程](completion-plan.md)で継続します。共有CIの公開repo除外とクラウド接続保留を維持し、Workflow起動・実Batch往復は未実施です。API呼出・費用は0、GitHub mainが本番反映先です。Webホスティング・pub.dev公開は行っていません。
