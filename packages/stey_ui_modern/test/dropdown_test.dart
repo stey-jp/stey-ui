@@ -303,7 +303,7 @@ void main() {
   );
 
   testWidgets(
-    'Keyboard skips disabled rows and supports End, Home and typeahead',
+    'Keyboard includes disabled rows and supports End, Home and typeahead',
     (tester) async {
       final controller = MenuController();
       var chosen = '';
@@ -315,13 +315,24 @@ void main() {
       ], controller: controller);
       final nodes = tester
           .widgetList<MenuItemButton>(find.byType(MenuItemButton))
+          .where((b) => b.focusNode != null)
           .map((b) => b.focusNode!)
           .toList();
       nodes.first.requestFocus();
       await tester.pump();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
       await tester.pump();
-      expect(nodes[2].hasFocus, isTrue);
+      final disabled = tester
+          .widget<Focus>(
+            find
+                .ancestor(
+                  of: find.widgetWithText(MenuItemButton, 'Disabled'),
+                  matching: find.byType(Focus),
+                )
+                .first,
+          )
+          .focusNode!;
+      expect(disabled.hasFocus, isTrue);
       await tester.sendKeyEvent(LogicalKeyboardKey.end);
       await tester.pump();
       expect(nodes.last.hasFocus, isTrue);
@@ -330,7 +341,7 @@ void main() {
       expect(nodes.first.hasFocus, isTrue);
       await tester.sendKeyEvent(LogicalKeyboardKey.keyB, character: 'b');
       await tester.pump();
-      expect(nodes[2].hasFocus, isTrue);
+      expect(nodes[1].hasFocus, isTrue);
       await tester.sendKeyEvent(LogicalKeyboardKey.keyB, character: 'b');
       await tester.pump();
       expect(nodes.last.hasFocus, isTrue);

@@ -17,14 +17,14 @@ try {
   const menu=page.getByRole('menu',{name:'操作メニュー',exact:true});
   await click(page,trigger);await page.clock.runFor(208);const settled=await menu.boundingBox();assert(settled);
   await click(page,trigger);await page.clock.runFor(208);assert.equal(await menu.count(),0);
-  await click(page,trigger);await page.clock.runFor(16);assert.equal(await menu.count(),0);
+  await click(page,trigger);await page.clock.runFor(16);assert.equal(await menu.count(),1);
   await page.clock.runFor(64);const opening=await menu.boundingBox();assert(opening.width<settled.width&&opening.width>settled.width*.95);
   await page.clock.runFor(96);
   const edit=page.getByRole('menuitem',{name:'編集 ⌘E',exact:true});const bounds=await edit.boundingBox();
   await click(page,edit);await page.clock.runFor(32);assert.equal(await menu.count(),0);
   await page.mouse.click(bounds.x+bounds.width/2,bounds.y+bounds.height/2);await page.clock.runFor(192);
   assert.equal(await page.getByText('最後の操作：編集（1回）',{exact:true}).count(),1);
-  checks.push(`${width}px ${mode}: timed pointer enter; exit immediately removes interaction/semantics and runs action once`);
+  checks.push(`${width}px ${mode}: opening semantics exist from the first frame; timed pointer enter; exit immediately removes interaction/semantics and runs action once`);
   await trigger.focus();await page.clock.runFor(16);await page.keyboard.press('Enter');await page.clock.runFor(32);
   const keyboard=await menu.boundingBox();assert(keyboard);assert.ok(Math.abs(keyboard.width-settled.width)<.1);
   await page.keyboard.press('Escape');await page.clock.runFor(32);assert.equal(await menu.count(),0);

@@ -255,7 +255,9 @@ class _DropdownState extends State<SteyDropdownMenu>
   }
 
   KeyEventResult keyEvent(KeyEvent event) {
-    input.keyEvent(event);
+    if (input.keyEvent(event) == KeyEventResult.handled) {
+      return KeyEventResult.handled;
+    }
     if (open &&
         event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.escape) {
@@ -424,6 +426,8 @@ class _DropdownState extends State<SteyDropdownMenu>
 
 class _MenuInput {
   bool keyboard = false, active = false;
+  bool searchSpaceDown = false;
+  final spaceSearches = <bool Function()>[];
   final dismissals = <ValueChanged<bool>>[];
   final geometryObservers = <VoidCallback>{};
   int geometryEpoch = 0;
@@ -453,6 +457,7 @@ class _MenuInput {
   }
 
   void dispose() {
+    spaceSearches.clear();
     geometryObservers.clear();
     geometryEpoch++;
   }
@@ -461,6 +466,20 @@ class _MenuInput {
     keyboard =
         event.logicalKey == LogicalKeyboardKey.enter ||
         event.logicalKey == LogicalKeyboardKey.space;
+    if (event.logicalKey == LogicalKeyboardKey.space) {
+      if (event is KeyUpEvent && searchSpaceDown) {
+        searchSpaceDown = false;
+        return KeyEventResult.handled;
+      }
+      if (event is KeyDownEvent || event is KeyRepeatEvent) {
+        for (final search in spaceSearches.reversed.toList()) {
+          if (search()) {
+            searchSpaceDown = true;
+            return KeyEventResult.handled;
+          }
+        }
+      }
+    }
     return KeyEventResult.ignored;
   }
 }
@@ -821,7 +840,9 @@ class _MenuTransition extends StatelessWidget {
     animation: motion,
     child: child,
     builder: (_, child) {
-      final closing = motion.status == AnimationStatus.reverse;
+      final closing =
+          motion.status == AnimationStatus.reverse ||
+          motion.status == AnimationStatus.dismissed;
       return ExcludeSemantics(
         excluding: closing,
         child: ExcludeFocus(
@@ -830,6 +851,7 @@ class _MenuTransition extends StatelessWidget {
             ignoring: closing,
             child: Opacity(
               opacity: motion.value,
+              alwaysIncludeSemantics: true,
               child: Transform.scale(
                 alignment: Alignment.topLeft,
                 origin: origin(),
@@ -992,10 +1014,12 @@ class _MenuPanelState extends State<_MenuPanel> {
   final nodes = <FocusNode>[];
   final panelFocus = FocusNode(skipTraversal: true);
   void focusPanel() => panelFocus.requestFocus();
+
   bool get interactive =>
       widget.input.active && (widget.isActive?.call() ?? true);
   Timer? searchTimer;
   String search = '';
+  int searchStart = -1;
   ValueChanged<bool>? closeChild;
   void activateRow(ValueChanged<bool>? close) {
     if (closeChild != close) closeChild?.call(false);
@@ -1018,6 +1042,7 @@ class _MenuPanelState extends State<_MenuPanel> {
   void initState() {
     super.initState();
     sync();
+    widget.input.spaceSearches.add(searchSpace);
   }
 
   @override
@@ -1028,6 +1053,7 @@ class _MenuPanelState extends State<_MenuPanel> {
 
   @override
   void dispose() {
+    widget.input.spaceSearches.remove(searchSpace);
     panelFocus.dispose();
     searchTimer?.cancel();
     for (final node in nodes) {
@@ -1037,9 +1063,54 @@ class _MenuPanelState extends State<_MenuPanel> {
   }
 
   bool available(int i) =>
-      entries[i] is! SteyMenuGroup &&
-      entries[i] is! SteyMenuSeparator &&
-      entries[i].enabled;
+      entries[i] is! SteyMenuGroup && entries[i] is! SteyMenuSeparator;
+
+  void clearSearch() {
+    searchTimer?.cancel();
+    search = '';
+  }
+
+  bool searchSpace() {
+    if (!interactive || !panelFocus.hasFocus) return false;
+    if (HardwareKeyboard.instance.isControlPressed ||
+        HardwareKeyboard.instance.isMetaPressed ||
+        HardwareKeyboard.instance.isAltPressed) {
+      return search.isNotEmpty;
+    }
+    final continuing = search.isNotEmpty;
+    final current = nodes.indexWhere((n) => n.hasFocus);
+    if (continuing || (current >= 0 && !entries[current].enabled)) {
+      typeahead(' ');
+    }
+    return continuing;
+  }
+
+  void typeahead(String text) {
+    final current = nodes.indexWhere((n) => n.hasFocus);
+    if (search.isEmpty) searchStart = current;
+    final rapid = List.generate(entries.length, (i) => i)
+        .where(available)
+        .every((i) {
+          final label = entries[i].label.toLowerCase();
+          return label.length < 2 || label[0] != label[1];
+        });
+    if (rapid && search == text) {
+      search = '';
+      searchStart = current;
+    }
+    search += text;
+    searchTimer?.cancel();
+    searchTimer = Timer(const Duration(milliseconds: 500), clearSearch);
+    for (var step = 1; step <= entries.length; step++) {
+      final i = (searchStart + step) % entries.length;
+      if (available(i) && entries[i].label.toLowerCase().startsWith(search)) {
+        nodes[i].requestFocus();
+        return;
+      }
+    }
+    if (text != ' ') search = '';
+  }
+
   void focusBoundary(bool last) {
     final indices = List.generate(entries.length, (i) => i).where(available);
     if (indices.isNotEmpty) {
@@ -1079,18 +1150,7 @@ class _MenuPanelState extends State<_MenuPanel> {
         HardwareKeyboard.instance.isAltPressed) {
       return KeyEventResult.ignored;
     }
-    searchTimer?.cancel();
-    final text = character.toLowerCase();
-    search = search.length == 1 && search == text ? text : search + text;
-    searchTimer = Timer(const Duration(milliseconds: 500), () => search = '');
-    final current = nodes.indexWhere((n) => n.hasFocus);
-    for (var step = 1; step <= entries.length; step++) {
-      final i = (current + step) % entries.length;
-      if (available(i) && entries[i].label.toLowerCase().startsWith(search)) {
-        nodes[i].requestFocus();
-        break;
-      }
-    }
+    typeahead(character.toLowerCase());
     return KeyEventResult.handled;
   }
 
@@ -1196,10 +1256,12 @@ class _MenuPanelState extends State<_MenuPanel> {
               },
               child: Focus(
                 focusNode: panelFocus,
-                autofocus: true,
                 includeSemantics: false,
                 skipTraversal: true,
                 onKeyEvent: keyEvent,
+                onFocusChange: (focused) {
+                  if (!focused) clearSearch();
+                },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1264,6 +1326,7 @@ class _MenuRow extends StatefulWidget {
 class _MenuRowState extends State<_MenuRow>
     with SingleTickerProviderStateMixin {
   bool hovered = false, popupOpen = false;
+  final states = WidgetStatesController();
   late final motion = AnimationController(
     vsync: this,
     duration: _menuDuration,
@@ -1305,6 +1368,28 @@ class _MenuRowState extends State<_MenuRow>
     if (current != null && current != popupSnapshot) popup?.markNeedsBuild();
   }
 
+  void focusChanged(bool focused) {
+    if (!mounted) return;
+    if (!widget.item.enabled) states.update(WidgetState.focused, focused);
+    if (!focused) return;
+    widget.onActive(widget.item.children.isNotEmpty ? closePopup : null);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !widget.focusNode.hasPrimaryFocus) return;
+      final object = anchorKey.currentContext?.findRenderObject();
+      final scroll = Scrollable.maybeOf(context)?.position;
+      if (object == null || !object.attached || scroll == null) return;
+      // Reveal only this menu's row; never scroll the application's anchor host.
+      scroll.ensureVisible(
+        object,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      );
+      scroll.ensureVisible(
+        object,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      );
+    });
+  }
+
   @override
   void didUpdateWidget(_MenuRow oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -1321,6 +1406,7 @@ class _MenuRowState extends State<_MenuRow>
     widget.input.dismissals.remove(dismiss);
     widget.input.unobserveGeometry(trackGeometry);
     motion.dispose();
+    states.dispose();
     popup?.remove();
     popup?.dispose();
     super.dispose();
@@ -1447,6 +1533,9 @@ class _MenuRowState extends State<_MenuRow>
                               child: SingleChildScrollView(
                                 padding: const EdgeInsets.all(6),
                                 child: FocusScope(
+                                  // Keep independent visual overlays in the
+                                  // anchor route's logical focus hierarchy.
+                                  parentNode: widget.focusNode.nearestScope,
                                   child: _MenuPanel(
                                     key: submenuKey,
                                     items: widget.item.children,
@@ -1461,10 +1550,7 @@ class _MenuRowState extends State<_MenuRow>
                                     padding: widget.padding,
                                     sticky: widget.sticky,
                                     width: width,
-                                    onBack: (instant) {
-                                      closePopup(instant);
-                                      widget.focusNode.requestFocus();
-                                    },
+                                    onBack: dismiss,
                                   ),
                                 ),
                               ),
@@ -1610,32 +1696,14 @@ class _MenuRowState extends State<_MenuRow>
         if (decoration != null) ...[const SizedBox(width: 8), decoration],
       ],
     );
-    final button = MenuItemButton(
+    Widget button = MenuItemButton(
       overflowAxis: Axis.vertical,
       key: anchorKey,
-      focusNode: widget.focusNode,
+      focusNode: item.enabled ? widget.focusNode : null,
+      statesController: states,
       style: style,
       onHover: onHover,
-      onFocusChange: (focused) {
-        if (!focused) return;
-        widget.onActive(submenu ? closePopup : null);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted || !widget.focusNode.hasPrimaryFocus) return;
-          final object = anchorKey.currentContext?.findRenderObject();
-          final scroll = Scrollable.maybeOf(context)?.position;
-          if (object == null || !object.attached || scroll == null) return;
-          // Reveal only this menu's focused row, as scrollIntoView(nearest)
-          // does in Base UI. Do not scroll the anchor's application viewport.
-          scroll.ensureVisible(
-            object,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-          );
-          scroll.ensureVisible(
-            object,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-          );
-        });
-      },
+      onFocusChange: item.enabled ? focusChanged : null,
       onPressed: !item.enabled
           ? null
           : () {
@@ -1658,9 +1726,25 @@ class _MenuRowState extends State<_MenuRow>
           : '${item.label} ${item.shortcut}',
       child: rowContent,
     );
+    if (!item.enabled) {
+      // The native button remains disabled (including its action semantics).
+      // A separate focus target matches Base UI's focusableWhenDisabled.
+      button = Focus(
+        focusNode: widget.focusNode,
+        onFocusChange: focusChanged,
+        onKeyEvent: (_, event) =>
+            !widget.item.enabled &&
+                (event.logicalKey == LogicalKeyboardKey.enter ||
+                    event.logicalKey == LogicalKeyboardKey.space)
+            ? KeyEventResult.handled
+            : KeyEventResult.ignored,
+        child: button,
+      );
+    }
     return MergeSemantics(
       child: Semantics(
         role: item.role,
+        enabled: item.enabled,
         expanded: submenu ? popupOpen : null,
         checked: checkbox || radio ? item.selection : null,
         inMutuallyExclusiveGroup: radio,
