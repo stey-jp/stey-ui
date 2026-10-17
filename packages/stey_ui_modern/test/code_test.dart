@@ -102,6 +102,20 @@ void main() {
       expect(engine.highlight(code, 'js', dark: false)!.toPlainText(), code);
     }
   });
+  testWidgets(
+    'Legacy code exposes its unchanged source as the accessible label',
+    (tester) async {
+      const source = 'SteyButton(child: Text("保存"))';
+      await tester.pumpWidget(host(const SteyCodeBlock(source)));
+      expect(
+        tester
+            .widget<SelectableText>(find.byType(SelectableText))
+            .semanticsLabel,
+        source,
+      );
+      expect(find.bySemanticsLabel(source), findsOneWidget);
+    },
+  );
   testWidgets('Numbers are multiline only, excluded from accessible source', (
     tester,
   ) async {

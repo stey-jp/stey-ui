@@ -136,6 +136,7 @@ def build_requests(config, inventory, source, base, target, root=ROOT):
     groups = {}
     for item in items:
         own = [p for p in relevant if p in item['source_files'] or
+               any(p.startswith(prefix) for prefix in item.get('source_prefixes', [])) or
                p.startswith(f"packages/kumo/src/{item['kind']}/{item['id']}/")]
         if not own and not global_files:
             continue

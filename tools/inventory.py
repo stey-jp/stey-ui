@@ -169,6 +169,12 @@ def generate(source, tokens_only=False, tailwind_theme=None):
             inventory.append({'id':folder.name, 'kind':kind, 'source_files':files,
                               'implementation_files':[], 'status':'pending',
                               'visual_verified':False, 'behavior_verified':False})
+            if kind == 'components' and folder.name == 'code':
+                prefix = 'packages/kumo/src/code/'
+                inventory[-1]['source_prefixes'] = [prefix]
+                extra = source/prefix
+                if extra.is_dir():
+                    inventory[-1]['source_files'] = sorted(files + [p.relative_to(source).as_posix() for p in extra.rglob('*') if p.is_file()])
     (ROOT/'upstream').mkdir(exist_ok=True)
     (ROOT/'upstream/inventory.json').write_text(json.dumps({'inspected_sha':sha,'components':inventory},indent=2)+'\n')
     print(f'Inventoried {len(inventory)} component groups; generated {len(FIELDS)} semantic colors.')

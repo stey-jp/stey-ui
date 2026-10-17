@@ -176,16 +176,31 @@
       "id": "code",
       "kind": "components",
       "source_files": [
+        "packages/kumo/src/code/code-highlighted.tsx",
+        "packages/kumo/src/code/context.ts",
+        "packages/kumo/src/code/index.ts",
+        "packages/kumo/src/code/provider.test.ts",
+        "packages/kumo/src/code/provider.test.tsx",
+        "packages/kumo/src/code/provider.tsx",
+        "packages/kumo/src/code/server.tsx",
+        "packages/kumo/src/code/types.ts",
+        "packages/kumo/src/code/use-shiki-highlighter.test.tsx",
+        "packages/kumo/src/code/use-shiki-highlighter.ts",
         "packages/kumo/src/components/code/code.tsx",
         "packages/kumo/src/components/code/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "packages/stey_ui_modern/lib/src/code.dart",
+        "apps/demo/lib/code_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Full upstream prop, behavior and visual parity remains to be certified.",
+      "source_prefixes": [
+        "packages/kumo/src/code/"
+      ]
     },
     {
       "id": "collapsible",

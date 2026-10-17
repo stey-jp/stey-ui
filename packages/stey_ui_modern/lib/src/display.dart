@@ -544,6 +544,7 @@ class SteyCode extends StatelessWidget {
       children: [
         SelectableText(
           code,
+          semanticsLabel: code,
           style: TextStyle(
             fontFamily: 'monospace',
             fontSize: 14,

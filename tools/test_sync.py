@@ -42,6 +42,21 @@ class SyncTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'LICENSE_REVIEW_REQUIRED'):
                 sync.build_requests(self.config, {'components': []}, Path('.'), 'a'*40, 'b'*40)
 
+    def test_code_entry_point_and_new_grammar_file_route_to_native_code_only(self):
+        inventory = sync.read_json(sync.ROOT/'upstream/inventory.json')
+        component = next(item for item in inventory['components'] if item['id'] == 'code')
+        for changed in ['packages/kumo/src/code/provider.tsx', 'packages/kumo/src/code/new-language.ts']:
+            def run(*args, **kwargs):
+                return changed if args[:3] == ('git', 'diff', '--name-only') else '+ language change'
+            with patch.object(sync, 'run', run):
+                batches, _ = sync.build_requests(self.config, inventory, Path('.'), 'a'*40, 'b'*40)
+            requests = [request for batch in batches.values() for request in batch]
+            self.assertEqual(len(requests), 1)
+            context = json.loads(requests[0]['body']['input'])
+            self.assertEqual(context['components'], ['code'])
+            self.assertEqual(set(context['local_files']), set(component['implementation_files']))
+            self.assertIn('packages/stey_ui_modern/lib/src/code.dart', context['local_files'])
+
     def test_observed_sha_prevents_reprocessing_documentation_after_a_merge(self):
         self.state.update(synchronized_sha='a'*40, observed_sha='b'*40)
         with tempfile.TemporaryDirectory() as folder:

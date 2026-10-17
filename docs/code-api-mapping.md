@@ -4,7 +4,7 @@
 
 | 公式 | Flutter | 対応範囲 |
 | --- | --- | --- |
-| Code / CodeBlock | SteyCode / SteyCodeBlock | 従来の選択可能なプレーンコード。構文強調は行わない |
+| Code / CodeBlock | SteyCode / SteyCodeBlock | 従来の選択可能なプレーンコード。構文強調は行わない。原文を読み上げラベルへ明示 |
 | CodeHighlighted.code / lang | SteyCodeHighlighted(code, lang: ...) | 原文を保つ選択可能なコード。横スクロール、折り返しなし |
 | variant=default / plain | standard / plain | 既定は枠・角丸6px・余白16px。plainは枠・余白なし。固定参照のCSSに合わせ13px／行高21.125px |
 | showLineNumbers | showLineNumbers | 複数行のみ。1始まり、横スクロールから独立、読み上げ対象外 |
@@ -41,3 +41,5 @@ SteyCodeHighlighting(
 - 等幅表示をプラットフォーム間で保つためOFLのRoboto Monoを同梱しています。公式のOS依存monospaceとはglyph・文字幅に差があります。リッチコードには原文をsemanticsLabelとして与え、空の読み上げ内容を避けます。スクロールバー、選択描画などの差も残ります。全状態の視覚認証・同期済みSHAの更新は行っていません。
 
 日本語デモは `?component=code&mode=light`、比較用は `?sample=code-highlighted&lang=javascript&mode=light`。比較用のlang/code/width/variant/numbers/highlight/copy/fallbackはURLで指定できます。検証結果は[検証記録](verification.md)へ追記します。
+
+同期の対応表は従来の `src/components/code/` に加え `src/code/` をCode群へ割り当てます。新しい文法ファイルもこの群だけへ振り分けます。API一覧には従来の固定SHAのソースを追加し、同期済みSHAは進めていません。クラウドの接続保留も維持します。

@@ -3889,6 +3889,533 @@
           "normalized_text_sha256": "fb07dbefeabcae23b0c7bad7a5b8576e41e3aed28a03bed6bf5fe5b715f1a772",
           "exports": [],
           "dependency_imports": []
+        },
+        {
+          "path": "packages/kumo/src/code/code-highlighted.tsx",
+          "normalized_text_sha256": "056cf0b526b11f24d7ede89e99e3ff4f74d65a32134869f7ceb0625382ac88b1",
+          "exports": [
+            {
+              "name": "CodeHighlighted",
+              "kind": "function",
+              "line": 35
+            }
+          ],
+          "dependency_imports": [
+            "@cloudflare/kumo/code"
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/context.ts",
+          "normalized_text_sha256": "59cd412988fc47c351b322222ed7be94fbfa5abd089f2b05d60eb6f88a48d627",
+          "exports": [
+            {
+              "name": "ShikiContextValue",
+              "kind": "interface",
+              "line": 5,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "highlighter",
+                  "optional": false,
+                  "line": 7
+                },
+                {
+                  "name": "isLoading",
+                  "optional": false,
+                  "line": 10
+                },
+                {
+                  "name": "error",
+                  "optional": false,
+                  "line": 13
+                },
+                {
+                  "name": "languages",
+                  "optional": false,
+                  "line": 16
+                },
+                {
+                  "name": "labels",
+                  "optional": false,
+                  "line": 19
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "ShikiContext",
+              "kind": "const",
+              "line": 22
+            }
+          ],
+          "dependency_imports": []
+        },
+        {
+          "path": "packages/kumo/src/code/index.ts",
+          "normalized_text_sha256": "b59f8df0333625786f83e985989a3fa9c8ccaac7dc03fae88a9183972506d9b8",
+          "exports": [],
+          "dependency_imports": [
+            "@cloudflare/kumo/code"
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/provider.test.ts",
+          "normalized_text_sha256": "1495f7675228a54b293779512103e84d87986eece0fa9fec8e4a085bb498a38b",
+          "test_titles": [
+            {
+              "title": "returns canonical names unchanged",
+              "line": 5
+            },
+            {
+              "title": "normalizes common aliases to canonical names",
+              "line": 26
+            },
+            {
+              "title": "returns null for unsupported or unknown languages",
+              "line": 48
+            },
+            {
+              "title": "returns null for empty string",
+              "line": 56
+            }
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/provider.test.tsx",
+          "normalized_text_sha256": "2b57389123abb8fec13e2fcb4388bda080f4a4d310e4385d22c9f0b04e604580",
+          "test_titles": [
+            {
+              "title": "initializes with a single language",
+              "line": 78
+            },
+            {
+              "title": "deduplicates canonical languages",
+              "line": 94
+            },
+            {
+              "title": "deduplicates aliases that resolve to the same canonical language",
+              "line": 113
+            },
+            {
+              "title": "deduplicates mixed aliases and canonical names",
+              "line": 133
+            },
+            {
+              "title": "filters out unknown languages silently",
+              "line": 153
+            },
+            {
+              "title": "handles empty languages array gracefully",
+              "line": 175
+            },
+            {
+              "title": "loads all requested unique languages",
+              "line": 191
+            },
+            {
+              "title": "uses javascript engine when engine='javascript'",
+              "line": 218
+            },
+            {
+              "title": "uses wasm engine when engine='wasm'",
+              "line": 232
+            },
+            {
+              "title": "does not reinitialize for an equivalent inline languages array",
+              "line": 246
+            },
+            {
+              "title": "reinitializes and disposes the old highlighter when languages change",
+              "line": 276
+            },
+            {
+              "title": "disposes the highlighter on unmount",
+              "line": 299
+            },
+            {
+              "title": "disposes a highlighter that resolves after unmount",
+              "line": 316
+            },
+            {
+              "title": "clears a stale error when reinitializing after a failed init",
+              "line": 343
+            },
+            {
+              "title": "does not re-highlight when an unrelated parent state changes",
+              "line": 375
+            },
+            {
+              "title": "renders the plain CodeHighlighted variant without a frame",
+              "line": 404
+            },
+            {
+              "title": "removes Shiki pre padding from the plain CodeHighlighted variant",
+              "line": 436
+            },
+            {
+              "title": "does not extend highlighted lines beyond a plain code block",
+              "line": 466
+            },
+            {
+              "title": "exposes normalized languages in context so hook alias resolution works end-to-end",
+              "line": 492
+            }
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/provider.tsx",
+          "normalized_text_sha256": "fe90017ebb028531ab10464ef067cee0a5650d79683bacccd10b70b64a7b7fc5",
+          "exports": [
+            {
+              "name": "normalizeLanguage",
+              "kind": "function",
+              "line": 45
+            },
+            {
+              "name": "ShikiProvider",
+              "kind": "function",
+              "line": 81
+            }
+          ],
+          "dependency_imports": [
+            "@cloudflare/kumo/code"
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/server.tsx",
+          "normalized_text_sha256": "ecaa4ca2dc64cc3563b0897072450cc823d66fa40844699e10e239b775e43e54",
+          "exports": [
+            {
+              "name": "HighlightCodeOptions",
+              "kind": "interface",
+              "line": 53,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "engine",
+                  "optional": true,
+                  "line": 55
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "CreateHighlighterOptions",
+              "kind": "interface",
+              "line": 58,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "engine",
+                  "optional": true,
+                  "line": 60
+                },
+                {
+                  "name": "languages",
+                  "optional": false,
+                  "line": 62
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "ServerHighlighter",
+              "kind": "interface",
+              "line": 65,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "highlight",
+                  "optional": false,
+                  "line": 67
+                },
+                {
+                  "name": "dispose",
+                  "optional": false,
+                  "line": 69
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "CodeBlockProps",
+              "kind": "interface",
+              "line": 207,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "html",
+                  "optional": false,
+                  "line": 209
+                },
+                {
+                  "name": "className",
+                  "optional": true,
+                  "line": 211
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "CodeBlock",
+              "kind": "function",
+              "line": 245
+            }
+          ],
+          "dependency_imports": [
+            "@cloudflare/kumo/code/server"
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/types.ts",
+          "normalized_text_sha256": "e419f3f4259d357f1507039b250303dbab518153acc61612ec68a82bcf10fa2c",
+          "exports": [
+            {
+              "name": "SupportedLanguage",
+              "kind": "type",
+              "line": 9,
+              "declaration_prefix": "= | \"javascript\" | \"typescript\" | \"jsx\" | \"tsx\" | \"json\" | \"jsonc\" | \"html\" | \"css\" | \"python\" | \"yaml\" | \"markdown\" | \"graphql\" | \"sql\" | \"bash\" | \"shell\" | \"diff\" | \"hcl\" | \"toml\"",
+              "direct_properties": [],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "LANGUAGE_ALIASES",
+              "kind": "const",
+              "line": 38
+            },
+            {
+              "name": "LanguageAlias",
+              "kind": "type",
+              "line": 54,
+              "declaration_prefix": "= keyof typeof LANGUAGE_ALIASES",
+              "direct_properties": [],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "LanguageInput",
+              "kind": "type",
+              "line": 57,
+              "declaration_prefix": "= SupportedLanguage | LanguageAlias",
+              "direct_properties": [],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "ShikiEngine",
+              "kind": "type",
+              "line": 64,
+              "declaration_prefix": "= \"javascript\" | \"wasm\"",
+              "direct_properties": [],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "CodeHighlightedLabels",
+              "kind": "interface",
+              "line": 69,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "copy",
+                  "optional": true,
+                  "line": 71
+                },
+                {
+                  "name": "copied",
+                  "optional": true,
+                  "line": 73
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "ShikiProviderProps",
+              "kind": "interface",
+              "line": 79,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "engine",
+                  "optional": false,
+                  "line": 85
+                },
+                {
+                  "name": "languages",
+                  "optional": false,
+                  "line": 92
+                },
+                {
+                  "name": "labels",
+                  "optional": true,
+                  "line": 99
+                },
+                {
+                  "name": "children",
+                  "optional": false,
+                  "line": 102
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "UseShikiHighlighterResult",
+              "kind": "interface",
+              "line": 108,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "highlight",
+                  "optional": false,
+                  "line": 117
+                },
+                {
+                  "name": "isLoading",
+                  "optional": false,
+                  "line": 123
+                },
+                {
+                  "name": "isReady",
+                  "optional": false,
+                  "line": 126
+                },
+                {
+                  "name": "error",
+                  "optional": false,
+                  "line": 129
+                },
+                {
+                  "name": "labels",
+                  "optional": false,
+                  "line": 132
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "CodeHighlightedVariant",
+              "kind": "type",
+              "line": 138,
+              "declaration_prefix": "= \"default\" | \"plain\"",
+              "direct_properties": [],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "CodeHighlightedProps",
+              "kind": "interface",
+              "line": 140,
+              "declaration_prefix": "",
+              "direct_properties": [
+                {
+                  "name": "code",
+                  "optional": false,
+                  "line": 142
+                },
+                {
+                  "name": "lang",
+                  "optional": false,
+                  "line": 149
+                },
+                {
+                  "name": "showLineNumbers",
+                  "optional": true,
+                  "line": 152
+                },
+                {
+                  "name": "highlightLines",
+                  "optional": true,
+                  "line": 158
+                },
+                {
+                  "name": "labels",
+                  "optional": true,
+                  "line": 164
+                },
+                {
+                  "name": "className",
+                  "optional": true,
+                  "line": 167
+                },
+                {
+                  "name": "variant",
+                  "optional": true,
+                  "line": 170
+                },
+                {
+                  "name": "showCopyButton",
+                  "optional": true,
+                  "line": 173
+                }
+              ],
+              "inherited_or_conditional_review": "pending"
+            },
+            {
+              "name": "BundledLanguage",
+              "kind": "type",
+              "line": 178,
+              "declaration_prefix": "= SupportedLanguage",
+              "direct_properties": [],
+              "inherited_or_conditional_review": "pending"
+            }
+          ],
+          "dependency_imports": []
+        },
+        {
+          "path": "packages/kumo/src/code/use-shiki-highlighter.test.tsx",
+          "normalized_text_sha256": "1df940a7e2ec3f5164224d834410d1ddfa35247826b4d27842b21c517608d197",
+          "test_titles": [
+            {
+              "title": "throws when used outside ShikiProvider",
+              "line": 23
+            },
+            {
+              "title": "returns null when highlighter is not ready",
+              "line": 29
+            },
+            {
+              "title": "normalizes language aliases before calling codeToHtml",
+              "line": 45
+            },
+            {
+              "title": "passes canonical language directly to codeToHtml",
+              "line": 77
+            },
+            {
+              "title": "returns null and warns when normalized language is not in languages list",
+              "line": 97
+            },
+            {
+              "title": "returns null and warns for unknown languages",
+              "line": 124
+            },
+            {
+              "title": "calls codeToHtml with dual theme config",
+              "line": 150
+            },
+            {
+              "title": "returns null and warns when codeToHtml throws",
+              "line": 173
+            },
+            {
+              "title": "exposes isReady as true when highlighter is loaded",
+              "line": 203
+            },
+            {
+              "title": "exposes labels from provider",
+              "line": 219
+            }
+          ]
+        },
+        {
+          "path": "packages/kumo/src/code/use-shiki-highlighter.ts",
+          "normalized_text_sha256": "2e1cc838523f08a69878b3b79c72f8f541275ccfbfdb2e5344dda2e030360909",
+          "exports": [
+            {
+              "name": "useShikiHighlighter",
+              "kind": "function",
+              "line": 41
+            }
+          ],
+          "dependency_imports": [
+            "@cloudflare/kumo/code"
+          ]
         }
       ],
       "api_review": "pending",
