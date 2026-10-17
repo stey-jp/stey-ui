@@ -20,6 +20,7 @@ Dropdownに階層メニュー・Checkbox／Radio選択・自動字下げ・キ�
 公式の物理余白に合わせたRTL行を実装し、日本語デモで表示方向を切り替えられます。
 矩形の配置境界・各辺の余白を指定でき、表示中のresize・scrollと、起点が隠れた際の追従に対応します。
 stickyによる境界内保持も指定でき、日本語デモで既定の追従と切り替えられます。
+disabled行へのフォーカスと500msの文字検索・Space処理、階層間のキーボードフォーカスを追加対応しています。
 日本語デモと[DropdownのAPI対応](docs/dropdown-api-mapping.md)で操作と制限を確認できます。
 Buttonの文字位置・アイコン余白と、Sidebarの階層リスト・装飾ガイド・640pxでのリサイズ操作切替を追加対応しています。
 [Button／SidebarのAPI対応](docs/button-sidebar-api-mapping.md)に適用範囲を記録しています。

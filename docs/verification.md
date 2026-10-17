@@ -1,4 +1,4 @@
-# 検証結果（Dropdown sticky配置：2026-10-17）
+# 検証結果（Dropdownキーボード操作：2026-10-17）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -428,3 +428,28 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 非スコア項目・Diagnosticsを含む全監査をJSONのdropdown_stickyへ保持しました。全100点・Issues 0件は未達です。SDKのIntl・SkWasm map、自社の起動負荷・転送量とDesktop Sidebar端の操作領域が残ります。Linux／macOS／iOSの今回ビルド、物理実機・screen readerは未検証、Android APKは開発用署名です。
 
 Element／複数境界・負の余白、rich child測定、全配置prop／イベント／portalと全描画状態の認証は残ります。公式はdisabled行にも矢印focusを移せますが現実装はskipし、500msの文字検索中のSpaceも公式は検索・現実装は実行という差があり、API対応表へ残課題を追記しました。同期済みSHAと承認済み視覚ゲートは進めていません。shared-ciの最新README／setup／登録設定のblob不変とWorkflow 0件を確認し、公開repo除外・クラウド接続保留を維持しました。Batch API呼出・費用は0、実往復は未実施。本番反映先はGitHub mainです。
+
+## Dropdownキーボード操作の追加検証（2026-10-17）
+
+ソースSHAは `492620a06433ec8f90f1958ce3e638d91d2cd754`。静的解析0件、ライブラリ236件・デモ11件、Web Wasm・Windows x64・Android APKのリリースビルドが成功しました。新規24テストで左右両方向のdisabled行への矢印／Home／End／文字検索、無効な通常行・checkbox・radio・submenuの非実行、disabledとfocusedの意味情報、表示中の無効／有効切替を確認しました。
+
+500msの検索継続・失敗時リセット・複数単語・同じ頭文字の巡回・Space長押し後のkeyupを公式へ合わせました。検索中のSpaceは検索を続け、検索がない有効行では連続Spaceで操作できます。無効行のSpaceは無反応ですが検索には残ります。子へのfocus移動で親の検索を終了します。子の開始フレームでopacityが0でも意味情報を保持し、panelの競合するautofocusを除去して、矢印で開いた子の先頭行へfocusを移します。独立OverlayのFocusScopeは起点のnearestScopeへ接続し、ルートがfocusを再要求しても子の選択を維持します。終了中はreverseだけでなくdismissed状態も操作・意味情報を除外し、透明な最終フレームでの再出現とWebのfocus消失を防ぎます。日本語デモの説明も更新しました。[API対応](dropdown-api-mapping.md)。
+
+公式SHA `7e0ff40` のKumo／CSS・Base UI 1.9.0と、実ChromeのLight/Dark・LTR/RTL・390／1200pxで比較しました。8条件・216状態で、無効行・検索中／検索前のSpace、時間経過、失敗検索、頭文字巡回、子の先頭focus、親へ戻った後のSpace、3階層の検索と選択、再表示時の選択保持を確認しました。Tabでアプリfocusへ入り、項目へのDOM focus指定は使いません。比較画像24組のpopup位置・寸法は最大0.000000 CSS px差、画面全体の画像差分はthreshold 0.1で0.34〜1.07%です。影・glyph・focusの描画差があり、完全一致は未達です。
+
+**無効行のWeb DOM focusはSDK差が残ります。** アプリのprimary focusとリングは無効行へ移り、aria-disabled=trueも維持しますが、Flutter WebのFocusable.updateはdisabledノードへのDOM focusを除外するため、document.activeElementは直前の有効行に残ります。実Chrome比較はこの差を明示して記録し、次の矢印・文字検索・Enter／Spaceの無反応も確認しました。enabledと偽る対処やDOM／SDK改造は行っていません。物理screen readerでの影響と解消は未検証です。
+
+既存Dropdown・motion・RTL・LayerDialogのChrome検査計56項目、日本語デモ390／1280pxの操作も成功しました。stickyの配置比較16条件・176状態も再実行し、可視位置・寸法は最大0.000000 CSS px差でした。全URLのCDP Audits.issueAdded監査は106 URL・108条件で実行時エラー0件、SDK IntlV8BreakIterator 108件でした。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- dropdown_gallery_mobile：65 / 100 / 81 / 100。実行警告0件。
+- dropdown_gallery_desktop：95 / 96 / 81 / 100。実行警告0件。
+- dropdown_mobile：94 / 100 / 81 / 100。実行警告0件。
+- dropdown_desktop：100 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_mobile：91 / 100 / 81 / 100。実行警告0件。
+- dropdown_tracking_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+追従サンプルのDesktopだけ初回にChrome traceのNO_NAVSTARTで失敗したため、その1条件だけ再実行しました。他の5条件の成功結果は再計測せず保持しています。
+
+非スコア項目・Diagnosticsを含む全監査をJSONのdropdown_keyboardへ保持しました。全100点・Issues 0件は未達です。SDKのIntl・SkWasm map、自社の起動負荷・転送量とDesktop Sidebar端の操作領域が残ります。今回ソースのLinux／macOS／iOSビルド・物理実機・screen readerは未検証、Android APKは開発用署名です。全継承API・rich child・全描画状態の認証は未完了で、同期済みSHAと承認済み視覚ゲートは進めていません。shared-ciのREADME／setup／登録設定のblob不変とWorkflow 0件を確認し、公開repo除外・クラウド保留を維持しています。Batch API呼出・費用は0、実往復は未実施。本番反映先はGitHub mainです。
