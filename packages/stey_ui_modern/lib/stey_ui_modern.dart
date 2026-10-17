@@ -4,6 +4,7 @@ library;
 export 'src/theme.dart';
 export 'src/button.dart';
 export 'src/display.dart';
+export 'src/code.dart';
 export 'src/input.dart';
 export 'src/selection.dart';
 export 'src/navigation.dart';

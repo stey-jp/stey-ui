@@ -21,3 +21,5 @@
    ロゴ群は書面許可または対象範囲の判断が必要。pub.dev公開は行わない。
 
 根拠は[検証記録](verification.md)、部品の不足は[再現チェックリスト](parity-checklist.md)に保持します。
+
+不足実装の続きとしてCodeHighlightedを追加しました。18言語の識別子・別名、行番号、行強調、原文コピーと日本語デモを用意しています。[CodeのAPI対応](code-api-mapping.md)に記載のShikiとの解析・色分けの差、HCLの全文法などは残ります。

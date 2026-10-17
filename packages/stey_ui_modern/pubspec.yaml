@@ -10,12 +10,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  re_highlight: 0.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
 flutter:
   fonts:
+    - family: SteyCodeMono
+      fonts:
+        - asset: assets/fonts/RobotoMono-Regular.ttf
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter-Regular.ttf
