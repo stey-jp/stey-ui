@@ -60,7 +60,7 @@ try {
    const frame=native?page.getByLabel('Code preview',{exact:true}):surface;
    await frame.waitFor();
    if(!native&&scenario.fallback!=='true')await page.locator('.kumo-shiki').waitFor();
-   await page.mouse.move(1,1);await page.waitForTimeout(80);
+   await page.mouse.move(1,1);await page.waitForTimeout(200);
    const box=await frame.boundingBox();assert(box,`${index} ${target} surface`);
    const text=native?await frame.locator('flt-semantics:not([role])').first().textContent():await frame.locator('pre code').textContent();
    assert.equal(text,scenario.code,`${index} ${target} original source`);

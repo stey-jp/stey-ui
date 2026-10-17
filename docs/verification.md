@@ -1,4 +1,4 @@
-# 検証結果（Dropdownキーボード操作：2026-10-17）
+# 検証結果（Code構文強調：2026-10-17）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -453,3 +453,24 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 追従サンプルのDesktopだけ初回にChrome traceのNO_NAVSTARTで失敗したため、その1条件だけ再実行しました。他の5条件の成功結果は再計測せず保持しています。
 
 非スコア項目・Diagnosticsを含む全監査をJSONのdropdown_keyboardへ保持しました。全100点・Issues 0件は未達です。SDKのIntl・SkWasm map、自社の起動負荷・転送量とDesktop Sidebar端の操作領域が残ります。今回ソースのLinux／macOS／iOSビルド・物理実機・screen readerは未検証、Android APKは開発用署名です。全継承API・rich child・全描画状態の認証は未完了で、同期済みSHAと承認済み視覚ゲートは進めていません。shared-ciのREADME／setup／登録設定のblob不変とWorkflow 0件を確認し、公開repo除外・クラウド保留を維持しています。Batch API呼出・費用は0、実往復は未実施。本番反映先はGitHub mainです。
+
+## Code構文強調の追加検証（2026-10-17）
+
+ソースSHAは `ac81e59b45aa8c2f66d2fed234187ed90501de9c`。静的解析0件、ライブラリ266件・デモ12件、Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。新規はライブラリ30件・デモ1件です。18言語の原文保持とLight/Darkの色分け、別名・言語制限・フォールバック、行番号と意味情報、2倍拡大とRTL、横スクロール、コピーの原文・ラベル・2秒の通知・失敗・応答順・破棄を確認しました。150msのフェードは動作低減設定でも維持します。[CodeのAPI対応](code-api-mapping.md)。
+
+公式の固定SHAをShiki 4.0.2のJavaScriptエンジン、github-light / vesperと組み合わせ、実Chromeで18言語×Light/Darkの36条件と、1行・枠なし・行番号なし・横長・未知言語の各320／390／1200px×Light/Darkの30条件、計66条件を比較しました。両側の意味情報の原文・実コピー・成功表示・クリップボードを確認しています。Windows ChromeのLF→CRLF変換はそのまま記録し、改行以外は一致を要求します。
+
+枠の位置・寸法は最大0.000000 CSS px差（許容1px）、画面全体の画像差分はthreshold 0.1で0.03〜0.46%でした。**枠の一致は全トークン・全色・文字幅の一致を意味しません。** 公式CSSの13px／行高21.125pxと、1行のコピーをコード直後に置く仕様へ修正しました。共有テーマからの誤ったフォント継承を防ぐ等幅Roboto Monoを同梱し、空になっていたリッチコードの読み上げ内容に原文を明示しています。Roboto MonoとOSフォント、re_highlightとShiki、HCLの全文法などの差が残ります。ロゴ等を含む全群の認証・同期済みSHA・視覚ゲートは進めていません。
+
+日本語デモは390／1280px・Light/Darkの4条件で言語選択、行番号・枠・構文強調の切替とコピー通知を確認しました。全URLのCDP Audits.issueAdded監査は106 URL・108条件で実行時エラー0件、Issue 108件でした。分類はJSONに保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：76 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：90 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全監査をJSONのcode_highlightedへ保持しました。SDK IntlV8BreakIterator・SkWasm mapと、自社の初期起動・転送量・操作領域などを残件として追跡します。Linux／macOS／iOS・物理実機・物理screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciのREADME／setup／登録設定は前回と同じblob、Workflow 0件で、公開repo除外・クラウド保留を維持しています。Batch API呼出・費用は0、実往復は未実施。本番反映先はGitHub mainです。
+
+従来のCode／CodeBlockにも原文の意味情報を設定し、Lighthouseで検出したラベル不足を修正しました。自動同期の対応表には公式の別入口src/code/の10ファイルとネイティブ実装を追加し、新規ファイルもCode群だけへ割り当てます。固定SHAのAPI一覧を補完し、同期済みSHAは維持しています。関連Pythonテスト19件はローカルの偽APIを含む検査であり、実際のBatch送信・クラウドCI・PR作成は実行していません。
