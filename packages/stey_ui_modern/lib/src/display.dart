@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -498,25 +500,394 @@ class _SteyClipboardTextState extends State<SteyClipboardText> {
   }
 
   @override
-  Widget build(BuildContext context) => SteyButton(
-    onPressed: copy,
-    variant: widget.inline
-        ? SteyButtonVariant.ghost
-        : SteyButtonVariant.secondary,
-    semanticLabel: copied
-        ? SteyMessages.of(context).copied
-        : SteyMessages.of(context).copy(widget.text),
-    trailing: Icon(copied ? Icons.check : Icons.copy, size: 14),
-    child: Text(
-      widget.text,
-      style: const TextStyle(fontFamily: 'monospace', fontSize: 12.6),
+  Widget build(BuildContext context) => widget.inline
+      ? SteyInlineCopyText(widget.text, onCopied: widget.onCopied)
+      : SteyButton(
+          onPressed: copy,
+          variant: widget.inline
+              ? SteyButtonVariant.ghost
+              : SteyButtonVariant.secondary,
+          semanticLabel: copied
+              ? SteyMessages.of(context).copied
+              : SteyMessages.of(context).copy(widget.text),
+          trailing: Icon(copied ? Icons.check : Icons.copy, size: 14),
+          child: Text(
+            widget.text,
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 12.6),
+          ),
+        );
+}
+
+enum SteyInlineCopyVariant {
+  body,
+  secondary,
+  success,
+  error,
+  mono,
+  monoSecondary,
+}
+
+enum SteyInlineCopySize { xs, sm, base, lg }
+
+/// A compact copy control. A rich child requires an explicit clipboard value.
+class SteyInlineCopyText extends SteyClipboardText {
+  const SteyInlineCopyText(
+    super.text, {
+    super.key,
+    super.onCopied,
+    this.value,
+    this.disabled = false,
+    this.truncate = true,
+    this.variant = SteyInlineCopyVariant.monoSecondary,
+    this.size = SteyInlineCopySize.base,
+    this.bold = false,
+    this.copyActionLabel,
+    this.copiedLabel,
+    this.focusNode,
+    this.autofocus = false,
+    this.onBeforeCopy,
+    this.onCopyError,
+  }) : child = null,
+       super(inline: true);
+
+  const SteyInlineCopyText.rich(
+    Widget this.child, {
+    super.key,
+    super.onCopied,
+    required String value,
+    this.disabled = false,
+    this.truncate = true,
+    this.variant = SteyInlineCopyVariant.monoSecondary,
+    this.size = SteyInlineCopySize.base,
+    this.bold = false,
+    this.copyActionLabel,
+    this.copiedLabel,
+    this.focusNode,
+    this.autofocus = false,
+    this.onBeforeCopy,
+    this.onCopyError,
+  }) : value = value,
+       super(value, inline: true);
+
+  final Widget? child;
+  final String? value, copyActionLabel, copiedLabel;
+  final bool disabled, truncate, bold, autofocus;
+  final SteyInlineCopyVariant variant;
+  final SteyInlineCopySize size;
+  final FocusNode? focusNode;
+
+  /// Return false to cancel activation before clipboard IO and feedback reset.
+  final bool Function()? onBeforeCopy;
+  final ValueChanged<Object>? onCopyError;
+  @override
+  State<SteyInlineCopyText> createState() => _SteyInlineCopyTextState();
+}
+
+/// Native counterpart of an enclosing Kumo `group`: hover or focus within the
+/// group reveals descendant copy icons without changing their text colors.
+class SteyInlineCopyGroup extends StatefulWidget {
+  const SteyInlineCopyGroup({super.key, required this.child});
+  final Widget child;
+  @override
+  State<SteyInlineCopyGroup> createState() => _SteyInlineCopyGroupState();
+}
+
+class _CopyReveal extends InheritedWidget {
+  const _CopyReveal({required this.visible, required super.child});
+  final bool visible;
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_CopyReveal>()?.visible ??
+      false;
+  @override
+  bool updateShouldNotify(_CopyReveal oldWidget) =>
+      visible != oldWidget.visible;
+}
+
+class _SteyInlineCopyGroupState extends State<SteyInlineCopyGroup> {
+  bool hovered = false, focused = false;
+  @override
+  Widget build(BuildContext context) => MouseRegion(
+    onEnter: (_) => setState(() => hovered = true),
+    onExit: (_) => setState(() => hovered = false),
+    child: Focus(
+      canRequestFocus: false,
+      includeSemantics: false,
+      onFocusChange: (v) => setState(() => focused = v),
+      child: _CopyReveal(
+        visible: hovered || focused || _CopyReveal.of(context),
+        child: widget.child,
+      ),
     ),
   );
 }
 
-class SteyInlineCopyText extends SteyClipboardText {
-  const SteyInlineCopyText(super.text, {super.key, super.onCopied})
-    : super(inline: true);
+class _SteyInlineCopyTextState extends State<SteyInlineCopyText>
+    with SingleTickerProviderStateMixin {
+  final ownFocus = FocusNode();
+  final timers = <Timer>{};
+  Timer? reset;
+  bool copied = false, hovered = false, focused = false, focusVisible = false;
+  bool spacePressed = false;
+  bool iconVisible = false;
+  late final fade = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 150),
+    animationBehavior: AnimationBehavior.preserve,
+  );
+
+  Future<void> copy() async {
+    if (widget.disabled || widget.onBeforeCopy?.call() == false) return;
+    reset?.cancel();
+    timers.remove(reset);
+    try {
+      await Clipboard.setData(ClipboardData(text: widget.value ?? widget.text));
+      if (!mounted) return;
+      setState(() => copied = true);
+      // Match upstream completion ordering, including overlapping requests.
+      // Own every timer so a late completion can never leave a live timer on disposal.
+      late final Timer timer;
+      timer = Timer(const Duration(milliseconds: 1500), () {
+        timers.remove(timer);
+        if (mounted) setState(() => copied = false);
+        if (reset == timer) reset = null;
+      });
+      reset = timer;
+      timers.add(timer);
+      widget.onCopied?.call();
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => copied = false);
+      widget.onCopyError?.call(error);
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final timer in timers) {
+      timer.cancel();
+    }
+    ownFocus.dispose();
+    fade.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = SteyTheme.colorsOf(context);
+    final mono =
+        widget.variant == SteyInlineCopyVariant.mono ||
+        widget.variant == SteyInlineCopyVariant.monoSecondary;
+    final fontSize = mono
+        ? (widget.size == SteyInlineCopySize.lg ? 14.0 : 13.0)
+        : switch (widget.size) {
+            SteyInlineCopySize.xs => 12.0,
+            SteyInlineCopySize.sm => 13.0,
+            SteyInlineCopySize.base => 14.0,
+            SteyInlineCopySize.lg => 16.0,
+          };
+    final active = hovered || focusVisible;
+    final color = switch (widget.variant) {
+      SteyInlineCopyVariant.secondary => c.subtle,
+      SteyInlineCopyVariant.monoSecondary => active ? c.text : c.subtle,
+      SteyInlineCopyVariant.success => c.link,
+      SteyInlineCopyVariant.error => c.dangerText,
+      _ => c.text,
+    };
+    final reveal = active || _CopyReveal.of(context);
+    if (iconVisible != reveal) {
+      iconVisible = reveal;
+      fade.animateTo(reveal ? 1 : 0, curve: const Cubic(.4, 0, .2, 1));
+    }
+    final copiedLabel = widget.copiedLabel ?? SteyMessages.of(context).copied;
+    final copyLabel =
+        widget.copyActionLabel ??
+        (Localizations.maybeLocaleOf(context)?.languageCode == 'ja'
+            ? 'クリップボードにコピー'
+            : 'Copy to clipboard');
+    final node = widget.focusNode ?? ownFocus;
+    final icon = CustomPaint(
+      size: const Size(14, 14),
+      painter: _InlineCopyIcon(copied, c.text),
+    );
+    final style = TextStyle(
+      fontFamily: mono ? 'SteyCodeMono' : 'Inter',
+      package: 'stey_ui_modern',
+      fontSize: fontSize,
+      height: 1.5,
+      color: color,
+      fontWeight: !mono && widget.bold ? FontWeight.w500 : FontWeight.w400,
+    );
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      widthFactor: 1,
+      heightFactor: 1,
+      child: Focus(
+        canRequestFocus: false,
+        includeSemantics: false,
+        onKeyEvent: (_, event) {
+          if (widget.disabled) return KeyEventResult.ignored;
+          if (event.logicalKey == LogicalKeyboardKey.space) {
+            if (event is KeyDownEvent) spacePressed = true;
+            if (event is KeyUpEvent && spacePressed) {
+              spacePressed = false;
+              copy();
+            }
+            return KeyEventResult.handled;
+          }
+          if (event.logicalKey == LogicalKeyboardKey.enter) {
+            if (event is KeyDownEvent || event is KeyRepeatEvent) copy();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: FocusableActionDetector(
+          enabled: !widget.disabled,
+          focusNode: node,
+          autofocus: widget.autofocus,
+          onFocusChange: (v) => setState(() {
+            focused = v;
+            if (!v) spacePressed = false;
+          }),
+          onShowFocusHighlight: (v) => setState(() => focusVisible = v),
+          child: Semantics(
+            button: true,
+            enabled: !widget.disabled,
+            focusable: !widget.disabled,
+            focused: focused,
+            label: copied ? copiedLabel : copyLabel,
+            liveRegion: copied,
+            excludeSemantics: true,
+            onTap: widget.disabled
+                ? null
+                : () {
+                    node.requestFocus();
+                    copy();
+                  },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => setState(() => hovered = true),
+              onExit: (_) => setState(() => hovered = false),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                excludeFromSemantics: true,
+                onTap: widget.disabled
+                    ? null
+                    : () {
+                        node.requestFocus();
+                        copy();
+                      },
+                child: CustomPaint(
+                  foregroundPainter: focusVisible
+                      ? _InlineCopyFocus(c.brand)
+                      : null,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: IgnorePointer(
+                          child: ExcludeFocus(
+                            child: DefaultTextStyle(
+                              style: style,
+                              maxLines: widget.truncate ? 1 : null,
+                              overflow: widget.truncate
+                                  ? TextOverflow.ellipsis
+                                  : TextOverflow.clip,
+                              child: widget.child ?? Text(widget.text),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      ExcludeSemantics(
+                        child: copied
+                            ? icon
+                            : FadeTransition(opacity: fade, child: icon),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Native geometry equivalent to the Phosphor regular CopySimple/Check paths.
+class _InlineCopyFocus extends CustomPainter {
+  const _InlineCopyFocus(this.color);
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawRRect(
+    RRect.fromRectAndRadius(
+      (Offset.zero & size).inflate(1),
+      const Radius.circular(3),
+    ),
+    Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2,
+  );
+  @override
+  bool shouldRepaint(_InlineCopyFocus oldDelegate) =>
+      color != oldDelegate.color;
+}
+
+class _InlineCopyIcon extends CustomPainter {
+  const _InlineCopyIcon(this.checked, this.color);
+  final bool checked;
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.scale(size.width / 256, size.height / 256);
+    final paint = Paint()..color = color;
+    if (checked) {
+      paint
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 16
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+      canvas.drawPath(
+        Path()
+          ..moveTo(40, 144)
+          ..lineTo(96, 200)
+          ..lineTo(224, 72),
+        paint,
+      );
+    } else {
+      final outline = Path()
+        ..fillType = PathFillType.evenOdd
+        ..addRRect(
+          RRect.fromRectAndRadius(
+            const Rect.fromLTRB(32, 64, 192, 224),
+            const Radius.circular(8),
+          ),
+        )
+        ..addRect(const Rect.fromLTRB(48, 80, 176, 208));
+      canvas.drawPath(outline, paint);
+      paint
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 16
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+      canvas.drawPath(
+        Path()
+          ..moveTo(72, 40)
+          ..lineTo(216, 40)
+          ..lineTo(216, 184),
+        paint,
+      );
+    }
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(_InlineCopyIcon oldDelegate) =>
+      checked != oldDelegate.checked || color != oldDelegate.color;
 }
 
 class SteyCode extends StatelessWidget {

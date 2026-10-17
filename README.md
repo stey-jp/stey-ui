@@ -36,6 +36,7 @@ Node.maxWidthで説明を折り返し、内容と幅の変化に合わせてノ�
 固定した比較対象の後に検出した公式更新は、[最新差分レビュー](upstream/latest-review.json)に未対応事項と併せて記録します。
 CodeHighlightedにDart製の構文強調、行番号・行の強調・コピーを追加しています。
 日本語デモで18言語の識別子と表示を切り替えられます。[CodeのAPI対応](docs/code-api-mapping.md)にShikiとの文法・色分けの差と未対応範囲を記録しています。
+InlineCopyTextに枠なし表示、明示したコピー値、hover・focus・行グループ、1.5秒の成功表示を追加しています。[InlineCopyTextのAPI対応](docs/inline-copy-api-mapping.md)を参照してください。
 
 ```text
 packages/

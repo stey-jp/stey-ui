@@ -394,7 +394,8 @@
         "packages/kumo/src/components/inline-copy-text/inline-copy-text.type-spec.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "apps/demo/lib/inline_copy_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,

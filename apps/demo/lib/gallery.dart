@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'catalog.g.dart';
 import 'code_example.dart';
+import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
 import 'dropdown_tracking_sample.dart';
@@ -109,6 +110,9 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'inline-copy-text' => inlineCopySample(
+                router.uri.queryParameters,
+              ),
               'code-highlighted' => codeSample(router.uri.queryParameters),
               'button-group' => buttonGroupSample(router.uri.queryParameters),
               'flow-anchor' => flowAnchorSample(router.uri.queryParameters),
@@ -1224,7 +1228,7 @@ class _ComponentExampleState extends State<ComponentExample> {
       'clipboard-text' => const SteyClipboardText(
         'npm install @cloudflare/kumo',
       ),
-      'inline-copy-text' => const SteyInlineCopyText('account_12345'),
+      'inline-copy-text' => const InlineCopyExample(),
       'code' => const CodeExample(),
       'grid' => SteyGrid(
         minWidth: 120,

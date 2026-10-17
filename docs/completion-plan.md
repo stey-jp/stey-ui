@@ -23,3 +23,5 @@
 根拠は[検証記録](verification.md)、部品の不足は[再現チェックリスト](parity-checklist.md)に保持します。
 
 不足実装の続きとしてCodeHighlightedを追加しました。18言語の識別子・別名、行番号、行強調、原文コピーと日本語デモを用意しています。[CodeのAPI対応](code-api-mapping.md)に記載のShikiとの解析・色分けの差、HCLの全文法などは残ります。
+
+InlineCopyTextの枠なし表示・コピー値・rich child・keyboard・親group・1.5秒の通知も追加しています。[API対応](inline-copy-api-mapping.md)に文字幅・折り返し・実機の残件を保持します。

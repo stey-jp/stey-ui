@@ -36,7 +36,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | field | 全parts、validation match、error/helper優先、label、required/optional、ID | 一部読み上げ済み。全validation match待ち |
 | flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | List/Parallelからの自動接続、内容測定・動的再配置、縦／center／末尾揃えを追加。既存DAG・アンカー維持。背景pan・両軸wheel・overflow通知・scroll表示を追加。maxWidthでの折り返しと再配置を追加。標準ノードの自動幅・初期幅履歴・再作成時の測定を追加。全custom／入力・視覚／実機認証は未完了。[API対応](flow-api-mapping.md) |
 | grid | 全export、columns/gap、breakpoints、overflow | 全比較待ち |
-| inline-copy-text | copy、feedback、本文/tooltip、幅制約 | 全比較待ち |
+| inline-copy-text | copy、feedback、本文/tooltip、幅制約 | 枠なし表示・コピー値・rich child・省略・disabled・keyboard・親group・150ms fade・1.5秒通知を追加。[API対応](inline-copy-api-mapping.md)。等幅glyph、truncate=falseの長い未分割文字列、全視覚・実機認証は未完了 |
 | input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | 描画・読み上げサンプルあり。全API比較待ち |
 | input-group | parts、padding、border/ring、icon/addon、disabled/focus | 全比較待ち |
 | label | tooltipのkeyboard/touch、optional、asContent、関連付け | 情報ボタンのタッチ・keyboardと読み上げテスト済み。全比較待ち |
