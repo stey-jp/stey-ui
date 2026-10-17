@@ -1,4 +1,4 @@
-# 検証結果（Code構文強調：2026-10-17）
+# 検証結果（InlineCopyText：2026-10-18）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -474,3 +474,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全監査をJSONのcode_highlightedへ保持しました。SDK IntlV8BreakIterator・SkWasm mapと、自社の初期起動・転送量・操作領域などを残件として追跡します。Linux／macOS／iOS・物理実機・物理screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciのREADME／setup／登録設定は前回と同じblob、Workflow 0件で、公開repo除外・クラウド保留を維持しています。Batch API呼出・費用は0、実往復は未実施。本番反映先はGitHub mainです。
 
 従来のCode／CodeBlockにも原文の意味情報を設定し、Lighthouseで検出したラベル不足を修正しました。自動同期の対応表には公式の別入口src/code/の10ファイルとネイティブ実装を追加し、新規ファイルもCode群だけへ割り当てます。固定SHAのAPI一覧を補完し、同期済みSHAは維持しています。関連Pythonテスト19件はローカルの偽APIを含む検査であり、実際のBatch送信・クラウドCI・PR作成は実行していません。
+
+## InlineCopyTextの追加検証（2026-10-18）
+
+ソースSHAは `791716ba8e18a0a214b82a2e3a2fdea41894dd16`。静的解析0件、ライブラリ284件・デモ13件、Python同期テスト19件、Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。新規はライブラリ18件・デモ1件です。[InlineCopyTextのAPI対応](inline-copy-api-mapping.md)に対応範囲を記載しています。通常のClipboardTextは今回の変更対象外です。
+
+枠なしのコピー操作、6種類の文字・4サイズ、明示値とrich child、ラベル、無効・省略・キャンセル・失敗通知、親groupのhover／focusを追加しました。成功表示は1.5秒、再操作・並行完了・破棄を検証しています。Enterはkeydown、Spaceはkeyupで実行し、意味情報経由のクリック後も次のTabで兄弟へ移動します。150msのフェードは動作低減設定でも維持します。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` と実Chromeで40条件・164状態を比較しました。Light/Dark、LTR/RTL、390／1200px、文字・サイズ・装飾・長文・無効・キャンセル・親groupを含み、両側の実クリップボードと成功表示を検証しました。Windows ChromeのLF→CRLF変換だけを許容します。既知の未分割長文を除き、ボタンの高さ差最大0.500000px・Y差0.250000px・比例文字の幅差0.015625px（許容1px）でした。等幅の幅差は最大8.437500pxで、判定対象外の診断値です。画面全体の画像差分はthreshold 0.1で0.02〜0.84%でした。**全画素・glyph・focus輪郭・全APIの一致は未認証です。** OS依存monospaceとの差と、truncate=falseの未分割長文のはみ出し／折り返し差を残件とし、同期済みSHAと承認済み視覚ゲートは維持しています。
+
+日本語デモは390／1280px・Light/Darkの4条件で、明示値のコピー、長文・装飾・行グループ・中止・無効を実操作しました。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。分類と全報告をJSONへ保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：69 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全監査をJSONのinline_copy_textへ保持しました。SDKのIntlV8BreakIterator・SkWasm mapと、自社の起動・転送量・操作領域などは残件です。今回のDesktopのAccessibility指摘は、スクロール領域末尾で高さ2pxだけ露出するサイドバーの「グリッド」です。スクロール・キーボード到達性を保つ修正は未完了です。InlineCopyText単体のAccessibilityは両画面100でした。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciのREADME／setup／登録設定は前回と同じblob、Workflow 0件で公開repo除外・クラウド保留を維持しています。Batch呼出と費用は0、更新検出からPR作成までの実往復は未実施です。本番反映先はGitHub mainです。
