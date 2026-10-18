@@ -84,10 +84,10 @@ void main() {
       find.bySemanticsLabel(MaterialLocalizations.of(context).nextMonthTooltip),
       findsOneWidget,
     );
-    await tester.tap(find.bySemanticsLabel('account_123をコピー'));
+    await tester.tap(find.bySemanticsLabel('クリップボードにコピー'));
     await tester.pump();
     expect(find.bySemanticsLabel('コピーしました'), findsOneWidget);
-    await tester.pump(const Duration(seconds: 2));
+    await tester.pump(const Duration(milliseconds: 1500));
     await tester.tap(find.text('開く'));
     await tester.pumpAndSettle();
     expect(find.bySemanticsLabel('ダイアログを閉じる'), findsOneWidget);

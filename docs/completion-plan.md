@@ -25,3 +25,5 @@
 不足実装の続きとしてCodeHighlightedを追加しました。18言語の識別子・別名、行番号、行強調、原文コピーと日本語デモを用意しています。[CodeのAPI対応](code-api-mapping.md)に記載のShikiとの解析・色分けの差、HCLの全文法などは残ります。
 
 InlineCopyTextの枠なし表示・コピー値・rich child・keyboard・親group・1.5秒の通知も追加しています。[API対応](inline-copy-api-mapping.md)に文字幅・折り返し・実機の残件を保持します。
+
+ClipboardTextにも専用入力欄・3サイズ・別のコピー値・keyboard・1.5秒の成功表示と4方向のtooltip／toastを追加しています。[API対応](clipboard-api-mapping.md)に選択・通知構成・視覚・実機の差を保持します。

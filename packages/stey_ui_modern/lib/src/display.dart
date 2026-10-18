@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show SemanticsRole;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -474,48 +475,609 @@ class _SteySkeletonLineState extends State<SteySkeletonLine>
   }
 }
 
+enum SteyClipboardSize { sm, base, lg }
+
+enum SteyClipboardSide { top, bottom, left, right }
+
+class SteyClipboardTooltip {
+  const SteyClipboardTooltip({
+    this.text,
+    this.copiedText,
+    this.side = SteyClipboardSide.top,
+  });
+  final String? text, copiedText;
+  final SteyClipboardSide side;
+}
+
 class SteyClipboardText extends StatefulWidget {
   const SteyClipboardText(
     this.text, {
     super.key,
     this.inline = false,
     this.onCopied,
-  });
+    this.textToCopy,
+    SteyClipboardSize size = SteyClipboardSize.lg,
+    this.tooltip,
+    String? copyActionLabel,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    ValueChanged<Object>? onCopyError,
+  }) : fieldSize = size,
+       // Public argument names coexist with InlineCopyText's existing fields.
+       // ignore: prefer_initializing_formals
+       _copyActionLabel = copyActionLabel,
+       // ignore: prefer_initializing_formals
+       _focusNode = focusNode,
+       // ignore: prefer_initializing_formals
+       _autofocus = autofocus,
+       // ignore: prefer_initializing_formals
+       _onCopyError = onCopyError;
   final String text;
   final bool inline;
   final VoidCallback? onCopied;
+  final String? textToCopy;
+  // Keep size separate from the existing InlineCopyText subtype's text size.
+  final SteyClipboardSize fieldSize;
+  final SteyClipboardTooltip? tooltip;
+  final String? _copyActionLabel;
+  final FocusNode? _focusNode;
+  final bool _autofocus;
+  final ValueChanged<Object>? _onCopyError;
   @override
   State<SteyClipboardText> createState() => _SteyClipboardTextState();
 }
 
-class _SteyClipboardTextState extends State<SteyClipboardText> {
-  bool copied = false;
+class _SteyClipboardTextState extends State<SteyClipboardText>
+    with TickerProviderStateMixin {
+  final portal = OverlayPortalController();
+  final ownFocus = FocusNode();
+  final selectionFocus = FocusNode(skipTraversal: true);
+  Timer? reset, hoverDelay;
+  bool copied = false, hovered = false, focusVisible = false;
+  bool tooltipVisible = false, spacePressed = false;
+  late final slide = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 200),
+    animationBehavior: AnimationBehavior.preserve,
+  );
+  late final bump = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 350),
+    animationBehavior: AnimationBehavior.preserve,
+  );
+  late final progress = CurvedAnimation(
+    parent: slide,
+    curve: const Cubic(.4, 0, .2, 1),
+  );
+  late final bumpScale = TweenSequence<double>([
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 1.0,
+        end: 1.04,
+      ).chain(CurveTween(curve: const Cubic(.34, 1.56, .64, 1))),
+      weight: 35,
+    ),
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 1.04,
+        end: 1.0,
+      ).chain(CurveTween(curve: const Cubic(.34, 1.56, .64, 1))),
+      weight: 65,
+    ),
+  ]).animate(bump);
+
+  void hideTooltip() {
+    hoverDelay?.cancel();
+    if (!tooltipVisible) return;
+    tooltipVisible = false;
+    if (!copied) portal.hide();
+  }
+
+  void showTooltip({bool immediate = false}) {
+    hoverDelay?.cancel();
+    if (widget.tooltip == null || copied) return;
+    void show() {
+      if (!mounted || copied || widget.tooltip == null) return;
+      setState(() => tooltipVisible = true);
+      portal.show();
+    }
+
+    if (immediate) {
+      show();
+    } else {
+      hoverDelay = Timer(const Duration(milliseconds: 600), show);
+    }
+  }
+
   Future<void> copy() async {
-    await Clipboard.setData(ClipboardData(text: widget.text));
-    if (!mounted) return;
-    setState(() => copied = true);
-    widget.onCopied?.call();
-    await Future<void>.delayed(const Duration(seconds: 2));
-    if (mounted) setState(() => copied = false);
+    try {
+      await Clipboard.setData(
+        ClipboardData(text: widget.textToCopy ?? widget.text),
+      );
+      if (!mounted) return;
+      final repeat = copied;
+      reset?.cancel();
+      hoverDelay?.cancel();
+      setState(() {
+        copied = true;
+        tooltipVisible = false;
+      });
+      slide.forward();
+      if (widget.tooltip != null) {
+        portal.show();
+        if (repeat) bump.forward(from: 0);
+      }
+      reset = Timer(const Duration(milliseconds: 1500), () {
+        if (!mounted) return;
+        setState(() => copied = false);
+        slide.reverse();
+        portal.hide();
+        reset = null;
+      });
+      widget.onCopied?.call();
+    } catch (error) {
+      if (mounted) widget._onCopyError?.call(error);
+    }
   }
 
   @override
-  Widget build(BuildContext context) => widget.inline
-      ? SteyInlineCopyText(widget.text, onCopied: widget.onCopied)
-      : SteyButton(
-          onPressed: copy,
-          variant: widget.inline
-              ? SteyButtonVariant.ghost
-              : SteyButtonVariant.secondary,
-          semanticLabel: copied
-              ? SteyMessages.of(context).copied
-              : SteyMessages.of(context).copy(widget.text),
-          trailing: Icon(copied ? Icons.check : Icons.copy, size: 14),
-          child: Text(
-            widget.text,
-            style: const TextStyle(fontFamily: 'monospace', fontSize: 12.6),
+  void didUpdateWidget(SteyClipboardText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.tooltip == null && oldWidget.tooltip != null) {
+      hoverDelay?.cancel();
+      tooltipVisible = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.tooltip == null) portal.hide();
+      });
+    } else if (widget.tooltip != null && oldWidget.tooltip == null && copied) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.tooltip != null && copied) portal.show();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    reset?.cancel();
+    hoverDelay?.cancel();
+    ownFocus.dispose();
+    selectionFocus.dispose();
+    progress.dispose();
+    slide.dispose();
+    bump.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.inline) {
+      return SteyInlineCopyText(
+        widget.text,
+        value: widget.textToCopy,
+        onCopied: widget.onCopied,
+        copyActionLabel: widget._copyActionLabel,
+        focusNode: widget._focusNode,
+        autofocus: widget._autofocus,
+        onCopyError: widget._onCopyError,
+      );
+    }
+    final c = SteyTheme.colorsOf(context);
+    final size = switch (widget.fieldSize) {
+      SteyClipboardSize.sm => SteySize.sm,
+      SteyClipboardSize.base => SteySize.base,
+      SteyClipboardSize.lg => SteySize.lg,
+    };
+    final iconSize = size.fontSize;
+    final textSize = size == SteySize.sm ? 12.0 : 13.0;
+    final textHeight = size == SteySize.sm ? 1 / .75 : 1 / .85;
+    final iconLift = size == SteySize.sm ? .5 : 1.0;
+    final radius = BorderRadius.circular(size.radius);
+    final copiedText =
+        widget.tooltip?.copiedText ?? SteyMessages.of(context).copied;
+    final copyLabel =
+        widget._copyActionLabel ??
+        (Localizations.maybeLocaleOf(context)?.languageCode == 'ja'
+            ? 'クリップボードにコピー'
+            : 'Copy to clipboard');
+    final node = widget._focusNode ?? ownFocus;
+    Widget button = Focus(
+      canRequestFocus: false,
+      includeSemantics: false,
+      onKeyEvent: (_, event) {
+        if (event.logicalKey == LogicalKeyboardKey.escape) {
+          hideTooltip();
+          return KeyEventResult.handled;
+        }
+        if (event.logicalKey == LogicalKeyboardKey.space) {
+          if (event is KeyDownEvent) spacePressed = true;
+          if (event is KeyUpEvent && spacePressed) {
+            spacePressed = false;
+            copy();
+          }
+          return KeyEventResult.handled;
+        }
+        if (event.logicalKey == LogicalKeyboardKey.enter) {
+          if (event is KeyDownEvent || event is KeyRepeatEvent) copy();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: FocusableActionDetector(
+        focusNode: node,
+        autofocus: widget._autofocus,
+        onFocusChange: (v) {
+          if (!v) {
+            spacePressed = false;
+            hideTooltip();
+          }
+        },
+        onShowFocusHighlight: (v) {
+          setState(() => focusVisible = v);
+          if (v) showTooltip(immediate: true);
+        },
+        child: Semantics(
+          button: true,
+          label: copyLabel,
+          excludeSemantics: true,
+          onTap: () {
+            node.requestFocus();
+            copy();
+          },
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            onEnter: (_) {
+              setState(() => hovered = true);
+              showTooltip();
+            },
+            onExit: (_) {
+              setState(() => hovered = false);
+              hideTooltip();
+            },
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              excludeFromSemantics: true,
+              onTap: () {
+                node.requestFocus();
+                copy();
+              },
+              child: CustomPaint(
+                foregroundPainter: focusVisible
+                    ? _ClipboardFocus(c.brand, size.radius)
+                    : null,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(size.radius),
+                    bottomRight: Radius.circular(size.radius),
+                  ),
+                  child: Container(
+                    width: 25 + iconSize,
+                    height: size.height,
+                    decoration: BoxDecoration(
+                      color: hovered ? c.tint : c.base,
+                      border: Border(left: BorderSide(color: c.line)),
+                    ),
+                    child: ClipRect(
+                      child: AnimatedBuilder(
+                        animation: progress,
+                        builder: (context, _) => Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Opacity(
+                              opacity: 1 - progress.value,
+                              child: Transform.translate(
+                                offset: Offset(
+                                  0,
+                                  -(copied ? size.height : iconSize) *
+                                          progress.value -
+                                      iconLift,
+                                ),
+                                child: CustomPaint(
+                                  size: Size.square(iconSize),
+                                  painter: _ClipboardCopyIcon(c.text),
+                                ),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: progress.value,
+                              child: Transform.translate(
+                                offset: Offset(
+                                  0,
+                                  (copied ? iconSize : size.height) *
+                                          (1 - progress.value) -
+                                      iconLift,
+                                ),
+                                child: CustomPaint(
+                                  size: Size.square(iconSize),
+                                  painter: _InlineCopyIcon(true, c.text),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    return OverlayPortal.overlayChildLayoutBuilder(
+      controller: portal,
+      overlayChildBuilder: (context, info) {
+        final anchor = MatrixUtils.transformRect(
+          info.childPaintTransform,
+          Rect.fromLTWH(
+            Directionality.of(context) == TextDirection.rtl
+                ? 0
+                : info.childSize.width - 25 - iconSize,
+            0,
+            25 + iconSize,
+            size.height,
           ),
         );
+        final tooltipText =
+            widget.tooltip?.text ??
+            (Localizations.maybeLocaleOf(context)?.languageCode == 'ja'
+                ? 'コピー'
+                : 'Copy');
+        return Positioned.fill(
+          child: IgnorePointer(
+            child: CustomSingleChildLayout(
+              delegate: _ClipboardPopupLayout(
+                anchor,
+                widget.tooltip?.side ?? SteyClipboardSide.top,
+              ),
+              child: AnimatedBuilder(
+                animation: bump,
+                builder: (context, child) {
+                  return Transform.scale(scale: bumpScale.value, child: child);
+                },
+                child: Semantics(
+                  container: true,
+                  role: copied ? SemanticsRole.status : SemanticsRole.none,
+                  tooltip: copied ? null : tooltipText,
+                  excludeSemantics: !copied,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: c.base,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: .1),
+                          blurRadius: copied ? 15 : 6,
+                          offset: Offset(0, copied ? 10 : 4),
+                        ),
+                      ],
+                    ),
+                    foregroundDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: c.line,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
+                    ),
+                    child: Text(
+                      copied ? copiedText : tooltipText,
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        package: 'stey_ui_modern',
+                        fontSize: 12,
+                        height: 1 / .75,
+                        color: c.text,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      child: Semantics(
+        container: true,
+        explicitChildNodes: true,
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(color: c.base, borderRadius: radius),
+              foregroundDecoration: BoxDecoration(
+                borderRadius: radius,
+                border: Border.all(
+                  color: c.line,
+                  strokeAlign: BorderSide.strokeAlignOutside,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: radius,
+                child: SizedBox(
+                  height: size.height,
+                  child: Row(
+                    spacing: switch (size) {
+                      SteySize.sm => 4,
+                      SteySize.base => 6,
+                      _ => 8,
+                    },
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 16,
+                            end: 8,
+                          ),
+                          child: Semantics(
+                            label: widget.text,
+                            excludeSemantics: true,
+                            child: ExcludeFocusTraversal(
+                              child: SelectionArea(
+                                focusNode: selectionFocus,
+                                child: Text(
+                                  widget.text,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: 'SteyCodeMono',
+                                    package: 'stey_ui_modern',
+                                    fontSize: textSize,
+                                    height: textHeight,
+                                    color: c.text,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      button,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              width: 1,
+              height: 1,
+              child: Semantics(
+                container: true,
+                liveRegion: true,
+                label: copied ? copiedText : '',
+                child: const SizedBox(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ClipboardFocus extends CustomPainter {
+  const _ClipboardFocus(this.color, this.radius);
+  final Color color;
+  final double radius;
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawRRect(
+    BorderRadius.only(
+      topRight: Radius.circular(radius),
+      bottomRight: Radius.circular(radius),
+    ).toRRect((Offset.zero & size).deflate(1)),
+    Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2,
+  );
+  @override
+  bool shouldRepaint(_ClipboardFocus oldDelegate) =>
+      color != oldDelegate.color || radius != oldDelegate.radius;
+}
+
+class _ClipboardCopyIcon extends CustomPainter {
+  const _ClipboardCopyIcon(this.color);
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.scale(size.width / 256, size.height / 256);
+    final path = Path()
+      ..fillType = PathFillType.evenOdd
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          const Rect.fromLTRB(32, 80, 176, 224),
+          const Radius.circular(8),
+        ),
+      )
+      ..addRect(const Rect.fromLTRB(48, 96, 160, 208));
+    canvas.drawPath(path, Paint()..color = color);
+    canvas.drawPath(
+      Path()
+        ..moveTo(88, 80)
+        ..lineTo(88, 40)
+        ..lineTo(216, 40)
+        ..lineTo(216, 168)
+        ..lineTo(176, 168),
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 16
+        ..strokeJoin = StrokeJoin.round,
+    );
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(_ClipboardCopyIcon oldDelegate) =>
+      color != oldDelegate.color;
+}
+
+class _ClipboardPopupLayout extends SingleChildLayoutDelegate {
+  const _ClipboardPopupLayout(this.anchor, this.side);
+  final Rect anchor;
+  final SteyClipboardSide side;
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      BoxConstraints.loose(
+        Size(
+          (constraints.maxWidth - 10).clamp(0, double.infinity),
+          (constraints.maxHeight - 10).clamp(0, double.infinity),
+        ),
+      );
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    Offset position(SteyClipboardSide side) => switch (side) {
+      SteyClipboardSide.top => Offset(
+        anchor.center.dx - childSize.width / 2,
+        anchor.top - 8 - childSize.height,
+      ),
+      SteyClipboardSide.bottom => Offset(
+        anchor.center.dx - childSize.width / 2,
+        anchor.bottom + 8,
+      ),
+      SteyClipboardSide.left => Offset(
+        anchor.left - 8 - childSize.width,
+        anchor.center.dy - childSize.height / 2,
+      ),
+      SteyClipboardSide.right => Offset(
+        anchor.right + 8,
+        anchor.center.dy - childSize.height / 2,
+      ),
+    };
+    bool fits(Offset p) => switch (side) {
+      SteyClipboardSide.top || SteyClipboardSide.bottom =>
+        p.dy >= 5 && p.dy + childSize.height <= size.height - 5,
+      SteyClipboardSide.left || SteyClipboardSide.right =>
+        p.dx >= 5 && p.dx + childSize.width <= size.width - 5,
+    };
+    var p = position(side);
+    if (!fits(p)) {
+      final opposite = switch (side) {
+        SteyClipboardSide.top => SteyClipboardSide.bottom,
+        SteyClipboardSide.bottom => SteyClipboardSide.top,
+        SteyClipboardSide.left => SteyClipboardSide.right,
+        SteyClipboardSide.right => SteyClipboardSide.left,
+      };
+      if (fits(position(opposite))) p = position(opposite);
+    }
+    return Offset(
+      p.dx.clamp(
+        5,
+        (size.width - childSize.width - 5).clamp(5, double.infinity),
+      ),
+      p.dy.clamp(
+        5,
+        (size.height - childSize.height - 5).clamp(5, double.infinity),
+      ),
+    );
+  }
+
+  @override
+  bool shouldRelayout(_ClipboardPopupLayout oldDelegate) =>
+      anchor != oldDelegate.anchor || side != oldDelegate.side;
 }
 
 enum SteyInlineCopyVariant {

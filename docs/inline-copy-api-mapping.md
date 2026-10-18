@@ -33,7 +33,7 @@ SteyInlineCopyGroup(
 );
 ```
 
-既存の `SteyInlineCopyText(text, onCopied: ...)` と `SteyClipboardText(text, inline: true)` を維持します。前者は従来と同じSteyClipboardTextのサブタイプです。通常のClipboardTextの表示・2秒通知は変更していません。`onCopyError` はネイティブ側の失敗通知用の追加APIです。
+既存の `SteyInlineCopyText(text, onCopied: ...)` と `SteyClipboardText(text, inline: true)` を維持します。前者は従来と同じSteyClipboardTextのサブタイプです。通常のClipboardTextは[ClipboardTextのAPI対応](clipboard-api-mapping.md)に記載の専用入力欄・1.5秒通知へ更新しています。`onCopyError` はネイティブ側の失敗通知用の追加APIです。
 
 ## 残る差異
 

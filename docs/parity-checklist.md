@@ -22,7 +22,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | button-group | orientation、連結border/radius、size伝播、focus | 1pxの境界共有・外側角丸・focus描画順・RTL・wrapped childを追加。5回帰テスト。全視覚・実機認証は未完了。[API対応](group-flow-api-mapping.md) |
 | chart | 全export、ECharts option、legend/tooltip、resize、Chart/Sankey/Globe固有操作 | 汎用option、drilldown、地形を含む実装不足 |
 | checkbox | 単体/Item/Group/Legend、mixed、parent/allValues、cardの縦/横結合、error、disabled | ネイティブ描画・グループ・親の部分選択復元をテスト。イベント詳細・子との読み上げ関連付け・拡張hit area・全視覚認証待ち |
-| clipboard-text | copy成功/失敗、非同期feedback、選択、tooltip、ellipsis | 全比較待ち |
+| clipboard-text | copy成功/失敗、非同期feedback、選択、tooltip、ellipsis | 専用入力欄・3サイズ・別値・1.5秒通知・4方向tooltip/toast・keyboard・画面端補正・追従を追加。[API対応](clipboard-api-mapping.md)。等幅glyph、選択・外部toast manager・全衝突規則・全視覚・実機認証は残る |
 | cloudflare-logo | 全export、色/size、PoweredBy、ブランド条件 | 書面許可待ち。公式ロゴ未配布 |
 | code | Code/CodeBlock/CodeHighlighted、language、highlight、copy、行/折返し | ネイティブ構文強調・行番号・行強調・コピーを追加。[対応範囲](code-api-mapping.md)。Shiki文法・全色の一致、HCL全文法、全状態・物理実機は未検証 |
 | collapsible | 制御/非制御、Trigger/Panel、hidden focus、mount、transition | 基本テストあり。全比較待ち |

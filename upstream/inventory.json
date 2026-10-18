@@ -152,12 +152,13 @@
         "packages/kumo/src/components/clipboard-text/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "apps/demo/lib/clipboard_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native readonly field, three sizes, explicit clipboard value, 1500ms renewed success feedback, 200ms slide, four-side tooltip/toast with edge flip/shift and moving anchor, keyboard and semantics are implemented. OS monospace, selection UI, global toast-manager composition, all collision rules and full visual/device certification remain pending."
     },
     {
       "id": "cloudflare-logo",
