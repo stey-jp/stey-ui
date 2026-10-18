@@ -1,4 +1,4 @@
-# 検証結果（ClipboardText：2026-10-19）
+# 検証結果（Banner：2026-10-19）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -512,3 +512,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全報告はJSONのclipboard_textに保持しました。SDKのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・スクロール末尾の操作領域などを残件として追跡します。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciのREADME／setup／登録設定は前回と同じblob、Workflow 0件で公開repo除外・クラウド保留を維持しています。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
+
+## Bannerの追加検証（2026-10-19）
+
+ソースSHAは `9aa798a78ff889687af986546a413dc8d73a4749`。静的解析0件、ライブラリ315件・デモ17件、Python 20件が成功しました。新規は14／2／1件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドも成功しています。[BannerのAPI対応](banner-api-mapping.md)に対応範囲と挙動変更を記載しました。
+
+title／descriptionの構造化本文、base／smの配置、4variant、色と26／20pxのサイズを継承するBanner.Actionを追加しました。compactのLinkは説明の行内へ配置します。ChromeでリンクのURL情報と余分なTab停止位置を修正し、見出しと説明の意味情報を分けました。Enterのkeydown・Spaceのkeyup、処理中／無効、旧形式の優先順位、RTL・文字拡大・日本語の閉じる操作も検査しています。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` とChromeで68条件・262状態を比較しました。Light/Dark、390／1200px、LTR/RTL、4variant・2サイズ・3操作variant、リンク・タイトル／説明のみ・旧形式・長文・無効／処理中・アイコンのみ／複数操作を含みます。枠・操作・本文行の最大位置／寸法差は0.500000px（許容1px、compactリンクのHTML glyph矩形は公式行高で比較。未補正の高さ差は最大2pxで元の矩形も保持）、画面全体の画像差分はthreshold 0.1で0.02〜0.79%でした。**任意Widget・文字・下線・focus・影・アニメーションを含む全画素／全挙動の一致は未認証です。** 同期済みSHA・承認済み視覚ゲートは進めません。
+
+日本語デモは390／1280px・Light/Darkの4条件で、種類／サイズ／操作variant・長文・処理中／無効・リンク・閉じる／再表示を実操作しました。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。分類を含む全報告をJSONへ保持しました。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：74 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：92 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全監査をJSONのbannerへ保持しています。SDKのIntlV8BreakIterator・SkWasm mapと、自社の起動・転送量・スクロール末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciはREADME／setup／登録設定のblobが前回と同じで、公開repo除外・Workflow 0件・クラウド保留を維持しています。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
