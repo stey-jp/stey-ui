@@ -1,4 +1,4 @@
-# 検証結果（Banner：2026-10-19）
+# 検証結果（Collapsible：2026-10-19）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -531,3 +531,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全監査をJSONのbannerへ保持しています。SDKのIntlV8BreakIterator・SkWasm mapと、自社の起動・転送量・スクロール末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciはREADME／setup／登録設定のblobが前回と同じで、公開repo除外・Workflow 0件・クラウド保留を維持しています。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
+
+## Collapsibleの追加検証（2026-10-19）
+
+ソースSHAは `a359f73cc133e6ec2320637dfb8f93d398b3a4e9`。静的解析0件、ライブラリ332件・デモ19件、Python20件が成功しました。新規は17／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドも成功しています。[CollapsibleのAPI対応](collapsible-api-mapping.md)に対応範囲と差異を記録しました。
+
+Root／Trigger／Panelと標準表示、制御／非制御、開閉取消、disabledの継承・上書き、100msの高さ・fade・caretを追加しました。子の自然な寸法を保ち、keepMountedでは状態を保持し、通常は閉じ終わってから破棄します。初期openでは即時表示します。実Chromeで開き始めのaria-controls欠落を検出し、Panelの識別情報をクリップの外へ移し、登録後にexpandedとcontrolsNodesを同時更新する構成へ修正しました。最初の高さ0フレームの回帰テストを含みます。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` とChromeで38条件・152状態を比較しました。Light/Dark、390／1200px、LTR/RTL、標準／無装飾／独自ボタン、初期開閉、制御／取消／無効、保持／破棄、長文・複数の子を含みます。実Tab・Enter・Spaceのkeyup、子の状態、展開情報と実DOM上の操作対象を検査しました。枠と起点の最大位置／寸法差は0.015625px（許容1px）、画面全体の画像差分はthreshold0.1で0.01〜1.25%です。**全画素・全状態の一致は未認証です。** 途中反転のCSS短縮規則、hiddenUntilFound／beforematchは残り、同期済みSHA・承認済み視覚ゲートは進めません。
+
+日本語デモを390／1280px・Light/Darkの4条件で操作しました。実キー入力とfocus後の値で入力値の保持／破棄を判定し、開閉取消、無効化、独自ボタン、外部制御と動的説明を確認しています。再表示直後の非focus DOM入力はvalueが空で、focus後に保持値へ同期する挙動を観測しました。描画とWidget状態は保持されますが、読み上げ側の値同期は未認証です。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件。分類を含む報告をJSONへ保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：75 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：99 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：95 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア項目・警告・提案・Diagnosticsを含む全監査をJSONのcollapsibleへ保持しています。SDK由来のIntlV8BreakIterator・SkWasm map、自社の起動・転送量・スクロール末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciの最新README／setup／登録設定のblobは前回と一致し、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
