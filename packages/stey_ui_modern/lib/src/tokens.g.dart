@@ -27,6 +27,8 @@ class SteyColors {
   Color get danger => Color(dark ? 0xffe7000b : 0xfffb2c36);
   Color get dangerText => Color(dark ? 0xffff6467 : 0xffc10007);
   Color get success => Color(dark ? 0xff00d492 : 0xff009966);
+  Color get info => Color(dark ? 0xff2b7fff : 0xff2b7fff);
+  Color get warning => Color(dark ? 0xffdb6809 : 0xfffa8900);
   Color get successText => Color(dark ? 0xffa4f4cf : 0xff006045);
   Color get warningText => Color(dark ? 0xffff8904 : 0xffbd6500);
   Color get infoTint => Color(dark ? 0x381c398e : 0x73dbeafe);
@@ -62,4 +64,14 @@ class SteyColors {
   Color get dangerEmphasisStart => Color(dark ? 0xfff0463e : 0xffff5b57);
   Color get dangerEmphasisHover => Color(dark ? 0xfff86e62 : 0xffff7d75);
   Color get dangerEmphasisRing => Color(dark ? 0xffc90008 : 0xffda252e);
+  Color get infoEmphasisStart => Color(dark ? 0xff5095ff : 0xff5095ff);
+  Color get infoEmphasisHover => Color(dark ? 0xff6fa9ff : 0xff6fa9ff);
+  Color get infoEmphasisRing => Color(dark ? 0xff246ee3 : 0xff246ee3);
+  Color get warningEmphasisStart => Color(dark ? 0xffe38044 : 0xfffd9c49);
+  Color get warningEmphasisHover => Color(dark ? 0xffea9768 : 0xffffaf6f);
+  Color get warningEmphasisRing => Color(dark ? 0xffbe5907 : 0xffda7600);
+  Color get bannerNeutral => Color(0xff404040);
+  Color get bannerNeutralEmphasisStart => Color(dark ? 0xff595959 : 0xff595959);
+  Color get bannerNeutralEmphasisHover => Color(dark ? 0xff747474 : 0xff747474);
+  Color get bannerNeutralEmphasisRing => Color(dark ? 0xff363636 : 0xff363636);
 }

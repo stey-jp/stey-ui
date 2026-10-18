@@ -39,6 +39,8 @@ CodeHighlightedにDart製の構文強調、行番号・行の強調・コピー�
 InlineCopyTextに枠なし表示、明示したコピー値、hover・focus・行グループ、1.5秒の成功表示を追加しています。[InlineCopyTextのAPI対応](docs/inline-copy-api-mapping.md)を参照してください。
 ClipboardTextも本文とコピー専用ボタンを持つ入力欄へ置き換え、3サイズ・別のコピー値・4方向の通知を追加しています。[ClipboardTextのAPI対応](docs/clipboard-api-mapping.md)と日本語デモで確認できます。
 
+Bannerにもタイトル・説明・compact表示と色・サイズを引き継ぐ操作ボタンを追加しています。[BannerのAPI対応](docs/banner-api-mapping.md)と日本語デモを参照してください。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

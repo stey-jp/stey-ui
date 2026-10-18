@@ -4,10 +4,10 @@ import 'dart:ui' show SemanticsRole;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'button.dart';
 import 'theme.dart';
 import 'messages.dart';
 export 'loader.dart';
+export 'banner.dart';
 
 class SteyText extends StatelessWidget {
   const SteyText(
@@ -229,71 +229,6 @@ class _BadgeBorder extends CustomPainter {
       color != oldDelegate.color ||
       dashed != oldDelegate.dashed ||
       outside != oldDelegate.outside;
-}
-
-class SteyBanner extends StatelessWidget {
-  const SteyBanner({
-    super.key,
-    required this.child,
-    this.tone = SteyTone.info,
-    this.onDismiss,
-    this.action,
-  });
-  final Widget child;
-  final SteyTone tone;
-  final VoidCallback? onDismiss;
-  final Widget? action;
-  @override
-  Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    return Semantics(
-      liveRegion: true,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: tone.background(c),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                switch (tone) {
-                  SteyTone.danger => Icons.error_outline,
-                  SteyTone.warning => Icons.warning_amber,
-                  SteyTone.success => Icons.check_circle_outline,
-                  _ => Icons.info_outline,
-                },
-                size: 18,
-                color: tone.foreground(c),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: DefaultTextStyle.merge(
-                  style: TextStyle(
-                    color: tone.foreground(c),
-                    fontSize: 14,
-                    height: 1.5,
-                  ),
-                  child: child,
-                ),
-              ),
-              ?action,
-              if (onDismiss != null)
-                SteyButton(
-                  onPressed: onDismiss,
-                  size: SteySize.xs,
-                  variant: SteyButtonVariant.ghost,
-                  semanticLabel: 'Dismiss notification',
-                  child: const Icon(Icons.close, size: 14),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class SteyLayerCard extends StatelessWidget {

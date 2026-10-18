@@ -63,7 +63,7 @@ def oklch_values(value):
     if value.startswith('var('): return oklch_values(split_args(value[4:-1])[1])
     match=re.search(r'oklch\(([^)]+)\)',value)
     parts=match[1].split()
-    values=[float(parts[0].rstrip('%'))/(100 if '%' in parts[0] else 1),float(parts[1]),float(parts[2])]
+    values=[float(parts[0].rstrip('%'))/(100 if '%' in parts[0] else 1),float(parts[1]),float(0 if parts[2] == 'none' else parts[2])]
     if value.startswith('color-mix('): values[0]*=.9;values[1]*=.9
     return values
 
@@ -80,7 +80,7 @@ FIELDS = {
     'subtle':'text-color-kumo-subtle', 'link':'text-color-kumo-link',
     'placeholder':'text-color-kumo-placeholder',
     'danger':'color-kumo-danger', 'dangerText':'text-color-kumo-danger',
-    'success':'color-kumo-success',
+    'success':'color-kumo-success', 'info':'color-kumo-info', 'warning':'color-kumo-warning',
     'successText':'text-color-kumo-success', 'warningText':'text-color-kumo-warning',
     'infoTint':'color-kumo-info-tint', 'successTint':'color-kumo-success-tint',
     'warningTint':'color-kumo-warning-tint', 'dangerTint':'color-kumo-danger-tint',
@@ -147,10 +147,13 @@ def generate(source, tokens_only=False, tailwind_theme=None):
                     if value == '@base' else palette[value] for index, value in enumerate(values)]
         light, dark = resolved
         lines.append(f'  Color get {name} => Color(dark ? 0x{color(dark)} : 0x{color(light)});')
-    for tone in ('brand','danger'):
+    for tone in ('brand','danger','info','warning','bannerNeutral'):
+        accents = (palette['color-neutral-700'],) * 2 if tone == 'bannerNeutral' else split_args(tokens['color-kumo-'+tone])
+        if tone == 'bannerNeutral':
+            lines.append(f'  Color get bannerNeutral => Color(0x{color(accents[0])});')
         for state,fraction,target in [('EmphasisStart',.15,1),('EmphasisHover',.3,1),('EmphasisRing',.1,0)]:
             values=[]
-            for value in split_args(tokens['color-kumo-'+tone]):
+            for value in accents:
                 l,c,h=oklch_values(resolve_color(value, palette))
                 values.append(color(f'oklch({l*(1-fraction)+target*fraction} {c*(1-fraction)} {h})'))
             lines.append(f'  Color get {tone}{state} => Color(dark ? 0x{values[1]} : 0x{values[0]});')

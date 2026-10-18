@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'catalog.g.dart';
 import 'code_example.dart';
 import 'clipboard_example.dart';
+import 'banner_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -111,6 +112,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'banner' => BannerSample(router.uri.queryParameters),
               'clipboard-text' => Transform.translate(
                 offset: Offset(
                   0,
@@ -771,10 +773,7 @@ class _ComponentExampleState extends State<ComponentExample> {
             child: Text(variantLabel(variant.name)),
           ),
       ]),
-      'banner' => form([
-        for (final tone in SteyTone.values)
-          SteyBanner(tone: tone, child: Text('${variantLabels[tone.name]}の通知')),
-      ]),
+      'banner' => const BannerExample(),
       'input' => form([
         const SteyInput(
           label: 'プロジェクト名',

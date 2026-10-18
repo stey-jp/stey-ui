@@ -43,12 +43,14 @@
         "packages/kumo/src/components/banner/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/banner.dart",
+        "packages/stey_ui_modern/lib/src/button.dart",
+        "apps/demo/lib/banner_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Structured title/description, base/sm, four variants, native Banner.Action accent and inherited sizing, compact inline Link and keyboard activation are implemented. Full inherited APIs, arbitrary widget compositions, every visual/input state and physical-device certification remain incomplete."
     },
     {
       "id": "breadcrumbs",

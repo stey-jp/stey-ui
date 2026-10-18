@@ -77,6 +77,7 @@ class SteyButton extends StatefulWidget {
     this.alignment = Alignment.center,
     this.backgroundColor,
     this.foregroundColor,
+    this.style,
   });
   final Widget child;
   final VoidCallback? onPressed;
@@ -89,6 +90,7 @@ class SteyButton extends StatefulWidget {
   final FocusNode? focusNode;
   final AlignmentGeometry alignment;
   final Color? backgroundColor, foregroundColor;
+  final ButtonStyle? style;
   @override
   State<SteyButton> createState() => _SteyButtonState();
 }
@@ -309,7 +311,7 @@ class _SteyButtonState extends State<SteyButton> {
               shape: WidgetStatePropertyAll(
                 _ButtonRingBorder(borderRadius: radius),
               ),
-            ),
+            ).merge(widget.style),
             child: ExcludeSemantics(
               excluding: widget.semanticLabel != null,
               child: Row(
@@ -372,13 +374,16 @@ class SteyLink extends StatelessWidget {
     required this.child,
     required this.onPressed,
     this.external = false,
+    this.href,
   });
   final Widget child;
   final VoidCallback? onPressed;
   final bool external;
+  final Uri? href;
   @override
   Widget build(BuildContext context) => Semantics(
     link: true,
+    linkUrl: onPressed == null ? null : href,
     child: SteyButton(
       onPressed: onPressed,
       variant: SteyButtonVariant.ghost,
