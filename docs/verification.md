@@ -1,4 +1,4 @@
-# 検証結果（InlineCopyText：2026-10-18）
+# 検証結果（ClipboardText：2026-10-19）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -493,3 +493,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全監査をJSONのinline_copy_textへ保持しました。SDKのIntlV8BreakIterator・SkWasm mapと、自社の起動・転送量・操作領域などは残件です。今回のDesktopのAccessibility指摘は、スクロール領域末尾で高さ2pxだけ露出するサイドバーの「グリッド」です。スクロール・キーボード到達性を保つ修正は未完了です。InlineCopyText単体のAccessibilityは両画面100でした。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciのREADME／setup／登録設定は前回と同じblob、Workflow 0件で公開repo除外・クラウド保留を維持しています。Batch呼出と費用は0、更新検出からPR作成までの実往復は未実施です。本番反映先はGitHub mainです。
+
+## ClipboardTextの追加検証（2026-10-19）
+
+ソースSHAは `8ebfd1ca6f37de00c6a732bec38308c227717399`。静的解析0件、ライブラリ301件・デモ15件、Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。新規はライブラリ17件・デモ2件です。[ClipboardTextのAPI対応](clipboard-api-mapping.md)に対応範囲と挙動変更を記載しています。
+
+通常のClipboardTextを本文とコピー専用ボタンの入力欄へ置き換えました。3サイズ・別のコピー値、最後の成功から1.5秒の通知、200msのアイコン遷移、600msのhover tooltip、4方向の成功toastと350msの連打フィードバックを追加しています。keyboard・raw値・失敗・応答順・破棄・画面端反転・移動追従・表示中のtooltip切替を確認しました。実Chromeで本文選択機構が余分なTab停止位置になる問題を修正し、本文は原文の意味情報を保ちます。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` と実Chromeで40条件・184状態を比較しました。Light/Dark、LTR/RTL、390／1200px、3サイズ、4方向のtooltip、長文・明示値・上下の画面端を含みます。両側でTab／Enter／Space、連打、成功中も固定の操作名、実クリップボードと通知の復帰を確認し、WindowsのLF→CRLFだけを許容します。枠・ボタン・本文行の最大位置・寸法差は0.281250px（許容1px）、画面全体の画像差分はthreshold 0.1で0.03〜0.18%でした。**文字・popup・影・選択UIを含む全画素・全挙動の一致は未認証です。** 同期済みSHA・承認済み視覚ゲートは進めていません。
+
+日本語デモは390／1280px・Light/Darkの4条件で、明示値・長文のコピー、連打と通知切替、サイズと方向の選択を実操作しました。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。分類と全監査をJSONに保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：80 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：96 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues 0件は未達です。非スコア項目・Diagnosticsを含む全報告はJSONのclipboard_textに保持しました。SDKのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・スクロール末尾の操作領域などを残件として追跡します。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciのREADME／setup／登録設定は前回と同じblob、Workflow 0件で公開repo除外・クラウド保留を維持しています。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
