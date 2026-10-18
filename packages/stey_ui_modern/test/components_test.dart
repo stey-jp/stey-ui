@@ -217,7 +217,8 @@ void main() {
     await tester.tap(find.text('Advanced'));
     await tester.pumpAndSettle();
     expect(controller.text, 'retained');
-    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+    expect(find.byType(TextField, skipOffstage: false), findsOneWidget);
     await tester.tap(find.text('Advanced'));
     await tester.pumpAndSettle();
     expect(controller.text, 'retained');

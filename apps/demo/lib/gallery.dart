@@ -8,6 +8,7 @@ import 'catalog.g.dart';
 import 'code_example.dart';
 import 'clipboard_example.dart';
 import 'banner_example.dart';
+import 'collapsible_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -113,6 +114,7 @@ class _SteyGalleryState extends State<SteyGallery> {
             );
             final child = switch (sample) {
               'banner' => BannerSample(router.uri.queryParameters),
+              'collapsible' => CollapsibleSample(router.uri.queryParameters),
               'clipboard-text' => Transform.translate(
                 offset: Offset(
                   0,
@@ -994,15 +996,7 @@ class _ComponentExampleState extends State<ComponentExample> {
           const SteyBreadcrumb('my-worker'),
         ],
       ),
-      'collapsible' => SteyCollapsible(
-        open: open,
-        onChanged: (v) => setState(() => open = v),
-        title: const Text('詳細設定'),
-        child: const Padding(
-          padding: EdgeInsets.all(16),
-          child: SteyInput(label: 'キャッシュキー', placeholder: 'default'),
-        ),
-      ),
+      'collapsible' => const CollapsibleExample(),
       'toolbar' => SteyToolbar(
         children: [
           SteyButton(onPressed: action, child: const Text('作成')),

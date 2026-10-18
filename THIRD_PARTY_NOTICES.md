@@ -80,7 +80,7 @@ SOFTWARE.
 
 ## Phosphor indicators and copy icons
 
-The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. InlineCopyText reproduces regular CopySimple and Check geometry with native painting. ClipboardText also reproduces regular Copy and Check geometry. No React icon runtime is used.
+The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. InlineCopyText reproduces regular CopySimple and Check geometry with native painting. ClipboardText also reproduces regular Copy and Check geometry. Collapsible reproduces the bold CaretDown geometry. No React icon runtime is used.
 
 MIT License
 

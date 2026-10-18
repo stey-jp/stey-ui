@@ -25,7 +25,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | clipboard-text | copy成功/失敗、非同期feedback、選択、tooltip、ellipsis | 専用入力欄・3サイズ・別値・1.5秒通知・4方向tooltip/toast・keyboard・画面端補正・追従を追加。[API対応](clipboard-api-mapping.md)。等幅glyph、選択・外部toast manager・全衝突規則・全視覚・実機認証は残る |
 | cloudflare-logo | 全export、色/size、PoweredBy、ブランド条件 | 書面許可待ち。公式ロゴ未配布 |
 | code | Code/CodeBlock/CodeHighlighted、language、highlight、copy、行/折返し | ネイティブ構文強調・行番号・行強調・コピーを追加。[対応範囲](code-api-mapping.md)。Shiki文法・全色の一致、HCL全文法、全状態・物理実機は未検証 |
-| collapsible | 制御/非制御、Trigger/Panel、hidden focus、mount、transition | 基本テストあり。全比較待ち |
+| collapsible | 制御/非制御、Trigger/Panel、hidden focus、mount、transition | Root／Trigger／Panel・標準表示、変更取消、keepMounted、100msの高さ・fade・caretを追加。[API対応](collapsible-api-mapping.md)。hiddenUntilFound／beforematch、CSSの反転規則・全視覚・実機認証は残る |
 | combobox | 複合parts、選択/複数、filter、portal、入力保持、キーボード、clear | 全API・比較待ち |
 | command-palette | 全parts、group、filter、強調、empty/loading、shortcut、close/focus | 一部操作テストあり。全複合API・視覚待ち |
 | date-picker | Calendar各mode、年境界、locale、min/max、disabled日、popover/focus | Calendarの一部操作済み。日付制約等の全比較待ち |

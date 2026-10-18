@@ -41,6 +41,8 @@ ClipboardTextも本文とコピー専用ボタンを持つ入力欄へ置き換�
 
 Bannerにもタイトル・説明・compact表示と色・サイズを引き継ぐ操作ボタンを追加しています。[BannerのAPI対応](docs/banner-api-mapping.md)と日本語デモを参照してください。
 
+CollapsibleにRoot・Trigger・Panelの組み合わせ、制御／非制御、開閉取消、100msの標準表示を追加しています。日本語デモで入力内容の保持／破棄とボタン型の起点を操作できます。[CollapsibleのAPI対応](docs/collapsible-api-mapping.md)にページ内検索・反転時のCSS規則などの残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

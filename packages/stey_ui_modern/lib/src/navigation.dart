@@ -9,6 +9,7 @@ import 'theme.dart';
 import 'messages.dart';
 
 export 'table_of_contents.dart';
+export 'collapsible.dart';
 
 class SteyTab {
   const SteyTab(this.value, this.label, {this.disabled = false});
@@ -228,53 +229,6 @@ class SteyBreadcrumbs extends StatelessWidget {
                 child: Text(items[i].label),
               ),
       ],
-    ],
-  );
-}
-
-class SteyCollapsible extends StatelessWidget {
-  const SteyCollapsible({
-    super.key,
-    required this.open,
-    required this.onChanged,
-    required this.title,
-    required this.child,
-  });
-  final bool open;
-  final ValueChanged<bool> onChanged;
-  final Widget title, child;
-  @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Semantics(
-        expanded: open,
-        child: SteyButton(
-          onPressed: () => onChanged(!open),
-          variant: SteyButtonVariant.ghost,
-          trailing: Icon(
-            open ? Icons.expand_less : Icons.expand_more,
-            size: 16,
-          ),
-          child: title,
-        ),
-      ),
-      ClipRect(
-        child: AnimatedAlign(
-          alignment: Alignment.topLeft,
-          heightFactor: open ? 1 : 0,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          child: ExcludeFocus(
-            excluding: !open,
-            child: ExcludeSemantics(
-              excluding: !open,
-              child: IgnorePointer(ignoring: !open, child: child),
-            ),
-          ),
-        ),
-      ),
     ],
   );
 }

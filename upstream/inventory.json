@@ -213,12 +213,12 @@
         "packages/kumo/src/components/collapsible/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/navigation.dart"
+        "packages/stey_ui_modern/lib/src/collapsible.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Composable Root/Trigger/Panel and styled defaults, controlled/uncontrolled state, cancellation, keepMounted and 100ms motion are implemented. Browser hiddenUntilFound/beforematch, CSS reversal shortening, all visual states and physical/screen-reader certification remain pending. See docs/collapsible-api-mapping.md."
     },
     {
       "id": "combobox",

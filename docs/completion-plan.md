@@ -29,3 +29,5 @@ InlineCopyTextの枠なし表示・コピー値・rich child・keyboard・親gro
 ClipboardTextにも専用入力欄・3サイズ・別のコピー値・keyboard・1.5秒の成功表示と4方向のtooltip／toastを追加しています。[API対応](clipboard-api-mapping.md)に選択・通知構成・視覚・実機の差を保持します。
 
 Bannerに構造化本文・compact配置・inline Link・色とサイズを継承するBanner.Actionを追加しています。[API対応](banner-api-mapping.md)に継承API・任意Widget・描画・実機の残件を保持します。
+
+Collapsibleに組み合わせ用Root／Trigger／Panel、制御／非制御、開閉取消、100msの標準表示と入力内容の保持／破棄を追加しています。[API対応](collapsible-api-mapping.md)にhiddenUntilFound／beforematch、CSSの反転規則、全視覚・実機の残件を保持します。
