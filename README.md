@@ -43,6 +43,8 @@ Bannerにもタイトル・説明・compact表示と色・サイズを引き継�
 
 CollapsibleにRoot・Trigger・Panelの組み合わせ、制御／非制御、開閉取消、100msの標準表示を追加しています。日本語デモで入力内容の保持／破棄とボタン型の起点を操作できます。[CollapsibleのAPI対応](docs/collapsible-api-mapping.md)にページ内検索・反転時のCSS規則などの残件を記録しています。
 
+Emptyに3サイズ、説明に応じた見出し、任意図版と追加操作、横スクロールできるコマンドと1秒のコピー成功表示を追加しています。[EmptyのAPI対応](docs/empty-api-mapping.md)と日本語デモで範囲と差異を確認できます。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

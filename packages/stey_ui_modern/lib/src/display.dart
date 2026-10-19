@@ -8,6 +8,7 @@ import 'theme.dart';
 import 'messages.dart';
 export 'loader.dart';
 export 'banner.dart';
+export 'empty.dart';
 
 class SteyText extends StatelessWidget {
   const SteyText(
@@ -288,39 +289,6 @@ class SteySurface extends SteyLayerCard {
     super.header,
     super.footer,
   });
-}
-
-class SteyEmpty extends StatelessWidget {
-  const SteyEmpty({
-    super.key,
-    required this.title,
-    this.description,
-    this.action,
-    this.icon = Icons.inbox_outlined,
-  });
-  final String title;
-  final String? description;
-  final Widget? action;
-  final IconData icon;
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(32),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 32, color: SteyTheme.colorsOf(context).subtle),
-        const SizedBox(height: 12),
-        SteyText(title, heading: 4),
-        if (description != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: SteyText(description!, subtle: true),
-          ),
-        if (action != null)
-          Padding(padding: const EdgeInsets.only(top: 20), child: action),
-      ],
-    ),
-  );
 }
 
 class SteyMeter extends StatelessWidget {

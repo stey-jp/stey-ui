@@ -14,6 +14,7 @@ The LayerDialog implementation and Primary compatibility alias additionally
 reference https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
 The ButtonGroup specification and Flow anchor correction also reference
 https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
+The Collapsible and Empty updates reference that same commit.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.
@@ -80,7 +81,7 @@ SOFTWARE.
 
 ## Phosphor indicators and copy icons
 
-The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. InlineCopyText reproduces regular CopySimple and Check geometry with native painting. ClipboardText also reproduces regular Copy and Check geometry. Collapsible reproduces the bold CaretDown geometry. No React icon runtime is used.
+The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. InlineCopyText reproduces regular CopySimple and Check geometry with native painting. ClipboardText and Empty reproduce regular Copy and Check geometry. Collapsible reproduces the bold CaretDown geometry. No React icon runtime is used.
 
 MIT License
 

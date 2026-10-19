@@ -9,6 +9,7 @@ import 'code_example.dart';
 import 'clipboard_example.dart';
 import 'banner_example.dart';
 import 'collapsible_example.dart';
+import 'empty_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -115,6 +116,7 @@ class _SteyGalleryState extends State<SteyGallery> {
             final child = switch (sample) {
               'banner' => BannerSample(router.uri.queryParameters),
               'collapsible' => CollapsibleSample(router.uri.queryParameters),
+              'empty' => EmptySample(router.uri.queryParameters),
               'clipboard-text' => Transform.translate(
                 offset: Offset(
                   0,
@@ -1210,11 +1212,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         footer: SteyText('最終更新：たった今', subtle: true),
         child: SteyText('Workerをデプロイできます。'),
       ),
-      'empty' => SteyEmpty(
-        title: 'Workerがまだありません',
-        description: '最初のWorkerを作成してください。',
-        action: SteyButton(onPressed: action, child: const Text('Workerを作成')),
-      ),
+      'empty' => const EmptyExample(),
       'meter' => form([
         SteyMeter(value: value, label: 'リクエスト使用量'),
         SteySlider(

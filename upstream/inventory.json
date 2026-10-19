@@ -325,12 +325,12 @@
         "packages/kumo/src/components/empty/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/empty.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Three sizes, optional illustration/contents, description-dependent heading, scrollable command, 1s copy feedback and latest-attempt ordering are implemented. CSS text-balance, monospace metrics, all visual/selection/physical/screen-reader certification remain pending. See docs/empty-api-mapping.md."
     },
     {
       "id": "field",
