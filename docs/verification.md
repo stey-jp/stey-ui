@@ -1,4 +1,4 @@
-# 検証結果（Collapsible：2026-10-19）
+# 検証結果（Empty：2026-10-19）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -550,3 +550,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア項目・警告・提案・Diagnosticsを含む全監査をJSONのcollapsibleへ保持しています。SDK由来のIntlV8BreakIterator・SkWasm map、自社の起動・転送量・スクロール末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciの最新README／setup／登録設定のblobは前回と一致し、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
+
+## Emptyの追加検証（2026-10-19）
+
+ソースSHAは `16ed97fc754021339d06551067f6d5146f5c7f68`。静的解析0件、ライブラリ345件・デモ21件、Python20件が成功しました。新規は13／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドも成功しています。[EmptyのAPI対応](empty-api-mapping.md)に対応範囲と差異を記録しました。
+
+3サイズ、説明の有無によるh2、任意図版／追加内容、横スクロールできるコマンドと全文コピーを追加しました。成功完了から1秒の表示期限を管理し、最新の試行だけを反映します。古い非同期結果や破棄後の完了は無視します。繰返し成功では400msのチェック表示アニメーションを再起動せず期限だけ延長します。自動アイコンをなくし、既存の空リスト／チャートにも標準のEmpty表示を適用します。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` とChromeで38条件・222状態を比較しました。Light/Dark、390／1200px、LTR/RTL、3サイズ・説明有無、図版、操作1個／複数、長文・長いコマンド・説明幅上限を含みます。実Tab・Enter・Spaceのkeyup、生のクリップボード読戻しと操作callbackを検査しました。外枠・見出しのY／高さ・コピー操作の高さの最大差は0.000000px（許容1px）、画面全体の画像差分はthreshold0.1で0.04〜1.23%です。**全画素・全状態の一致は未認証です。** text-balance・OS等幅フォント・コピーの横位置・選択とアニメーションの位相比較は残り、未補正の矩形も保持します。同期済みSHA・承認済み視覚ゲートは進めません。
+
+日本語デモを390／1280px・Light/Darkの4条件で操作しました。3サイズ・任意内容の切替、2回のコピー全文読戻しと作成操作を確認しています。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件。分類を含む報告をJSONへ保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：79 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア項目・警告・提案・Diagnosticsを含む全監査をJSONのemptyへ保持しています。SDK由来のIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。Android SDKのXML v4を旧ツールが読む世代差の警告が出ましたが、ビルドは成功しています。SDK／ビルドツールの更新は今回のUI変更へ混在させず、警告を保持します。shared-ciの最新README／setup／登録設定のblobは前回と一致し、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
