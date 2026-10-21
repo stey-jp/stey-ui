@@ -12,6 +12,7 @@ import 'collapsible_example.dart';
 import 'empty_example.dart';
 import 'breadcrumbs_example.dart';
 import 'badge_example.dart';
+import 'loader_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -236,6 +237,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                   orElse: () => SteySwitchSize.base,
                 ),
               ),
+              'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => const SizedBox(
                 width: 280,
@@ -1187,12 +1189,7 @@ class _ComponentExampleState extends State<ComponentExample> {
           onChanged: (v) => setState(() => value = v),
         ),
       ]),
-      'loader' => group([
-        const SteyLoader(),
-        const SteyLoader(size: 24),
-        const SizedBox(width: 180, child: SteySkeletonLine()),
-        const SteySkeletonLine(width: 100),
-      ]),
+      'loader' => const LoaderExample(),
       'clipboard-text' => const ClipboardExample(),
       'inline-copy-text' => const InlineCopyExample(),
       'code' => const CodeExample(),

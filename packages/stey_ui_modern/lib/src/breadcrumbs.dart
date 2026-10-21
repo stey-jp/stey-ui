@@ -10,6 +10,7 @@ import 'button.dart';
 import 'badge_link_scope.dart';
 import 'messages.dart';
 import 'theme.dart';
+import 'loader.dart';
 
 enum SteyBreadcrumbsSize { sm, base }
 
@@ -252,7 +253,7 @@ class SteyBreadcrumbsCurrent extends StatelessWidget {
       children: [
         if (icon != null) ExcludeSemantics(child: icon!),
         if (loading)
-          const _BreadcrumbSkeleton()
+          const SteySkeletonLine()
         else
           DefaultTextStyle.merge(
             maxLines: 1,
@@ -417,99 +418,6 @@ class _ClipboardState extends State<SteyBreadcrumbsClipboard>
       ),
     );
   }
-}
-
-class _BreadcrumbSkeleton extends StatefulWidget {
-  const _BreadcrumbSkeleton();
-  @override
-  State<_BreadcrumbSkeleton> createState() => _SkeletonState();
-}
-
-class _SkeletonState extends State<_BreadcrumbSkeleton>
-    with SingleTickerProviderStateMixin {
-  final random = math.Random();
-  late final fraction = (30 + random.nextInt(71)) / 100;
-  late final delay = Duration(milliseconds: random.nextInt(501));
-  late final animation = AnimationController(
-    vsync: this,
-    duration: Duration(milliseconds: 1300 + random.nextInt(401)),
-    animationBehavior: AnimationBehavior.preserve,
-  );
-  Timer? start;
-  @override
-  void initState() {
-    super.initState();
-    start = Timer(delay, () {
-      if (mounted) animation.repeat();
-    });
-  }
-
-  @override
-  void dispose() {
-    start?.cancel();
-    animation.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final dark = SteyTheme.colorsOf(context).dark;
-      return Align(
-        alignment: AlignmentDirectional.centerStart,
-        widthFactor: 1,
-        child: SizedBox(
-          width: constraints.hasBoundedWidth
-              ? constraints.maxWidth * fraction
-              : 125 * fraction,
-          height: 8,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(2),
-            child: AnimatedBuilder(
-              animation: animation,
-              builder: (context, _) => CustomPaint(
-                painter: _Shimmer(
-                  dark,
-                  const Cubic(.42, 0, .58, 1).transform(animation.value),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    },
-  );
-}
-
-class _Shimmer extends CustomPainter {
-  const _Shimmer(this.dark, this.value);
-  final bool dark;
-  final double value;
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawRect(
-      Offset.zero & size,
-      Paint()..color = dark ? const Color(0x0fffffff) : const Color(0xfff3f4f6),
-    );
-    canvas.save();
-    canvas.translate((-1 + 2 * value) * size.width, 0);
-    canvas.drawRect(
-      Offset.zero & size,
-      Paint()
-        ..shader = LinearGradient(
-          colors: [
-            Colors.transparent,
-            dark ? const Color(0x0dffffff) : const Color(0x14000000),
-            Colors.transparent,
-          ],
-        ).createShader(Offset.zero & size),
-    );
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(_Shimmer oldDelegate) =>
-      dark != oldDelegate.dark || value != oldDelegate.value;
 }
 
 class _Separator extends CustomPainter {

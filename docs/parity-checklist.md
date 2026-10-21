@@ -43,7 +43,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | layer-card | 複合parts、nested radius、header/footer、border、responsive | 全比較待ち |
 | layer-dialog | 層構造、全parts、modal/focus、scroll、sticky境界 | 専用多層面・640pxでのシート切替、Action／Primary alias、alert・pending・split menu、固定見出し／操作欄を追加。14回帰テスト。全portal／Drawer挙動・視覚／実機認証は未完了。[API対応](layer-dialog-api-mapping.md) |
 | link | variant、外部link、visited/hover/focus、disabled、asChild | 全比較待ち |
-| loader | 全size、三点の位相/opacity、loop、ラベル | 周期テストあり。公式との位相を揃えた視覚比較待ち |
+| loader | 全size、円形spinnerの回転/dash位相、SkeletonLine、loop、ラベル | 3サイズpreset・status、SkeletonLineの乱数／遅延／8px／blockHeight、日本語デモを追加。[API対応](loader-api-mapping.md)。widget software rasterの固定位相と公式を比較し、Web動作は別途検査。全Web位相・実機認証は残る |
 | menubar | 全parts、左右/上下、Submenu、focus、selection | 全比較待ち |
 | meter | 値域、境界、variant、label、読み上げ | 全比較待ち |
 | pagination | page/count、境界、ellipsis、size、keyboard、狭幅 | 全比較待ち |

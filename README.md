@@ -49,6 +49,8 @@ Breadcrumbsに組み合わせAPI、2サイズ、640px未満の省略、現在ペ
 
 Badgeにリンク祖先のhover枠・12pxアイコン枠・単一行の幅保持と日本語操作デモを追加しています。[BadgeのAPI対応](docs/badge-api-mapping.md)に対応範囲と残件を記録しています。
 
+Loaderに3サイズpreset・status、SkeletonLineに乱数幅・周期・遅延・blockHeightと日本語デモを追加しています。[LoaderのAPI対応](docs/loader-api-mapping.md)に最新公式との対応と未認証範囲を記載しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

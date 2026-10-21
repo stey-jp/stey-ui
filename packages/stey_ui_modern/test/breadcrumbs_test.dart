@@ -407,7 +407,7 @@ void main() {
         matching: find.byWidgetPredicate(
           (w) =>
               w is CustomPaint &&
-              w.painter.runtimeType.toString() == '_Shimmer',
+              w.painter.runtimeType.toString() == '_SkeletonPainter',
         ),
       );
       expect(t.getSize(paints).height, 8);

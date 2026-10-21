@@ -521,7 +521,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Native circle geometry and the 2s rotation / 1.5s dash timelines are implemented. Time-aligned upstream visual certification remains pending."
+      "limitations": "Preset sizes/status and SkeletonLine random bounds, delay, blockHeight and shimmer implemented. Native software-raster phase comparisons and separate Web behavior do not certify every Web frame, CSS/custom compositions or physical/screen-reader platforms. See docs/loader-api-mapping.md."
     },
     {
       "id": "menubar",

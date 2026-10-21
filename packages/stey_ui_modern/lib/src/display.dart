@@ -378,50 +378,6 @@ class SteyMeter extends StatelessWidget {
   }
 }
 
-class SteySkeletonLine extends StatefulWidget {
-  const SteySkeletonLine({super.key, this.width, this.height = 14});
-  final double? width;
-  final double height;
-  @override
-  State<SteySkeletonLine> createState() => _SteySkeletonLineState();
-}
-
-class _SteySkeletonLineState extends State<SteySkeletonLine>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController animation = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1500),
-    animationBehavior: AnimationBehavior.preserve,
-  )..repeat();
-  @override
-  void dispose() {
-    animation.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    return ExcludeSemantics(
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, _) => Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            gradient: LinearGradient(
-              begin: Alignment(-3 + 6 * animation.value, 0),
-              end: Alignment(-1 + 6 * animation.value, 0),
-              colors: [c.fill, c.tint, c.fill],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 enum SteyClipboardSize { sm, base, lg }
 
 enum SteyClipboardSide { top, bottom, left, right }

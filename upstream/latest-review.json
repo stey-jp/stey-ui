@@ -158,5 +158,12 @@
     "latest_observed_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
     "badge_source_diff_empty": true,
     "synchronized_sha_advanced": false
+  },
+  "loader_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "loader_fix_sha": "bfb4140ea91b7945efcc137139d6887422ecec11",
+    "change": "SVG dimensions moved from inline style to width/height attributes; native Widget dimensions already independent of SVG. New upstream geometry tests are reflected in the local checks.",
+    "synchronized_sha_advanced": false
   }
 }

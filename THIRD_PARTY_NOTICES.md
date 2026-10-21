@@ -15,6 +15,7 @@ reference https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0f
 The ButtonGroup specification and Flow anchor correction also reference
 https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
 The Collapsible, Empty, Breadcrumbs and Badge updates reference that same commit.
+Loader additionally references https://github.com/cloudflare/kumo/commit/947065ad39694fdc688b1128cc9c360f566a4f73.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.
