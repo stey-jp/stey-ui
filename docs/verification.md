@@ -1,4 +1,4 @@
-# 検証結果（Loader：2026-10-22）
+# 検証結果（Pagination：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -628,3 +628,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：98 / 100 / 100 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK生成loaderのIntlV8BreakIteratorはSDK側の更新、SkWasm mapは一致するengine成果物が必要です。自社の起動・転送量・一覧末尾の操作領域も残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciの登録設定は更新されましたが公開repo除外・未登録を確認し、Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Paginationの追加検証（2026-10-22）
+
+ソースSHA `6cd18e381dcf3fd3b6a5372a98506961ed314e40`。静的解析0件、ライブラリ388件・デモ28件、Python20件が成功しました。新規は12／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。[API対応](pagination-api-mapping.md)に仕様と残件を保持します。
+
+Info／PageSize／Separator／Controlsを組み合わせるAPI、入力・全ページ選択、full／simple、既知／不明の総件数、境界ボタンと日本語ラベルを追加しました。既存totalPages呼出を維持します。公式最新の文字列下書き・ASCII整数の検証・空データでも最大ページ1・範囲外ページの次操作無効化を反映しています。Enter確定後のWeb入力接続の再作成を避け、繰返し入力を検証しました。デモの意味情報用inputにborder-boxを指定し、ブラウザ既定の枠・余白による操作領域の拡張も修正しました。
+
+公式 `947065ad39694fdc688b1128cc9c360f566a4f73` のPaginationと比較しました。fixtureのInputGroup／Selectは既存比較SHA `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` です。実Chrome 155.0.8059.86でLight/Dark、先頭・中間・末尾・空・範囲外、simple、不明な総件数、入力／選択、件数変更、RTL・狭い親を含む26条件・62状態を検査しました。無効値10種類の連続入力、Enter／Tab、範囲補正・矢印・最終ページのキーボード操作と通知回数を比較しています。
+
+全条件のnav／host／各ボタン／入力欄の矩形は1px以内で、基準の不一致は0状態でした。Selectの連結角丸・focusの重なり・popup全体の描画は未認証です。操作群周辺の画素差はthreshold0.1で0.599〜2.948%です。**全画素・全focus・全構成の一致認証ではありません。** 日本語デモは390／1280px・Light/Darkの4条件で入力・境界・不明総数・選択・件数変更・空結果・RTLを操作しました。入力の識別子・履歴・テーマの既存ナビゲーション検査も成功しています。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：77 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：96 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK生成loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Selectの連結描画・combobox／option相当の意味情報・全focus・screen readerの認証も残ります。Linux／macOS／iOS・物理実機は今回ソースで未検証、Android APKは開発用署名です。shared-ci最新設定はprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
