@@ -10,6 +10,7 @@ import 'clipboard_example.dart';
 import 'banner_example.dart';
 import 'collapsible_example.dart';
 import 'empty_example.dart';
+import 'breadcrumbs_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -117,6 +118,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               'banner' => BannerSample(router.uri.queryParameters),
               'collapsible' => CollapsibleSample(router.uri.queryParameters),
               'empty' => EmptySample(router.uri.queryParameters),
+              'breadcrumbs' => BreadcrumbsSample(router.uri.queryParameters),
               'clipboard-text' => Transform.translate(
                 offset: Offset(
                   0,
@@ -991,13 +993,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         ),
         SteyText('20ページ中$pageページ目'),
       ]),
-      'breadcrumbs' => SteyBreadcrumbs(
-        items: [
-          SteyBreadcrumb('アカウント', onPressed: action),
-          SteyBreadcrumb('Workers', onPressed: action),
-          const SteyBreadcrumb('my-worker'),
-        ],
-      ),
+      'breadcrumbs' => const BreadcrumbsExample(),
       'collapsible' => const CollapsibleExample(),
       'toolbar' => SteyToolbar(
         children: [

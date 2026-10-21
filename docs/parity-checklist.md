@@ -17,7 +17,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | autocomplete | 候補、filter、空、無効項目、highlight、キーボード、自由入力 | 継承API・機能・視覚の全比較待ち |
 | badge | 全variant、filled/dot、色、beta破線、リンク内hover | 静止サンプルあり。リンク内と全機能待ち |
 | banner | variant、icon、本文、action、dismiss、折返し | 構造化title／description、base／sm、4variant、Banner.Actionのaccent・サイズ継承、compact inline Linkを追加。[API対応](banner-api-mapping.md)。全継承API・任意Widget・全視覚・実機認証は残る |
-| breadcrumbs | link/current、separator、折返し、狭幅 | 全比較待ち |
+| breadcrumbs | link/current、separator、コピー、狭幅・省略 | 2サイズ、組み合わせAPI、640px境界の省略、Currentだけの切詰め、125px読み込み枠、2秒コピー通知を追加。[API対応](breadcrumbs-api-mapping.md)。aria-current相当・任意構成・全視覚・実機認証は残る |
 | button | 全variant/size/shape、hover/focus、disabled/loading、icon、asChild | 文字位置・iconの補正、空children、全サイズとRTLの5テストを追加。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
 | button-group | orientation、連結border/radius、size伝播、focus | 1pxの境界共有・外側角丸・focus描画順・RTL・wrapped childを追加。5回帰テスト。全視覚・実機認証は未完了。[API対応](group-flow-api-mapping.md) |
 | chart | 全export、ECharts option、legend/tooltip、resize、Chart/Sankey/Globe固有操作 | 汎用option、drilldown、地形を含む実装不足 |

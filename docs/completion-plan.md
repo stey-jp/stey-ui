@@ -33,3 +33,5 @@ Bannerに構造化本文・compact配置・inline Link・色とサイズを継�
 Collapsibleに組み合わせ用Root／Trigger／Panel、制御／非制御、開閉取消、100msの標準表示と入力内容の保持／破棄を追加しています。[API対応](collapsible-api-mapping.md)にhiddenUntilFound／beforematch、CSSの反転規則、全視覚・実機の残件を保持します。
 
 Emptyに3サイズ、見出し／説明、任意図版・追加操作、横スクロールとコマンド全文コピーを追加しています。[API対応](empty-api-mapping.md)にtext-balance・等幅文字・選択・全視覚・実機の残件を保持します。
+
+Breadcrumbsに組み合わせAPI、2サイズ、640px未満の省略、Currentの切詰め・読み込み・コピーを追加しています。[API対応](breadcrumbs-api-mapping.md)にaria-current・focus・任意構成・全視覚・実機の残件を保持します。

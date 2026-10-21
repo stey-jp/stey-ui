@@ -45,6 +45,8 @@ CollapsibleにRoot・Trigger・Panelの組み合わせ、制御／非制御、�
 
 Emptyに3サイズ、説明に応じた見出し、任意図版と追加操作、横スクロールできるコマンドと1秒のコピー成功表示を追加しています。[EmptyのAPI対応](docs/empty-api-mapping.md)と日本語デモで範囲と差異を確認できます。
 
+Breadcrumbsに組み合わせAPI、2サイズ、640px未満の省略、現在ページの切詰め、読み込み表示とコピー操作を追加しています。[BreadcrumbsのAPI対応](docs/breadcrumbs-api-mapping.md)に意味情報・focus・任意構成の差を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

@@ -60,12 +60,12 @@
         "packages/kumo/src/components/breadcrumbs/index.ts"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/navigation.dart"
+        "packages/stey_ui_modern/lib/src/breadcrumbs.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Compound parts, 2 sizes, viewport-based mobile reduction, nonshrinking ancestors/current-only truncation, loading and 2s copy feedback are implemented. aria-current mapping, arbitrary composition and complete visual/physical/screen-reader certification remain pending. See docs/breadcrumbs-api-mapping.md."
     },
     {
       "id": "button",

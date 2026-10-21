@@ -10,6 +10,7 @@ import 'messages.dart';
 
 export 'table_of_contents.dart';
 export 'collapsible.dart';
+export 'breadcrumbs.dart';
 
 class SteyTab {
   const SteyTab(this.value, this.label, {this.disabled = false});
@@ -195,40 +196,6 @@ class SteyPagination extends StatelessWidget {
         semanticLabel: MaterialLocalizations.of(context).nextPageTooltip,
         child: const Icon(Icons.chevron_right, size: 16),
       ),
-    ],
-  );
-}
-
-class SteyBreadcrumb {
-  const SteyBreadcrumb(this.label, {this.onPressed});
-  final String label;
-  final VoidCallback? onPressed;
-}
-
-class SteyBreadcrumbs extends StatelessWidget {
-  const SteyBreadcrumbs({super.key, required this.items});
-  final List<SteyBreadcrumb> items;
-  @override
-  Widget build(BuildContext context) => Wrap(
-    crossAxisAlignment: WrapCrossAlignment.center,
-    children: [
-      for (var i = 0; i < items.length; i++) ...[
-        if (i > 0)
-          Icon(
-            Icons.chevron_right,
-            size: 14,
-            color: SteyTheme.colorsOf(context).subtle,
-          ),
-        items[i].onPressed == null
-            ? Padding(
-                padding: const EdgeInsets.all(6),
-                child: SteyText(items[i].label),
-              )
-            : SteyLink(
-                onPressed: items[i].onPressed,
-                child: Text(items[i].label),
-              ),
-      ],
     ],
   );
 }
