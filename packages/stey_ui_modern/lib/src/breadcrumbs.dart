@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'button.dart';
+import 'badge_link_scope.dart';
 import 'messages.dart';
 import 'theme.dart';
 
@@ -165,59 +166,61 @@ class _LinkState extends State<SteyBreadcrumbsLink> {
   @override
   Widget build(BuildContext context) {
     final c = SteyTheme.colorsOf(context);
-    return MergeSemantics(
-      child: Semantics(
-        link: true,
-        // Preserve the active Flutter Web route/query when the DOM anchor is
-        // resolved against <base href="/">.
-        linkUrl: kIsWeb && widget.href?.toString().startsWith('#') == true
-            ? Uri.base.resolveUri(widget.href!)
-            : widget.href,
-        onTap: widget.onPressed,
-        child: FocusableActionDetector(
-          focusNode: widget.focusNode,
-          autofocus: widget.autofocus,
-          mouseCursor: SystemMouseCursors.click,
-          onShowFocusHighlight: (v) => setState(() => highlight = v),
-          shortcuts: const {
-            SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
-            SingleActivator(LogicalKeyboardKey.space):
-                DoNothingAndStopPropagationIntent(),
-          },
-          actions: {
-            ActivateIntent: CallbackAction<ActivateIntent>(
-              onInvoke: (_) {
-                widget.onPressed?.call();
-                return null;
-              },
-            ),
-          },
-          child: Focus(
-            canRequestFocus: false,
-            includeSemantics: false,
-            onKeyEvent: (_, event) =>
-                event.logicalKey == LogicalKeyboardKey.space
-                ? KeyEventResult.handled
-                : KeyEventResult.ignored,
-            child: GestureDetector(
-              excludeFromSemantics: true,
-              behavior: HitTestBehavior.opaque,
-              onTap: widget.onPressed,
-              child: CustomPaint(
-                foregroundPainter: highlight ? _LinkFocus(c.brand) : null,
-                child: DefaultTextStyle.merge(
-                  style: TextStyle(
-                    color: c.subtle,
-                    decoration: TextDecoration.none,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 4,
-                    children: [
-                      if (widget.icon != null)
-                        ExcludeSemantics(child: widget.icon!),
-                      widget.child,
-                    ],
+    return SteyBadgeLinkScope(
+      child: MergeSemantics(
+        child: Semantics(
+          link: true,
+          // Preserve the active Flutter Web route/query when the DOM anchor is
+          // resolved against <base href="/">.
+          linkUrl: kIsWeb && widget.href?.toString().startsWith('#') == true
+              ? Uri.base.resolveUri(widget.href!)
+              : widget.href,
+          onTap: widget.onPressed,
+          child: FocusableActionDetector(
+            focusNode: widget.focusNode,
+            autofocus: widget.autofocus,
+            mouseCursor: SystemMouseCursors.click,
+            onShowFocusHighlight: (v) => setState(() => highlight = v),
+            shortcuts: const {
+              SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
+              SingleActivator(LogicalKeyboardKey.space):
+                  DoNothingAndStopPropagationIntent(),
+            },
+            actions: {
+              ActivateIntent: CallbackAction<ActivateIntent>(
+                onInvoke: (_) {
+                  widget.onPressed?.call();
+                  return null;
+                },
+              ),
+            },
+            child: Focus(
+              canRequestFocus: false,
+              includeSemantics: false,
+              onKeyEvent: (_, event) =>
+                  event.logicalKey == LogicalKeyboardKey.space
+                  ? KeyEventResult.handled
+                  : KeyEventResult.ignored,
+              child: GestureDetector(
+                excludeFromSemantics: true,
+                behavior: HitTestBehavior.opaque,
+                onTap: widget.onPressed,
+                child: CustomPaint(
+                  foregroundPainter: highlight ? _LinkFocus(c.brand) : null,
+                  child: DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: c.subtle,
+                      decoration: TextDecoration.none,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 4,
+                      children: [
+                        if (widget.icon != null)
+                          ExcludeSemantics(child: widget.icon!),
+                        widget.child,
+                      ],
+                    ),
                   ),
                 ),
               ),

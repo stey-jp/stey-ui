@@ -11,6 +11,7 @@ import 'banner_example.dart';
 import 'collapsible_example.dart';
 import 'empty_example.dart';
 import 'breadcrumbs_example.dart';
+import 'badge_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -235,16 +236,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                   orElse: () => SteySwitchSize.base,
                 ),
               ),
-              'badge' => SteyBadge(
-                appearance: router.uri.queryParameters['appearance'] == 'dot'
-                    ? SteyBadgeAppearance.dot
-                    : SteyBadgeAppearance.filled,
-                variant: SteyBadgeVariant.values.firstWhere(
-                  (v) => v.name == variant,
-                  orElse: () => SteyBadgeVariant.secondary,
-                ),
-                child: const Text('Active'),
-              ),
+              'badge' => BadgeSample(router.uri.queryParameters),
               'input' => const SizedBox(
                 width: 280,
                 child: SteyInput(
@@ -756,29 +748,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         SteyText('操作回数：$clicks回'),
       ]),
       'button-group' => const ButtonGroupExample(),
-      'badge' => group([
-        for (final variant in SteyBadgeVariant.values)
-          SteyBadge(variant: variant, child: Text(variantLabel(variant.name))),
-        for (final tone in SteyTone.values)
-          SteyBadge(tone: tone, child: Text(variantLabel(tone.name))),
-        for (final tone in SteyTone.values)
-          SteyBadge(
-            tone: tone,
-            dot: true,
-            child: Text(variantLabel(tone.name)),
-          ),
-        for (final variant in [
-          SteyBadgeVariant.success,
-          SteyBadgeVariant.warning,
-          SteyBadgeVariant.error,
-          SteyBadgeVariant.neutral,
-        ])
-          SteyBadge(
-            variant: variant,
-            appearance: SteyBadgeAppearance.dot,
-            child: Text(variantLabel(variant.name)),
-          ),
-      ]),
+      'badge' => const BadgeExample(),
       'banner' => const BannerExample(),
       'input' => form([
         const SteyInput(

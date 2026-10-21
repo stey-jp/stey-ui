@@ -31,7 +31,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Filled and dot variants, beta dashes, and default primary variant are implemented. Pixel parity and badges inside hovered links remain pending. The pinned upstream teal-subtle background token is undefined."
+      "limitations": "17 variants, filled/dot, native ancestor-link hover ring, 12px icon slot, single-line intrinsic size and empty labels are implemented. CSS/rich compositions, dash rasterization and full visual/physical/screen-reader certification remain pending. See docs/badge-api-mapping.md."
     },
     {
       "id": "banner",

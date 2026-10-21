@@ -151,5 +151,12 @@
       "packages/kumo/src/components/tag-input/tag-input.tsx"
     ],
     "synchronized_sha_advanced": false
+  },
+  "badge_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "7e0ff40546f08405d05bc9754f0ff0fd009ece0a",
+    "latest_observed_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "badge_source_diff_empty": true,
+    "synchronized_sha_advanced": false
   }
 }

@@ -15,7 +15,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | 群 | 固有の照合事項 | 現状・残作業 |
 | --- | --- | --- |
 | autocomplete | 候補、filter、空、無効項目、highlight、キーボード、自由入力 | 継承API・機能・視覚の全比較待ち |
-| badge | 全variant、filled/dot、色、beta破線、リンク内hover | 静止サンプルあり。リンク内と全機能待ち |
+| badge | 全variant、filled/dot、色、beta破線、リンク内hover | 全17variant・dot、リンク祖先hoverの枠、12pxアイコン枠、単一行・空ラベルと日本語デモを追加。[API対応](badge-api-mapping.md)。任意構成・破線・全視覚・実機認証は残る |
 | banner | variant、icon、本文、action、dismiss、折返し | 構造化title／description、base／sm、4variant、Banner.Actionのaccent・サイズ継承、compact inline Linkを追加。[API対応](banner-api-mapping.md)。全継承API・任意Widget・全視覚・実機認証は残る |
 | breadcrumbs | link/current、separator、コピー、狭幅・省略 | 2サイズ、組み合わせAPI、640px境界の省略、Currentだけの切詰め、125px読み込み枠、2秒コピー通知を追加。[API対応](breadcrumbs-api-mapping.md)。aria-current相当・任意構成・全視覚・実機認証は残る |
 | button | 全variant/size/shape、hover/focus、disabled/loading、icon、asChild | 文字位置・iconの補正、空children、全サイズとRTLの5テストを追加。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |

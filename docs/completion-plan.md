@@ -35,3 +35,5 @@ Collapsibleに組み合わせ用Root／Trigger／Panel、制御／非制御、�
 Emptyに3サイズ、見出し／説明、任意図版・追加操作、横スクロールとコマンド全文コピーを追加しています。[API対応](empty-api-mapping.md)にtext-balance・等幅文字・選択・全視覚・実機の残件を保持します。
 
 Breadcrumbsに組み合わせAPI、2サイズ、640px未満の省略、Currentの切詰め・読み込み・コピーを追加しています。[API対応](breadcrumbs-api-mapping.md)にaria-current・focus・任意構成・全視覚・実機の残件を保持します。
+
+Badgeにリンク祖先のhover枠・12pxアイコン枠・狭幅と空ラベルの処理、日本語デモを追加しています。[API対応](badge-api-mapping.md)に任意構成・破線・全視覚・実機の残件を保持します。

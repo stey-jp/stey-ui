@@ -14,7 +14,7 @@ The LayerDialog implementation and Primary compatibility alias additionally
 reference https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
 The ButtonGroup specification and Flow anchor correction also reference
 https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
-The Collapsible, Empty and Breadcrumbs updates reference that same commit.
+The Collapsible, Empty, Breadcrumbs and Badge updates reference that same commit.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.

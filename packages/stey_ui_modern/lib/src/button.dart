@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'theme.dart';
+import 'badge_link_scope.dart';
 import 'messages.dart';
 import 'loader.dart';
 
@@ -381,19 +382,21 @@ class SteyLink extends StatelessWidget {
   final bool external;
   final Uri? href;
   @override
-  Widget build(BuildContext context) => Semantics(
-    link: true,
-    linkUrl: onPressed == null ? null : href,
-    child: SteyButton(
-      onPressed: onPressed,
-      variant: SteyButtonVariant.ghost,
-      trailing: external ? const Icon(Icons.open_in_new, size: 12) : null,
-      child: DefaultTextStyle.merge(
-        style: TextStyle(
-          color: SteyTheme.colorsOf(context).link,
-          decoration: TextDecoration.underline,
+  Widget build(BuildContext context) => SteyBadgeLinkScope(
+    child: Semantics(
+      link: true,
+      linkUrl: onPressed == null ? null : href,
+      child: SteyButton(
+        onPressed: onPressed,
+        variant: SteyButtonVariant.ghost,
+        trailing: external ? const Icon(Icons.open_in_new, size: 12) : null,
+        child: DefaultTextStyle.merge(
+          style: TextStyle(
+            color: SteyTheme.colorsOf(context).link,
+            decoration: TextDecoration.underline,
+          ),
+          child: child,
         ),
-        child: child,
       ),
     ),
   );

@@ -47,6 +47,8 @@ Emptyに3サイズ、説明に応じた見出し、任意図版と追加操作�
 
 Breadcrumbsに組み合わせAPI、2サイズ、640px未満の省略、現在ページの切詰め、読み込み表示とコピー操作を追加しています。[BreadcrumbsのAPI対応](docs/breadcrumbs-api-mapping.md)に意味情報・focus・任意構成の差を記録しています。
 
+Badgeにリンク祖先のhover枠・12pxアイコン枠・単一行の幅保持と日本語操作デモを追加しています。[BadgeのAPI対応](docs/badge-api-mapping.md)に対応範囲と残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

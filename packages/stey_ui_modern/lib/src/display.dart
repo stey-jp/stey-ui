@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:ui' show SemanticsRole;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:flutter/services.dart';
 
 import 'theme.dart';
+import 'badge_link_scope.dart';
+export 'badge_link_scope.dart';
 import 'messages.dart';
 export 'loader.dart';
 export 'banner.dart';
@@ -131,61 +134,90 @@ class SteyBadge extends StatelessWidget {
             selectedVariant == SteyBadgeVariant.outline ||
             selectedVariant == SteyBadgeVariant.beta);
     final beta = !isDot && selectedVariant == SteyBadgeVariant.beta;
-    return CustomPaint(
-      foregroundPainter: isDot || beta
-          ? _BadgeBorder(
-              color: isDot ? c.hairline : c.brand,
-              dashed: beta,
-              outside: isDot,
-            )
-          : null,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: isDot
-              ? Colors.transparent
-              : outline
-              ? c.base
-              : background,
-          borderRadius: BorderRadius.circular(99),
-          border: bordered && !beta ? Border.all(color: c.fill) : null,
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            (icon != null && !isDot ? 6 : 8) + (bordered ? 1 : 0),
-            bordered ? 3 : 2,
-            bordered ? 9 : 8,
-            bordered ? 3 : 2,
+    final hovered = SteyBadgeLinkScope.hoveredOf(context);
+    final textColor = isDot ? c.text : foreground;
+    // Like inline-flex/shrink-0, an intrinsic badge can paint beyond a narrow
+    // host without truncating its label or raising a RenderFlex overflow.
+    return OverflowBox(
+      alignment: AlignmentDirectional.centerStart,
+      minWidth: 0,
+      maxWidth: double.infinity,
+      fit: OverflowBoxFit.deferToChild,
+      child: CustomPaint(
+        foregroundPainter: isDot || beta || hovered
+            ? _BadgeBorder(
+                color: beta
+                    ? c.brand
+                    : hovered
+                    ? textColor
+                    : c.hairline,
+                dashed: beta,
+                outside: !beta,
+                ringColor: beta && hovered ? textColor : null,
+              )
+            : null,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: isDot
+                ? Colors.transparent
+                : outline
+                ? c.base
+                : background,
+            borderRadius: BorderRadius.circular(99),
+            border: bordered && !beta ? Border.all(color: c.fill) : null,
           ),
-          child: DefaultTextStyle.merge(
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              height: 4 / 3,
-              color: isDot ? c.text : foreground,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              (icon != null && !isDot ? 6 : 8) + (bordered ? 1 : 0),
+              bordered ? 3 : 2,
+              bordered ? 9 : 8,
+              bordered ? 3 : 2,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isDot && dotColor != null) ...[
-                  Container(
-                    width: 7,
-                    height: 7,
-                    decoration: BoxDecoration(
-                      color: dotColor,
-                      shape: BoxShape.circle,
+            child: DefaultTextStyle.merge(
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                height: 4 / 3,
+                color: textColor,
+                decoration: TextDecoration.none,
+              ),
+              maxLines: 1,
+              softWrap: false,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: isDot ? 6 : 4,
+                children: [
+                  if (isDot && dotColor != null) ...[
+                    Container(
+                      width: 7,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: dotColor,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
+                  ],
+                  if (icon != null && !isDot) ...[
+                    SizedBox(
+                      width: 12,
+                      height:
+                          MediaQuery.textScalerOf(context).scale(12) * 4 / 3,
+                      child: Center(
+                        child: SizedBox.square(
+                          dimension: 12,
+                          child: FittedBox(
+                            child: IconTheme(
+                              data: IconThemeData(size: 12, color: foreground),
+                              child: icon!,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (child is! Text || (child as Text).data != '') child,
                 ],
-                if (icon != null && !isDot) ...[
-                  IconTheme(
-                    data: IconThemeData(size: 12, color: foreground),
-                    child: icon!,
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                child,
-              ],
+              ),
             ),
           ),
         ),
@@ -199,8 +231,10 @@ class _BadgeBorder extends CustomPainter {
     required this.color,
     required this.dashed,
     required this.outside,
+    this.ringColor,
   });
   final Color color;
+  final Color? ringColor;
   final bool dashed, outside;
 
   @override
@@ -223,10 +257,20 @@ class _BadgeBorder extends CustomPainter {
         canvas.drawPath(metric.extractPath(offset, offset + 3), paint);
       }
     }
+    if (ringColor != null) {
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          (Offset.zero & size).inflate(.5),
+          Radius.circular((size.height + 1) / 2),
+        ),
+        paint..color = ringColor!,
+      );
+    }
   }
 
   @override
   bool shouldRepaint(_BadgeBorder oldDelegate) =>
+      ringColor != oldDelegate.ringColor ||
       color != oldDelegate.color ||
       dashed != oldDelegate.dashed ||
       outside != oldDelegate.outside;
