@@ -1,4 +1,4 @@
-# 検証結果（Pagination：2026-10-22）
+# 検証結果（Meter：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -647,3 +647,22 @@ Info／PageSize／Separator／Controlsを組み合わせるAPI、入力・全ペ
 - isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK生成loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Selectの連結描画・combobox／option相当の意味情報・全focus・screen readerの認証も残ります。Linux／macOS／iOS・物理実機は今回ソースで未検証、Android APKは開発用署名です。shared-ci最新設定はprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Meterの追加検証（2026-10-22）
+
+ソースSHA `1814cae2b6e63b1135e18c26767715c2ab8d0353`。静的解析0件、ライブラリ400件・デモ30件、Python20件が成功しました。新規は12／2件、制御画像出力用define付きの13件も成功しています。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。[API対応](meter-api-mapping.md)に仕様と残件を保持します。
+
+min／max・NaN／無限大の補正、customValue／showValue、locale／NumberFormat、読み上げテキスト関数、8pxトラック・余白と300msのTailwind ease-out、RTLを追加しました。既存のlabel省略・toneを維持します。公式のMeter本体は既存比較SHAから差分なし、最新947065aとBase UI1.9.0の継承挙動を確認しました。狭幅での長いラベルの折り返しを修正しています。日本語デモは入力と値変更ボタンで操作し、標準Sliderの透明overlayによるWeb意味情報のポインター遮断を避けています。このSDK挙動の根本対応はSliderの残作業です。
+
+実Chrome 155.0.8059.86でLight/Darkの50条件を比較しました。0／25／65／100、上下限外、NaN・±Infinity、offset／負の値域、非表示・独自値・書式・de／fr・RTL・160px長文・色・読み上げcallbackを含みます。メーター／親の矩形とバーの着色幅はすべて1px以内でした。要素領域の画素差はthreshold0.1で0.908〜4.541%です。
+
+固定時刻の比較は25→75の変化、Light/Dark・LTR/RTL・0／75／150／225／300msの20フレームです。公式CSSのtransitionを停止して時刻指定し、Flutter widgetのsoftware rasterと比較しました。幅差は1px以内、320×120px領域の画素差は0.404〜0.471%です。**Flutter Webの全フレーム一致や全画素の認証ではありません。** Web側は動作低減設定でも幅が変化することを別に2条件で確認しています。日本語デモは390／1280px・Light/Darkの4条件で値・値域・独自表示・非表示・書式・色・長文・RTL・範囲外を操作しました。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：81 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：97 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK生成loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。FlutterのprogressBar＋数値範囲・aria-descriptionと、公式meter＋aria-valuetextの意味情報は異なります。NumberFormatの全locale／丸め・CSS反転時の短縮規則・screen reader・任意構成の認証も残ります。Linux／macOS／iOS・物理実機は今回ソースで未検証、Android APKは開発用署名です。shared-ci最新設定はprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
