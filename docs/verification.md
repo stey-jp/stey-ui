@@ -1,4 +1,4 @@
-# 検証結果（Empty：2026-10-19）
+# 検証結果（Breadcrumbs：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -569,3 +569,24 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア項目・警告・提案・Diagnosticsを含む全監査をJSONのemptyへ保持しています。SDK由来のIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。Android SDKのXML v4を旧ツールが読む世代差の警告が出ましたが、ビルドは成功しています。SDK／ビルドツールの更新は今回のUI変更へ混在させず、警告を保持します。shared-ciの最新README／setup／登録設定のblobは前回と一致し、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
+
+## Breadcrumbsの追加検証（2026-10-22）
+
+ソースSHAは `9f62236aaf804b3dab7049734c4f6ee1ba810c1d`。静的解析0件、ライブラリ357件・デモ23件、Python20件が成功しました。新規は12／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドも成功しています。[BreadcrumbsのAPI対応](breadcrumbs-api-mapping.md)に対応範囲と差異を記録しました。
+
+組み合わせAPI、2サイズ、viewport640px未満の省略、祖先を縮めず現在ページだけ切り詰める単一行配置、読み込み表示とコピー操作を追加しました。実Chromeでコンパクトサイズの行高とコピーアイコンの大きさの差を検出し、公式の実測値へ修正しました。Webのfragmentリンクがqueryを失ってデモを再読込する問題も修正しました。コピーは最新の成功から2秒、繰返し成功で期限を延長し、古い非同期結果と破棄後の完了を無視します。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` とChromeで46条件・300状態を比較しました。最新観測 `947065ad39694fdc688b1128cc9c360f566a4f73` でもBreadcrumbs／SkeletonLineのソース差分はありません。Light/Dark、390／640／1200px、LTR/RTL、2サイズ、項目数・長文・読み込み・アイコン・追加内容・コピーなし／空値・狭いdesktopを含みます。実Tab・Enter・Spaceのkeyup、リンクhref・ポインタ操作・query維持と生のクリップボード読戻しを検査しました。外枠・nav・リンク・現在ページ・コピー操作の矩形の最大差は0.281250px（許容1px）、画面全体の画像差分はthreshold0.1で0.01〜0.67%です。**全画素・全状態の一致は未認証です。** loadingの乱数・位相、focus時の追加可視化、tooltipとクリップ外操作は残り、未補正の矩形を保持します。同期済みSHA・承認済み視覚ゲートは進めません。
+
+日本語デモを390／1280px・Light/Darkの4条件で操作しました。サイズ・読み込み・アイコン・長文・RTL・コピー有無の切替、リンクcallbackと2回の全文コピーを確認しています。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件。分類を含む報告をJSONへ保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：70 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：96 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア項目・警告・提案・Diagnosticsを含む全監査をJSONのbreadcrumbsへ保持しています。SDK由来のIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。ビルド警告はJSONへ保持します。shared-ciの最新README／setup／登録設定は更新されていましたが、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
+
+SDKの非推奨API利用はSDK側の修正・更新、SkWasmのmap不足は対応するengineビルド成果物が必要です。警告の隠蔽や架空のmap作成は行いません。起動・転送量と一覧末尾「グリッド」の224×2pxにクリップされた操作領域は、自社側で対応可能な残件として継続します。
