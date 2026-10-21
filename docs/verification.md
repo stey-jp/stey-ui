@@ -1,4 +1,4 @@
-# 検証結果（Breadcrumbs：2026-10-22）
+# 検証結果（Badge：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -590,3 +590,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 全100点・Issues0件は未達です。非スコア項目・警告・提案・Diagnosticsを含む全監査をJSONのbreadcrumbsへ保持しています。SDK由来のIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。ビルド警告はJSONへ保持します。shared-ciの最新README／setup／登録設定は更新されていましたが、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
 
 SDKの非推奨API利用はSDK側の修正・更新、SkWasmのmap不足は対応するengineビルド成果物が必要です。警告の隠蔽や架空のmap作成は行いません。起動・転送量と一覧末尾「グリッド」の224×2pxにクリップされた操作領域は、自社側で対応可能な残件として継続します。
+
+## Badgeの追加検証（2026-10-22）
+
+ソースSHAは `afc5b82d6b72a5385ceccf5b1df7676551601b11`。静的解析0件、ライブラリ369件・デモ25件、Python20件が成功しました。新規は12／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドも成功しています。[BadgeのAPI対応](badge-api-mapping.md)に対応範囲と差異を記録しました。
+
+全17variantの既存配色を維持し、リンク祖先のhoverに連動する文字色の外側ring、beta破線の保持、任意アイコンの12px枠、文字拡大時の行枠、狭幅で縮めない単一行と空ラベルを追加修正しました。SteyLink／SteyBreadcrumbsLinkがscopeを伝え、任意リンクも明示scopeで利用できます。日本語デモは長いリンク内容を横スクロールで操作できます。
+
+公式 `7e0ff40546f08405d05bc9754f0ff0fd009ece0a` とChromeで132条件・318状態を比較しました。最新観測 `947065ad39694fdc688b1128cc9c360f566a4f73` でもBadgeソース差分はありません。Light/Dark、全variantのfilled／dot／icon、祖先余白のhover・exit・実Tab／Enter／Space・pointer、空・長文・文字拡大・RTLを含みます。Badgeと外枠の矩形の最大差は0.015625px（許容1px）。画面全体の画像差分はthreshold0.1で0.00〜0.51%、Badge領域の差分は0.00〜7.89%です。矩形・部分画像の差は補正せず保持し、**全画素・全状態の一致は未認証です。** 破線・glyph・focus等の差を残し、同期済みSHAと承認済み視覚ゲートは進めません。
+
+日本語デモを390／1280px・Light/Darkの4条件で操作しました。variant・dot・icon・リンク・RTL・長文の切替と2回のcallbackを確認しています。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件。分類と非スコア項目を含むLighthouseの全監査をJSONのbadgeへ保持しています。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：82 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：96 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：95 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。SDK生成loaderのIntlV8BreakIteratorはSDK側の修正・更新、SkWasm mapは対応するengine成果物が必要です。警告を隠蔽したり架空のmapを作成したりしません。自社側の起動・転送量と一覧末尾の小さい操作領域も対応可能な残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciの最新README／setup／登録設定blobは前回と同じで、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
