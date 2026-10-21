@@ -547,12 +547,14 @@
         "packages/kumo/src/components/meter/meter.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/meter.dart",
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "apps/demo/lib/meter_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native known-range meter with label/value, customValue/showValue, NumberFormat/locale, NaN/infinity clamp,300ms width ease-out and RTL. Flutter progressBar/numeric range plus formatted hint differs from upstream meter/aria-valuetext. CSS reversal shortening, all locale rounding, full visual and device parity uncertified. See docs/meter-api-mapping.md."
     },
     {
       "id": "pagination",

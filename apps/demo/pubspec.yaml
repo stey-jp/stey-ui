@@ -16,6 +16,7 @@ dependencies:
   stey_ui_modern:
     path: ../../packages/stey_ui_modern
   url_launcher: ^6.3.2
+  intl: 0.20.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

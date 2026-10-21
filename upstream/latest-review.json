@@ -172,5 +172,13 @@
     "dependency_review_sha": "7e0ff40546f08405d05bc9754f0ff0fd009ece0a",
     "change": "Latest Pagination string draft, ASCII integer commit validation on Enter/blur, empty maxPage1, page>=maxPage disables next/last. Native compound parts, page-size and dropdown choices, unknown-total sequential controls. Select group styling/semantics and full visual certification pending.",
     "synchronized_sha_advanced": false
+  },
+  "meter_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "meter_source_diff_empty": true,
+    "base_ui_version": "1.9.0",
+    "change": "Native value/min/max normalization, customValue/showValue precedence, NumberFormat/locale,300ms ease-out width and RTL. Flutter progressBar semantics instead of meter, with numeric range and formatted hint; full native meter/aria-valuetext remains a public SDK limitation.",
+    "synchronized_sha_advanced": false
   }
 }

@@ -45,14 +45,14 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | link | variant、外部link、visited/hover/focus、disabled、asChild | 全比較待ち |
 | loader | 全size、円形spinnerの回転/dash位相、SkeletonLine、loop、ラベル | 3サイズpreset・status、SkeletonLineの乱数／遅延／8px／blockHeight、日本語デモを追加。[API対応](loader-api-mapping.md)。widget software rasterの固定位相と公式を比較し、Web動作は別途検査。全Web位相・実機認証は残る |
 | menubar | 全parts、左右/上下、Submenu、focus、selection | 全比較待ち |
-| meter | 値域、境界、variant、label、読み上げ | 全比較待ち |
+| meter | 値域、境界、表示値／書式、label、幅変化、読み上げ | 値域・NaN／無限大補正、独自表示・数値非表示・書式・300msの幅変化と日本語デモを追加。[API対応](meter-api-mapping.md)。meter役割／aria-valuetextのSDK制約・全画素・実機認証は残る |
 | pagination | compound parts、full/simple、入力/dropdown、件数選択、既知/不明総数、整数検証、境界、keyboard、狭幅 | [部分実装・全比較待ち](pagination-api-mapping.md) |
 | popover | 全parts、anchor、衝突、開閉、dismiss、focus、portal | 全比較待ち |
 | radio | Group/Item/Legend、inline/card/segmented、description、矢印/Tab、generic値、rich label | RawRadioの操作・native描画・縦/二列グループを追加。イベント詳細・フォーム・拡張hit area・全視覚比較待ち |
 | select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | native overlay、複数選択、group/disabled、readOnly、typeahead、画面端の反転を追加。Form・任意anchor/trigger・SDKのWeb役割制約・全比較待ち |
 | sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | reveal/valueの基本テストあり。全比較待ち |
 | sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | MenuSub/Item/Buttonと装飾ガイドを追加し、階層リスト・選択保持の2テストを追加。resize／sliding views検証も維持。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
-| slider | 値域、step、複数thumb、orientation、keyboard、label/tooltip | 全比較待ち |
+| slider | 値域、step、複数thumb、orientation、keyboard、label/tooltip | 全比較待ち。標準Sliderの透明overlayがWeb意味情報のポインター操作を遮るSDK挙動も要対応。Meterデモは数値入力とボタンで操作 |
 | surface | variant、境界、nested構成、padding、theme | 全比較待ち |
 | switch | 単体/Item/Group/Legend、default/neutral、3size、busy、150ms遷移 | ネイティブ描画・グループ・操作テスト追加。全API・位相比較待ち |
 | table | 全parts、選択、sort、sticky、スクロール、空/忙しい状態 | 全比較待ち |

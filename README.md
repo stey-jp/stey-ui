@@ -53,6 +53,8 @@ Loaderに3サイズpreset・status、SkeletonLineに乱数幅・周期・遅延�
 
 Paginationに組み合わせAPI、ページ番号の入力／選択、件数選択、総件数不明時の前後移動と日本語デモを追加しています。[PaginationのAPI対応](docs/pagination-api-mapping.md)に最新公式の入力検証と残件を記録しています。
 
+Meterに値域・独自表示値・数値書式・300msの幅変化と日本語デモを追加しています。[MeterのAPI対応](docs/meter-api-mapping.md)に読み上げのSDK制約と未認証範囲を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

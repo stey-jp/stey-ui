@@ -41,3 +41,5 @@ Badgeにリンク祖先のhover枠・12pxアイコン枠・狭幅と空ラベル
 Loaderにpreset・status、SkeletonLineに乱数幅・時間・blockHeightと日本語デモを追加しています。[API対応](loader-api-mapping.md)に固定位相比較とWeb／実機の残件を保持します。
 
 Paginationに組み合わせAPI、full／simple、入力／選択、件数選択、総件数不明時の移動と最新公式の入力検証を追加しています。[API対応](pagination-api-mapping.md)にSelectの連結描画・意味情報・全画素と実機の残件を保持します。
+
+Meterに値域・独自表示・数値書式・300msの幅変化と日本語デモを追加しています。[API対応](meter-api-mapping.md)にmeterの意味情報に関するSDK制約・全画素と実機の残件を保持します。

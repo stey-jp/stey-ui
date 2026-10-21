@@ -232,12 +232,12 @@ void main() {
       host(const SteyMeter(value: 150, max: 100, label: 'Usage')),
     );
     expect(find.bySemanticsLabel('Usage'), findsOneWidget);
-    expect(
-      tester
-          .widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator))
-          .value,
-      1,
-    );
+    final data = tester
+        .getSemantics(find.bySemanticsLabel('Usage'))
+        .getSemanticsData();
+    expect(data.value, '100.0');
+    expect(data.minValue, '0.0');
+    expect(data.maxValue, '100.0');
     handle.dispose();
   });
   testWidgets('Charts render dark empty and keyboard exploration', (

@@ -12,6 +12,7 @@ import 'messages.dart';
 export 'loader.dart';
 export 'banner.dart';
 export 'empty.dart';
+export 'meter.dart';
 
 class SteyText extends StatelessWidget {
   const SteyText(
@@ -333,49 +334,6 @@ class SteySurface extends SteyLayerCard {
     super.header,
     super.footer,
   });
-}
-
-class SteyMeter extends StatelessWidget {
-  const SteyMeter({
-    super.key,
-    required this.value,
-    this.max = 100,
-    this.label,
-    this.tone = SteyTone.info,
-  });
-  final double value, max;
-  final String? label;
-  final SteyTone tone;
-  @override
-  Widget build(BuildContext context) {
-    final fraction = max <= 0 ? 0.0 : (value / max).clamp(0.0, 1.0);
-    final c = SteyTheme.colorsOf(context);
-    return Semantics(
-      excludeSemantics: true,
-      label: label,
-      value: '${(fraction * 100).round()}%',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (label != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: SteyText(label!),
-            ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(99),
-            child: LinearProgressIndicator(
-              value: fraction,
-              minHeight: 6,
-              color: tone.foreground(c),
-              backgroundColor: c.fill,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 enum SteyClipboardSize { sm, base, lg }

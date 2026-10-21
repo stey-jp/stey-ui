@@ -14,6 +14,7 @@ import 'breadcrumbs_example.dart';
 import 'badge_example.dart';
 import 'loader_example.dart';
 import 'pagination_example.dart';
+import 'meter_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -239,6 +240,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                 ),
               ),
               'pagination' => PaginationSample(router.uri.queryParameters),
+              'meter' => MeterSample(router.uri.queryParameters),
               'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => const SizedBox(
@@ -1175,14 +1177,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         child: SteyText('Workerをデプロイできます。'),
       ),
       'empty' => const EmptyExample(),
-      'meter' => form([
-        SteyMeter(value: value, label: 'リクエスト使用量'),
-        SteySlider(
-          value: value,
-          label: '使用量',
-          onChanged: (v) => setState(() => value = v),
-        ),
-      ]),
+      'meter' => const MeterExample(),
       'loader' => const LoaderExample(),
       'clipboard-text' => const ClipboardExample(),
       'inline-copy-text' => const InlineCopyExample(),
