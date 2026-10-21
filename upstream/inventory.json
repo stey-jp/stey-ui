@@ -563,12 +563,14 @@
         "packages/kumo/src/components/pagination/pagination.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/navigation.dart"
+        "packages/stey_ui_modern/lib/src/pagination.dart",
+        "packages/stey_ui_modern/lib/src/navigation.dart",
+        "apps/demo/lib/pagination_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native compound Info/PageSize/Controls/Separator, full/simple, input/dropdown, known/unknown totals and latest upstream integer validation implemented. Select group/popup styling and semantics, focus paint order, arbitrary composition, full visual and device parity remain uncertified. See docs/pagination-api-mapping.md."
     },
     {
       "id": "popover",

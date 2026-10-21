@@ -39,3 +39,5 @@ Breadcrumbsに組み合わせAPI、2サイズ、640px未満の省略、Current�
 Badgeにリンク祖先のhover枠・12pxアイコン枠・狭幅と空ラベルの処理、日本語デモを追加しています。[API対応](badge-api-mapping.md)に任意構成・破線・全視覚・実機の残件を保持します。
 
 Loaderにpreset・status、SkeletonLineに乱数幅・時間・blockHeightと日本語デモを追加しています。[API対応](loader-api-mapping.md)に固定位相比較とWeb／実機の残件を保持します。
+
+Paginationに組み合わせAPI、full／simple、入力／選択、件数選択、総件数不明時の移動と最新公式の入力検証を追加しています。[API対応](pagination-api-mapping.md)にSelectの連結描画・意味情報・全画素と実機の残件を保持します。

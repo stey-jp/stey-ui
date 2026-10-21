@@ -11,6 +11,7 @@ import 'messages.dart';
 export 'table_of_contents.dart';
 export 'collapsible.dart';
 export 'breadcrumbs.dart';
+export 'pagination.dart';
 
 class SteyTab {
   const SteyTab(this.value, this.label, {this.disabled = false});
@@ -151,53 +152,6 @@ class SteyMenuBar extends SteyTabs {
     required super.value,
     required super.onChanged,
   });
-}
-
-class SteyPagination extends StatelessWidget {
-  const SteyPagination({
-    super.key,
-    required this.page,
-    required this.totalPages,
-    required this.onChanged,
-    this.label = 'Page',
-  });
-  final int page, totalPages;
-  final ValueChanged<int> onChanged;
-  final String label;
-  @override
-  Widget build(BuildContext context) => Wrap(
-    spacing: 4,
-    runSpacing: 4,
-    crossAxisAlignment: WrapCrossAlignment.center,
-    children: [
-      SteyButton(
-        onPressed: page > 1 ? () => onChanged(page - 1) : null,
-        semanticLabel: MaterialLocalizations.of(context).previousPageTooltip,
-        child: const Icon(Icons.chevron_left, size: 16),
-      ),
-      ...List.generate(totalPages, (index) => index + 1)
-          .where((p) => p == 1 || p == totalPages || (p - page).abs() <= 1)
-          .map(
-            (p) => Semantics(
-              selected: p == page,
-              child: SteyButton(
-                onPressed: () => onChanged(p),
-                variant: p == page
-                    ? SteyButtonVariant.primary
-                    : SteyButtonVariant.ghost,
-                semanticLabel:
-                    '${label == 'Page' ? SteyMessages.of(context).page : label} $p',
-                child: Text('$p'),
-              ),
-            ),
-          ),
-      SteyButton(
-        onPressed: page < totalPages ? () => onChanged(page + 1) : null,
-        semanticLabel: MaterialLocalizations.of(context).nextPageTooltip,
-        child: const Icon(Icons.chevron_right, size: 16),
-      ),
-    ],
-  );
 }
 
 class SteyToolbar extends StatelessWidget {

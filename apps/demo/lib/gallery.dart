@@ -13,6 +13,7 @@ import 'empty_example.dart';
 import 'breadcrumbs_example.dart';
 import 'badge_example.dart';
 import 'loader_example.dart';
+import 'pagination_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -237,6 +238,7 @@ class _SteyGalleryState extends State<SteyGallery> {
                   orElse: () => SteySwitchSize.base,
                 ),
               ),
+              'pagination' => PaginationSample(router.uri.queryParameters),
               'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => const SizedBox(
@@ -956,15 +958,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         ),
         SteyText('選択中のタブ：${exampleValues[tab] ?? tab}'),
       ]),
-      'pagination' => form([
-        SteyPagination(
-          label: 'ページ',
-          page: page,
-          totalPages: 20,
-          onChanged: (v) => setState(() => page = v),
-        ),
-        SteyText('20ページ中$pageページ目'),
-      ]),
+      'pagination' => const PaginationExample(),
       'breadcrumbs' => const BreadcrumbsExample(),
       'collapsible' => const CollapsibleExample(),
       'toolbar' => SteyToolbar(

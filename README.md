@@ -51,6 +51,8 @@ Badgeにリンク祖先のhover枠・12pxアイコン枠・単一行の幅保持
 
 Loaderに3サイズpreset・status、SkeletonLineに乱数幅・周期・遅延・blockHeightと日本語デモを追加しています。[LoaderのAPI対応](docs/loader-api-mapping.md)に最新公式との対応と未認証範囲を記載しています。
 
+Paginationに組み合わせAPI、ページ番号の入力／選択、件数選択、総件数不明時の前後移動と日本語デモを追加しています。[PaginationのAPI対応](docs/pagination-api-mapping.md)に最新公式の入力検証と残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

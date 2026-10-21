@@ -46,7 +46,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | loader | 全size、円形spinnerの回転/dash位相、SkeletonLine、loop、ラベル | 3サイズpreset・status、SkeletonLineの乱数／遅延／8px／blockHeight、日本語デモを追加。[API対応](loader-api-mapping.md)。widget software rasterの固定位相と公式を比較し、Web動作は別途検査。全Web位相・実機認証は残る |
 | menubar | 全parts、左右/上下、Submenu、focus、selection | 全比較待ち |
 | meter | 値域、境界、variant、label、読み上げ | 全比較待ち |
-| pagination | page/count、境界、ellipsis、size、keyboard、狭幅 | 全比較待ち |
+| pagination | compound parts、full/simple、入力/dropdown、件数選択、既知/不明総数、整数検証、境界、keyboard、狭幅 | [部分実装・全比較待ち](pagination-api-mapping.md) |
 | popover | 全parts、anchor、衝突、開閉、dismiss、focus、portal | 全比較待ち |
 | radio | Group/Item/Legend、inline/card/segmented、description、矢印/Tab、generic値、rich label | RawRadioの操作・native描画・縦/二列グループを追加。イベント詳細・フォーム・拡張hit area・全視覚比較待ち |
 | select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | native overlay、複数選択、group/disabled、readOnly、typeahead、画面端の反転を追加。Form・任意anchor/trigger・SDKのWeb役割制約・全比較待ち |
