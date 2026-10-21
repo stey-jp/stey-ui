@@ -1,4 +1,4 @@
-# 検証結果（Badge：2026-10-22）
+# 検証結果（Loader：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -609,3 +609,22 @@ Lighthouse（Performance / Accessibility / Best practices / SEO）：
 - isolated_desktop：95 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。SDK生成loaderのIntlV8BreakIteratorはSDK側の修正・更新、SkWasm mapは対応するengine成果物が必要です。警告を隠蔽したり架空のmapを作成したりしません。自社側の起動・転送量と一覧末尾の小さい操作領域も対応可能な残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciの最新README／setup／登録設定blobは前回と同じで、公開repo除外・Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、更新検出からPR作成までの実往復は未実施。本番反映先はGitHub mainです。
+
+## Loader／SkeletonLineの追加検証（2026-10-22）
+
+ソースSHA `dac48690e59ad2f99f2cbd241b67cc2b66e4f35b`。静的解析0件、ライブラリ376件・デモ26件、Python20件が成功しました。新規は7／1件です。画像出力用defineを付けた8件も成功しています。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。[API対応](loader-api-mapping.md)に仕様と残件を保持します。
+
+円形Loaderの3サイズpresetとstatusを追加し、数値サイズAPIと色継承を維持しました。SkeletonLineは8px・2px角丸、整数の乱数幅・小数2桁の時間、開始遅延・範囲変更時の再選択・blockHeightを追加し、既存width／heightを維持します。Breadcrumbsの読み込み表示も同じ部品を使用します。
+
+公式 `947065ad39694fdc688b1128cc9c360f566a4f73` のLoader修正はinline styleからSVG属性への寸法移動です。native側はSVGを使わず、最新公式の16／24／32／45pxとボタン内14／16pxの実装と、既存の中央配置テストも維持します。固定時刻比較はLight/Dark・4サイズ・0／375／750／1125／1499／1500／2000／3000／5999／6000msの80フレーム、SkeletonLineの2テーマ・5時点の10フレーム、計90フレームです。Flutter widgetテストのsoftware rasterと公式SVG SMIL／CSSを比較し、差分率は160×96px領域・threshold0.1で0.000〜0.026%です。**これはFlutter Webの全位相・全画素の一致認証ではありません。**
+
+実ChromeのWeb版は別に18条件を検査しました。サイズ0ではFlutter Webがstatusを意味情報から除外し、SVGのDOM保持とは異なることを確認しています。preset・45／0px・半透明色・RTL・skeleton・blockHeight、statusと動作低減設定でもアニメーションが進むことを確認しています。日本語デモは390／1280px・Light/Darkの4条件でサイズ・色・RTL・再作成を操作しました。全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。
+
+Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：79 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：69 / 100 / 100 / 100。実行警告0件。
+- isolated_desktop：98 / 100 / 100 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK生成loaderのIntlV8BreakIteratorはSDK側の更新、SkWasm mapは一致するengine成果物が必要です。自社の起動・転送量・一覧末尾の操作領域も残件です。Linux／macOS／iOS・物理実機・screen readerは今回ソースで未検証、Android APKは開発用署名です。shared-ciの登録設定は更新されましたが公開repo除外・未登録を確認し、Workflow0件・クラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
