@@ -71,6 +71,8 @@ TagInputに検証・上限、区切り確定、選択範囲への貼り付け、
 
 Textに10種類・4サイズ、行高の継承、見出しの意味情報・省略・rich spanと日本語デモを追加しています。[API対応](docs/text-api-mapping.md)にHTML要素・書体・実機などの残件を記録しています。
 
+Linkに3種類・色継承・外部アイコン、アプリ側の遷移処理、キーボード操作と日本語デモを追加しています。[API対応](docs/link-api-mapping.md)に下線・Webの意味情報・実機などの残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

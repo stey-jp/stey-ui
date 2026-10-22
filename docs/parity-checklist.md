@@ -42,7 +42,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | label | tooltipのkeyboard/touch、optional、asContent、関連付け | 情報ボタンのタッチ・keyboardと読み上げテスト済み。全比較待ち |
 | layer-card | 単層／Primary・Secondary、負の余白、描画順、padding、clip | [API対応](layer-card-api-mapping.md)。直接の子から多層を選択、既存header／footerを保持。任意構成・全画素・実機は未認証 |
 | layer-dialog | 層構造、全parts、modal/focus、scroll、sticky境界 | 専用多層面・640pxでのシート切替、Action／Primary alias、alert・pending・split menu、固定見出し／操作欄を追加。14回帰テスト。全portal／Drawer挙動・視覚／実機認証は未完了。[API対応](layer-dialog-api-mapping.md) |
-| link | variant、外部link、visited/hover/focus、disabled、asChild | 全比較待ち |
+| link | 3variant、色継承、外部アイコン、Provider、hover/focus、keyboard、無効化、最小内容幅 | 部分対応。[対応表](link-api-mapping.md)。下線・UA focus・Web意味情報／任意DOM・全画素／実機は残件 |
 | loader | 全size、円形spinnerの回転/dash位相、SkeletonLine、loop、ラベル | 3サイズpreset・status、SkeletonLineの乱数／遅延／8px／blockHeight、日本語デモを追加。[API対応](loader-api-mapping.md)。widget software rasterの固定位相と公式を比較し、Web動作は別途検査。全Web位相・実機認証は残る |
 | menubar | 全parts、左右/上下、Submenu、focus、selection | 全比較待ち |
 | meter | 値域、境界、表示値／書式、label、幅変化、読み上げ | 値域・NaN／無限大補正、独自表示・数値非表示・書式・300msの幅変化と日本語デモを追加。[API対応](meter-api-mapping.md)。meter役割／aria-valuetextのSDK制約・全画素・実機認証は残る |

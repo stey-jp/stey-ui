@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'theme.dart';
-import 'badge_link_scope.dart';
+export 'link.dart';
 import 'messages.dart';
 import 'loader.dart';
 
@@ -374,39 +374,6 @@ class SteyRefreshButton extends StatelessWidget {
     loading: refreshing,
     icon: const Icon(Icons.refresh),
     child: Text(label),
-  );
-}
-
-class SteyLink extends StatelessWidget {
-  const SteyLink({
-    super.key,
-    required this.child,
-    required this.onPressed,
-    this.external = false,
-    this.href,
-  });
-  final Widget child;
-  final VoidCallback? onPressed;
-  final bool external;
-  final Uri? href;
-  @override
-  Widget build(BuildContext context) => SteyBadgeLinkScope(
-    child: Semantics(
-      link: true,
-      linkUrl: onPressed == null ? null : href,
-      child: SteyButton(
-        onPressed: onPressed,
-        variant: SteyButtonVariant.ghost,
-        trailing: external ? const Icon(Icons.open_in_new, size: 12) : null,
-        child: DefaultTextStyle.merge(
-          style: TextStyle(
-            color: SteyTheme.colorsOf(context).link,
-            decoration: TextDecoration.underline,
-          ),
-          child: child,
-        ),
-      ),
-    ),
   );
 }
 

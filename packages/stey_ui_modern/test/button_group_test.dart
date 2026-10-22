@@ -99,7 +99,7 @@ void main() {
   });
 
   testWidgets(
-    'Tooltip and link wrappers inherit their logical child position',
+    'Tooltip keeps logical position while inline link retains no button chrome',
     (tester) async {
       await tester.pumpWidget(
         host(
@@ -116,7 +116,8 @@ void main() {
         ),
       );
       expect(radius(tester, 'One').topRight, Radius.zero);
-      expect(radius(tester, 'Two'), BorderRadius.zero);
+      expect(find.widgetWithText(TextButton, 'Two'), findsNothing);
+      expect(tester.getSize(find.text('Two')).height, lessThan(36));
       expect(radius(tester, 'Three').topLeft, Radius.zero);
       expect(tester.takeException(), isNull);
     },

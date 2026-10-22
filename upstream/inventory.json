@@ -503,12 +503,12 @@
         "packages/kumo/src/components/link/link.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/button.dart"
+        "packages/stey_ui_modern/lib/src/link.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Three native variants, inherited typography/current color, external geometry, routing provider, keyboard page scroll/activation, disabled and min-content overflow are implemented. Native underline/UA focus,URL-less/disabled Web semantics,target/rel/download and all DOM/pixel/physical-platform behavior remain uncertified. See docs/link-api-mapping.md."
     },
     {
       "id": "loader",

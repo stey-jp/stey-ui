@@ -57,3 +57,5 @@ SensitiveInputに固定の伏字・3状態、表示／非表示・入力blur、2
 TagInputに制御／非制御、検証・上限、失敗した入力の保持、区切りとblurでの確定、IME・readOnly、選択範囲への貼り付け、折り返しと日本語デモを追加しています。[API対応](tag-input-api-mapping.md)にHTML Form・全IME／Undo・視覚／実機の残件を保持します。
 
 Textに10種類・4サイズ、計算済み行高の継承、装飾と見出し階層の分離、rich span・省略・RTL・拡大と日本語デモを追加しています。[API対応](text-api-mapping.md)にHTML要素・OS等幅フォント・全視覚／実機の残件を保持します。
+
+Linkに3種類、親色の継承、外部アイコン、アプリ側のProvider遷移、Spaceスクロール・Enter実行と日本語デモを追加しています。[API対応](link-api-mapping.md)に下線・UA focus・hrefのないWeb意味情報・任意DOMと実機の残件を保持します。

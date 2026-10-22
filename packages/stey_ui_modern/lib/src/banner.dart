@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 
 import 'button.dart';
@@ -87,9 +86,7 @@ class SteyBanner extends StatelessWidget {
     final gap = compact ? 8.0 : 12.0;
     final font = compact ? 13.0 : 14.0;
     final hasTitle = title?.isNotEmpty ?? false;
-    final linkAction = action is SteyLink
-        ? _BannerInlineLink(action! as SteyLink)
-        : null;
+    final linkAction = action is SteyLink ? action : null;
     final inlineLink = compact ? linkAction : null;
     Widget? titleWidget = hasTitle
         ? Text(
@@ -464,98 +461,4 @@ class _BannerHighlight extends CustomPainter {
   @override
   bool shouldRepaint(_BannerHighlight oldDelegate) =>
       color != oldDelegate.color;
-}
-
-/// Keep a compact Kumo Link in the description's line box, without button padding.
-class _BannerInlineLink extends StatefulWidget {
-  const _BannerInlineLink(this.link);
-  final SteyLink link;
-  @override
-  State<_BannerInlineLink> createState() => _BannerInlineLinkState();
-}
-
-class _BannerInlineLinkState extends State<_BannerInlineLink> {
-  final focus = FocusNode();
-  bool highlight = false;
-  @override
-  void dispose() {
-    focus.dispose();
-    super.dispose();
-  }
-
-  void followLink() {
-    focus.requestFocus();
-    widget.link.onPressed?.call();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    final enabled = widget.link.onPressed != null;
-    return MergeSemantics(
-      child: FocusableActionDetector(
-        focusNode: focus,
-        enabled: enabled,
-        shortcuts: const {
-          SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
-          SingleActivator(LogicalKeyboardKey.space):
-              DoNothingAndStopPropagationIntent(),
-        },
-        actions: {
-          ActivateIntent: CallbackAction<ActivateIntent>(
-            onInvoke: (_) {
-              if (enabled) followLink();
-              return null;
-            },
-          ),
-        },
-        onShowFocusHighlight: (v) => setState(() => highlight = v),
-        child: Semantics(
-          link: true,
-          linkUrl: !enabled || widget.link.href == null
-              ? null
-              : kIsWeb && widget.link.href!.toString().startsWith('#')
-              ? Uri.base.resolveUri(widget.link.href!)
-              : widget.link.href,
-          enabled: enabled,
-          onTap: enabled ? followLink : null,
-          child: MouseRegion(
-            cursor: enabled
-                ? SystemMouseCursors.click
-                : SystemMouseCursors.basic,
-            child: GestureDetector(
-              excludeFromSemantics: true,
-              onTap: enabled ? followLink : null,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  border: highlight
-                      ? Border.all(
-                          color: c.brand,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                        )
-                      : null,
-                ),
-                child: DefaultTextStyle.merge(
-                  style: TextStyle(
-                    color: c.link,
-                    decoration: TextDecoration.underline,
-                    decorationColor: c.link,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 3,
-                    children: [
-                      widget.link.child,
-                      if (widget.link.external)
-                        const Icon(Icons.open_in_new, size: 12),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

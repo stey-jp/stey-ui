@@ -23,6 +23,7 @@ import 'input_group_example.dart';
 import 'sensitive_input_example.dart';
 import 'tag_input_example.dart';
 import 'text_example.dart';
+import 'link_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -128,6 +129,7 @@ class _SteyGalleryState extends State<SteyGallery> {
             );
             final child = switch (sample) {
               'text' => TextSample(router.uri.queryParameters),
+              'link' => LinkSample(router.uri.queryParameters),
               'tag-input' => TagInputSample(router.uri.queryParameters),
               'banner' => BannerSample(router.uri.queryParameters),
               'collapsible' => CollapsibleSample(router.uri.queryParameters),
@@ -1167,11 +1169,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         ],
       ),
       'text' => const TextExample(),
-      'link' => SteyLink(
-        onPressed: () => launchUrl(Uri.parse('https://kumo-ui.com')),
-        external: true,
-        child: const Text('Kumoドキュメント'),
-      ),
+      'link' => const LinkExample(),
       'layer-dialog' => const LayerDialogExample(),
       'dialog' => SteyButton(
         onPressed: () => SteyDialog.show(
