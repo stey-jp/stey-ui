@@ -1,4 +1,4 @@
-# 検証結果（Text：2026-10-22）
+# 検証結果（Link：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -828,3 +828,22 @@ TagInput単体はMobile／DesktopともAccessibility100点でした。ギャラ�
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDKのIntlV8BreakIterator、自社の起動・転送量・一覧の操作領域、全意味情報と過去のレンダラエラーは残件です。source mapの今回の指摘有無もJSONへ記録し、過去のSkWasm map診断は保持します。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Linkの追加検証（2026-10-22）
+
+ソースSHA `b147900ed6a631b04533244a627f29ffcf5d11bd`。静的解析0件、ライブラリ562件・デモ52件の計614件とPython20件が成功しました。新規は12／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、5つの製品ソースとWasm source mapの埋め込み内容が一致しました。[API対応](link-api-mapping.md)に仕様と残件を保持します。
+
+inline／current／plainをボタンの余白なしで実装し、書体・行高・currentの色継承、Light35%／Dark65%の下線とhover、plain70%の文字・アイコン色を追加しました。外部アイコンは公式の24単位パス・1em・線幅1.75／2、間隔0.1875emです。ProviderはUriとtargetをアプリへ渡し、個別onPressedを優先します。Enter／pointerは一度だけ実行、Space／Shift+Spaceは周囲をページスクロールします。disabledは公式propでなくSteyの拡張で、実行・focus・hrefを抑止します。直接のText／RichTextは単語の最小幅を保持し、2倍・狭幅でも単語を途中で分断しません。LayoutBuilderなどはintrinsic測定を要求せず標準レイアウトを保持します。親の外側のhit test全般は未認証です。Bannerの旧Linkコピーを削除して同じ実装を再利用し、元のimportと引数を維持しました。
+
+実Chrome 155.0.8059.86で50条件・各idle／hover／focusの150組を公式947065aと比較しました。Light／Dark、3variant、外部アイコン、親色、16px、120pxの長文折り返し、RTL、2倍・180px、無効、直接Badgeを含みます。pointer／Enterの一度の実行、Spaceの非実行、無効と隣接操作を確認し、リンク矩形の差は1px以内、実行時エラー0件でした。画素差はthreshold0.1で0.847〜24.407%です。Inter3書体のSHA一致を確認しましたが、下線のoffset／thickness／skip-inkとUA focus、Badgeの丸いfocus枠は一致認証していません。比較の成功は画素一致を意味しません。
+
+日本語デモは390／1280px・Light／Darkの4条件で、3種類切替・Provider操作・無効時抑止・外部アイコン・狭幅・RTL・200%表示、Badgeと隣接操作を確認しました。無効化後にChromeが隣接した通常文字をAX上でまとめるため、無効化のchecked状態とAX全文を照合します。Flutter Web SDKはhrefのないaにlink役割を付与せず、無効化したリンクとonPressedだけのリンクはChrome上で通常文字になります。aria-disabledも完全には出ません。ダミーhrefやDOM変更で隠さず残件に保持し、有効なBadgeデモには実際のfragment hrefを指定しました。targetはアプリへの情報でDOM属性ではなく、rel／download・中クリック・修飾キー・全ルーター動作も未認証です。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouseはギャラリーと単体の既定inline表示のMobile／Desktopを対象とし、全色・全背景・全遷移の認証ではありません（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：49 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：92 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：97 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK非推奨API、起動・転送量・一覧操作領域、全意味情報と過去のレンダラエラーは残件です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
