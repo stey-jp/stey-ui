@@ -186,6 +186,7 @@ class _SensitiveInputState extends _SteyInputState {
             (mode == _SensitiveMode.revealed ||
                 mode == _SensitiveMode.empty && hasValue),
         iconSize = size.fontSize == 12 ? 12.0 : 16.0,
+        eyeHitSize = math.min(24.0, size.height),
         reserve = [20.0, 24.0, 32.0, 40.0][size.index],
         radius = size == SteySize.xs ? 4.0 : size.radius,
         line = size.fontSize == 12 ? 16.0 : 21.0,
@@ -224,6 +225,7 @@ class _SensitiveInputState extends _SteyInputState {
             onTap: () => editorActivated = true,
             enabled: w.enabled,
             readOnly: w.readOnly || masked,
+            selectAllOnFocus: false,
             obscureText: mode != _SensitiveMode.revealed,
             onChanged: change,
             onSubmitted: w.onSubmitted,
@@ -314,31 +316,35 @@ class _SensitiveInputState extends _SteyInputState {
                   ),
                 ),
               Positioned(
-                right: size.padding,
-                top: (size.height - iconSize) / 2,
-                child: Opacity(
-                  opacity: showEye ? 1 : 0,
-                  alwaysIncludeSemantics: true,
-                  child: IgnorePointer(
-                    ignoring: !showEye,
-                    child: _SensitiveAction(
-                      focusNode: eye,
-                      label: mode == _SensitiveMode.revealed
-                          ? (ja ? '値を隠す' : 'Hide value')
-                          : (ja ? '値を表示' : 'Reveal value'),
-                      enabled: w.enabled,
-                      onPressed: () {
-                        if (mode == _SensitiveMode.revealed) {
-                          hide();
-                        } else if (mode == _SensitiveMode.empty && hasValue) {
-                          setState(() => mode = _SensitiveMode.revealed);
-                        }
-                      },
-                      child: CustomPaint(
-                        size: Size.square(iconSize),
-                        painter: _SensitiveEye(
-                          c.subtle,
-                          mode == _SensitiveMode.revealed,
+                right: size.padding - (eyeHitSize - iconSize) / 2,
+                top: (size.height - eyeHitSize) / 2,
+                child: ExcludeSemantics(
+                  excluding: !showEye,
+                  child: Opacity(
+                    opacity: showEye ? 1 : 0,
+                    alwaysIncludeSemantics: true,
+                    child: IgnorePointer(
+                      ignoring: !showEye,
+                      child: _SensitiveAction(
+                        focusNode: eye,
+                        minExtent: eyeHitSize,
+                        label: mode == _SensitiveMode.revealed
+                            ? (ja ? '値を隠す' : 'Hide value')
+                            : (ja ? '値を表示' : 'Reveal value'),
+                        enabled: w.enabled,
+                        onPressed: () {
+                          if (mode == _SensitiveMode.revealed) {
+                            hide(returnFocus: true);
+                          } else if (mode == _SensitiveMode.empty && hasValue) {
+                            setState(() => mode = _SensitiveMode.revealed);
+                          }
+                        },
+                        child: CustomPaint(
+                          size: Size.square(iconSize),
+                          painter: _SensitiveEye(
+                            c.subtle,
+                            mode == _SensitiveMode.revealed,
+                          ),
                         ),
                       ),
                     ),
@@ -435,7 +441,7 @@ class _SensitiveInputState extends _SteyInputState {
           p.dispose();
           return Positioned(
             left: anchor.right - 8 - width,
-            top: anchor.top - 1 - height,
+            top: anchor.top - 5 - height,
             child: MouseRegion(
               onEnter: (_) => setState(() => copyHovered = true),
               onExit: (_) => setState(() => copyHovered = false),
@@ -446,6 +452,7 @@ class _SensitiveInputState extends _SteyInputState {
                 curve: const Cubic(.4, 0, .2, 1),
                 child: _SensitiveAction(
                   focusNode: copyNode,
+                  hitPadding: const EdgeInsets.only(top: 4),
                   label: copied
                       ? (ja ? 'コピーしました' : 'Copied')
                       : (ja ? 'コピー' : 'Copy'),
@@ -512,7 +519,11 @@ class _SensitiveAction extends StatefulWidget {
     required this.enabled,
     required this.onPressed,
     required this.child,
+    this.hitPadding = EdgeInsets.zero,
+    this.minExtent = 0,
   });
+  final EdgeInsets hitPadding;
+  final double minExtent;
   final FocusNode focusNode;
   final String label;
   final bool enabled;
@@ -571,6 +582,15 @@ class _SensitiveActionState extends State<_SensitiveAction> {
         child: child,
       );
     }
+    if (widget.minExtent > 0) {
+      child = ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: widget.minExtent,
+          minHeight: widget.minExtent,
+        ),
+        child: Center(widthFactor: 1, heightFactor: 1, child: child),
+      );
+    }
     return Focus(
       canRequestFocus: false,
       skipTraversal: true,
@@ -612,11 +632,14 @@ class _SensitiveActionState extends State<_SensitiveAction> {
               behavior: HitTestBehavior.opaque,
               excludeFromSemantics: true,
               onTap: widget.enabled ? trigger : null,
-              child: CustomPaint(
-                foregroundPainter: focusVisible
-                    ? _InputRing(c.brand, 4, 2)
-                    : null,
-                child: child,
+              child: Padding(
+                padding: widget.hitPadding,
+                child: CustomPaint(
+                  foregroundPainter: focusVisible
+                      ? _InputRing(c.brand, 4, 2)
+                      : null,
+                  child: child,
+                ),
               ),
             ),
           ),

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/semantics.dart';
@@ -54,6 +56,7 @@ void main() {
         find.semantics.byLabel('Sensitive value, masked.'),
         findsOneWidget,
       );
+      expect(find.semantics.byLabel('Reveal value'), findsNothing);
       expect(find.semantics.byLabel(RegExp('private_value')), findsNothing);
       expect(field(t).readOnly, true);
       expect(field(t).focusNode!.skipTraversal, true);
@@ -85,6 +88,7 @@ void main() {
       await reveal(t);
       expect(field(t).obscureText, false);
       expect(field(t).focusNode!.hasFocus, true);
+      expect(t.getSize(find.bySemanticsLabel('Hide value')).height, 24);
       expect(
         controller.selection,
         const TextSelection(baseOffset: 2, extentOffset: 5),
@@ -117,6 +121,23 @@ void main() {
     expect(field(t).obscureText, true);
     expect(find.text('Click to reveal'), findsOneWidget);
   });
+  testWidgets(
+    'initial reveal leaves a collapsed caret instead of selecting the whole secret',
+    (t) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      try {
+        await ready(
+          t,
+          host(const SteySensitiveInput(defaultValue: 'secret123')),
+        );
+        await reveal(t);
+        expect(field(t).controller!.selection.isCollapsed, true);
+        expect(field(t).controller!.text, 'secret123');
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+      }
+    },
+  );
   testWidgets('read only reveal does not focus the editor or permit changes', (
     t,
   ) async {
@@ -157,11 +178,11 @@ void main() {
       await t.pumpAndSettle();
       await reveal(t);
       expect(field(t).obscureText, false);
-        field(t).focusNode!.requestFocus();
-        await t.pumpAndSettle();
-        field(t).focusNode!.unfocus();
-        await t.pumpAndSettle();
-        expect(field(t).obscureText, false);
+      field(t).focusNode!.requestFocus();
+      await t.pumpAndSettle();
+      field(t).focusNode!.unfocus();
+      await t.pumpAndSettle();
+      expect(field(t).obscureText, false);
       await t.tap(find.byType(TextField));
       await t.pumpAndSettle();
       await t.sendKeyEvent(LogicalKeyboardKey.keyX);
@@ -266,6 +287,7 @@ void main() {
         ),
       );
       final copy = find.bySemanticsLabel('Copy');
+      expect(t.getSize(copy).height, greaterThanOrEqualTo(24));
       expect(
         t.getRect(copy).bottom,
         lessThan(t.getRect(find.byType(TextField)).top),
