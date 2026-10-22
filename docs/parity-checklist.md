@@ -50,7 +50,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | popover | 全parts、anchor、衝突、開閉、dismiss、focus、portal | 全比較待ち |
 | radio | Group/Item/Legend、inline/card/segmented、description、矢印/Tab、generic値、rich label | RawRadioの操作・native描画・縦/二列グループを追加。イベント詳細・フォーム・拡張hit area・全視覚比較待ち |
 | select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | native overlay、複数選択、group/disabled、readOnly、typeahead、画面端の反転を追加。Form・任意anchor/trigger・SDKのWeb役割制約・全比較待ち |
-| sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | reveal/valueの基本テストあり。全比較待ち |
+| sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | 固定8文字の伏字、3状態、表示・再マスク、上端のコピー操作、2秒通知、値／選択／所有権と日本語デモを追加。[API対応](sensitive-input-api-mapping.md)。全Form／IME・視覚／実機は未認証 |
 | sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | MenuSub/Item/Buttonと装飾ガイドを追加し、階層リスト・選択保持の2テストを追加。resize／sliding views検証も維持。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
 | slider | 水平、値域、step、複数thumb、衝突方式、keyboard、常時表示値 | [API対応](slider-api-mapping.md)。標準Sliderの透明overlayを廃止。Web入力名の欠落・代理の数値属性・無効時の役割、Form連携・任意構成・実機・全画素は未認証 |
 | surface | 非推奨互換、color、角丸・overflow、padding、theme | [API対応](layer-card-api-mapping.md)。LayerCardへ委譲し角丸0・overflow-visible。外側hit test・任意構成・全画素・実機は未認証 |

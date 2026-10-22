@@ -220,5 +220,13 @@
     "source_diff_empty_vs_7e0ff40": true,
     "change": "Native compound Input/Addon/Suffix/Button, direct-child shared/individual/hybrid detection, four sizes, one-pixel seams and focus painting, suffix sizing, controller preservation, Field and disabled propagation. Official input font-sans uses OS font while native retains licensed Inter. Tooltip, inherited DOM/Form/IME, arbitrary structures and full certification remain pending.",
     "synchronized_sha_advanced": false
+  },
+  "sensitive_input_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "base_ui_version": "1.9.0",
+    "source_and_copy_hook_diff_empty_vs_7e0ff40": true,
+    "change": "Native three-state secret editor, eight constant bullets and masked semantics, pointer/keyboard reveal and Escape, input-only blur behavior, controlled/controller ownership and selection, four sizes and inherited Field states. Overlay copy tab uses native clipboard and ordered two-second feedback. Eye/EyeSlash regular geometry retained with MIT notice. Full HTML/Form/IME, visual and physical-platform certification remain pending.",
+    "synchronized_sha_advanced": false
   }
 }

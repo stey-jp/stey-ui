@@ -65,6 +65,8 @@ Inputに制御／非制御、4サイズの即時フォーカス枠、無効色�
 
 InputGroupにInput／Addon／Suffix／Buttonの組み合わせ、共有・個別・混合枠、接尾辞の伸縮と日本語デモを追加しています。[InputGroupのAPI対応](docs/input-group-api-mapping.md)にフォント・tooltip・全視覚／実機の残件を記録しています。
 
+SensitiveInputに固定の伏字・表示切替、2秒のコピー通知、値と選択の保持、日本語デモを追加しています。[API対応](docs/sensitive-input-api-mapping.md)にfocus・Form・実機などの残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

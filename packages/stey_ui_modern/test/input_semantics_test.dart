@@ -45,10 +45,9 @@ void main() {
     );
     expect(find.semantics.byFlag(SemanticsFlag.isTextField), findsOneWidget);
     expect(find.semantics.byLabel('API key'), findsWidgets);
-    expect(find.semantics.byLabel('Show API key'), findsOneWidget);
-    await tester.tap(find.bySemanticsLabel('Show API key'));
+    await tester.enterText(find.byType(TextField), 'example');
     await tester.pump();
-    expect(find.semantics.byLabel('Hide API key'), findsOneWidget);
+    expect(find.semantics.byLabel('Hide value'), findsOneWidget);
     semantics.dispose();
   });
   testWidgets(

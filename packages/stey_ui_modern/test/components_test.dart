@@ -87,7 +87,7 @@ void main() {
       tester.widget<TextField>(find.byType(TextField)).obscureText,
       isTrue,
     );
-    await tester.tap(find.byIcon(Icons.visibility_outlined));
+    await tester.tap(find.bySemanticsLabel('Token, masked.'));
     await tester.pump();
     expect(
       tester.widget<TextField>(find.byType(TextField)).obscureText,

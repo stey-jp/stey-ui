@@ -636,12 +636,13 @@
         "packages/kumo/src/components/sensitive-input/sensitive-input.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/input.dart"
+        "packages/stey_ui_modern/lib/src/input.dart",
+        "packages/stey_ui_modern/lib/src/sensitive_input.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native masked/revealed/empty modes, constant eight bullets, reveal/escape/blur semantics, value/selection ownership, four sizes, Field propagation and overlay copy tab with ordered two-second feedback implemented. Full inherited DOM/Form/IME, screen readers, pixels and physical-platform certification remain pending."
     },
     {
       "id": "sidebar",

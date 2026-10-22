@@ -20,6 +20,7 @@ import 'layer_card_example.dart';
 import 'tabs_example.dart';
 import 'input_example.dart';
 import 'input_group_example.dart';
+import 'sensitive_input_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -257,6 +258,9 @@ class _SteyGalleryState extends State<SteyGallery> {
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => InputSample(router.uri.queryParameters),
               'input-group' => InputGroupSample(router.uri.queryParameters),
+              'sensitive-input' => SensitiveInputSample(
+                router.uri.queryParameters,
+              ),
               'table-of-contents' => SizedBox(
                 width: 280,
                 child: SteyTableOfContents(
@@ -783,10 +787,7 @@ class _ComponentExampleState extends State<ComponentExample> {
       'banner' => const BannerExample(),
       'input' => const InputExample(),
       'input-group' => const InputGroupExample(),
-      'sensitive-input' => SteySensitiveInput(
-        controller: controller,
-        label: 'APIトークン',
-      ),
+      'sensitive-input' => const SensitiveInputExample(),
       'field' => const SteyField(
         label: 'アカウント名',
         description: 'この名前は公開されます。',

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
@@ -10,6 +11,7 @@ import 'theme.dart';
 import 'messages.dart';
 
 part 'input_group.dart';
+part 'sensitive_input.dart';
 
 class SteyLabel extends StatelessWidget {
   const SteyLabel(
@@ -546,48 +548,6 @@ class SteyInputArea extends SteyTextarea {
     super.autofocus,
     super.semanticLabel,
   });
-}
-
-class SteySensitiveInput extends StatefulWidget {
-  const SteySensitiveInput({
-    super.key,
-    this.controller,
-    this.label = 'Secret',
-    this.onChanged,
-    this.enabled = true,
-  });
-  final TextEditingController? controller;
-  final String label;
-  final ValueChanged<String>? onChanged;
-  final bool enabled;
-  @override
-  State<SteySensitiveInput> createState() => _SteySensitiveInputState();
-}
-
-class _SteySensitiveInputState extends State<SteySensitiveInput> {
-  bool visible = false;
-  @override
-  Widget build(BuildContext context) => SteyInput(
-    controller: widget.controller,
-    label: widget.label,
-    enabled: widget.enabled,
-    obscureText: !visible,
-    onChanged: widget.onChanged,
-    suffix: SteyButton(
-      onPressed: widget.enabled
-          ? () => setState(() => visible = !visible)
-          : null,
-      variant: SteyButtonVariant.ghost,
-      shape: SteyButtonShape.square,
-      semanticLabel: visible
-          ? SteyMessages.of(context).hide(widget.label)
-          : SteyMessages.of(context).show(widget.label),
-      child: Icon(
-        visible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-        size: 16,
-      ),
-    ),
-  );
 }
 
 class SteyTagInput extends StatefulWidget {
