@@ -791,12 +791,13 @@
         "packages/kumo/src/components/text/text.type-spec.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "packages/stey_ui_modern/lib/src/text.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native ten variants/four sizes,computed parent line height,medium/semibold,independent heading levels,rich InlineSpan,truncation/full semantics,RTL/scaling and Japanese demo implemented. Legacy heading/subtle preserved. HTML element/inline formatting,whitespace/selection,platform monospace,full pixels and physical-platform certification remain pending."
     },
     {
       "id": "toast",

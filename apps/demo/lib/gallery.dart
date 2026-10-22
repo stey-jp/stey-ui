@@ -22,6 +22,7 @@ import 'input_example.dart';
 import 'input_group_example.dart';
 import 'sensitive_input_example.dart';
 import 'tag_input_example.dart';
+import 'text_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -126,6 +127,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'text' => TextSample(router.uri.queryParameters),
               'tag-input' => TagInputSample(router.uri.queryParameters),
               'banner' => BannerSample(router.uri.queryParameters),
               'collapsible' => CollapsibleSample(router.uri.queryParameters),
@@ -1164,13 +1166,7 @@ class _ComponentExampleState extends State<ComponentExample> {
             ),
         ],
       ),
-      'text' => form([
-        const SteyText('見出し1', heading: 1),
-        const SteyText('見出し2', heading: 2),
-        const SteyText('見出し3', heading: 3),
-        const SteyText('本文の文字サイズは14pxです。'),
-        const SteyText('補足説明のテキストです。', subtle: true),
-      ]),
+      'text' => const TextExample(),
       'link' => SteyLink(
         onPressed: () => launchUrl(Uri.parse('https://kumo-ui.com')),
         external: true,

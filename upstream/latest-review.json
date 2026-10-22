@@ -237,5 +237,12 @@
     "dependency_button_field_styles_diff_empty_vs_7e0ff40": true,
     "change": "Native accepted tags/draft, partial validation and maximum feedback, controlled/uncontrolled state, delimiter/blur and composition guard, selection-aware native clipboard, readOnly and wrapping editor with localized Field. Latest upstream clipboard caret and readOnly fixes included; native HTML FormData/ValidityState and full IME/physical/pixel certification remain pending.",
     "synchronized_sha_advanced": false
+  },
+  "text_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "text_and_style_diff_empty_vs_7e0ff40": true,
+    "change": "Native ten variants/four sizes,computed inherited body/mono line height,heading metrics,weight and theme tokens,independent semantic heading levels,rich spans,truncation and Japanese controls. Historical heading/subtle API retained. Platform monospace,HTML element behavior/whitespace/selection,all pixels/platforms remain uncertified.",
+    "synchronized_sha_advanced": false
   }
 }

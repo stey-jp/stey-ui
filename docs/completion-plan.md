@@ -55,3 +55,5 @@ Inputに値の制御／非制御、4サイズ・エラー／無効色・即時fo
 SensitiveInputに固定の伏字・3状態、表示／非表示・入力blur、2秒のコピー通知、試行順序と破棄処理、日本語デモを追加しています。[API対応](sensitive-input-api-mapping.md)にコピー操作を経たfocusの仕様と、全Form／IME・視覚／実機の残件を保持します。
 
 TagInputに制御／非制御、検証・上限、失敗した入力の保持、区切りとblurでの確定、IME・readOnly、選択範囲への貼り付け、折り返しと日本語デモを追加しています。[API対応](tag-input-api-mapping.md)にHTML Form・全IME／Undo・視覚／実機の残件を保持します。
+
+Textに10種類・4サイズ、計算済み行高の継承、装飾と見出し階層の分離、rich span・省略・RTL・拡大と日本語デモを追加しています。[API対応](text-api-mapping.md)にHTML要素・OS等幅フォント・全視覚／実機の残件を保持します。

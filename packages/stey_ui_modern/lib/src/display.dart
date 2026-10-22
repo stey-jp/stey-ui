@@ -14,44 +14,7 @@ export 'banner.dart';
 export 'empty.dart';
 export 'meter.dart';
 export 'layer_card.dart';
-
-class SteyText extends StatelessWidget {
-  const SteyText(
-    this.data, {
-    super.key,
-    this.heading = 0,
-    this.subtle = false,
-    this.bold = false,
-  });
-  final String data;
-  final int heading;
-  final bool subtle, bold;
-  @override
-  Widget build(BuildContext context) => Semantics(
-    header: heading > 0,
-    child: Text(
-      data,
-      style: TextStyle(
-        fontSize: switch (heading) {
-          1 => 30,
-          2 => 24,
-          3 => 20,
-          4 => 16,
-          _ => 14,
-        },
-        height: 1.5,
-        fontWeight: heading > 0
-            ? FontWeight.w600
-            : bold
-            ? FontWeight.w500
-            : FontWeight.w400,
-        color: subtle
-            ? SteyTheme.colorsOf(context).subtle
-            : SteyTheme.colorsOf(context).text,
-      ),
-    ),
-  );
-}
+export 'text.dart';
 
 enum SteyBadgeVariant {
   primary,
