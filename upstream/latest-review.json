@@ -228,5 +228,14 @@
     "source_and_copy_hook_diff_empty_vs_7e0ff40": true,
     "change": "Native three-state secret editor, eight constant bullets and masked semantics, pointer/keyboard reveal and Escape, input-only blur behavior, controlled/controller ownership and selection, four sizes and inherited Field states. Overlay copy tab uses native clipboard and ordered two-second feedback. Eye/EyeSlash regular geometry retained with MIT notice. Full HTML/Form/IME, visual and physical-platform certification remain pending.",
     "synchronized_sha_advanced": false
+  },
+  "tag_input_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "base_ui_version": "1.9.0",
+    "source_diff_vs_7e0ff40": true,
+    "dependency_button_field_styles_diff_empty_vs_7e0ff40": true,
+    "change": "Native accepted tags/draft, partial validation and maximum feedback, controlled/uncontrolled state, delimiter/blur and composition guard, selection-aware native clipboard, readOnly and wrapping editor with localized Field. Latest upstream clipboard caret and readOnly fixes included; native HTML FormData/ValidityState and full IME/physical/pixel certification remain pending.",
+    "synchronized_sha_advanced": false
   }
 }

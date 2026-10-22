@@ -773,12 +773,13 @@
         "packages/kumo/src/components/tag-input/tag-input.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/input.dart"
+        "packages/stey_ui_modern/lib/src/input.dart",
+        "packages/stey_ui_modern/lib/src/tag_input.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native controlled/uncontrolled tag array and independent draft, validation/limit partial acceptance, delimiters and blur, active composition guard, selection-aware clipboard, readOnly, Field, wrapping/truncation and Japanese demo implemented. HTML FormData/ValidityState, keyCode229, rich Field, full IME/Undo/DOM, pixels and physical-platform certification remain pending."
     },
     {
       "id": "text",

@@ -21,6 +21,7 @@ import 'tabs_example.dart';
 import 'input_example.dart';
 import 'input_group_example.dart';
 import 'sensitive_input_example.dart';
+import 'tag_input_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -125,6 +126,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               orElse: () => SteyButtonShape.base,
             );
             final child = switch (sample) {
+              'tag-input' => TagInputSample(router.uri.queryParameters),
               'banner' => BannerSample(router.uri.queryParameters),
               'collapsible' => CollapsibleSample(router.uri.queryParameters),
               'empty' => EmptySample(router.uri.queryParameters),
@@ -1142,12 +1144,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         onSelected: widget.onSectionSelected,
         location: widget.sectionLocation,
       ),
-      'tag-input' => SteyTagInput(
-        value: tags,
-        onChanged: (v) => setState(() => tags = v),
-        label: '環境タグ',
-        placeholder: 'タグを追加',
-      ),
+      'tag-input' => const TagInputExample(),
       'layer-card' => const LayerCardExample(),
       'surface' => const LayerCardExample(surface: true),
       'empty' => const EmptyExample(),

@@ -58,7 +58,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | table | 全parts、選択、sort、sticky、スクロール、空/忙しい状態 | 全比較待ち |
 | table-of-contents | active位置、scroll spy、anchor、sticky、階層/狭幅 | Title/List/Item/Group、native scroll追跡、Web hash、不正%・raw fragment・Unicode対応を追加。12件の回帰テストあり。全実機・視覚認証は未完了。API対応資料を参照 |
 | tabs | 2種類・2サイズ、制御／非制御、手動／即時選択、focus、overflow・drag、RTL | [API対応](tabs-api-mapping.md)。実測200ms選択表示。DOMのtabindex・aria-disabled、公式RTL overflowとの差、全画素・実機は未認証 |
-| tag-input | add/remove、区切り、重複、IME、keyboard、disabled、overflow | 基本追加削除済み。全比較待ち |
+| tag-input | add/remove、区切り、重複、IME、keyboard、disabled、overflow | 制御／非制御、検証・上限と失敗した残りの保持、Enter／カンマ／Tab／Backspace・blur、IME中の確定抑止、選択範囲へ貼り付け、readOnly・Field・折り返しと日本語デモを追加。[API対応](tag-input-api-mapping.md)。HTML FormData／ValidityState、全IME／Undo・任意DOM／構成・全画素と実機の認証は残る |
 | text | 全variant、element、weight、mono、truncate、折返し | 全比較待ち |
 | toast | Provider/Manager/parts、queue、duration/pause、action、swipe、live region | 全比較待ち |
 | toolbar | group/separator、roving focus、orientation、toggle/link | 全比較待ち |

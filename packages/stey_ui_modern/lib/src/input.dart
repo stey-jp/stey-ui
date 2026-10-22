@@ -12,6 +12,7 @@ import 'messages.dart';
 
 part 'input_group.dart';
 part 'sensitive_input.dart';
+part 'tag_input.dart';
 
 class SteyLabel extends StatelessWidget {
   const SteyLabel(
@@ -548,95 +549,4 @@ class SteyInputArea extends SteyTextarea {
     super.autofocus,
     super.semanticLabel,
   });
-}
-
-class SteyTagInput extends StatefulWidget {
-  const SteyTagInput({
-    super.key,
-    required this.value,
-    required this.onChanged,
-    this.label = 'Tags',
-    this.placeholder = 'Add a tag',
-    this.enabled = true,
-    this.validate,
-    this.maxTags,
-  });
-  final List<String> value;
-  final ValueChanged<List<String>> onChanged;
-  final String label, placeholder;
-  final bool enabled;
-  final String? Function(String)? validate;
-  final int? maxTags;
-  @override
-  State<SteyTagInput> createState() => _SteyTagInputState();
-}
-
-class _SteyTagInputState extends State<SteyTagInput> {
-  final controller = TextEditingController();
-  String? error;
-  void add(String raw) {
-    if (!widget.enabled) return;
-    final tag = raw.trim();
-    if (tag.isEmpty) return;
-    final validation = widget.validate?.call(tag);
-    if (validation != null) {
-      setState(() => error = validation);
-      return;
-    }
-    if (widget.maxTags != null && widget.value.length >= widget.maxTags!) {
-      setState(() => error = SteyMessages.of(context).maxTags(widget.maxTags!));
-      return;
-    }
-    if (!widget.value.contains(tag)) widget.onChanged([...widget.value, tag]);
-    controller.clear();
-    setState(() => error = null);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => SteyField(
-    label: widget.label,
-    error: error,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Wrap(
-          spacing: 4,
-          runSpacing: 4,
-          children: widget.value
-              .map(
-                (tag) => SteyButton(
-                  size: SteySize.sm,
-                  onPressed: widget.enabled
-                      ? () => widget.onChanged(
-                          widget.value.where((v) => v != tag).toList(),
-                        )
-                      : null,
-                  semanticLabel: SteyMessages.of(context).remove(tag),
-                  trailing: const Icon(Icons.close, size: 12),
-                  child: Text(tag),
-                ),
-              )
-              .toList(),
-        ),
-        if (widget.value.isNotEmpty) const SizedBox(height: 6),
-        SteyInput(
-          controller: controller,
-          semanticLabel: widget.label,
-          placeholder: widget.placeholder,
-          enabled: widget.enabled,
-          onSubmitted: add,
-          onChanged: (value) {
-            if (value.endsWith(',')) add(value.substring(0, value.length - 1));
-          },
-        ),
-      ],
-    ),
-  );
 }

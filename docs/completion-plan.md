@@ -53,3 +53,5 @@ Tabsに制御／非制御・手動／即時選択、実測による200msの選�
 Inputに値の制御／非制御、4サイズ・エラー／無効色・即時focus枠、ラベル操作とInputAreaの自動伸縮を追加しています。[API対応](input-api-mapping.md)にForm・構造化validation・IME・任意属性・全視覚／実機の残件を保持します。InputGroupにもInput／Addon／Suffix／Button、共有・個別・混合枠、接尾辞の伸縮と日本語デモを追加しています。[API対応](input-group-api-mapping.md)に文字幅・tooltip・任意構成・全視覚／実機の残件を保持します。
 
 SensitiveInputに固定の伏字・3状態、表示／非表示・入力blur、2秒のコピー通知、試行順序と破棄処理、日本語デモを追加しています。[API対応](sensitive-input-api-mapping.md)にコピー操作を経たfocusの仕様と、全Form／IME・視覚／実機の残件を保持します。
+
+TagInputに制御／非制御、検証・上限、失敗した入力の保持、区切りとblurでの確定、IME・readOnly、選択範囲への貼り付け、折り返しと日本語デモを追加しています。[API対応](tag-input-api-mapping.md)にHTML Form・全IME／Undo・視覚／実機の残件を保持します。
