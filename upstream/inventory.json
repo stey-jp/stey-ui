@@ -468,12 +468,14 @@
         "packages/kumo/src/components/layer-card/layer-card.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "packages/stey_ui_modern/lib/src/layer_card.dart",
+        "apps/demo/lib/layer_card_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native simple/layered cards, Primary/Secondary, physical padding, negative block margins with primary foreground paint/hit ordering, legacy header/footer and Surface square/overflow-visible compatibility are implemented. Surface colors intentionally share paint. Japanese demo and comparisons cover curated configurations. Arbitrary flex children, outside-parent hit testing, all pixels, physical screen readers and full platform parity remain uncertified."
     },
     {
       "id": "layer-dialog",
@@ -682,12 +684,14 @@
         "packages/kumo/src/components/surface/surface.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/display.dart"
+        "packages/stey_ui_modern/lib/src/display.dart",
+        "packages/stey_ui_modern/lib/src/layer_card.dart",
+        "apps/demo/lib/layer_card_example.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native simple/layered cards, Primary/Secondary, physical padding, negative block margins with primary foreground paint/hit ordering, legacy header/footer and Surface square/overflow-visible compatibility are implemented. Surface colors intentionally share paint. Japanese demo and comparisons cover curated configurations. Arbitrary flex children, outside-parent hit testing, all pixels, physical screen readers and full platform parity remain uncertified."
     },
     {
       "id": "switch",

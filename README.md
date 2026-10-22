@@ -57,6 +57,8 @@ Meterに値域・独自表示値・数値書式・300msの幅変化と日本語�
 
 Sliderに複数つまみ・衝突方式・刻み値・確定通知・取消・RTLと日本語デモを追加しています。[SliderのAPI対応](docs/slider-api-mapping.md)に操作仕様とWebの意味情報に関するSDK制約を記録しています。
 
+LayerCardに単層／Primary・Secondaryの多層構成、余白・描画順・クリップを追加しています。Surfaceの非推奨互換APIと日本語デモも用意しています。[LayerCard／SurfaceのAPI対応](docs/layer-card-api-mapping.md)を参照してください。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

@@ -13,6 +13,7 @@ export 'loader.dart';
 export 'banner.dart';
 export 'empty.dart';
 export 'meter.dart';
+export 'layer_card.dart';
 
 class SteyText extends StatelessWidget {
   const SteyText(
@@ -275,65 +276,6 @@ class _BadgeBorder extends CustomPainter {
       color != oldDelegate.color ||
       dashed != oldDelegate.dashed ||
       outside != oldDelegate.outside;
-}
-
-class SteyLayerCard extends StatelessWidget {
-  const SteyLayerCard({
-    super.key,
-    required this.child,
-    this.header,
-    this.footer,
-    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-  });
-  final Widget child;
-  final Widget? header, footer;
-  final EdgeInsetsGeometry padding;
-  @override
-  Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: c.elevated,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: c.line, spreadRadius: 1),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: c.dark ? .3 : .06),
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (header != null) Padding(padding: padding, child: header),
-          Padding(
-            padding: const EdgeInsets.all(4),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: c.base,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(padding: padding, child: child),
-            ),
-          ),
-          if (footer != null) Padding(padding: padding, child: footer),
-        ],
-      ),
-    );
-  }
-}
-
-@Deprecated('Use SteyLayerCard.')
-class SteySurface extends SteyLayerCard {
-  const SteySurface({
-    super.key,
-    required super.child,
-    super.header,
-    super.footer,
-  });
 }
 
 enum SteyClipboardSize { sm, base, lg }

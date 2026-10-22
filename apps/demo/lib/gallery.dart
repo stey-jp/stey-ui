@@ -16,6 +16,7 @@ import 'loader_example.dart';
 import 'pagination_example.dart';
 import 'meter_example.dart';
 import 'slider_example.dart';
+import 'layer_card_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -243,6 +244,11 @@ class _SteyGalleryState extends State<SteyGallery> {
               'pagination' => PaginationSample(router.uri.queryParameters),
               'meter' => MeterSample(router.uri.queryParameters),
               'slider' => SliderSample(router.uri.queryParameters),
+              'layer-card' => LayerCardSample(router.uri.queryParameters),
+              'surface' => LayerCardSample({
+                ...router.uri.queryParameters,
+                'kind': 'surface',
+              }),
               'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => const SizedBox(
@@ -531,29 +537,47 @@ class _SteyGalleryState extends State<SteyGallery> {
                                           ],
                                         ),
                                         const SizedBox(height: 24),
-                                        SteyLayerCard(
-                                          header: const Row(
-                                            children: [
-                                              Expanded(
-                                                child: SteyText(
-                                                  '操作プレビュー',
-                                                  bold: true,
-                                                ),
-                                              ),
-                                              SteyBadge(child: Text('プレビュー')),
-                                            ],
-                                          ),
-                                          child: ComponentExample(
-                                            key: ValueKey(selected),
-                                            id: selected,
-                                            sectionLocation: router.uri,
-                                            onSectionSelected: (id) =>
-                                                router.navigate(
-                                                  router.uri.replace(
-                                                    fragment: id,
+                                        Builder(
+                                          builder: (context) {
+                                            const heading = Row(
+                                              children: [
+                                                Expanded(
+                                                  child: SteyText(
+                                                    '操作プレビュー',
+                                                    bold: true,
                                                   ),
                                                 ),
-                                          ),
+                                                SteyBadge(child: Text('プレビュー')),
+                                              ],
+                                            );
+                                            final example = ComponentExample(
+                                              key: ValueKey(selected),
+                                              id: selected,
+                                              sectionLocation: router.uri,
+                                              onSectionSelected: (id) =>
+                                                  router.navigate(
+                                                    router.uri.replace(
+                                                      fragment: id,
+                                                    ),
+                                                  ),
+                                            );
+                                            if (selected == 'layer-card' ||
+                                                selected == 'surface') {
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  heading,
+                                                  const SizedBox(height: 16),
+                                                  example,
+                                                ],
+                                              );
+                                            }
+                                            return SteyLayerCard(
+                                              header: heading,
+                                              child: example,
+                                            );
+                                          },
                                         ),
                                         const SizedBox(height: 24),
                                         const SteyBanner(
@@ -1165,11 +1189,8 @@ class _ComponentExampleState extends State<ComponentExample> {
         label: '環境タグ',
         placeholder: 'タグを追加',
       ),
-      'layer-card' || 'surface' => const SteyLayerCard(
-        header: SteyText('デプロイ', bold: true),
-        footer: SteyText('最終更新：たった今', subtle: true),
-        child: SteyText('Workerをデプロイできます。'),
-      ),
+      'layer-card' => const LayerCardExample(),
+      'surface' => const LayerCardExample(surface: true),
       'empty' => const EmptyExample(),
       'meter' => const MeterExample(),
       'loader' => const LoaderExample(),

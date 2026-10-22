@@ -40,7 +40,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | 描画・読み上げサンプルあり。全API比較待ち |
 | input-group | parts、padding、border/ring、icon/addon、disabled/focus | 全比較待ち |
 | label | tooltipのkeyboard/touch、optional、asContent、関連付け | 情報ボタンのタッチ・keyboardと読み上げテスト済み。全比較待ち |
-| layer-card | 複合parts、nested radius、header/footer、border、responsive | 全比較待ち |
+| layer-card | 単層／Primary・Secondary、負の余白、描画順、padding、clip | [API対応](layer-card-api-mapping.md)。直接の子から多層を選択、既存header／footerを保持。任意構成・全画素・実機は未認証 |
 | layer-dialog | 層構造、全parts、modal/focus、scroll、sticky境界 | 専用多層面・640pxでのシート切替、Action／Primary alias、alert・pending・split menu、固定見出し／操作欄を追加。14回帰テスト。全portal／Drawer挙動・視覚／実機認証は未完了。[API対応](layer-dialog-api-mapping.md) |
 | link | variant、外部link、visited/hover/focus、disabled、asChild | 全比較待ち |
 | loader | 全size、円形spinnerの回転/dash位相、SkeletonLine、loop、ラベル | 3サイズpreset・status、SkeletonLineの乱数／遅延／8px／blockHeight、日本語デモを追加。[API対応](loader-api-mapping.md)。widget software rasterの固定位相と公式を比較し、Web動作は別途検査。全Web位相・実機認証は残る |
@@ -53,7 +53,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | reveal/valueの基本テストあり。全比較待ち |
 | sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | MenuSub/Item/Buttonと装飾ガイドを追加し、階層リスト・選択保持の2テストを追加。resize／sliding views検証も維持。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
 | slider | 水平、値域、step、複数thumb、衝突方式、keyboard、常時表示値 | [API対応](slider-api-mapping.md)。標準Sliderの透明overlayを廃止。Web入力名の欠落・代理の数値属性・無効時の役割、Form連携・任意構成・実機・全画素は未認証 |
-| surface | variant、境界、nested構成、padding、theme | 全比較待ち |
+| surface | 非推奨互換、color、角丸・overflow、padding、theme | [API対応](layer-card-api-mapping.md)。LayerCardへ委譲し角丸0・overflow-visible。外側hit test・任意構成・全画素・実機は未認証 |
 | switch | 単体/Item/Group/Legend、default/neutral、3size、busy、150ms遷移 | ネイティブ描画・グループ・操作テスト追加。全API・位相比較待ち |
 | table | 全parts、選択、sort、sticky、スクロール、空/忙しい状態 | 全比較待ち |
 | table-of-contents | active位置、scroll spy、anchor、sticky、階層/狭幅 | Title/List/Item/Group、native scroll追跡、Web hash、不正%・raw fragment・Unicode対応を追加。12件の回帰テストあり。全実機・視覚認証は未完了。API対応資料を参照 |
