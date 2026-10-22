@@ -1,4 +1,4 @@
-# 検証結果（Slider：2026-10-22）
+# 検証結果（LayerCard／Surface：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -685,3 +685,26 @@ Material SliderをFlutterの描画・Focus・Semantics・ポインター処理�
 - isolated_desktop：87 / 94 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Flutter Webの数値属性は実値ではなく相対増減用の代理値で、実値はaria-valuetextへ渡します。無効時のDOM slider役割・HTML Form連携・全書式・任意構成・文字拡大・タッチ競合・screen readerも未認証です。Linux／macOS／iOS・物理実機は今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciはprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## LayerCard／Surfaceの追加検証（2026-10-22）
+
+ソースSHA `697201f088ac8d2629fc5d945647e1c9ca264339`。静的解析0件、ライブラリ431件・デモ34件の計465件とPython20件が成功しました。新規は14／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。[API対応](layer-card-api-mapping.md)に仕様と残件を保持します。
+
+単層のbase背景・8px角丸・shadow-xs・lineリング、多層Rootのelevated背景・hairlineリングとPrimary／Secondaryを追加しました。Primaryの物理方向の右12px余白・8px間隔、Secondaryの上下−8px余白、後続フッターより手前に描画するPrimaryの配置とクリック判定に対応します。読み上げ順と入力内容は維持します。既存header／footerは各セクションへ変換し、明示paddingを保持します。Surfaceは公式同様に非推奨の互換APIで、既定の角丸0・overflow-visible、colorの2値が同じ描画であることを保持します。日本語ギャラリーはカードを二重に重ねない表示にしています。最新公式947065aの両ソースは7e0ff40から差分なしです。
+
+実Chrome 155.0.8059.86でLight/Dark・Card／Surfaceの76条件を公式と比較しました。単層・多層・Primaryだけ・header省略・footer・複数本文・既存API・余白／角丸・160px長文・RTL・font18pxの継承・はみ出しを含みます。RootとPrimaryの矩形は1px以内、フッターと重なるPrimaryの背景色も一致し、実行時エラー0件です。Secondaryのクリップされた意味情報矩形は別に記録します。装飾のみのFlutter比較枠はSDKがgroup役割を省くため、同じ実寸の意味情報ノードを取得します。領域の画素差はthreshold0.1で0.000〜3.679%です。**全画素・全体の視覚認証ではありません。** 参照と候補のInter-Regular.ttfのSHA一致と、Chromeの実際のInter-Regular使用を確認していますが、文字を含む描画の画素差は残ります。
+
+日本語デモはLayerCard／Surface・390／1280px・Light/Darkの8条件で、カード内のボタン、長文・RTL・角丸・footer、単層／既存APIへの切替、Surface color、はみ出し表示と隣接ボタンを操作しました。Widgetテストでは負の余白のクリック領域、Primaryの手前描画に対応するクリック順、入力保持、160px／文字倍率2とintrinsic heightも検査しています。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_card_mobile：83 / 100 / 81 / 100。実行警告0件。
+- gallery_card_desktop：93 / 96 / 81 / 100。実行警告0件。
+- gallery_surface_mobile：82 / 100 / 81 / 100。実行警告0件。
+- gallery_surface_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_card_mobile：70 / 100 / 81 / 100。実行警告0件。
+- isolated_card_desktop：100 / 100 / 81 / 100。実行警告0件。
+- isolated_surface_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_surface_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧の操作領域は残件です。任意のflex構成・文字拡大・全画素・screen reader、Surfaceの親境界外へのhit testも未認証です。Linux／macOS／iOS・物理実機は今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
