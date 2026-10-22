@@ -18,6 +18,7 @@ import 'meter_example.dart';
 import 'slider_example.dart';
 import 'layer_card_example.dart';
 import 'tabs_example.dart';
+import 'input_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -253,13 +254,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               }),
               'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
-              'input' => const SizedBox(
-                width: 280,
-                child: SteyInput(
-                  placeholder: 'Project name',
-                  semanticLabel: 'Name',
-                ),
-              ),
+              'input' => InputSample(router.uri.queryParameters),
               'table-of-contents' => SizedBox(
                 width: 280,
                 child: SteyTableOfContents(
@@ -784,21 +779,7 @@ class _ComponentExampleState extends State<ComponentExample> {
       'button-group' => const ButtonGroupExample(),
       'badge' => const BadgeExample(),
       'banner' => const BannerExample(),
-      'input' => form([
-        const SteyInput(
-          label: 'プロジェクト名',
-          placeholder: 'my-project',
-          required: true,
-          description: '重複しない名前を指定してください。',
-        ),
-        const SteyInput(
-          label: 'メール',
-          error: '有効なメールアドレスを入力してください',
-          placeholder: 'name@example.com',
-        ),
-        const SteyTextarea(label: '説明', placeholder: 'プロジェクトの説明を入力'),
-        const SteyInput(label: '無効な入力欄', enabled: false, placeholder: '利用不可'),
-      ]),
+      'input' => const InputExample(),
       'input-group' => const SteyInputGroup(
         addon: Text('https://'),
         suffix: Text('.com'),

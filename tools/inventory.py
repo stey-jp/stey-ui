@@ -78,7 +78,7 @@ FIELDS = {
     'text':'text-color-kumo-default', 'inverse':'text-color-kumo-inverse',
     'strong':'text-color-kumo-strong',
     'subtle':'text-color-kumo-subtle', 'link':'text-color-kumo-link',
-    'placeholder':'text-color-kumo-placeholder',
+    'inactive':'text-color-kumo-inactive', 'placeholder':'text-color-kumo-placeholder',
     'danger':'color-kumo-danger', 'dangerText':'text-color-kumo-danger',
     'success':'color-kumo-success', 'info':'color-kumo-info', 'warning':'color-kumo-warning',
     'successText':'text-color-kumo-success', 'warningText':'text-color-kumo-warning',

@@ -37,7 +37,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | flow | 全export、接続/edge、layout、選択、pan/zoom、keyboard | List/Parallelからの自動接続、内容測定・動的再配置、縦／center／末尾揃えを追加。既存DAG・アンカー維持。背景pan・両軸wheel・overflow通知・scroll表示を追加。maxWidthでの折り返しと再配置を追加。標準ノードの自動幅・初期幅履歴・再作成時の測定を追加。全custom／入力・視覚／実機認証は未完了。[API対応](flow-api-mapping.md) |
 | grid | 全export、columns/gap、breakpoints、overflow | 全比較待ち |
 | inline-copy-text | copy、feedback、本文/tooltip、幅制約 | 枠なし表示・コピー値・rich child・省略・disabled・keyboard・親group・150ms fade・1.5秒通知を追加。[API対応](inline-copy-api-mapping.md)。等幅glyph、truncate=falseの長い未分割文字列、全視覚・実機認証は未完了 |
-| input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | 描画・読み上げサンプルあり。全API比較待ち |
+| input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | [API対応](input-api-mapping.md)。4サイズ・値管理・即時focus枠・inactive色・ラベル操作、InputAreaの自動伸縮を追加。全HTML type／Form／構造化validation・IME・全画素・実機は未認証 |
 | input-group | parts、padding、border/ring、icon/addon、disabled/focus | 全比較待ち |
 | label | tooltipのkeyboard/touch、optional、asContent、関連付け | 情報ボタンのタッチ・keyboardと読み上げテスト済み。全比較待ち |
 | layer-card | 単層／Primary・Secondary、負の余白、描画順、padding、clip | [API対応](layer-card-api-mapping.md)。直接の子から多層を選択、既存header／footerを保持。任意構成・全画素・実機は未認証 |

@@ -1,55 +1,11 @@
+import 'dart:ui' show SemanticsValidationResult;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'button.dart';
 import 'theme.dart';
 import 'messages.dart';
-
-// Kumo uses an outer CSS ring. Its stroke does not consume input padding.
-class _SteyRingInputBorder extends OutlineInputBorder {
-  const _SteyRingInputBorder({
-    required super.borderSide,
-    required super.borderRadius,
-  }) : super(gapPadding: 0);
-  @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
-  @override
-  _SteyRingInputBorder copyWith({
-    BorderSide? borderSide,
-    BorderRadius? borderRadius,
-    double? gapPadding,
-  }) => _SteyRingInputBorder(
-    borderSide: borderSide ?? this.borderSide,
-    borderRadius: borderRadius ?? this.borderRadius,
-  );
-  @override
-  _SteyRingInputBorder scale(double t) =>
-      copyWith(borderSide: borderSide.scale(t));
-  @override
-  ShapeBorder? lerpFrom(ShapeBorder? a, double t) =>
-      a is _SteyRingInputBorder ? this : super.lerpFrom(a, t);
-  @override
-  ShapeBorder? lerpTo(ShapeBorder? b, double t) =>
-      b is _SteyRingInputBorder ? b : super.lerpTo(b, t);
-  @override
-  void paint(
-    Canvas canvas,
-    Rect rect, {
-    double? gapStart,
-    double gapExtent = 0,
-    double gapPercentage = 0,
-    TextDirection? textDirection,
-  }) {
-    final radius = borderRadius.topLeft.x + borderSide.width / 2;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        rect.inflate(borderSide.width / 2),
-        Radius.circular(radius),
-      ),
-      borderSide.toPaint(),
-    );
-  }
-}
 
 class SteyLabel extends StatelessWidget {
   const SteyLabel(
@@ -62,6 +18,7 @@ class SteyLabel extends StatelessWidget {
     this.tooltipAriaLabel = 'More information',
     this.excludeTextSemantics = false,
     this.weight = FontWeight.w500,
+    this.onTap,
   });
   final String text, optionalLabel, tooltipAriaLabel;
   final String? tooltip;
@@ -69,6 +26,7 @@ class SteyLabel extends StatelessWidget {
   final bool showOptional;
   final bool excludeTextSemantics;
   final FontWeight weight;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => Wrap(
     spacing: 4,
@@ -76,29 +34,42 @@ class SteyLabel extends StatelessWidget {
     children: [
       ExcludeSemantics(
         excluding: excludeTextSemantics,
-        child: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(text: text),
-              if (showOptional || required == false)
-                TextSpan(
-                  text: ' $optionalLabel',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: SteyTheme.colorsOf(context).subtle,
+        child: GestureDetector(
+          onTap: onTap,
+          excludeFromSemantics: true,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: text),
+                if (showOptional || required == false)
+                  TextSpan(
+                    text:
+                        ' ${optionalLabel == '(optional)' && SteyMessages.of(context).japanese ? '（任意）' : optionalLabel}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: SteyTheme.colorsOf(context).subtle,
+                    ),
                   ),
-                ),
-            ],
-          ),
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: weight,
-            color: SteyTheme.colorsOf(context).text,
+              ],
+            ),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: weight,
+              color: SteyTheme.colorsOf(context).text,
+              height: 1.5,
+            ),
           ),
         ),
       ),
       if (tooltip != null)
-        _SteyLabelInfo(message: tooltip!, semanticLabel: tooltipAriaLabel),
+        _SteyLabelInfo(
+          message: tooltip!,
+          semanticLabel:
+              tooltipAriaLabel == 'More information' &&
+                  SteyMessages.of(context).japanese
+              ? '詳しい情報'
+              : tooltipAriaLabel,
+        ),
     ],
   );
 }
@@ -145,11 +116,13 @@ class SteyField extends StatelessWidget {
     this.required,
     this.hideLabel = false,
     this.labelTooltip,
+    this.onLabelTap,
   });
   final Widget child;
   final String? label, description, error, labelTooltip;
   final bool? required;
   final bool hideLabel;
+  final VoidCallback? onLabelTap;
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
@@ -158,7 +131,12 @@ class SteyField extends StatelessWidget {
       if (label != null && !hideLabel)
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: SteyLabel(label!, required: required, tooltip: labelTooltip),
+          child: SteyLabel(
+            label!,
+            required: required,
+            tooltip: labelTooltip,
+            onTap: onLabelTap,
+          ),
         ),
       child,
       if (description != null && (error == null || error!.isEmpty))
@@ -192,15 +170,22 @@ class SteyField extends StatelessWidget {
   );
 }
 
-class SteyInput extends StatelessWidget {
+enum SteyInputVariant { standard, error }
+
+class SteyInput extends StatefulWidget {
   const SteyInput({
     super.key,
     this.controller,
+    this.value,
+    this.defaultValue = '',
     this.label,
     this.placeholder,
     this.description,
     this.error,
+    this.labelTooltip,
+    this.variant,
     this.onChanged,
+    this.onValueChange,
     this.onSubmitted,
     this.enabled = true,
     this.readOnly = false,
@@ -208,113 +193,240 @@ class SteyInput extends StatelessWidget {
     this.obscureText = false,
     this.size = SteySize.base,
     this.maxLines = 1,
+    this.autoResize = false,
+    this.minRows = 1,
+    this.maxRows,
     this.keyboardType,
+    this.textInputAction,
+    this.autofillHints,
     this.focusNode,
     this.prefix,
     this.suffix,
     this.inputFormatters,
     this.autofocus = false,
     this.semanticLabel,
-  });
+  }) : assert(controller == null || value == null),
+       assert(maxLines > 0),
+       assert(minRows > 0 && (maxRows == null || maxRows >= minRows)),
+       assert(!obscureText || (maxLines == 1 && !autoResize));
   final TextEditingController? controller;
-  final String? label, placeholder, description, error, semanticLabel;
-  final ValueChanged<String>? onChanged, onSubmitted;
-  final bool enabled, readOnly, obscureText, autofocus;
+  final String? value;
+  final String defaultValue;
+  final String? label,
+      placeholder,
+      description,
+      error,
+      semanticLabel,
+      labelTooltip;
+  final SteyInputVariant? variant;
+  final ValueChanged<String>? onChanged, onValueChange, onSubmitted;
+  final bool enabled, readOnly, obscureText, autofocus, autoResize;
   final bool? required;
   final SteySize size;
-  final int maxLines;
+  final int maxLines, minRows;
+  final int? maxRows;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
   final FocusNode? focusNode;
   final Widget? prefix, suffix;
   final List<TextInputFormatter>? inputFormatters;
   @override
+  State<SteyInput> createState() => _SteyInputState();
+}
+
+class _SteyInputState extends State<SteyInput> {
+  TextEditingController? internal;
+  FocusNode? internalFocus;
+  TextEditingController get controller => widget.controller ?? internal!;
+  FocusNode get focus => widget.focusNode ?? internalFocus!;
+  bool get multiline => widget.maxLines != 1 || widget.autoResize;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.controller == null) {
+      internal = TextEditingController(
+        text: widget.value ?? widget.defaultValue,
+      );
+    }
+    if (widget.focusNode == null) internalFocus = FocusNode();
+    focus.addListener(focusChanged);
+  }
+
+  @override
+  void didUpdateWidget(SteyInput old) {
+    super.didUpdateWidget(old);
+    if (old.controller != widget.controller) {
+      final previous = old.controller?.value ?? internal!.value;
+      internal?.dispose();
+      internal = widget.controller == null
+          ? TextEditingController.fromValue(previous)
+          : null;
+    }
+    if (old.focusNode != widget.focusNode) {
+      (old.focusNode ?? internalFocus!).removeListener(focusChanged);
+      internalFocus?.dispose();
+      internalFocus = widget.focusNode == null ? FocusNode() : null;
+      focus.addListener(focusChanged);
+    }
+    restoreValue();
+  }
+
+  void focusChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void restoreValue() {
+    final value = widget.value;
+    if (value == null || controller.text == value) return;
+    final selection = controller.selection;
+    controller.value = TextEditingValue(
+      text: value,
+      selection: selection.isValid
+          ? TextSelection(
+              baseOffset: selection.baseOffset.clamp(0, value.length),
+              extentOffset: selection.extentOffset.clamp(0, value.length),
+            )
+          : TextSelection.collapsed(offset: value.length),
+    );
+  }
+
+  void change(String value) {
+    widget.onChanged?.call(value);
+    widget.onValueChange?.call(value);
+    if (widget.value != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) restoreValue();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    focus.removeListener(focusChanged);
+    internal?.dispose();
+    internalFocus?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final c = SteyTheme.colorsOf(context);
-    final hasError = error?.isNotEmpty ?? false;
-    OutlineInputBorder border(Color color, [double width = 1]) =>
-        _SteyRingInputBorder(
-          borderRadius: BorderRadius.circular(size.radius),
-          borderSide: BorderSide(color: color, width: width),
-        );
+    final c = SteyTheme.colorsOf(context),
+        hasError = widget.error?.isNotEmpty ?? false,
+        errorStyle =
+            widget.variant == SteyInputVariant.error ||
+            (widget.variant == null && hasError),
+        focused = focus.hasFocus && widget.enabled,
+        ringColor = errorStyle
+            ? c.danger
+            : focused
+            ? c.focus.withValues(alpha: .5)
+            : c.line,
+        fontSize = widget.size.fontSize,
+        lineHeight = fontSize == 12 ? 16 / 12 : 1.5;
+    final style = TextStyle(
+      fontFamily: 'Inter',
+      package: 'stey_ui_modern',
+      fontSize: fontSize,
+      height: lineHeight,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+      color: widget.enabled ? c.text : c.inactive,
+    );
     return SteyField(
-      label: label,
-      description: description,
-      error: error,
-      required: required,
+      label: widget.label?.isNotEmpty == true
+          ? widget.label
+          : hasError || widget.description?.isNotEmpty == true
+          ? ''
+          : null,
+      description: widget.description,
+      error: widget.error,
+      required: widget.required,
+      labelTooltip: widget.labelTooltip,
+      onLabelTap: widget.enabled ? focus.requestFocus : null,
       child: Semantics(
-        label: semanticLabel ?? label ?? placeholder,
-        hint: hasError ? error : description,
-        isRequired: required,
-        child: SizedBox(
-          height: maxLines == 1 ? size.height : null,
-          child: TextField(
-            controller: controller,
-            onChanged: onChanged,
-            onSubmitted: onSubmitted,
-            enabled: enabled,
-            readOnly: readOnly,
-            obscureText: obscureText,
-            autofocus: autofocus,
-            focusNode: focusNode,
-            maxLines: maxLines,
-            textAlignVertical: maxLines == 1
-                ? TextAlignVertical.center
-                : TextAlignVertical.top,
-            keyboardType: keyboardType,
-            inputFormatters: inputFormatters,
-            style: TextStyle(
-              fontSize: size.fontSize,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0,
-              color: enabled ? c.text : c.subtle,
-              height: 1.5,
+        label: widget.semanticLabel ?? widget.label ?? widget.placeholder,
+        hint: hasError ? widget.error : widget.description,
+        isRequired: widget.required,
+        validationResult: hasError
+            ? SemanticsValidationResult.invalid
+            : SemanticsValidationResult.none,
+        child: CustomPaint(
+          foregroundPainter: _InputRing(
+            ringColor,
+            widget.size.radius,
+            focused ? 1.5 : 1,
+          ),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: c.control,
+              borderRadius: BorderRadius.circular(widget.size.radius),
             ),
-            cursorColor: c.focus,
-            decoration: InputDecoration(
-              isDense: maxLines != 1,
-              visualDensity: VisualDensity.standard,
-              constraints: maxLines == 1
-                  ? BoxConstraints.tightFor(height: size.height)
-                  : null,
-              filled: true,
-              fillColor: c.control,
-              hint: placeholder == null
-                  ? null
-                  : ExcludeSemantics(
-                      child: Text(
-                        placeholder!,
-                        style: TextStyle(
-                          color: c.placeholder,
-                          fontFamily: 'Inter',
-                          package: 'stey_ui_modern',
-                          fontSize: size.fontSize,
-                          fontWeight: FontWeight.w400,
-                          // Reset Material's 0.5px tracking to CSS's normal spacing.
-                          letterSpacing: 0,
-                          height: 1.5,
+            child: SizedBox(
+              height: multiline ? null : widget.size.height,
+              child: TextField(
+                controller: controller,
+                focusNode: focus,
+                onChanged: change,
+                onSubmitted: widget.onSubmitted,
+                enabled: widget.enabled,
+                readOnly: widget.readOnly,
+                obscureText: widget.obscureText,
+                autofocus: widget.autofocus,
+                minLines: multiline
+                    ? widget.autoResize
+                          ? widget.minRows
+                          : widget.maxLines
+                    : 1,
+                maxLines: widget.autoResize ? widget.maxRows : widget.maxLines,
+                textAlignVertical: multiline
+                    ? TextAlignVertical.top
+                    : TextAlignVertical.center,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                autofillHints: widget.autofillHints,
+                inputFormatters: widget.inputFormatters,
+                style: style,
+                strutStyle: StrutStyle.fromTextStyle(
+                  style,
+                  forceStrutHeight: true,
+                ),
+                cursorColor: c.text,
+                decoration: InputDecoration(
+                  isDense: true,
+                  visualDensity: VisualDensity.standard,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  filled: false,
+                  hintFadeDuration: Duration.zero,
+                  hint: widget.placeholder == null
+                      ? null
+                      : ExcludeSemantics(
+                          child: Text(
+                            widget.placeholder!,
+                            style: style.copyWith(color: c.placeholder),
+                          ),
                         ),
-                      ),
-                    ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: size.padding,
-                vertical: maxLines == 1 ? 0 : 12,
-              ),
-              border: border(c.line),
-              enabledBorder: border(hasError ? c.dangerText : c.line),
-              focusedBorder: border(
-                hasError ? c.dangerText : c.focus.withValues(alpha: .5),
-                1.5,
-              ),
-              disabledBorder: border(c.line.withValues(alpha: .5)),
-              prefixIcon: prefix,
-              suffixIcon: suffix,
-              prefixIconConstraints: BoxConstraints(
-                minHeight: size.height,
-                minWidth: size.height,
-              ),
-              suffixIconConstraints: BoxConstraints(
-                minHeight: size.height,
-                minWidth: size.height,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: widget.size.padding,
+                    vertical: multiline
+                        ? 8
+                        : (widget.size.height - fontSize * lineHeight) / 2,
+                  ),
+                  prefixIcon: widget.prefix,
+                  suffixIcon: widget.suffix,
+                  prefixIconConstraints: BoxConstraints(
+                    minHeight: widget.size.height,
+                    minWidth: widget.size.height,
+                  ),
+                  suffixIconConstraints: BoxConstraints(
+                    minHeight: widget.size.height,
+                    minWidth: widget.size.height,
+                  ),
+                ),
               ),
             ),
           ),
@@ -324,19 +436,88 @@ class SteyInput extends StatelessWidget {
   }
 }
 
+class _InputRing extends CustomPainter {
+  const _InputRing(this.color, this.radius, this.width);
+  final Color color;
+  final double radius, width;
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawRRect(
+    RRect.fromRectAndRadius(
+      (Offset.zero & size).inflate(width / 2),
+      Radius.circular(radius + width / 2),
+    ),
+    Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = width,
+  );
+  @override
+  bool shouldRepaint(_InputRing old) =>
+      color != old.color || radius != old.radius || width != old.width;
+}
+
 class SteyTextarea extends SteyInput {
   const SteyTextarea({
     super.key,
     super.controller,
+    super.value,
+    super.defaultValue,
     super.label,
     super.placeholder,
     super.description,
     super.error,
+    super.labelTooltip,
+    super.variant,
     super.onChanged,
+    super.onValueChange,
     super.enabled,
+    super.readOnly,
     super.required,
+    super.size,
     super.maxLines = 4,
+    super.autoResize,
+    super.minRows,
+    super.maxRows,
+    super.keyboardType = TextInputType.multiline,
+    super.textInputAction,
+    super.autofillHints,
     super.focusNode,
+    super.inputFormatters,
+    super.autofocus,
+    super.semanticLabel,
+  });
+}
+
+/// The upstream InputArea name, with its browser-default two-row height.
+class SteyInputArea extends SteyTextarea {
+  const SteyInputArea({
+    super.key,
+    super.controller,
+    super.value,
+    super.defaultValue,
+    super.label,
+    super.placeholder,
+    super.description,
+    super.error,
+    super.labelTooltip,
+    super.variant,
+    super.onChanged,
+    super.onValueChange,
+    super.enabled,
+    super.readOnly,
+    super.required,
+    super.size,
+    super.maxLines = 2,
+    super.autoResize,
+    super.minRows,
+    super.maxRows,
+    super.keyboardType,
+    super.textInputAction,
+    super.autofillHints,
+    super.focusNode,
+    super.inputFormatters,
+    super.autofocus,
+    super.semanticLabel,
   });
 }
 

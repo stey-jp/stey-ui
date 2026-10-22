@@ -420,7 +420,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Four sizes with exact line metrics and external immediate focus/error ring, inactive disabled text, label focus, controlled/uncontrolled/controller ownership, error semantics, InputArea fixed/auto resizing and Japanese demo. Full HTML types/Form/ValidityState, arbitrary attrs, IME, native selection/scrollbar/full visual and physical screen-reader certification pending. See docs/input-api-mapping.md."
     },
     {
       "id": "input-group",

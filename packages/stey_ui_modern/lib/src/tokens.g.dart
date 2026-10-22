@@ -23,6 +23,7 @@ class SteyColors {
   Color get strong => Color(dark ? 0xfffafafa : 0xff0a0a0a);
   Color get subtle => Color(dark ? 0xffa1a1a1 : 0xff737373);
   Color get link => Color(dark ? 0xff51a2ff : 0xff193cb8);
+  Color get inactive => Color(dark ? 0xff525252 : 0xffd4d4d4);
   Color get placeholder => Color(dark ? 0xff737373 : 0xffa1a1a1);
   Color get danger => Color(dark ? 0xffe7000b : 0xfffb2c36);
   Color get dangerText => Color(dark ? 0xffff6467 : 0xffc10007);

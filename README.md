@@ -61,6 +61,8 @@ LayerCardに単層／Primary・Secondaryの多層構成、余白・描画順・�
 
 Tabsに手動／即時選択、2種類・2サイズ、200msの選択表示、横スクロール・ドラッグ・RTLと日本語デモを追加しています。[TabsのAPI対応](docs/tabs-api-mapping.md)に既定動作の変更とWebのfocus・無効状態のSDK制約を記録しています。
 
+Inputに制御／非制御、4サイズの即時フォーカス枠、無効色、ラベル操作を追加しています。InputAreaの内容に応じた伸縮と日本語デモも用意しています。[InputのAPI対応](docs/input-api-mapping.md)にForm・IME・全属性の残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ
