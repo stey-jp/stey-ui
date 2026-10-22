@@ -1,4 +1,4 @@
-# 検証結果（SensitiveInput：2026-10-22）
+# 検証結果（TagInput：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -790,3 +790,22 @@ Input／Addon／Suffix／Button、共有・個別・混合枠、4サイズ、1px
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 SensitiveInput単体はMobile／DesktopともAccessibility100点で、修正前のlabel-content-name-mismatchとtarget-sizeの指摘が解消しました。ギャラリーDesktopのtarget-sizeは既存の一覧側に残ります。全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDKのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧の操作領域、全DOM意味情報と過去のレンダラエラーは残件です。全HTML／Form／ValidityState・rich Field／全IME・screen reader・全画素は未認証です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新README・setup・coverageを確認してもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## TagInputの追加検証（2026-10-22）
+
+ソースSHA `529e2d03d6532b46b2cb946d0c95d0a7b6f8286f`。静的解析0件、ライブラリ539件・デモ48件の計587件とPython20件が成功しました。新規は27／3件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、4つの製品ソースとWasm source mapの埋め込み内容が一致しました。[API対応](tag-input-api-mapping.md)に仕様と残件を保持します。
+
+タグ一覧と入力途中の文字を分離し、制御／非制御・重複除外・検証／上限による途中採用と失敗した残りの保持を追加しました。Enter／カンマ／Tab／Backspace・入力blur、変換中の確定抑止、翻訳ラベル・Field・readOnly／disabledに対応します。選択範囲を考慮した実Clipboardの貼り付け、古い試行・編集後・破棄後の結果抑止を検証しました。24pxのタグと残り幅へ伸びる最小128pxの入力を同じ枠へ折り返して配置し、長いタグを省略します。入力名へ隣のタグ本文が混ざる問題をSemanticsの分離で修正し、マウス／WebのSemantics経由の削除操作では入力blurによる確定を抑止しfocusを戻します。矢印・Home／EndとShift選択をFlutter標準の編集アクションへ接続し、Webの貼り付けが選択範囲へ挿入されることを確認しました。空欄Enter／software doneではタグを通知しません。SDKの初期focusだけで空欄確定が通知される差も抑止しました。既存onChanged／validate／maxTagsを維持し、既定の可視ラベル・placeholderと空欄確定通知は公式に揃えています。
+
+実Chrome 155.0.8059.86でLight/Darkの66条件・132状態を公式947065aと比較しました。標準／hover／focus、160／280px・長いタグ・RTL、空／無効／readOnly、Field／errorと明示standard、各確定キー・末尾削除・個別削除・blur、上限・途中検証、キャレット末尾／選択範囲／区切りなし／改行付きの実貼り付け、拒否する制御側／非制御／ラベル操作を含みます。採用済み配列・通知回数・入力途中の文字が一致し、外枠の矩形差は1px以内、実行時エラー0件でした。画素差はthreshold0.1で0.314〜5.666%、同じInter Regular／MediumのSHA一致を確認しましたが、全画素の認証ではありません。blurやField挿入後の非focus DOM代理値が遅れるため、両方へfocusを戻して実際のdraftを読みます。初期focus・DOM属性は別途記録し、disabled時にtextboxのAX役割がないSDKの差も残します。
+
+日本語デモは390／1280px・Light/Darkの4条件で、日本語の追加／削除・重複、改行付き実貼り付けと上限失敗の残り、翻訳した検証エラー、空欄／再設定・RTL／制御／必須切替、readOnly／disabledと隣接操作を確認しました。HTML FormDataのhidden input、ネイティブのrequired制約検証・ValidityState・rich Field／matchは非対応です。Safari固有の生keyCode229はFlutter公開KeyEventに存在せず、TextEditingValue.composingの変換中処理をテストしています。全IME／Undo／物理タッチとscreen readerの認証は残ります。過去のTabsとInputGroupの一過性SkWasmエラーは原因未確定のまま保持し、今回の成功で解消済みとは扱いません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：76 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：98 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：95 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+TagInput単体はMobile／DesktopともAccessibility100点でした。ギャラリーDesktopには既存の一覧側のtarget-sizeが残ります。全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDKのIntlV8BreakIterator、自社の起動・転送量・一覧の操作領域、全DOM意味情報と過去のレンダラエラーは残件です。今回のvalid-source-mapsは4条件とも成功しました。過去のSkWasm map診断は当時の記録を維持し、今回の指摘なしで全般的な解消とは扱いません。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
