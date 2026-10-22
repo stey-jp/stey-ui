@@ -52,7 +52,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | select | 全parts、placeholder、groups、disabled、多選択、search/typeahead、position | native overlay、複数選択、group/disabled、readOnly、typeahead、画面端の反転を追加。Form・任意anchor/trigger・SDKのWeb役割制約・全比較待ち |
 | sensitive-input | reveal/copy、focus/value保持、type、エラー、disabled | reveal/valueの基本テストあり。全比較待ち |
 | sidebar | 全parts、expanded/collapsed、peeking/mobile、resize、sliding views、navigation | MenuSub/Item/Buttonと装飾ガイドを追加し、階層リスト・選択保持の2テストを追加。resize／sliding views検証も維持。全認証は未完了。[API対応](button-sidebar-api-mapping.md) |
-| slider | 水平、値域、step、複数thumb、衝突方式、keyboard、常時表示値 | [API対応](slider-api-mapping.md)。標準Sliderの透明overlayを廃止。代理の数値属性・無効時のWeb役割、Form連携・任意構成・実機・全画素は未認証 |
+| slider | 水平、値域、step、複数thumb、衝突方式、keyboard、常時表示値 | [API対応](slider-api-mapping.md)。標準Sliderの透明overlayを廃止。Web入力名の欠落・代理の数値属性・無効時の役割、Form連携・任意構成・実機・全画素は未認証 |
 | surface | variant、境界、nested構成、padding、theme | 全比較待ち |
 | switch | 単体/Item/Group/Legend、default/neutral、3size、busy、150ms遷移 | ネイティブ描画・グループ・操作テスト追加。全API・位相比較待ち |
 | table | 全parts、選択、sort、sticky、スクロール、空/忙しい状態 | 全比較待ち |

@@ -1,4 +1,4 @@
-# 検証結果（Meter：2026-10-22）
+# 検証結果（Slider：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -666,3 +666,22 @@ min／max・NaN／無限大の補正、customValue／showValue、locale／Number
 - isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK生成loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。FlutterのprogressBar＋数値範囲・aria-descriptionと、公式meter＋aria-valuetextの意味情報は異なります。NumberFormatの全locale／丸め・CSS反転時の短縮規則・screen reader・任意構成の認証も残ります。Linux／macOS／iOS・物理実機は今回ソースで未検証、Android APKは開発用署名です。shared-ci最新設定はprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Sliderの追加検証（2026-10-22）
+
+ソースSHA `c385ceb244eaa3377639ed484bdecb4147fb87e2`。静的解析0件、ライブラリ417件・デモ32件の計449件とPython20件が成功しました。新規は17／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功しました。[API対応](slider-api-mapping.md)に仕様と残件を保持します。
+
+Material SliderをFlutterの描画・Focus・Semantics・ポインター処理へ置き換えました。複数つまみ・push／swap／none・最小間隔・刻み値・Shift／Page／Home／End・取消・変更と確定通知・制御／非制御・NumberFormat・RTLを追加しています。値バッジは常時表示し、base32px／sm24px、初期表示では不要なフォーカス枠を出さずTab／矢印で表示します。Meterで観測した全画面透明overlayによる隣接ボタンの遮断を解消しました。Meterデモ自体は前回の数値入力とボタンを維持します。公式Slider本体は既存比較SHAから差分なし、最新947065aとBase UI1.9.0の継承挙動を参照しました。
+
+実Chrome 155.0.8059.86でLight/Darkの44条件・206状態を公式と比較しました。上下限・scalar／range／3つまみ・小サイズ・無効・ラベル省略・端の揃え方・160px幅・小数／負の値域・de書式・RTL・非制御・取消・値を更新しない制御を含みます。ドラッグの往復・確定・Tab／Shift+Tab・矢印／Shift・Page Down・Home／End・繰返し上限・隣接ボタンについて値と通知回数が一致しました。親と有効つまみの矩形は1px以内、実行時エラー0件です。領域の画素差はthreshold0.1で0.068〜0.721%で、**全画素・全体の視覚認証ではありません。** 無効時のWeb役割と代理の数値属性は既知差として除外し、読み上げ値の文字列を比較します。名前の欠落は別検査で記録します。
+
+日本語デモは390／1280px・Light/Darkの4条件で、単一値の変更・確定、隣接ボタン、範囲・小数・最小間隔・RTL・取消・無効を操作しました。別のLight/Dark・単一／範囲／無効の6条件でChromeのアクセシビリティツリーも確認しました。SDKがラベルを親ノードへ付けて内部入力へ関連付けないため、Web入力の名前は空で、Lighthouseのlabel検査に失敗します。公開APIだけでは修正できない差として記録します。ポインター後にSDKの内部range入力が500msだけ無効になるため、有効化を待ってキー操作を検証します。製品の待機処理やDOMの改変は加えていません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件です。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：82 / 94 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 90 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 94 / 81 / 100。実行警告0件。
+- isolated_desktop：87 / 94 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧末尾の操作領域は残件です。Flutter Webの数値属性は実値ではなく相対増減用の代理値で、実値はaria-valuetextへ渡します。無効時のDOM slider役割・HTML Form連携・全書式・任意構成・文字拡大・タッチ競合・screen readerも未認証です。Linux／macOS／iOS・物理実機は今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciはprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。

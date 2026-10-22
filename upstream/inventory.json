@@ -672,7 +672,7 @@
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Native horizontal scalar/range sliders, base/sm, step/largeStep, edge/center, push/swap/none, minimum gaps, controlled/uncontrolled values, cancellable change and commit callbacks, RTL, NumberFormat and Japanese demo are implemented. Material overlay interception is removed. Flutter Web uses surrogate numeric range attributes,500ms pointer-mode input disabling and drops the slider DOM role when disabled. Form/event/render APIs, arbitrary compositions, all pixels, touch/physical screen readers and full parity remain uncertified."
+      "limitations": "Native horizontal scalar/range sliders, base/sm, step/largeStep, edge/center, push/swap/none, minimum gaps, controlled/uncontrolled values, cancellable change and commit callbacks, RTL, NumberFormat and Japanese demo are implemented. Material overlay interception is removed. Flutter Web does not associate the parent label with its internal range input, and uses surrogate numeric range attributes,500ms pointer-mode input disabling and drops the slider DOM role when disabled. Form/event/render APIs, arbitrary compositions, all pixels, touch/physical screen readers and full parity remain uncertified."
     },
     {
       "id": "surface",

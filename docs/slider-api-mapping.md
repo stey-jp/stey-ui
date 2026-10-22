@@ -31,6 +31,8 @@ Material Sliderの全画面OverlayPortalは使わず、Flutterの描画・Focus�
 
 意味情報には公開SDKの制約が残ります。Flutter Webは内部のrange入力を相対増減用の代理値として作成するため、aria-valuenow／min／maxは実値になりません。実値はaria-valuetextへ渡します。またSDKはポインター操作後500msの間、この入力を一時無効化します。コンポーネントの無効時には増減actionがなくなり、Web DOMではslider役割自体が出力されません。ネイティブのSemanticsにはslider属性を保持します。DOMを書き換える対処は加えていません。ブラウザー比較では代理の数値属性を一致と扱わず、読み上げ文字列・操作後の値と通知回数を確認します。
 
+ラベルについてもSDKは親ノードへaria-labelを付け、内部range入力へ関連付けません。Chromeのアクセシビリティツリーでは入力の名前が空で、Lighthouseのlabel検査に失敗します。ライブラリは正しいSemanticsラベルを渡していますが、公開SDKには子入力へラベルを設定するAPIがなく、このWeb読み上げの欠落は未解決です。SDKのincrementable.dart／label_and_value.dartで実装を確認しています。
+
 未認証範囲はHTML Form／name／form連携、ReactのeventDetails・render・任意DOM属性、全NumberFormatオプションとlocaleの丸め、任意の長い値・大量つまみ・文字拡大、タッチスクロールとの全競合、screen reader・物理実機・全画素です。理由はtrackPress／drag／keyboard／accessibilityを提供し、Reactの入力イベントそのものは移植しません。同期済みSHAと全体の承認済み視覚ゲートは進めません。
 
 日本語デモは `?component=slider&mode=light`。範囲・サイズ・小数・最小間隔・RTL・取消・無効・衝突方式を切り替えられます。比較用 `?sample=slider` はvalue／values／min／max／step／largeStep／gap／size／alignment／collision／locale／format=decimal／noLabel／disabled／uncontrolled／cancel／frozen／host／direction／modeに対応します。
