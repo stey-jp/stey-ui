@@ -1,4 +1,4 @@
-# 検証結果（LayerCard／Surface：2026-10-22）
+# 検証結果（Tabs：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -708,3 +708,26 @@ Material SliderをFlutterの描画・Focus・Semantics・ポインター処理�
 - isolated_surface_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧の操作領域は残件です。任意のflex構成・文字拡大・全画素・screen reader、Surfaceの親境界外へのhit testも未認証です。Linux／macOS／iOS・物理実機は今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Tabsの追加検証（2026-10-22）
+
+ソースSHA `45c904fa780d263f28b13bc4c915e87e8571a36d`。静的解析0件、ライブラリ451件・デモ36件の計487件とPython20件が成功しました。新規は20／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、4つの製品ソースと生成Wasm source mapの埋め込み内容の一致を確認しました。[API対応](tabs-api-mapping.md)に仕様と残件を保持します。
+
+Tabsを実測幅に基づく描画へ置き換え、segmented／underline・base／sm、制御／非制御、初期値・削除時のfallback、任意ラベル、手動／即時選択を追加しました。既定の矢印操作はfocusのみで、Enter／Spaceで選択します。従来の即時選択はactivateOnFocus=trueで維持できます。200msの選択表示は途中位置からの再開と動作低減設定でも動く仕様に対応します。overflowの150ms表示、幅に応じたボタン移動、48pxの表示余白、3px超のマウスドラッグとクリック抑制、RTLも追加しています。公式947065aのTabsとstylesは7e0ff40から差分なし、依存挙動の参照はBase UI1.9.0です。
+
+実Chrome 155.0.8059.86でLight/Darkの48条件・112状態を公式と比較しました。2種類・2サイズ、hover、手動／即時選択、RTL、非制御、凍結した制御値、rich label、160px／320pxのoverflow、ドラッグ、末尾の表示、初期選択、存在しない値と空配列を含みます。表示枠と収まるタブの矩形は1px以内、選択値・通知回数は一致し、実行時エラー0件です。overflowでクリップされる意味情報矩形は別に記録します。画素差はthreshold0.1で2.626〜7.283%でした。Inter Regular／MediumのファイルSHAは参照と同一ですが、文字・影などの描画差は残ります。**全画素・全体の視覚認証ではありません。**
+
+Light/Dark・LTR/RTL・2種類の40フレームで、0／50／100／150／200msの公式CSS transitionとネイティブWidgetのsoftware rasterを比較しました。選択表示の矩形差は最大0.073px、画素差は2.321〜3.418%です。Flutter Webと公式を同時撮影した位相比較ではなく、全サイズ・反転・smooth scrollの経路を認証するものでもありません。Widgetテストでは実際のplatform disableAnimationsフラグでも200ms遷移が残ることを確認します。
+
+日本語デモは390／1280px・Light/Darkの4条件で、手動の矢印／Enter、8つの切替、非制御・RTLの即時選択と無効項目のスキップ、図形付きラベル、隣接ボタンを操作しました。最初の4条件検査中にWasmのfunction signature mismatchが1件発生し、スタックは未取得です。その後の同一4条件と追加8周で再現しませんでしたが、原因未特定・未解消として記録します。成功した再検査だけで解消済みとは扱いません。
+
+Flutterの公開Semantics APIではtablist／tab・選択状態・名前を設定します。SDKのAccessibilityFocusManager.stopManagingは古いtabindex=0を削除せず、矢印操作後に複数項目が残るため、Web DOMのroving tabindexは未達です。SDKのSemanticTabもenabled=falseをaria-disabledへ変換しません。Flutter内のFocus traversal・無効項目のスキップと、実ChromeのTabキーで隣接操作へ抜ける挙動は成功していますが、DOM／screen readerの全認証とは分けます。公式RTL overflowでは初期の右ボタンがscrollLeft0のまま動かないことを確認し、Flutterは左への移動・右への復帰を可能にしています。この差は一致として集計しません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件（IntlV8BreakIterator）でした。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：80 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：92 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧の操作領域に加え、TabsのSDK意味情報と未特定のWasmエラーも残件です。任意render／リンク・CSS指定、文字拡大・タッチ慣性・全画素・screen readerも未認証です。Linux／macOS／iOS・物理実機は今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
