@@ -1,4 +1,4 @@
-# 検証結果（InputGroup：2026-10-22）
+# 検証結果（SensitiveInput：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -771,3 +771,22 @@ Input／Addon／Suffix／Button、共有・個別・混合枠、4サイズ、1px
 - isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧の操作領域、DOMのfocus／値代理とレンダラの一過性エラーは残件です。rich tooltipと4方向指定・任意構成・Form／IME・screen reader・全画素も未認証です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## SensitiveInputの追加検証（2026-10-22）
+
+ソースSHA `78a08445ab6f199b6a3edb53f17080c27c0afd94`。静的解析0件、ライブラリ512件・デモ45件の計557件とPython20件が成功しました。新規は22／3件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、4つの製品ソースとWasm source mapの埋め込み内容が一致しました。[API対応](sensitive-input-api-mapping.md)に仕様と残件を保持します。
+
+固定8文字の伏字、masked／revealed／empty、マウス・Enter／Spaceでの表示、Escape・入力blurでの再マスク、値／選択／controllerの所有、自動全選択を無効にした初期キャレット、4サイズ・Field・readOnly／disabledを追加しました。上端のコピー操作はOverlayPortalで枠の外も操作可能にし、150msのfade・2秒の成功通知・古い試行と破棄後の通知の抑止、失敗callbackを検証しています。公式の入力blurだけにある処理に合わせ、コピーにfocusを移してから外へ移る場合は表示を保持することがあります。目の図形はPhosphor RegularのPathをMIT notice付きで使用します。非表示の目はSemanticsから除外し、隠す操作後は外枠へfocusを返します。コピーは上側4pxの透明な領域で24pxのhit areaを確保し、目も外枠内で最大24pxへ広げ、可視の図形を維持しています。readOnlyでの表示に遅れた旧blurが上書きしないよう、外枠へ意図的に移したfocusと、SDKだけが移したfocusを編集開始と混同しないよう保護しました。親のfocus用Semanticsが空欄のクリックを遮らないよう、伏字操作へfocusを結び付け、RTLの伏字位置も修正しました。公式SensitiveInputとcopy hookは7e0ff40から947065aまで差分なしです。
+
+実Chrome 155.0.8059.86でLight/Darkの74条件・102状態を公式と比較しました。4サイズの伏字／hover／表示／disabled、Enter／Escape／Space、blur、伏字と表示状態でのコピー・2秒後の復帰、目のボタン、制御／拒否／非制御／空からの編集、readOnly、Fieldのlabel／required／optional・errorと明示default、RTL／160px幅、空欄、説明のみとラベル操作を含みます。値・通知回数と表示状態が一致し、外枠の矩形差は1px以内、完走時の実行時エラー0件です。実際のClipboard APIで架空のサンプル値が一致しました。画素差はthreshold0.1で0.000〜11.068%でした。RTLのコピーと目の操作も含みます。コピーの長い読み上げ名の透明DOMテキストが目の操作を覆う問題は、短いCopy／コピーに揃えて修正しました。製品のDOMを直接変更する対策は追加していません。copy tabを含む外枠上24pxも比較し、同じInter Regular／MediumのSHA一致を確認しましたが、全画素・全体の認証ではありません。
+
+日本語デモは390／1280px・Light/Darkの4条件で、日本語の表示／入力／Escape、実際のコピーと値の二重表示防止、4サイズ・エラー／RTL／任意／制御切替、空欄とサンプル再設定、readOnly／非表示／disabledと隣接操作を確認しました。画面の状態表示は文字数と操作回数だけにしています。過去のTabsとInputGroupの一過性SkWasmエラーは原因未確定のまま記録を保持し、今回の成功で解消済みとは扱いません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：80 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：92 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+SensitiveInput単体はMobile／DesktopともAccessibility100点で、修正前のlabel-content-name-mismatchとtarget-sizeの指摘が解消しました。ギャラリーDesktopのtarget-sizeは既存の一覧側に残ります。全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDKのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧の操作領域、全DOM意味情報と過去のレンダラエラーは残件です。全HTML／Form／ValidityState・rich Field／全IME・screen reader・全画素は未認証です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新README・setup・coverageを確認してもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
