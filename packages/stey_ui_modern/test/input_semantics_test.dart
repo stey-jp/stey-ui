@@ -110,7 +110,8 @@ void main() {
       );
       expect(find.text('Default field'), findsOneWidget);
       expect(find.text('Default field (optional)'), findsNothing);
-      expect(find.text('Optional field (optional)'), findsOneWidget);
+      expect(find.text('Optional field'), findsOneWidget);
+      expect(find.text('(optional)'), findsOneWidget);
       expect(find.semantics.byLabel('More information'), findsOneWidget);
       semantics.dispose();
     },

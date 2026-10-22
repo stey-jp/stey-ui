@@ -24,6 +24,7 @@ import 'sensitive_input_example.dart';
 import 'tag_input_example.dart';
 import 'text_example.dart';
 import 'link_example.dart';
+import 'label_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -130,6 +131,7 @@ class _SteyGalleryState extends State<SteyGallery> {
             final child = switch (sample) {
               'text' => TextSample(router.uri.queryParameters),
               'link' => LinkSample(router.uri.queryParameters),
+              'label' => LabelSample(router.uri.queryParameters),
               'tag-input' => TagInputSample(router.uri.queryParameters),
               'banner' => BannerSample(router.uri.queryParameters),
               'collapsible' => CollapsibleSample(router.uri.queryParameters),
@@ -800,10 +802,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         required: true,
         child: SteyInput(semanticLabel: 'アカウント名', placeholder: 'アカウント'),
       ),
-      'label' => group([
-        const SteyLabel('プロジェクト名'),
-        const SteyLabel('必須の入力欄', required: true),
-      ]),
+      'label' => const LabelExample(),
       'checkbox' => form([
         SteyCheckbox(
           value: checked,

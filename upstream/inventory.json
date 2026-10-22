@@ -453,12 +453,12 @@
         "packages/kumo/src/components/label/label.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/input.dart"
+        "packages/stey_ui_modern/lib/src/label.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native text/rich widgets,separate optional content,asContent inheritance,explicit locale overrides,editor focus association,Info geometry and local hover/focus/keyboard tooltip implemented. Already-editing Web label reactivation loses DOM text focus and remains a recorded behavior mismatch. Full HTML label/ARIA binding,BaseUI safePolygon/provider/click rules,all pixels and physical-platform behavior remain uncertified. See docs/label-api-mapping.md."
     },
     {
       "id": "layer-card",

@@ -7,111 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'button.dart';
+import 'label.dart';
+
+export 'label.dart';
 import 'theme.dart';
 import 'messages.dart';
 
 part 'input_group.dart';
 part 'sensitive_input.dart';
 part 'tag_input.dart';
-
-class SteyLabel extends StatelessWidget {
-  const SteyLabel(
-    this.text, {
-    super.key,
-    this.required,
-    this.showOptional = false,
-    this.optionalLabel = '(optional)',
-    this.tooltip,
-    this.tooltipAriaLabel = 'More information',
-    this.excludeTextSemantics = false,
-    this.weight = FontWeight.w500,
-    this.onTap,
-  });
-  final String text, optionalLabel, tooltipAriaLabel;
-  final String? tooltip;
-  final bool? required;
-  final bool showOptional;
-  final bool excludeTextSemantics;
-  final FontWeight weight;
-  final VoidCallback? onTap;
-  @override
-  Widget build(BuildContext context) => Wrap(
-    spacing: 4,
-    crossAxisAlignment: WrapCrossAlignment.center,
-    children: [
-      ExcludeSemantics(
-        excluding: excludeTextSemantics,
-        child: GestureDetector(
-          onTap: onTap,
-          excludeFromSemantics: true,
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: text),
-                if (showOptional || required == false)
-                  TextSpan(
-                    text:
-                        ' ${optionalLabel == '(optional)' && SteyMessages.of(context).japanese ? '（任意）' : optionalLabel}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: SteyTheme.colorsOf(context).subtle,
-                    ),
-                  ),
-              ],
-            ),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: weight,
-              color: SteyTheme.colorsOf(context).text,
-              height: 1.5,
-            ),
-          ),
-        ),
-      ),
-      if (tooltip != null)
-        _SteyLabelInfo(
-          message: tooltip!,
-          semanticLabel:
-              tooltipAriaLabel == 'More information' &&
-                  SteyMessages.of(context).japanese
-              ? '詳しい情報'
-              : tooltipAriaLabel,
-        ),
-    ],
-  );
-}
-
-class _SteyLabelInfo extends StatefulWidget {
-  const _SteyLabelInfo({required this.message, required this.semanticLabel});
-  final String message, semanticLabel;
-  @override
-  State<_SteyLabelInfo> createState() => _SteyLabelInfoState();
-}
-
-class _SteyLabelInfoState extends State<_SteyLabelInfo> {
-  final tooltip = GlobalKey<TooltipState>();
-  @override
-  Widget build(BuildContext context) => Focus(
-    canRequestFocus: false,
-    skipTraversal: true,
-    onFocusChange: (focused) {
-      if (focused) tooltip.currentState?.ensureTooltipVisible();
-    },
-    child: Tooltip(
-      key: tooltip,
-      message: widget.message,
-      excludeFromSemantics: true,
-      child: SteyButton(
-        onPressed: () => tooltip.currentState?.ensureTooltipVisible(),
-        variant: SteyButtonVariant.ghost,
-        size: SteySize.xs,
-        shape: SteyButtonShape.square,
-        semanticLabel: widget.semanticLabel,
-        child: const Icon(Icons.info_outline, size: 14),
-      ),
-    ),
-  );
-}
 
 class SteyField extends StatelessWidget {
   const SteyField({

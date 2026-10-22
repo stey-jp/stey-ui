@@ -73,6 +73,8 @@ Textに10種類・4サイズ、行高の継承、見出しの意味情報・省�
 
 Linkに3種類・色継承・外部アイコン、アプリ側の遷移処理、キーボード操作と日本語デモを追加しています。[API対応](docs/link-api-mapping.md)に下線・Webの意味情報・実機などの残件を記録しています。
 
+Labelに装飾付きの内容、任意表示、親スタイルの継承、入力欄へのfocusと情報表示、日本語デモを追加しています。[API対応](docs/label-api-mapping.md)にTooltip・関連付け・実機などの残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

@@ -15,7 +15,7 @@ reference https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0f
 The ButtonGroup specification and Flow anchor correction also reference
 https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
 The Collapsible, Empty, Breadcrumbs and Badge updates reference that same commit.
-Loader, Pagination, Meter, Slider, LayerCard, Surface, Tabs, Input/InputArea, InputGroup, SensitiveInput, TagInput, Text and Link additionally reference https://github.com/cloudflare/kumo/commit/947065ad39694fdc688b1128cc9c360f566a4f73.
+Loader, Pagination, Meter, Slider, LayerCard, Surface, Tabs, Input/InputArea, InputGroup, SensitiveInput, TagInput, Text, Link and Label additionally reference https://github.com/cloudflare/kumo/commit/947065ad39694fdc688b1128cc9c360f566a4f73.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.
@@ -108,7 +108,7 @@ SOFTWARE.
 
 ## Phosphor indicators and copy icons
 
-The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. InlineCopyText reproduces regular CopySimple and Check geometry with native painting. ClipboardText and Empty reproduce regular Copy and Check geometry. Breadcrumbs uses regular Copy and bold Check geometry. Collapsible reproduces the bold CaretDown geometry. SensitiveInput reproduces the regular Eye and EyeSlash paths. TagInput reproduces regular X geometry. No React icon runtime is used.
+The native Checkbox indicators reproduce the upstream Phosphor bold paths. Select uses the regular Check and CaretUpDown paths. InlineCopyText reproduces regular CopySimple and Check geometry with native painting. ClipboardText and Empty reproduce regular Copy and Check geometry. Breadcrumbs uses regular Copy and bold Check geometry. Collapsible reproduces the bold CaretDown geometry. SensitiveInput reproduces the regular Eye and EyeSlash paths. TagInput reproduces regular X geometry. Label reproduces regular Info geometry. No React icon runtime is used.
 
 MIT License
 

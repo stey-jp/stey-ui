@@ -447,7 +447,8 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Key (optional)'), findsOneWidget);
+    expect(find.text('Key'), findsOneWidget);
+    expect(find.text('(optional)'), findsOneWidget);
     expect(find.text('Invalid'), findsOneWidget);
     expect(find.text('Help'), findsNothing);
   });

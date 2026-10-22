@@ -59,3 +59,5 @@ TagInputに制御／非制御、検証・上限、失敗した入力の保持、
 Textに10種類・4サイズ、計算済み行高の継承、装飾と見出し階層の分離、rich span・省略・RTL・拡大と日本語デモを追加しています。[API対応](text-api-mapping.md)にHTML要素・OS等幅フォント・全視覚／実機の残件を保持します。
 
 Linkに3種類、親色の継承、外部アイコン、アプリ側のProvider遷移、Spaceスクロール・Enter実行と日本語デモを追加しています。[API対応](link-api-mapping.md)に下線・UA focus・hrefのないWeb意味情報・任意DOMと実機の残件を保持します。
+
+Labelに文字／任意Widget、任意表示、asContentのスタイル継承、入力欄へのfocus、600msのhoverと説明の開閉、日本語デモを追加しています。[API対応](label-api-mapping.md)に編集中のWeb再操作・設定変更後／200%の任意表示からの入力、Tooltip全規則・HTML関連付け・全寸法と全画素／実機の残件を保持します。

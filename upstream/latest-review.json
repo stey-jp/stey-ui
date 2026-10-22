@@ -251,5 +251,12 @@
     "source_provider_styles_diff_empty_vs_7e0ff40": true,
     "change": "Native inline/current/plain link without button padding;inherited typography/current color,theme/hover underline and external geometry,routing provider,Enter/pointer and Space page scroll,disabled and min-content overflow. Historical API retained. Native underline/UA focus,URL-less/disabled Web semantics,target/rel/download,arbitrary DOM and all pixels/platforms remain uncertified.",
     "synchronized_sha_advanced": false
+  },
+  "label_observation": {
+    "client_date": "2026-10-23",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "source_and_tooltip_diff_empty_vs_7e0ff40": true,
+    "change": "Native Label text/rich widgets,separate optional content and locale overrides,asContent style inheritance,explicit editor focus association,Phosphor regular Info and local OverlayEntry tooltip with stable trigger focus;already-editing Web label reactivation remains a behavior mismatch,hover600ms,150ms transitions and arrow. Full HTML label/ARIA binding,BaseUI safePolygon/provider/click rules,all pixels/platforms remain uncertified.",
+    "synchronized_sha_advanced": false
   }
 }

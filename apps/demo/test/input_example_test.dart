@@ -32,7 +32,8 @@ void main() {
         ),
       );
       await t.pumpAndSettle();
-      expect(find.text('名前 （任意）'), findsOneWidget);
+      expect(find.text('名前'), findsOneWidget);
+      expect(find.text('（任意）'), findsOneWidget);
       expect(find.bySemanticsLabel('詳しい情報'), findsOneWidget);
     },
   );

@@ -250,7 +250,8 @@ void main() {
         const SteyInput(label: 'Name', required: false, labelTooltip: 'Help'),
       ),
     );
-    expect(find.text('Name (optional)'), findsOneWidget);
+    expect(find.text('Name'), findsOneWidget);
+    expect(find.text('(optional)'), findsOneWidget);
     expect(find.bySemanticsLabel('More information'), findsOneWidget);
     await t.tap(find.bySemanticsLabel('More information'));
     await t.pumpAndSettle();

@@ -39,7 +39,7 @@ CSSのvariant一覧だけでなく、実際のrender分岐・イベント・既�
 | inline-copy-text | copy、feedback、本文/tooltip、幅制約 | 枠なし表示・コピー値・rich child・省略・disabled・keyboard・親group・150ms fade・1.5秒通知を追加。[API対応](inline-copy-api-mapping.md)。等幅glyph、truncate=falseの長い未分割文字列、全視覚・実機認証は未完了 |
 | input | 全type/size、focus/error、readOnly/disabled、addon、validation、制御/非制御 | [API対応](input-api-mapping.md)。4サイズ・値管理・即時focus枠・inactive色・ラベル操作、InputAreaの自動伸縮を追加。全HTML type／Form／構造化validation・IME・全画素・実機は未認証 |
 | input-group | parts、padding、border/ring、icon/addon、disabled/focus | 組み合わせAPI、3形式・4サイズ・共有境界・接尾辞の伸縮・focus・日本語デモを追加。[API対応](input-group-api-mapping.md)。OSフォントとの差・tooltip・任意構成・全視覚／実機は未認証 |
-| label | tooltipのkeyboard/touch、optional、asContent、関連付け | 情報ボタンのタッチ・keyboardと読み上げテスト済み。全比較待ち |
+| label | tooltipのkeyboard/touch、optional、asContent、関連付け | 文字／任意Widget・任意表示の別要素・親スタイル継承・入力focus・情報表示と日本語デモを追加。[API対応](label-api-mapping.md)。編集中のWeb再操作・狭幅の関連付け、Tooltip全規則・HTML関連付け・全寸法と全画素／実機は残件 |
 | layer-card | 単層／Primary・Secondary、負の余白、描画順、padding、clip | [API対応](layer-card-api-mapping.md)。直接の子から多層を選択、既存header／footerを保持。任意構成・全画素・実機は未認証 |
 | layer-dialog | 層構造、全parts、modal/focus、scroll、sticky境界 | 専用多層面・640pxでのシート切替、Action／Primary alias、alert・pending・split menu、固定見出し／操作欄を追加。14回帰テスト。全portal／Drawer挙動・視覚／実機認証は未完了。[API対応](layer-dialog-api-mapping.md) |
 | link | 3variant、色継承、外部アイコン、Provider、hover/focus、keyboard、無効化、最小内容幅 | 部分対応。[対応表](link-api-mapping.md)。下線・UA focus・Web意味情報／任意DOM・全画素／実機は残件 |
