@@ -196,5 +196,13 @@
     "surface_source_diff_empty": true,
     "change": "Native simple/layered card with Primary/Secondary, negative block margins, primary foreground painting/hit order, physical padding, clipping and legacy header/footer. Surface delegates with square corners and visible overflow; colors remain compatibility metadata.",
     "synchronized_sha_advanced": false
+  },
+  "tabs_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "tabs_source_diff_empty": true,
+    "base_ui_version": "1.9.0",
+    "change": "Native measured200ms indicator,segmented/underline base/sm,controlled/uncontrolled selection,manual default/automatic focus activation,overflow controls/drag and RTL. Web stale tabindex/missing disabled ARIA,upstream RTL overflow deviation and full certification remain pending.",
+    "synchronized_sha_advanced": false
   }
 }

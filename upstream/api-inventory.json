@@ -12170,9 +12170,10 @@
           ]
         }
       ],
-      "api_review": "pending",
-      "behavior_review": "pending",
-      "visual_review": "pending"
+      "api_review": "partial; see docs/tabs-api-mapping.md",
+      "behavior_review": "partial; controlled/uncontrolled, manual/automatic, keyboard/RTL, overflow/drag covered; full certification pending",
+      "visual_review": "partial; curated geometry and transition diagnostics, not approved fixtures",
+      "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73"
     },
     {
       "component": "tag-input",

@@ -17,6 +17,7 @@ import 'pagination_example.dart';
 import 'meter_example.dart';
 import 'slider_example.dart';
 import 'layer_card_example.dart';
+import 'tabs_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -244,6 +245,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               'pagination' => PaginationSample(router.uri.queryParameters),
               'meter' => MeterSample(router.uri.queryParameters),
               'slider' => SliderSample(router.uri.queryParameters),
+              'tabs' => TabsSample(router.uri.queryParameters),
               'layer-card' => LayerCardSample(router.uri.queryParameters),
               'surface' => LayerCardSample({
                 ...router.uri.queryParameters,
@@ -954,30 +956,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         SteyText('選択中：${exampleValues[option] ?? option}'),
       ]),
       'slider' => const SliderExample(),
-      'tabs' || 'menubar' => form([
-        SteyTabs(
-          label: 'タブ',
-          tabs: const [
-            SteyTab('overview', '概要'),
-            SteyTab('analytics', '分析'),
-            SteyTab('settings', '設定'),
-          ],
-          value: tab,
-          onChanged: (v) => setState(() => tab = v),
-        ),
-        SteyTabs(
-          label: 'タブ',
-          tabs: const [
-            SteyTab('overview', '概要'),
-            SteyTab('analytics', '分析'),
-            SteyTab('settings', '設定'),
-          ],
-          value: tab,
-          onChanged: (v) => setState(() => tab = v),
-          variant: SteyTabsVariant.underline,
-        ),
-        SteyText('選択中のタブ：${exampleValues[tab] ?? tab}'),
-      ]),
+      'tabs' || 'menubar' => const TabsExample(),
       'pagination' => const PaginationExample(),
       'breadcrumbs' => const BreadcrumbsExample(),
       'collapsible' => const CollapsibleExample(),

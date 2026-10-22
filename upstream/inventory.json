@@ -754,12 +754,13 @@
         "packages/kumo/src/components/tabs/tabs.tsx"
       ],
       "implementation_files": [
+        "packages/stey_ui_modern/lib/src/tabs.dart",
         "packages/stey_ui_modern/lib/src/navigation.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native segmented/underline base/sm, measured200ms indicator, controlled/uncontrolled selection, manual/automatic focus activation, overflow controls and mouse drag, RTL. Web SDK stale tabindex and missing disabled ARIA, upstream RTL overflow deviation, browser-specific scroll/transition timing, arbitrary render/link and full visual/physical/screen-reader certification remain pending. See docs/tabs-api-mapping.md."
     },
     {
       "id": "tag-input",

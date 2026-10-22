@@ -100,7 +100,9 @@ void main() {
     expect(tester.widget<TextField>(find.byType(TextField)).maxLines, 4);
     controller.dispose();
   });
-  testWidgets('Tabs arrow keys skip disabled entries and wrap', (tester) async {
+  testWidgets('Tabs arrow focus skips disabled entries and Enter selects', (
+    tester,
+  ) async {
     var value = 'a';
     await tester.pumpWidget(
       host(
@@ -121,8 +123,14 @@ void main() {
     await tester.pump();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.pump();
+    expect(value, 'a');
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
     expect(value, 'c');
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pump();
+    expect(value, 'c');
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pump();
     expect(value, 'a');
   });

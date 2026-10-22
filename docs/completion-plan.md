@@ -47,3 +47,5 @@ Meterに値域・独自表示・数値書式・300msの幅変化と日本語デ�
 Sliderにネイティブ描画、複数つまみ、push／swap／none、最小間隔、刻み値・確定通知・取消と日本語デモを追加しています。標準Sliderの全画面overlayによる隣接操作の遮断を解消しています。[API対応](slider-api-mapping.md)にWebの代理値・無効時の役割・Form連携・タッチ／実機の残件を保持します。
 
 LayerCardの単層／Primary・Secondary、負の余白と描画順、Surfaceの角丸なし・overflow-visible互換、日本語デモを追加しています。[API対応](layer-card-api-mapping.md)に任意構成・外側へのhit test・全画素と実機の残件を保持します。
+
+Tabsに制御／非制御・手動／即時選択、実測による200msの選択表示、2種類・2サイズ、overflow・ドラッグ・RTLと日本語デモを追加しています。[API対応](tabs-api-mapping.md)にWeb DOMのroving tabindex・aria-disabledのSDK制約、公式のRTL overflowとの差、全画素と実機の残件を保持します。

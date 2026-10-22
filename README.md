@@ -59,6 +59,8 @@ Sliderに複数つまみ・衝突方式・刻み値・確定通知・取消・RT
 
 LayerCardに単層／Primary・Secondaryの多層構成、余白・描画順・クリップを追加しています。Surfaceの非推奨互換APIと日本語デモも用意しています。[LayerCard／SurfaceのAPI対応](docs/layer-card-api-mapping.md)を参照してください。
 
+Tabsに手動／即時選択、2種類・2サイズ、200msの選択表示、横スクロール・ドラッグ・RTLと日本語デモを追加しています。[TabsのAPI対応](docs/tabs-api-mapping.md)に既定動作の変更とWebのfocus・無効状態のSDK制約を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ
