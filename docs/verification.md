@@ -1,4 +1,4 @@
-# 検証結果（Tabs：2026-10-22）
+# 検証結果（Input／InputArea：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -731,3 +731,24 @@ Flutterの公開Semantics APIではtablist／tab・選択状態・名前を設�
 - isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator、SkWasm map、自社の起動・転送量・一覧の操作領域に加え、TabsのSDK意味情報と未特定のWasmエラーも残件です。任意render／リンク・CSS指定、文字拡大・タッチ慣性・全画素・screen readerも未認証です。Linux／macOS／iOS・物理実機は今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Input／InputAreaの追加検証（2026-10-22）
+
+ソースSHA `afcabb15e1e7df9639c0388f2f8cad57e7890d0a`。静的解析0件、ライブラリ470件・デモ39件の計509件とPython20件が成功しました。新規は19／3件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、4つの製品ソースとWasm source mapの埋め込み内容の一致を確認しました。[API対応](input-api-mapping.md)に仕様と残件を保持します。
+
+InputはFlutter TextFieldの編集機能を維持し、Materialの枠遷移から外側の即時リングを分離しました。4サイズ・12px／16pxと14px／21pxの行高、単一行の上下中央、errorのdanger色、disabledのinactive色へ対応します。value／defaultValue／controllerの所有とfocusの所有、両通知名、ラベル操作・日本語の任意表記／情報ボタン名も追加しています。InputAreaは既定2行と内容／幅に応じた伸縮、最小・最大行数と内部スクロールに対応し、既存Textareaの4行は互換のため保持します。公式947065aでの変更はdisabledクラスのinactive修正で、InputArea／Field／styleは7e0ff40から差分なしです。
+
+実Chrome 155.0.8059.86でLight/Darkの60条件・78状態を公式と比較しました。4サイズの通常／focus／disabled、エラー、readOnly、制御と拒否された編集、RTL・160px幅、labelのクリック／required／optional、説明／エラーだけ、明示standard、InputAreaの固定行・4サイズ・auto伸縮／最大行数／狭幅折返しを含みます。枠全体の矩形は1px以内、値・通知／確定回数は一致し、実行時エラー0件です。Inputの単一行文字位置はWidgetテストでも実際のEditableText座標を検査します。画素差はthreshold0.1で0.000〜11.358%でした。同一Inter Regular／MediumのSHAも確認しましたが、文字・caret・選択・影などの差は残り、**全画素・全体の視覚認証ではありません。**
+
+比較用の公式bare textareaにはid／nameがないため、公式側でFormEmptyIdAndNameAttributesForInputErrorが16件発生しました。候補側は各条件のSDK IntlV8BreakIteratorだけで、これらは本番デモの全URL監査と分けて記録します。比較では先に隣接ボタンへfocusをそろえ、SDKのroute既定focusによる差と各操作状態を分けます。実際の初期focusは別に記録します。ラベルはSDKの透明な意味情報spanを直接click対象にできないため、実際の表示位置へマウスクリックし、編集欄のDOM focusを確認しました。自動fillはクリック後の編集接続を待って実行します。ラベル／説明／エラーの意味情報属性とHTML Form・ValidityStateの全等価性は認証しません。
+
+日本語デモは390／1280px・Light/Darkの4条件で、情報表示と外側クリックによる終了、日本語入力／Enter、4サイズ、error・制御・自動複数行・RTL・任意表記、パスワード表示の秘匿、readOnly／disabledと隣接ボタンを操作しました。今回の成功した検査で実行時エラーは0件ですが、前段階のTabsで記録した原因未特定のWasmエラーを解消済みとは扱いません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：78 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：99 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：95 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧の操作領域、前段階のSDK意味情報は残件です。Form／全HTML type／構造化validation、IME・composing・Undo／補完・文字拡大・screen reader・InputGroup複合構成も未認証です。ブラウザは実Chromeのみで他主要ブラウザと旧2世代は未検証、Linux／macOS／iOS・物理実機も今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
