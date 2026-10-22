@@ -212,5 +212,13 @@
     "change": "Latest input.tsx changes disabled:text-kumo-disabled to disabled:text-kumo-inactive. Native four-size metrics, immediate external focus/error ring, inactive disabled text, label focus, controlled/uncontrolled/controller ownership, and InputArea native auto resize added. Existing browser-extension passwordManagerIgnore hints, Form/ValidityState and full inherited DOM APIs remain unsupported.",
     "input_area_field_style_diff_empty_vs_7e0ff40": true,
     "synchronized_sha_advanced": false
+  },
+  "input_group_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "base_ui_version": "1.9.0",
+    "source_diff_empty_vs_7e0ff40": true,
+    "change": "Native compound Input/Addon/Suffix/Button, direct-child shared/individual/hybrid detection, four sizes, one-pixel seams and focus painting, suffix sizing, controller preservation, Field and disabled propagation. Official input font-sans uses OS font while native retains licensed Inter. Tooltip, inherited DOM/Form/IME, arbitrary structures and full certification remain pending.",
+    "synchronized_sha_advanced": false
   }
 }

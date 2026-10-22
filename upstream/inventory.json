@@ -436,12 +436,13 @@
         "packages/kumo/src/components/input-group/input-group.tsx"
       ],
       "implementation_files": [
-        "packages/stey_ui_modern/lib/src/input.dart"
+        "packages/stey_ui_modern/lib/src/input.dart",
+        "packages/stey_ui_modern/lib/src/input_group.dart"
       ],
       "status": "partial",
       "visual_verified": false,
       "behavior_verified": false,
-      "limitations": "Full upstream prop, behavior and visual parity remains to be certified."
+      "limitations": "Native compound Input/Addon/Suffix/Button, auto-detected shared/individual/hybrid modes, four sizes, overlap/focus order, suffix sizing, labels and disabled propagation implemented. Official OS input font versus bundled Inter, Material tooltip, arbitrary wrappers, full inherited DOM/Form/IME, visual and physical-platform certification remain pending."
     },
     {
       "id": "label",

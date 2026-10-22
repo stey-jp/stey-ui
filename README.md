@@ -63,6 +63,8 @@ Tabsに手動／即時選択、2種類・2サイズ、200msの選択表示、横
 
 Inputに制御／非制御、4サイズの即時フォーカス枠、無効色、ラベル操作を追加しています。InputAreaの内容に応じた伸縮と日本語デモも用意しています。[InputのAPI対応](docs/input-api-mapping.md)にForm・IME・全属性の残件を記録しています。
 
+InputGroupにInput／Addon／Suffix／Buttonの組み合わせ、共有・個別・混合枠、接尾辞の伸縮と日本語デモを追加しています。[InputGroupのAPI対応](docs/input-group-api-mapping.md)にフォント・tooltip・全視覚／実機の残件を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ

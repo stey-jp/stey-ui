@@ -50,4 +50,4 @@ LayerCardの単層／Primary・Secondary、負の余白と描画順、Surfaceの
 
 Tabsに制御／非制御・手動／即時選択、実測による200msの選択表示、2種類・2サイズ、overflow・ドラッグ・RTLと日本語デモを追加しています。[API対応](tabs-api-mapping.md)にWeb DOMのroving tabindex・aria-disabledのSDK制約、公式のRTL overflowとの差、全画素と実機の残件を保持します。
 
-Inputに値の制御／非制御、4サイズ・エラー／無効色・即時focus枠、ラベル操作とInputAreaの自動伸縮を追加しています。[API対応](input-api-mapping.md)にForm・構造化validation・IME・任意属性・全視覚／実機の残件を保持します。InputGroupの複合partsは次の対応項目として残ります。
+Inputに値の制御／非制御、4サイズ・エラー／無効色・即時focus枠、ラベル操作とInputAreaの自動伸縮を追加しています。[API対応](input-api-mapping.md)にForm・構造化validation・IME・任意属性・全視覚／実機の残件を保持します。InputGroupにもInput／Addon／Suffix／Button、共有・個別・混合枠、接尾辞の伸縮と日本語デモを追加しています。[API対応](input-group-api-mapping.md)に文字幅・tooltip・任意構成・全視覚／実機の残件を保持します。

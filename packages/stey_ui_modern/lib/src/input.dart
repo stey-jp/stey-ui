@@ -1,4 +1,6 @@
-import 'dart:ui' show SemanticsValidationResult;
+import 'dart:math' as math;
+
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'button.dart';
 import 'theme.dart';
 import 'messages.dart';
+
+part 'input_group.dart';
 
 class SteyLabel extends StatelessWidget {
   const SteyLabel(
@@ -238,6 +242,11 @@ class SteyInput extends StatefulWidget {
 class _SteyInputState extends State<SteyInput> {
   TextEditingController? internal;
   FocusNode? internalFocus;
+  _SteyInputGroupState? groupOwner;
+  void groupValueChanged() {
+    if (mounted) setState(() {});
+  }
+
   TextEditingController get controller => widget.controller ?? internal!;
   FocusNode get focus => widget.focusNode ?? internalFocus!;
   bool get multiline => widget.maxLines != 1 || widget.autoResize;
@@ -252,6 +261,9 @@ class _SteyInputState extends State<SteyInput> {
     }
     if (widget.focusNode == null) internalFocus = FocusNode();
     focus.addListener(focusChanged);
+    if (widget is SteyInputGroupInput) {
+      controller.addListener(groupValueChanged);
+    }
   }
 
   @override
@@ -259,10 +271,16 @@ class _SteyInputState extends State<SteyInput> {
     super.didUpdateWidget(old);
     if (old.controller != widget.controller) {
       final previous = old.controller?.value ?? internal!.value;
+      if (widget is SteyInputGroupInput) {
+        (old.controller ?? internal!).removeListener(groupValueChanged);
+      }
       internal?.dispose();
       internal = widget.controller == null
           ? TextEditingController.fromValue(previous)
           : null;
+      if (widget is SteyInputGroupInput) {
+        controller.addListener(groupValueChanged);
+      }
     }
     if (old.focusNode != widget.focusNode) {
       (old.focusNode ?? internalFocus!).removeListener(focusChanged);
@@ -304,6 +322,10 @@ class _SteyInputState extends State<SteyInput> {
 
   @override
   void dispose() {
+    groupOwner?.editors.remove(this);
+    if (widget is SteyInputGroupInput) {
+      controller.removeListener(groupValueChanged);
+    }
     focus.removeListener(focusChanged);
     internal?.dispose();
     internalFocus?.dispose();
@@ -312,6 +334,11 @@ class _SteyInputState extends State<SteyInput> {
 
   @override
   Widget build(BuildContext context) {
+    final group = widget is SteyInputGroupInput
+        ? _GroupScope.maybeOf(context)
+        : null;
+    if (group != null) return _buildGroupEditor(this, context, group);
+
     final c = SteyTheme.colorsOf(context),
         hasError = widget.error?.isNotEmpty ?? false,
         errorStyle =
@@ -560,27 +587,6 @@ class _SteySensitiveInputState extends State<SteySensitiveInput> {
         size: 16,
       ),
     ),
-  );
-}
-
-class SteyInputGroup extends StatelessWidget {
-  const SteyInputGroup({
-    super.key,
-    required this.child,
-    this.addon,
-    this.suffix,
-  });
-  final Widget child;
-  final Widget? addon, suffix;
-  @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      if (addon != null)
-        Padding(padding: const EdgeInsets.only(right: 8), child: addon!),
-      Expanded(child: child),
-      if (suffix != null)
-        Padding(padding: const EdgeInsets.only(left: 8), child: suffix!),
-    ],
   );
 }
 

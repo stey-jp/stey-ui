@@ -19,6 +19,7 @@ import 'slider_example.dart';
 import 'layer_card_example.dart';
 import 'tabs_example.dart';
 import 'input_example.dart';
+import 'input_group_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -255,6 +256,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => InputSample(router.uri.queryParameters),
+              'input-group' => InputGroupSample(router.uri.queryParameters),
               'table-of-contents' => SizedBox(
                 width: 280,
                 child: SteyTableOfContents(
@@ -780,11 +782,7 @@ class _ComponentExampleState extends State<ComponentExample> {
       'badge' => const BadgeExample(),
       'banner' => const BannerExample(),
       'input' => const InputExample(),
-      'input-group' => const SteyInputGroup(
-        addon: Text('https://'),
-        suffix: Text('.com'),
-        child: SteyInput(label: 'ドメイン', placeholder: 'example.com'),
-      ),
+      'input-group' => const InputGroupExample(),
       'sensitive-input' => SteySensitiveInput(
         controller: controller,
         label: 'APIトークン',

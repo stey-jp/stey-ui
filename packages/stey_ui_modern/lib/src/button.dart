@@ -96,6 +96,11 @@ class SteyButton extends StatefulWidget {
   State<SteyButton> createState() => _SteyButtonState();
 }
 
+extension _SteyButtonStyleOverrides on ButtonStyle {
+  ButtonStyle withOverrides(ButtonStyle? overrides) =>
+      overrides?.merge(this) ?? this;
+}
+
 class _SteyButtonState extends State<SteyButton> {
   @override
   Widget build(BuildContext context) {
@@ -136,9 +141,12 @@ class _SteyButtonState extends State<SteyButton> {
             : danger
             ? c.dangerText
             : c.text);
-    final outerRadius = BorderRadius.circular(
-      widget.shape == SteyButtonShape.circle ? 100 : widget.size.radius,
-    );
+    final explicitShape = widget.style?.shape?.resolve({});
+    final outerRadius = explicitShape is RoundedRectangleBorder
+        ? explicitShape.borderRadius.resolve(Directionality.of(context))
+        : BorderRadius.circular(
+            widget.shape == SteyButtonShape.circle ? 100 : widget.size.radius,
+          );
     final group = context
         .dependOnInheritedWidgetOfExactType<_ButtonGroupSlot>();
     final radius =
@@ -312,7 +320,7 @@ class _SteyButtonState extends State<SteyButton> {
               shape: WidgetStatePropertyAll(
                 _ButtonRingBorder(borderRadius: radius),
               ),
-            ).merge(widget.style),
+            ).withOverrides(widget.style),
             child: ExcludeSemantics(
               excluding: widget.semanticLabel != null,
               child: Row(
