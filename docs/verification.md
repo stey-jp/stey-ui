@@ -1,4 +1,4 @@
-# 検証結果（Link：2026-10-22）
+# 検証結果（Label：2026-10-23）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -847,3 +847,22 @@ inline／current／plainをボタンの余白なしで実装し、書体・行�
 - isolated_desktop：97 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK非推奨API、起動・転送量・一覧操作領域、全意味情報と過去のレンダラエラーは残件です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Labelの追加検証（2026-10-23）
+
+ソースSHA `c97429b57ad07d7b76db9734f691e0f00091e7ac`。静的解析0件、ライブラリ576件・デモ54件の計630件とPython20件が成功しました。新規は14／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、4つの製品ソースとWasm source mapの内容が一致しました。[API対応](label-api-mapping.md)に仕様と残件を保持します。
+
+本文と任意表示は都度作成・破棄するネイティブTextPainterでフォールバックフォント更新後のmin-content／max-contentを測り、元の幅で重み付けして縮め、最小幅で止める処理を追加しました。情報ボタンは固定幅です。本文・任意表示・情報ボタンを4px間隔の別要素とし、文字／任意Widget、asContentの親スタイル継承、明示した文字列と空値の維持、英語／日本語の既定を追加しました。本文・任意表示は指定した入力欄にfocusし、情報ボタンは独立します。EditableTextのrequestKeyboardで入力接続の表示を要求しますが、編集中のWeb再操作は下記の制約が残ります。14pxのボタンから16pxのPhosphor Infoを描画します。説明は独立したOverlayEntryで、hover600ms・focus即時・150msのfade／scale、Escape・blur・外側操作で閉じます。ボタンの意味情報をpopupと分離し、標準focus traversalでTab／Shift+Tabを処理します。スクロール追従と破棄処理をテストしました。popupへ移動する80msの猶予を設けますが、BaseUI safePolygonの軌跡規則とは異なります。旧Steyのクリック／タップで開く動作を維持し、公式のcloseOnClickと区別します。
+
+実Chrome 155.0.8059.86でLight／Darkの28条件・64組を公式947065aと比較しました。任意表示・独自文言・空値・説明・asContent・20px継承・rich・120px折り返し・RTL／アラビア語・200%表示を含みます。hover／focusでの説明、Escapeと次のTab、labelの入力focus・入力・隣接操作を確認し、実行時エラー0件でした。Label外枠の矩形差1px超は6組です。矩形差とhover／focusの説明表示の不一致は個別にJSONへ保持します。すでに編集中の入力欄のLabelを再操作すると、ネイティブではキー入力が届かない不一致が28条件あり、比較スクリプトは非ゼロ終了・success=falseのまま保持します。通常の未focusからの移動と実際のキー入力は別に確認しています。画素差はthreshold0.1で0.163〜7.188%です。Labelとその上65pxを含む領域の診断値であり、popup全体・全位相の一致認証ではありません。Inter3書体のSHA一致を確認しました。参照側の任意文言はデモの日本語localeに合わせて明示し、文字拡大は親fontとtext-base変数で再現して固定gap・情報ボタンを拡大しません。nativeの拡大はpopupにも届きますが、参照Portalへ局所変数は届かないため拡大時popupの差を保持します。
+
+日本語デモは390／1280px・Light／Darkの4条件で操作しました。初期の本文からの日本語入力と、説明／Escape、rich・asContent・狭幅・RTL・200%・隣接操作を確認しています。初期入力と、200%・richの任意表示からのキー入力の不一致は3条件です。各条件の成功／失敗をJSONへ保持し、編集中の再クリックの比較とは区別します。編集中の再操作はWeb SDKのTextInputShowがisEditing=true時にshow要求を処理しない制約を含み、requestKeyboardでも解消しません。強制blur・DOM書換えで選択やIMEを損なう回避は追加せず、不一致を残します。日本語デモの200%では併置Inputの固定高に対して入力文字が上下に切れることも確認し、Input側の拡大対応残件としています。倍率を下げて隠していません。HTMLのlabel ID／読み上げ関連付けはエミュレートせず、focusとeditor名を明示します。説明はnative hintとpopupの意味情報であり、全aria-describedby／tooltip役割や物理screen readerは未認証です。Labelの日本語操作中にもSkWasmのmemory access out of boundsが再発し、説明の意味情報を待つ操作がタイムアウトしました。失敗ログを保持し、単独の再実行で実行時エラー0件を確認しましたが、描画エラーの原因解消や再発防止を認証していません。全体テストで一度、components_testのロード前に接続が切れ、多数のテストが未完了になりました。原因を製品不具合と断定せずログを保持し、並列数2の最終全件実行で成功を確認しました。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouseはギャラリーと単体の既定表示をMobile／Desktopで測定しています（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：68 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：92 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+Labelの全再現、全100点・Issues0件は未達です。条件別の画素差、任意表示からの入力と編集中の再操作、Tooltip全規則とHTML関連付けを残件として保持します。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK非推奨API、起動・転送量・一覧操作領域、全意味情報と過去のレンダラエラーは残件です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
