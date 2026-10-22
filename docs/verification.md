@@ -1,4 +1,4 @@
-# 検証結果（Input／InputArea：2026-10-22）
+# 検証結果（InputGroup：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -752,3 +752,22 @@ InputはFlutter TextFieldの編集機能を維持し、Materialの枠遷移か�
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧の操作領域、前段階のSDK意味情報は残件です。Form／全HTML type／構造化validation、IME・composing・Undo／補完・文字拡大・screen reader・InputGroup複合構成も未認証です。ブラウザは実Chromeのみで他主要ブラウザと旧2世代は未検証、Linux／macOS／iOS・物理実機も今回ソースで未検証、Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## InputGroupの追加検証（2026-10-22）
+
+ソースSHA `76329d1ba5fa617750b29c4f3c8dbe74ba3e88b9`。静的解析0件、ライブラリ490件・デモ42件の計532件とPython20件が成功しました。新規は20／3件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、5つの製品ソースとWasm source mapの埋め込み内容が一致しました。[API対応](input-group-api-mapping.md)に仕様と残件を保持します。
+
+Input／Addon／Suffix／Button、共有・個別・混合枠、4サイズ、1pxの境界共有・focus描画順、補助アイコン・ボタン、接尾辞に応じた入力幅、Fieldと無効状態の継承を追加しました。動的な形式変更でも入力値・focusを保ち、従来child/addon/suffixのRowを保持します。画像比較で見つけたButton.styleの優先順を修正し、内側角丸とborder分の余白を有効にしました。Paginationにも使うためLight/Darkの既存比較を追加実行しています。公式InputGroupの6ソースは7e0ff40から947065aまで差分なしです。
+
+実Chrome 155.0.8059.86でLight/Darkの112条件・126状態を公式と比較しました。各4サイズの7構成、primary／destructive、focus・編集と拒否・消去・実行・hover、label／required／optional、error／disabled、RTL、狭幅・空値・text addon・leading hybridを含みます。枠全体の矩形は1px以内、値・通知／操作回数は一致し、完走時の実行時エラー0件です。個別入力・ボタンのDOM矩形と意味情報も診断として保持します。画素差はthreshold0.1で0.000〜7.576%でした。公式入力はWindowsのSegoe UI、候補は配布済みInterを使うため文字・内容幅に差があります。**全画素・全体の視覚認証ではありません。**
+
+日本語デモは390／1280px・Light/Darkの4条件で、日本語入力、3形式での値保持、消去・実行、4サイズ、補助テキスト・error・RTL・任意表記、readOnly／disabledと隣接操作を確認しました。初回にdark390でSkWasmのmemory access out of boundsを1件記録しました。4条件の操作は完走し、操作段階を付けた再現検査4条件と更新後の検査はエラー0件ですが、原因・解消は未確定です。stackと当時のWasm SHA、過去のTabsの一過性エラーを保持し、解消済みとは扱いません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouse（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：78 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：93 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：94 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDK loaderのIntlV8BreakIterator・SkWasm map、自社の起動・転送量・一覧の操作領域、DOMのfocus／値代理とレンダラの一過性エラーは残件です。rich tooltipと4方向指定・任意構成・Form／IME・screen reader・全画素も未認証です。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciは最新設定でもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、実際の更新検出→PRの往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
