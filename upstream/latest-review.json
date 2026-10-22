@@ -180,5 +180,13 @@
     "base_ui_version": "1.9.0",
     "change": "Native value/min/max normalization, customValue/showValue precedence, NumberFormat/locale,300ms ease-out width and RTL. Flutter progressBar semantics instead of meter, with numeric range and formatted hint; full native meter/aria-valuetext remains a public SDK limitation.",
     "synchronized_sha_advanced": false
+  },
+  "slider_observation": {
+    "client_date": "2026-10-22",
+    "review_sha": "947065ad39694fdc688b1128cc9c360f566a4f73",
+    "slider_source_diff_empty": true,
+    "base_ui_version": "1.9.0",
+    "change": "Native horizontal slider replaces Material overlay. Multiple thumbs, pointer push/swap/none, minimum gaps, keyboard rounding/large steps, cancellable changes and commit notifications, visible value badges, RTL and NumberFormat. Web surrogate attributes/disabled role, Form integration and full visual/platform certification remain pending.",
+    "synchronized_sha_advanced": false
   }
 }

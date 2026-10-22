@@ -7,6 +7,7 @@ export 'checkable.dart';
 
 export 'radio.dart';
 export 'select.dart';
+export 'slider.dart';
 
 class SteyAutocomplete extends StatelessWidget {
   const SteyAutocomplete({
@@ -96,41 +97,4 @@ class SteyCombobox extends SteyAutocomplete {
     super.initialValue,
     super.enabled,
   });
-}
-
-class SteySlider extends StatelessWidget {
-  const SteySlider({
-    super.key,
-    required this.value,
-    required this.onChanged,
-    this.min = 0,
-    this.max = 100,
-    this.divisions,
-    this.label = 'Value',
-  });
-  final double value, min, max;
-  final int? divisions;
-  final ValueChanged<double>? onChanged;
-  final String label;
-  @override
-  Widget build(BuildContext context) => Semantics(
-    label: label,
-    child: SliderTheme(
-      data: SliderTheme.of(context).copyWith(
-        trackHeight: 4,
-        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
-        activeTrackColor: SteyTheme.colorsOf(context).brand,
-        inactiveTrackColor: SteyTheme.colorsOf(context).fill,
-        thumbColor: SteyTheme.colorsOf(context).base,
-      ),
-      child: Slider(
-        value: value.clamp(min, max),
-        onChanged: onChanged,
-        min: min,
-        max: max,
-        divisions: divisions,
-        label: value.toStringAsFixed(0),
-      ),
-    ),
-  );
 }

@@ -15,7 +15,7 @@ reference https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0f
 The ButtonGroup specification and Flow anchor correction also reference
 https://github.com/cloudflare/kumo/commit/7e0ff40546f08405d05bc9754f0ff0fd009ece0a.
 The Collapsible, Empty, Breadcrumbs and Badge updates reference that same commit.
-Loader, Pagination and Meter additionally reference https://github.com/cloudflare/kumo/commit/947065ad39694fdc688b1128cc9c360f566a4f73.
+Loader, Pagination, Meter and Slider additionally reference https://github.com/cloudflare/kumo/commit/947065ad39694fdc688b1128cc9c360f566a4f73.
 The original MIT notice is retained below. Flutter, Dart, and build/test
 libraries retain their own licenses, included in their distributions and
 Flutter's license registry. Runtime has no React or WebView dependency.
@@ -50,9 +50,9 @@ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-## Base UI meter behavior reference
+## Base UI meter and slider behavior reference
 
-The meter range normalization and formatting contract also reference @base-ui/react 1.9.0. Base UI is used only in the isolated official comparison fixture, with no React runtime dependency in the Flutter package. Its notice is retained for the referenced implementation.
+The meter range normalization and formatting contract, and the slider rounding, keyboard, thumb collision and commit behavior also reference @base-ui/react 1.9.0. Base UI is used only in the isolated official comparison fixture, with no React runtime dependency in the Flutter package. Its notice is retained for the referenced implementation.
 
 MIT License
 

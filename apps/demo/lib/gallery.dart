@@ -15,6 +15,7 @@ import 'badge_example.dart';
 import 'loader_example.dart';
 import 'pagination_example.dart';
 import 'meter_example.dart';
+import 'slider_example.dart';
 import 'inline_copy_example.dart';
 import 'demo_labels.dart';
 import 'dropdown_example.dart';
@@ -241,6 +242,7 @@ class _SteyGalleryState extends State<SteyGallery> {
               ),
               'pagination' => PaginationSample(router.uri.queryParameters),
               'meter' => MeterSample(router.uri.queryParameters),
+              'slider' => SliderSample(router.uri.queryParameters),
               'loader' => LoaderSample(router.uri.queryParameters),
               'badge' => BadgeSample(router.uri.queryParameters),
               'input' => const SizedBox(
@@ -927,15 +929,7 @@ class _ComponentExampleState extends State<ComponentExample> {
         ),
         SteyText('選択中：${exampleValues[option] ?? option}'),
       ]),
-      'slider' => form([
-        SteySlider(
-          value: value,
-          onChanged: (v) => setState(() => value = v),
-          divisions: 100,
-          label: 'キャッシュ時間',
-        ),
-        SteyText('${value.round()}分'),
-      ]),
+      'slider' => const SliderExample(),
       'tabs' || 'menubar' => form([
         SteyTabs(
           label: 'タブ',

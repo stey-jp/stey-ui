@@ -55,6 +55,8 @@ Paginationに組み合わせAPI、ページ番号の入力／選択、件数選�
 
 Meterに値域・独自表示値・数値書式・300msの幅変化と日本語デモを追加しています。[MeterのAPI対応](docs/meter-api-mapping.md)に読み上げのSDK制約と未認証範囲を記録しています。
 
+Sliderに複数つまみ・衝突方式・刻み値・確定通知・取消・RTLと日本語デモを追加しています。[SliderのAPI対応](docs/slider-api-mapping.md)に操作仕様とWebの意味情報に関するSDK制約を記録しています。
+
 ```text
 packages/
   stey_ui_modern/     # 他のデザインパッケージから独立したFlutterライブラリ
