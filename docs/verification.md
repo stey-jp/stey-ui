@@ -1,4 +1,4 @@
-# 検証結果（TagInput：2026-10-22）
+# 検証結果（Text：2026-10-22）
 
 これは開発プレビューの検証記録です。依頼の全完了条件は未達です。
 
@@ -809,3 +809,22 @@ SensitiveInput単体はMobile／DesktopともAccessibility100点で、修正前�
 - isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
 
 TagInput単体はMobile／DesktopともAccessibility100点でした。ギャラリーDesktopには既存の一覧側のtarget-sizeが残ります。全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDKのIntlV8BreakIterator、自社の起動・転送量・一覧の操作領域、全DOM意味情報と過去のレンダラエラーは残件です。今回のvalid-source-mapsは4条件とも成功しました。過去のSkWasm map診断は当時の記録を維持し、今回の指摘なしで全般的な解消とは扱いません。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
+
+## Textの追加検証（2026-10-22）
+
+ソースSHA `c454230615511014a70b01ce4aa0ed2d3a19d454`。静的解析0件、ライブラリ550件・デモ50件の計600件とPython20件が成功しました。新規は11／2件です。Web Wasm＋JavaScriptフォールバック・Windows x64・Android APKのリリースビルドが成功し、4つの製品ソースとWasm source mapの埋め込み内容が一致しました。[API対応](text-api-mapping.md)に仕様と残件を保持します。
+
+本文・補足・成功・エラー・等幅2種・見出し4種と4サイズを追加しました。本文は12／13／14／16px、等幅は13／14pxで、太さと色は実際のCSSに従います。本文と等幅は親のfontSize×heightの計算済み行高を継承します。通常見出しは16px／行高24px・lgは20px／28px、旧variantは30／36・24／32・16／24です。装飾と見出し階層を分離し、headingLevel1〜6を明示した場合だけ意味情報の見出しになります。元のStey heading引数・subtle・boldは互換を維持します。rich span・省略時の全文Semantics・RTL・2倍の文字拡大・空文字の高さ0を追加し、日本語操作ボタンの名前にも現在値を含めました。Flutter Webは見出し要素の作成後にレベル変更を反映しないため、headingLevel変更時にSemantics境界を再作成し、DOMの直接変更なしで階層を更新します。
+
+実Chrome 155.0.8059.86でLight/Darkの94条件を公式947065aと比較しました。本文4種×4サイズ、見出しと等幅の既定／lg、medium・継承した太さ、120px折り返し／省略、RTL、親32px行高、rich span、見出しレベル指定、2倍表示と空文字を含みます。全文・見出しレベルが一致し、外枠の矩形差は1px以内、実行時エラー0件でした。画素差はthreshold0.1で0.000〜12.816%です。Inter Regular／Medium／SemiBoldのSHA一致を確認しましたが、等幅は公式のOS書体とネイティブの既存OFL Roboto Monoが異なります。今回の最大差はRTLのアラビア語混在の条件で、差の原因の切り分けは未完了です。全画素の認証とは扱いません。参照側はflexでinline要素をblock化して矩形比較し、全inline／block formattingを認証したものではありません。CSSzoomとFlutter TextScalerによる拡大条件を比較しています。空文字でも比較枠を取得できるよう両側のfixtureに上下1pxの余白を追加し、文字自身の高さは0のままです。
+
+日本語デモは390／1280px・Light/Darkの4条件で、10種類・4サイズの切替、見出しレベル1〜6と解除、medium・省略・狭幅・RTL・部分強調・200%表示、隣接操作を確認しました。HTMLの全as要素・UA装飾・label関連付け・空白圧縮／preformatted・選択／コピーの互換は非対応または未認証です。任意フォント・全長文／rich span・物理screen readerも残ります。過去のTabsとInputGroupの一過性SkWasmエラーは原因未確定のまま保持し、今回の成功で解消済みとは扱いません。
+
+全URLのCDP Audits.issueAdded監査は106 URL・108条件、実行時エラー0件・Issue 108件でした。Lighthouseはギャラリーと単体の既定body表示を対象とし、全色・全背景の認証ではありません（Performance / Accessibility / Best practices / SEO）：
+
+- gallery_mobile：78 / 100 / 81 / 100。実行警告0件。
+- gallery_desktop：97 / 96 / 81 / 100。実行警告0件。
+- isolated_mobile：94 / 100 / 81 / 100。実行警告0件。
+- isolated_desktop：100 / 100 / 81 / 100。実行警告0件。
+
+全100点・Issues0件は未達です。非スコア・警告・提案・Diagnosticsを含む全監査をJSONへ保持します。SDKのIntlV8BreakIterator、自社の起動・転送量・一覧の操作領域、全意味情報と過去のレンダラエラーは残件です。source mapの今回の指摘有無もJSONへ記録し、過去のSkWasm map診断は保持します。他主要ブラウザと旧2世代、Linux／macOS／iOS・物理実機は今回ソースで未検証。Windows／Androidはビルドのみ、APKは開発用署名です。shared-ciの最新README・setup・coverageでもprivate-only・公開repo未登録、Workflow0件とクラウド保留を維持します。Batch呼出・費用は0、更新検出→PRの実往復は未実施。同期済みSHA・承認済み視覚ゲートは進めません。本番反映先はGitHub mainです。
